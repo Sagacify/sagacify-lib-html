@@ -1,6 +1,6 @@
-define(['dojo', 'bizComp/_Widget', './revealView/RevealFrontView', './revealView/RevealRearView', 'dojox/mobile/View', 'dojo/_base/window'], function(dojo, _Widget, RevealFrontView, RevealRearView, View, win) {
+define(['dojo', 'bizComp/_Widget', './revealView/RevealFrontViewController', './revealView/RevealRearViewController', 'dojox/mobile/View', 'dojo/_base/window'], function(dojo, _Widget, RevealFrontViewController, RevealRearViewController, View, win) {
 	
-	return dojo.declare('bizComp.RevealView', [_Widget], {
+	return dojo.declare('bizComp.RevealViewController', [_Widget], {
 		
 		viewControllers: null,
 		
@@ -30,7 +30,7 @@ define(['dojo', 'bizComp/_Widget', './revealView/RevealFrontView', './revealView
 			});*/
 			
 			if(!this.revealRearViewController) {
-				this.revealRearViewController = new RevealRearView({parent:this});
+				this.revealRearViewController = new RevealRearViewController({parent:this});
 			}
 			this.revealRearViewController.domNode.style.position = "absolute";
 			this.revealRearViewController.placeAt(this.domNode);

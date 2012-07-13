@@ -1,6 +1,6 @@
 define(['dojo', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'dojox/mobile/View'], function(dojo, _Widget, TabBar, TabBarButton, NavigationView) {
 	
-	return dojo.declare('M2C.Widgets.TabBarContainer', [_Widget], {
+	return dojo.declare('M2C.Widgets.TabBarViewController', [_Widget], {
 		
 		tabBar: null,
 		

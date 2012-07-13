@@ -1,6 +1,6 @@
 define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-construct', 'dojo/query', 'dojox/mobile/EdgeToEdgeList', 'dojox/mobile/EdgeToEdgeCategory', 'dojox/mobile/RoundRectList', 'dojox/mobile/RoundRectCategory', 'dojo/date/locale', 'spin/Spin'], function(dojo, connect, ScrollableView, domConstruct, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
-	return dojo.declare('bizComp.TableView', [ScrollableView], {
+	return dojo.declare('bizComp.TableViewController', [ScrollableView], {
 		
 		parent: null,
 		
