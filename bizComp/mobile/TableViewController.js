@@ -29,7 +29,7 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 			dojo.style(lastUpdateDiv, "color", new dojo.Color([87,108,137]));
 			this._pullDownDiv.lastUpdateDiv = lastUpdateDiv;
 			
-			var arrowImg = domConstruct.create("img", {style:"display:block;position:absolute;left:25px;top:435px;", src:"js/M2C/Assets/blueArrow_down.png"}, this._pullDownDiv);
+			var arrowImg = domConstruct.create("img", {style:"display:block;position:absolute;left:25px;top:435px;", src:dojo.moduleUrl("bizComp/mobile/Assets/")+"blueArrow_down.png"}, this._pullDownDiv);
 			this._pullDownDiv.arrowImg = arrowImg;
 			
 			var spinner = new Spinner({color:"gray", lines:12, length:3, width:2, radius:5}).spin();
@@ -136,11 +136,11 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 				}
 				else {
 					if(to.y > 65) {
-						this._pullDownDiv.arrowImg.src = "js/M2C/Assets/blueArrow_up.png";
+						this._pullDownDiv.arrowImg.src = dojo.moduleUrl("bizComp/mobile/Assets/")+"blueArrow_up.png";
 						this._pullDownDiv.statusDiv.innerHTML = "Release to refresh...";
 					}
 					else {
-						this._pullDownDiv.arrowImg.src = "js/M2C/Assets/blueArrow_down.png";
+						this._pullDownDiv.arrowImg.src = dojo.moduleUrl("bizComp/mobile/Assets/")+"blueArrow_down.png";
 						this._pullDownDiv.statusDiv.innerHTML = "Pull down to refresh...";
 					}
 					this._pullDownDiv.arrowImg.style.display = "";
