@@ -23,10 +23,20 @@ define(['dojo', './ViewController', './NavigationBar', 'dojo/_base/connect', 'do
         	
 			this._viewControllers[0].placeAt(this.domNode);
 			this.domNode.style.width = this._viewControllers[0].domNode.style.width;
-			this.domNode.style.height = this._viewControllers[0].domNode.style.height;
+			this.domNode.style.height = this._viewControllers[0].domNode.style.height+44;
+			
+			this._viewControllers[0]._updateNavigationBar();
 		},
 		
+		
 		_updateNavigationBar: function() {
+			
+			this.navigationBar.destroyRecursive();
+			this.navigationBar = new NavigationBar({back:null, href:null, moveTo:"#", label:this._viewControllers[0].name});
+        	this.navigationBar.placeAt(this.domNode, 0);
+        	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
+        	this.navigationBar.startup();
+			
 			if(this._viewControllers.length >= 2) {
 				if(this._viewControllers[1].name)
 					this.navigationBar._setBackAttr(this._viewControllers[1].name);
@@ -46,10 +56,17 @@ define(['dojo', './ViewController', './NavigationBar', 'dojo/_base/connect', 'do
 				this.navigationBar._setLabelAttr(this._viewControllers[0].name);
 			else
 				this.navigationBar._setLabelAttr(null);
+				
+			this._viewControllers[0]._updateNavigationBar();
 		},
 		
 		frontViewController: function() {
 			return this._viewControllers[0];
+		},
+		
+		setFrontViewController: function(viewController) {
+			this._viewControllers = [args.viewController];
+				args.viewController.navigationController = this;
 		},
 		
 		pushViewController: function(viewController) {

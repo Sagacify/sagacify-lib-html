@@ -1,4 +1,4 @@
-define(['dojo', 'bizComp/_Widget', 'dojox/mobile/View'], function(dojo, _Widget, View) {
+define(['dojo', 'bizComp/_Widget', 'dojox/mobile/View', 'bizComp/mobile/ActionSheet', 'dojo/_Base/lang', 'dojo/dom-construct'], function(dojo, _Widget, View, ActionSheet, lang, domConstruct) {
 	
 	return dojo.declare('bizComp.ViewController', [_Widget, View], {
 	
@@ -8,7 +8,13 @@ define(['dojo', 'bizComp/_Widget', 'dojox/mobile/View'], function(dojo, _Widget,
 		
 		navigationController: null,
 		
-		modalViewController: null,	
+		actionSheet: null,
+		
+		name: null,
+		
+		iconUnselectedPath: null,
+		
+		iconSelectedPath: null,
 				
 		constructor: function(args){
 			if(args)
@@ -19,6 +25,10 @@ define(['dojo', 'bizComp/_Widget', 'dojox/mobile/View'], function(dojo, _Widget,
 			this.inherited(arguments);
 			if(this.frame)
 				this.setFrame(this.frame);
+		},
+		
+		getFrame: function() {
+			return lang.clone(this.frame);
 		},
 		
 		setFrame: function(frame) {
@@ -61,12 +71,47 @@ define(['dojo', 'bizComp/_Widget', 'dojox/mobile/View'], function(dojo, _Widget,
 		},
 		
 		dismissViewController: function() {
+			
 			this.performTransition(null, -1, "revealv", null);
 			
 			var me = this;
 			this.on("afterTransitionOut", function(){
-				me.destroyRecursive();
+				me.destroy();
 			});	
+		},
+		
+		presentActionSheet: function(actionSheetOptions) {
+			var mask = domConstruct.create("div", {style:"background:rgba(0,0,0,0.4);z-index:10;position:absolute;top:0px;left:0px;width:"+Window.domNode.clientWidth+"px;height:"+Window.domNode.clientHeight+"px"}, Window.domNode);
+			
+			var actionSheet = new ActionSheet(actionSheetOptions);
+			actionSheet.mask = mask;
+			
+			actionSheet.domNode.style.top = Window.domNode.clientHeight+"px";
+			actionSheet.domNode.style.position = "absolute";
+			actionSheet.placeAt(Window.domNode);
+			this.actionSheet = actionSheet;
+			actionSheet.performTransition(null, 1, "revealv", null);
+			
+			actionSheet.on("cancelButtonPressed", function(){
+				actionSheet.dismissActionSheet();
+				domConstruct.destroy(mask);
+			});
+			
+			actionSheet.on("afterTransitionOut", function(){
+				actionSheet.domNode.style.display = "";
+				actionSheet.domNode.style.top = Window.domNode.clientHeight-actionSheet.domNode.clientHeight+"px";
+				actionSheet.domNode.style.left = "0px";
+			});
+			
+			return actionSheet;
+		},
+		
+		dismissActionSheet: function() {
+			
+		},
+		
+		_updateNavigationBar: function() {
+			//method to be overidden by the view controller to handle his navigation bar	
 		}
 		
 	});

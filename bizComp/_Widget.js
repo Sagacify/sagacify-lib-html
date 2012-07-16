@@ -20,9 +20,9 @@ function(_Widget, _TemplatedMixin, _WidgetsInTemplateMixin) {
 		},
 		
 		destroyRecursive: function() {
-			dojo.forEach(dijit.findWidgets(this.domNode), function(widget){
+			/*dojo.forEach(dijit.findWidgets(this.domNode), function(widget){
             	widget.destroyRecursive();
-        	});
+        	});*/
 			this.inherited(arguments);
 		}
 		

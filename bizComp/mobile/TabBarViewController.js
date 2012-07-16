@@ -1,6 +1,6 @@
-define(['dojo', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'dojox/mobile/View'], function(dojo, _Widget, TabBar, TabBarButton, NavigationView) {
+define(['dojo', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'bizComp/mobile/ViewController'], function(dojo, _Widget, TabBar, TabBarButton, ViewController) {
 	
-	return dojo.declare('M2C.Widgets.TabBarViewController', [_Widget], {
+	return dojo.declare('M2C.Widgets.TabBarViewController', [ViewController], {
 		
 		tabBar: null,
 		
@@ -15,15 +15,14 @@ define(['dojo', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarBu
 		},
 		
 		postCreate: function() {
-			this.domNode.style.backgroundColor = "purple";
 			this.tabBar = new TabBar();
 			this.tabBarButtons = [];
 			
-			var viewsContainerView = new dojox.mobile.View();
+			var viewsContainerView = new ViewController();
 			viewsContainerView.domNode.style.top = "0px";
 			viewsContainerView.domNode.style.left = "0px";
 			viewsContainerView.domNode.style.width = "320px";
-			viewsContainerView.domNode.style.height = "412px";
+			viewsContainerView.domNode.style.height = this.frame.height-49+"px";
 			viewsContainerView.placeAt(this.domNode);
 			
 			var me = this;
@@ -33,7 +32,7 @@ define(['dojo', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarBu
 				me.tabBarButtons.push(tabBarButton);
 				viewController.domNode.style.display = "none";
 				viewController.placeAt(viewsContainerView);
-				viewController.setFrame({height:412});
+				//viewController.setFrame({height:me.frame.height-49});
 			});
 	
 			this.tabBar.placeAt(this.domNode);

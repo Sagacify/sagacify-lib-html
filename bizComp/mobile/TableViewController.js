@@ -4,40 +4,59 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 		
 		parent: null,
 		
+		frame: null,
+		
 		_headers: null,
 		
 		_cellsBySection: null,
 		
 		_type: "EdgeToEdge",
 		
+		_options: null,
+		
+		_pullToRefresh: false,
+		
 		_pullDownDiv: null,
+		
+		_cellsContainer: null,
 						
 		constructor: function(args) {
-			this._type = args.type;
+			if(args) {
+				this._type = args.type;
+				//options.roundrect_marginside to fix the size between the edge of the table and the cells
+				this._options = args.options;
+				this.frame = args.frame;
+				this._pullToRefresh = args.pullToRefresh;
+			}
 		},		
 		
 		postCreate: function() {
-			this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
-			this.containerNode.style.top = "-500px";
-			dojo.style(this._pullDownDiv, "backgroundColor", new dojo.Color([226,231,237]));
-			
-			var statusDiv = domConstruct.create("div", {style:"top:452px;width:320px; height:20px; position:absolute;text-align:center;font-size:13px;font-weight:bold;", innerHTML:"Pull down to refresh..."}, this._pullDownDiv);
-			dojo.style(statusDiv, "color", new dojo.Color([87,108,137]));
-			this._pullDownDiv.statusDiv = statusDiv;
-			
-			var lastUpdateDiv = domConstruct.create("div", {style:"top:470px; width:320px; height:20px; position:absolute;text-align:center;font-size:12px;", innerHTML:"Last update: " + locale.format(new Date(), {selector:"date", datePattern:"MM/dd/yy hh:mm:a"})}, this._pullDownDiv);
-			dojo.style(lastUpdateDiv, "color", new dojo.Color([87,108,137]));
-			this._pullDownDiv.lastUpdateDiv = lastUpdateDiv;
-			
-			var arrowImg = domConstruct.create("img", {style:"display:block;position:absolute;left:25px;top:435px;", src:dojo.moduleUrl("bizComp/mobile/Assets/")+"blueArrow_down.png"}, this._pullDownDiv);
-			this._pullDownDiv.arrowImg = arrowImg;
-			
-			var spinner = new Spinner({color:"gray", lines:12, length:3, width:2, radius:5}).spin();
-        	spinner.el.style.top = "468px";
-        	spinner.el.style.left = "40px";
-        	spinner.el.style.display = "none";
-        	this._pullDownDiv.appendChild(spinner.el);
-        	this._pullDownDiv.spinner = spinner.el;
+			if(this._pullToRefresh) {
+				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
+				this.containerNode.style.top = "-500px";
+				dojo.style(this._pullDownDiv, "backgroundColor", new dojo.Color([226,231,237]));
+				
+				var statusDiv = domConstruct.create("div", {style:"top:452px;width:320px; height:20px; position:absolute;text-align:center;font-size:13px;font-weight:bold;", innerHTML:"Pull down to refresh..."}, this._pullDownDiv);
+				dojo.style(statusDiv, "color", new dojo.Color([87,108,137]));
+				this._pullDownDiv.statusDiv = statusDiv;
+				
+				var lastUpdateDiv = domConstruct.create("div", {style:"top:470px; width:320px; height:20px; position:absolute;text-align:center;font-size:12px;", innerHTML:"Last update: " + locale.format(new Date(), {selector:"date", datePattern:"MM/dd/yy hh:mm:a"})}, this._pullDownDiv);
+				dojo.style(lastUpdateDiv, "color", new dojo.Color([87,108,137]));
+				this._pullDownDiv.lastUpdateDiv = lastUpdateDiv;
+				
+				var arrowImg = domConstruct.create("img", {style:"display:block;position:absolute;left:25px;top:435px;", src:dojo.moduleUrl("bizComp/mobile/Assets/")+"blueArrow_down.png"}, this._pullDownDiv);
+				this._pullDownDiv.arrowImg = arrowImg;
+				
+				var spinner = new Spinner({color:"gray", lines:12, length:3, width:2, radius:5}).spin();
+	        	spinner.el.style.top = "468px";
+	        	spinner.el.style.left = "40px";
+	        	spinner.el.style.display = "none";
+	        	this._pullDownDiv.appendChild(spinner.el);
+	        	this._pullDownDiv.spinner = spinner.el;
+      		}
+        	
+        	if(this.frame)
+        		this.setFrame(this.frame);
         	
 			//this.reload();
 		},
@@ -68,10 +87,18 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 				var cells = [];
 				
 				var cellsContainer;
-				if (this._type == "RoundRect")
+				if (this._type == "RoundRect") {
 					cellsContainer = new RoundRectList();
-				else
+					//fix the size between the edge of the table and the cells					
+					if(this._options && this._options.roundrect_marginside) {
+						cellsContainer.domNode.style.marginLeft = this._options.roundrect_marginside+"px";
+						cellsContainer.domNode.style.marginRight = this._options.roundrect_marginside+"px";
+					}
+				}
+				else {
 					cellsContainer = new EdgeToEdgeList();
+				}
+				this._cellsContainer = cellsContainer;
 					
 				for (var j = 0; j < this.numberOfRowsInSection(j); j++) {
 					var cell = this.cellForRowAtIndexPath({section:i, row:j});
@@ -96,6 +123,36 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 		
 		load: function() {
 			this.reload();
+		},
+		
+		setFrame: function(frame) {
+			if(!this.frame)
+				this.frame = {};
+			
+			if(frame.x) {
+				this.frame.x = frame.x;
+				this.domNode.style.left = frame.x + "px";
+			}
+			if(frame.y) {
+				this.frame.y = frame.y;
+				this.domNode.style.top = frame.y + "px";
+			}
+			if(frame.width) {
+				this.frame.width = frame.width;
+				this.domNode.style.width = frame.width + "px";
+			}
+			if(frame.height) {
+				this.frame.height = frame.height;
+				this.domNode.style.height = frame.height + "px";
+			}
+			
+			if(this._pullToRefresh) {
+				this._pullDownDiv.style.width = frame.width + "px";
+				this._pullDownDiv.statusDiv.style.width = frame.width + "px";
+				this._pullDownDiv.lastUpdateDiv.style.width = frame.width + "px";
+				this._pullDownDiv.arrowImg.style.left = ((frame.width -320)/2 + 25) + "px";
+				this._pullDownDiv.spinner.style.left = ((frame.width -320)/2 + 40) + "px";
+			}
 		},
 		
 		numberOfSections: 0,
@@ -127,7 +184,6 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 		},
 		
 		scrollTo: function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node) {
-			
 			if(this._pullDownDiv) {
 				if(this._pullDownDiv.loading) {
 					this._pullDownDiv.statusDiv.innerHTML = "Loading...";
@@ -169,7 +225,16 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 			}
 			this.inherited(arguments);
 		},
-	
+
+		//override the getDim method of the scrollable.js class to handle the addition of the "pullToScroll" header		
+		getDim: function() {
+			var dim = this.inherited(arguments);
+			if(this._pullToRefresh) {
+				dim.c.h-=500;
+				dim.o.h-=500;
+			}
+			return dim;
+		},
 		
 		reloadTableViewDataSource: function() {
 			//to be implemented by subclasses
@@ -183,6 +248,20 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 					this._nextSlideDest.y = 0;
 				else
 					this.slideTo({y:0}, 0.3, "ease-out");
+			}
+		},
+		
+		setWidth:function(width) {
+			if(this._type == "EdgeToEdge") {
+				this.domNode.style.width = width+"px";
+				this._cellsContainer.domNode.style.width = width+"px";
+			}
+			else {
+				var marginside = 10;
+				if(this._options && this._options.roundrect_marginside)
+					marginside = this._options.roundrect_marginside;
+				this.domNode.style.width = width+"px";
+				this._cellsContainer.domNode.style.width = (width-marginside*2)+"px";
 			}
 		}
 		

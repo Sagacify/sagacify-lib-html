@@ -717,7 +717,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 
 		this.adjustDestination(to, pos);
-
 		if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
 			this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
 			return;
@@ -745,6 +744,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 				if(pos.y < -dim.o.h){ // started from above the screen top. return quickly.
 					duration = 0.3;
 					to.y = dim.c.h <= dim.d.h ? 0 : -dim.o.h; // if shorter, move to 0
+					to.y = -dim.o.h;
 				}else{
 					to.y = Math.max(to.y, -dim.o.h - 20);
 					easing = "linear";
