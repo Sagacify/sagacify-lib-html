@@ -27,6 +27,7 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 				this._options = args.options;
 				this.frame = args.frame;
 				this._pullToRefresh = args.pullToRefresh;
+				this.parent = args.parent;
 			}
 		},		
 		
@@ -78,7 +79,10 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 			this._headers = [];
 			this._cellsBySection = [];
 			
-			for (var i = 0; i < this.numberOfSections; i++) {
+			var numberOfSections = this.numberOfSections;
+			if(!(numberOfSections > -1))
+				numberOfSections = this.numberOfSections();
+			for (var i = 0; i < numberOfSections; i++) {
 				var header = this.viewForHeaderInSection(i);
 				if (header) 
 					this.containerNode.appendChild(header.domNode);
@@ -99,8 +103,8 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 					cellsContainer = new EdgeToEdgeList();
 				}
 				this._cellsContainer = cellsContainer;
-					
-				for (var j = 0; j < this.numberOfRowsInSection(j); j++) {
+
+				for (var j = 0; j < this.numberOfRowsInSection(i); j++) {
 					var cell = this.cellForRowAtIndexPath({section:i, row:j});
 					if (cell)
 						cellsContainer.addChild(cell);
@@ -183,7 +187,25 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 			return this._cellsBySection[indexPath.section][indexPath.row];
 		},
 		
+		scrollToSection: function(section) {
+			var to = {x:0, y:0};
+			for(var i = 0; i < section; i++) {
+				to.y -= this._headers[i].domNode.clientHeight;
+				to.y -= 2;
+				for(var j = 0; j < this._cellsBySection[i].length; j++) {
+					console.log(i + ", " + j);
+					to.y -= this._cellsBySection[i][j].domNode.clientHeight;
+					to.y -= 1;
+				}
+			}
+			console.log(this._headers[0].domNode.clientHeight);
+			console.log(this._cellsBySection[0][0].domNode.clientHeight);
+			console.log(to.y);
+			this.scrollTo(to);
+		},
+		
 		scrollTo: function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node) {
+			//console.log(to.y);
 			if(this._pullDownDiv) {
 				if(this._pullDownDiv.loading) {
 					this._pullDownDiv.statusDiv.innerHTML = "Loading...";
