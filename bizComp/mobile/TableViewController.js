@@ -79,6 +79,10 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 			this._headers = [];
 			this._cellsBySection = [];
 			
+			
+			this.scrollTo({x:0, y:0});
+			
+			
 			var numberOfSections = this.numberOfSections;
 			if(!(numberOfSections > -1))
 				numberOfSections = this.numberOfSections();

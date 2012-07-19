@@ -33,7 +33,7 @@ define([
 		postCreate: function() {
 			this.inherited(arguments);
 			this.domNode.style.background = "rgb(70,70,70)";
-			this.domNode.style.zIndex = 10;
+			//this.domNode.style.zIndex = 10;
 			this.domNode.style.width = Window.frame.width+"px";
 			var height = 40 + 40 + 39*this.otherButtonTitles.length;
 			if(this.destructiveButtonTitle)

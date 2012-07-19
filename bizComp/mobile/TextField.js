@@ -1,8 +1,8 @@
 define(['dojo', 'bizComp/_Widget'], function(dojo, _Widget) {
 	
-	return dojo.declare('bizComp.TextView', [_Widget], {
+	return dojo.declare('bizComp.TextField', [_Widget], {
 	
-		templateString:"<textarea style='outline:none;border:none;'></textarea>",
+		templateString:"<input type='text' style='outline:none;border:none;'></input>",
 		
 		placeholder: null,
 		

@@ -44,9 +44,11 @@ define(['dojo', './ViewController', './NavigationBar', 'dojo/_base/connect', 'do
 					this.navigationBar._setBackAttr("Back");
 				var me = this;
 	        	dojo.forEach(this.navigationBar.domNode.childNodes, function(childNode, i){
-	        		connect.connect(childNode, "onclick", this, function(){
-	        			me.popViewController();
-	        		});
+					if(domClass.contains(childNode, "mblArrowButton")) {
+		        		connect.connect(childNode, "onclick", this, function(){
+		        			me.popViewController();
+		        		});
+		        	}
 	        	});
 			}
 			else {
