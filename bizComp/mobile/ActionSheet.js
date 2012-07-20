@@ -1,5 +1,5 @@
 define([
-	'dojo', 
+	'dojo/_base/declare', 
 	'bizComp/_Widget', 
 	'dojox/mobile/View', 
 	'dojo/on', 
@@ -7,9 +7,9 @@ define([
 	'dojo/dom-construct', 
 	'dojo/dom-class', 
 	'dojo/_base/connect'], 
-	function(dojo, _Widget, View, on, Button, domConstruct, domClass, connect) {
+	function(declare, _Widget, View, on, Button, domConstruct, domClass, connect) {
 	
-	return dojo.declare('bizComp.ActionSheet', [_Widget, View], {
+	return declare('bizComp.ActionSheet', [_Widget, View], {
 		
 		templateString: "<div></div>",
 		

@@ -1,6 +1,6 @@
-define(['dojo', 'dojox/mobile/Button'], function(dojo, Button) {
+define(['dojo/_base/declare', 'dojox/mobile/Button'], function(declare, Button) {
 	
-	return dojo.declare('bizComp.Button', [Button], {
+	return declare('bizComp.Button', [Button], {
 		
 		constructor: function(args) {
 			

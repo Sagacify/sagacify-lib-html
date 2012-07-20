@@ -1,6 +1,6 @@
-define(['dojo', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'bizComp/mobile/ViewController'], function(dojo, _Widget, TabBar, TabBarButton, ViewController) {
+define(['dojo/_base/declare', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'bizComp/mobile/ViewController'], function(declare, _Widget, TabBar, TabBarButton, ViewController) {
 	
-	return dojo.declare('M2C.Widgets.TabBarViewController', [ViewController], {
+	return declare('M2C.Widgets.TabBarViewController', [ViewController], {
 		
 		tabBar: null,
 		

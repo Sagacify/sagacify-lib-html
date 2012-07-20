@@ -1,6 +1,6 @@
-define(['dojo', 'dojox/mobile/Heading'], function(dojo, Heading) {
+define(['dojo/_base/declare', 'dojox/mobile/Heading'], function(declare, Heading) {
 	
-	return dojo.declare('bizComp.mobile.NavigationBar', [Heading], {
+	return declare('bizComp.mobile.NavigationBar', [Heading], {
 
 		constructor: function(args) {
 			

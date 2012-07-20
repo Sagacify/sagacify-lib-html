@@ -1,4 +1,4 @@
-define(['dojo', 'dojox', 'dojo/_base/declare', 'dojo/store/util/SimpleQueryEngine','dojo/store/Observable','dojo/store/util/QueryResults','dojox/storage','dojox/storage/LocalStorageProvider'], function(dojo, dojox, declare, sqe, observable){
+define('dojox', 'dojo/_base/declare', 'dojo/store/util/SimpleQueryEngine','dojo/store/Observable','dojo/store/util/QueryResults','dojox/storage','dojox/storage/LocalStorageProvider'], function(dojox, declare, sqe, observable){
 /*
  * Definition of a general local offline _store using LocalStorage.
  * It relies on dojox.storage wrapper and is compliant with Dojo _store API.

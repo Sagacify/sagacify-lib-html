@@ -1,6 +1,6 @@
-define(['dojo', 'dojox/mobile/ListItem', './TextField', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-construct'], function(dojo, ListItem, TextField, connect, on, domConstruct) {
+define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-construct'], function(declare, ListItem, TextField, connect, on, domConstruct) {
 	
-	return dojo.declare('bizComp.TableViewCell', [ListItem], {
+	return declare('bizComp.TableViewCell', [ListItem], {
 		
 		directInput: null,
 		

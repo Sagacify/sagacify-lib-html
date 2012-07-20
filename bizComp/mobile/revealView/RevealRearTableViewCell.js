@@ -1,6 +1,6 @@
-define(['dojo', '../TableViewCell'], function(dojo, TableViewCell) {
+define(['dojo/_base/declare', '../TableViewCell'], function(declare, TableViewCell) {
 	
-	return dojo.declare('bizComp.RevealRearTableViewCell', [TableViewCell], {
+	return declare('bizComp.RevealRearTableViewCell', [TableViewCell], {
 		
 				
 		constructor: function(args){

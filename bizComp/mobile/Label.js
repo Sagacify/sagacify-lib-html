@@ -1,6 +1,6 @@
-define(['dojo', 'bizComp/_Widget'], function(dojo, _Widget) {
+define(['dojo/_base/declare', 'bizComp/_Widget'], function(declare, _Widget) {
 	
-	return dojo.declare('bizComp.Label', [_Widget], {
+	return declare('bizComp.Label', [_Widget], {
 	
 		templateString:"<label></label>",
 		

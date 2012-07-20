@@ -1,17 +1,17 @@
 define([
-	'dojo',
+	'dojo/_base/declare',
 	'bizComp/_Widget', 
 	'dojox/mobile/View', 
 	'bizComp/mobile/ActionSheet', 
-	'dojo/_Base/lang', 
+	'dojo/_base/lang', 
 	'dojo/dom-construct',
 	'dojox/mobile/SpinWheelDatePicker',
 	'bizComp/mobile/NavigationBar',
 	'dojox/mobile/ToolBarButton',
 	'dojo/on'], 
-	function(dojo, _Widget, View, ActionSheet, lang, domConstruct, SpinWheelDatePicker, NavigationBar, ToolBarButton, on, Evented) {
+	function(declare, _Widget, View, ActionSheet, lang, domConstruct, SpinWheelDatePicker, NavigationBar, ToolBarButton, on) {
 	
-	return dojo.declare('bizComp.ViewController', [_Widget, View], {
+	return declare('bizComp.ViewController', [_Widget, View], {
 	
 		parent: null,
 		

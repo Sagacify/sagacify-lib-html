@@ -1,6 +1,6 @@
-define(['dojo', '../NavigationController', 'dojox/mobile/ToolBarButton', 'dojo/Evented'], function(dojo, NavigationController, ToolBarButton, Evented) {
+define(['dojo/_base/declare', '../NavigationController', 'dojox/mobile/ToolBarButton', 'dojo/Evented'], function(declare, NavigationController, ToolBarButton, Evented) {
 	
-	return dojo.declare('bizComp.RevealFrontViewController', [NavigationController, Evented], {
+	return declare('bizComp.RevealFrontViewController', [NavigationController, Evented], {
 		
 		_revealButton: null,
 		

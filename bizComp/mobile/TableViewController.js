@@ -1,6 +1,6 @@
-define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-construct', 'dojo/query', 'dojox/mobile/EdgeToEdgeList', 'dojox/mobile/EdgeToEdgeCategory', 'dojox/mobile/RoundRectList', 'dojox/mobile/RoundRectCategory', 'dojo/date/locale', 'spin/Spin'], function(dojo, connect, ScrollableView, domConstruct, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
+define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-construct', 'dojo/query', 'dojox/mobile/EdgeToEdgeList', 'dojox/mobile/EdgeToEdgeCategory', 'dojox/mobile/RoundRectList', 'dojox/mobile/RoundRectCategory', 'dojo/date/locale', 'spin/Spin'], function(declare, connect, ScrollableView, domConstruct, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
-	return dojo.declare('bizComp.TableViewController', [ScrollableView], {
+	return declare('bizComp.TableViewController', [ScrollableView], {
 		
 		parent: null,
 		
@@ -55,7 +55,7 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 	        	this._pullDownDiv.appendChild(spinner.el);
 	        	this._pullDownDiv.spinner = spinner.el;
       		}
-        	
+
         	if(this.frame)
         		this.setFrame(this.frame);
         	
@@ -63,6 +63,7 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 		},
 		
 		reload: function() {
+			
 			this.inherited(arguments);
 			dojo.forEach(this._headers, function(header, i){
 				if(header)
@@ -86,7 +87,9 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 			var numberOfSections = this.numberOfSections;
 			if(!(numberOfSections > -1))
 				numberOfSections = this.numberOfSections();
+			
 			for (var i = 0; i < numberOfSections; i++) {
+				
 				var header = this.viewForHeaderInSection(i);
 				if (header) 
 					this.containerNode.appendChild(header.domNode);
@@ -103,12 +106,14 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 						cellsContainer.domNode.style.marginRight = this._options.roundrect_marginside+"px";
 					}
 				}
+				
 				else {
 					cellsContainer = new EdgeToEdgeList();
 				}
 				this._cellsContainer = cellsContainer;
-
-				for (var j = 0; j < this.numberOfRowsInSection(i); j++) {
+				
+				var numberOfRowsInSection = this.numberOfRowsInSection(i);
+				for (var j = 0; j < numberOfRowsInSection; j++) {
 					var cell = this.cellForRowAtIndexPath({section:i, row:j});
 					if (cell)
 						cellsContainer.addChild(cell);
@@ -117,6 +122,7 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 				}
 				this._cellsBySection.push(cells);
 				this.containerNode.appendChild(cellsContainer.domNode);
+				
 			}
 			
 			var me = this;
@@ -127,6 +133,7 @@ define(['dojo', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-c
 					})
 				});
 			});
+			
 		},
 		
 		load: function() {

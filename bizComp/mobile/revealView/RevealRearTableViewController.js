@@ -1,6 +1,6 @@
-define(['dojo', '../TableViewController', './RevealRearTableViewCell'], function(dojo, TableViewController, RevealRearTableViewCell) {
+define(['dojo/_base/declare', '../TableViewController', './RevealRearTableViewCell'], function(declare, TableViewController, RevealRearTableViewCell) {
 	
-	return dojo.declare('bizComp.RevealRearTableViewController', [TableViewController], {
+	return declare('bizComp.RevealRearTableViewController', [TableViewController], {
 			
 		constructor: function(args){
 			this.parent = args.parent;

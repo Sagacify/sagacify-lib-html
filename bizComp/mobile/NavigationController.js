@@ -1,6 +1,6 @@
-define(['dojo', './ViewController', './NavigationBar', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-class', 'dojox/mobile/View'], function(dojo, ViewController, NavigationBar, connect, on, domClass) {
+define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-class', 'dojox/mobile/View'], function(declare, ViewController, NavigationBar, connect, on, domClass) {
 	
-	return dojo.declare('bizComp.NavigationController', [ViewController], {
+	return declare('bizComp.NavigationController', [ViewController], {
 		
 		_viewControllers: null,
 		
