@@ -21,7 +21,7 @@ define(['dojo/_base/declare', 'dojo/_base/xhr', 'dojo/Evented'], function(declar
 	    		handleAs:"json",
 	    
 	    		load: function(jsonData) {
-	    			console.log(dojo.toJson(jsonData));
+	    			//console.log(dojo.toJson(jsonData));
 	    			me._data = jsonData;
 	    	    	me.emit("storeSynchronizationFinished", {data:jsonData});
 	    		}

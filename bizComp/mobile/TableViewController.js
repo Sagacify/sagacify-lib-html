@@ -106,17 +106,22 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 						cellsContainer.domNode.style.marginRight = this._options.roundrect_marginside+"px";
 					}
 				}
-				
 				else {
 					cellsContainer = new EdgeToEdgeList();
 				}
+				cellsContainer.domNode.style.background = "transparent";
 				this._cellsContainer = cellsContainer;
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);
 				for (var j = 0; j < numberOfRowsInSection; j++) {
 					var cell = this.cellForRowAtIndexPath({section:i, row:j});
-					if (cell)
-						cellsContainer.addChild(cell);
+					if (cell) {
+						if(cell.domNode)
+							cellsContainer.addChild(cell);
+						else
+							cellsContainer.domNode.appendChild(cell);
+					}
+						
 					cells.push(cell);
 					//cell.setDelegate({delegate:this, indexPath:{section:i, row:j}});
 				}
@@ -124,7 +129,7 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 				this.containerNode.appendChild(cellsContainer.domNode);
 				
 			}
-			
+					
 			var me = this;
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
