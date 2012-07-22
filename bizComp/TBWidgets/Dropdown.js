@@ -1,8 +1,13 @@
-define(['./_Widget', 'dojo/text!./templates/Dropdown.html', 'dojo/dom-construct', 
-'dojo/dom-attr', 'dojo/_base/connect'], 
-function(_Widget, template, domConstruct, domAttr, connect) {
+define([
+	'../_Widget', 
+	'dojo/Evented', 
+	'dojo/text!./templates/Dropdown.html', 
+	'dojo/dom-construct', 
+	'dojo/dom-attr', 
+	'dojo/_base/connect'], 
+	function(_Widget, Evented, template, domConstruct, domAttr, connect) {
 
-	return dojo.declare('bootstrap.Dropdown', [_Widget], {
+	return dojo.declare('bootstrap.Dropdown', [_Widget, Evented], {
 
 		templateString: template,
 		
