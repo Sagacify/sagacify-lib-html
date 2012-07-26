@@ -15,8 +15,13 @@ define([
 
 		templateString: template,
 		
+		_url: null,
+		
 		
 		constructor: function(args){
+			if(args) {
+				this._url = args.url;
+			}
 
 		},
 		
@@ -24,7 +29,7 @@ define([
 			event.stop(evt);
 			var me = this;			
 			iframe.send({
-						url : "/api/images/tmp",
+						url : me._url,
 						form : me.dropImageFormNode,
 						handleAs: "json"
 				}).then(function(response){
@@ -47,6 +52,28 @@ define([
 			// Setup the dnd listeners.
 			
 			var me = this;
+			
+			this.maskNode.style.backgroundImage = "url("+window.location.pathname+"/js/lib/bizComp/img/DropImageBg.png)";
+			
+			on(this.inputFileNode, "change", function(args){
+				iframe.send({
+						url : me._url,
+						form : me.dropImageFormNode,
+						handleAs: "json"
+				}).then(function(response){
+							if (response.path){
+								console.log(response.path);
+								me.emit('fileUploaded', {'path':response.path});
+							}
+							else {
+								console.log('Raise Error : No path returned');
+							}
+						},
+						function(error, ioArgs){
+							console.log('Raise Error : Server side error');
+							console.log(error);
+						});			
+			});
 			
 			//on(this.submitFormNode, 'click', function(evt){
 				

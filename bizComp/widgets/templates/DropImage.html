@@ -1,9 +1,9 @@
-<div>
+<div class="dropImage">
 	<form data-dojo-attach-point="dropImageFormNode"
 		enctype="multipart/form-data"
-        action="/api/images/tmp"
         method="post">
-       <input type="file" name="img"/>
-       <button data-dojo-attach-event="ondijitclick:onClick">Send</button>
+       <input type="file" name="img" data-dojo-attach-point="inputFileNode"/>
+       <div data-dojo-attach-point="maskNode">Drop image or click to add image...</div>
+       <!--<button data-dojo-attach-event="ondijitclick:onClick">Send</button>-->
 	</form>
 </div>
