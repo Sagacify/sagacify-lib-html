@@ -1,5 +1,6 @@
 define([
 	'dojo/_base/declare',
+	'dojo/on',
 	'../_Widget', 
 	'dojo/Evented', 
 	'dojo/text!./templates/OpeningHourForm.html', 
@@ -7,7 +8,7 @@ define([
 	'./ScheduleCell',
 	'dijit/Calendar',
 	], 
-	function(declare, _Widget, Evented, template, domAttr, ScheduleCell, Calendar) {
+	function(declare, on, _Widget, Evented, template, domAttr, ScheduleCell, Calendar) {
 
 	return declare('BizComp.OpeningHourForm', [_Widget, Evented], {
 
@@ -24,10 +25,12 @@ define([
 				this.array.push(cell);
 				cell.placeAt(this.scheduleCellParentNode,'after');
 			}
+			
+			//on(this.validateButton, 'click', this.getResult);
 		},
-		validate: function(){
+		/*validate1: function(){
 			this.getResult();
-		},
+		},*/
 		getResult:function(){
 			var result = new Array();
 			for(var i  in this.array){
