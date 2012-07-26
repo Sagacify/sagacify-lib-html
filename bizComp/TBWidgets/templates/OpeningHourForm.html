@@ -1,12 +1,12 @@
-<div>
-					<ul id="openingHours">
-						<li>
-	 						<ul>
-		 						<li><label>from </label><input type="text" class="input-mini"/><label>to </label><input type="text" class="input-mini"/></li>
-		 						<li><label>from </label><input type="text" class="input-mini"/><label>to </label><input type="text" class="input-mini"/></li>
-		 						<li><label>from </label><input type="text" class="input-mini"/><label>to </label><input type="text" class="input-mini"/></li>
-		 						<li><label>from </label><input type="text" class="input-mini"/><label>to </label><input type="text" class="input-mini"/></li>
-	 						</ul>
- 						</li>
- 					</ul>
-</div>
+			<div style="background-color:green;">
+				<label for="openingHours">Opening : </label>
+				<table id="table" width="632">
+		            <tr data-dojo-attach-point="scheduleCellParentNode">
+		              <th class="title">Jour</th>
+		              <th class="title" align="center">Matin</th>
+		              <th class="title" align="center">Après-Midi</th>
+		              <th class="title" align="center">Close</th>
+		            </tr>
+		          </table>
+		          <button data-dojo-attach-event="ondijitclick:validate">validate</button>
+			</div>
