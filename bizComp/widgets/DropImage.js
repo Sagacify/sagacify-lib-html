@@ -52,8 +52,7 @@ define([
 			// Setup the dnd listeners.
 			
 			var me = this;
-			
-			this.maskNode.style.backgroundImage = "url("+window.location.pathname+"/js/lib/bizComp/img/DropImageBg.png)";
+			this.maskNode.style.backgroundImage = "url(js/lib/bizComp/img/DropImageBg.png)";
 			
 			on(this.inputFileNode, "change", function(args){
 				iframe.send({
