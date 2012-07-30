@@ -52,7 +52,6 @@ define([
 			// Setup the dnd listeners.
 			
 			var me = this;
-			console.log("url: "+config.baseUrl);
 			this.maskNode.style.backgroundImage = "url("+config.baseUrl+"lib/bizComp/img/DropImageBg.png)";
 			
 			on(this.inputFileNode, "change", function(args){
