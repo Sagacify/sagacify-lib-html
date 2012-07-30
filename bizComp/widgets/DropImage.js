@@ -8,8 +8,9 @@ define([
 	'dojo/_base/connect',
 	'dojo/_base/lang',
 	'dojo/io/iframe',
-	'dojo/_base/event'],
-	function(_Widget, Evented, template, on, domConstruct, domAttr, connect, lang, iframe, event) {
+	'dojo/_base/event',
+	'dojo/_base/config'],
+	function(_Widget, Evented, template, on, domConstruct, domAttr, connect, lang, iframe, event, config) {
 
 	return dojo.declare('DropImage', [_Widget, Evented], {
 
@@ -22,7 +23,6 @@ define([
 			if(args) {
 				this._url = args.url;
 			}
-
 		},
 		
 		onClick : function(evt){
@@ -52,7 +52,8 @@ define([
 			// Setup the dnd listeners.
 			
 			var me = this;
-			this.maskNode.style.backgroundImage = "url(js/lib/bizComp/img/DropImageBg.png)";
+			console.log("url: "+config.baseUrl);
+			this.maskNode.style.backgroundImage = "url("+config.baseUrl+"lib/bizComp/img/DropImageBg.png)";
 			
 			on(this.inputFileNode, "change", function(args){
 				iframe.send({
