@@ -18,10 +18,12 @@ define([
 		
 		_url: null,
 		
+		_options: null,
 		
 		constructor: function(args){
 			if(args) {
 				this._url = args.url;
+				this._options = args.options;
 			}
 		},
 		
@@ -33,9 +35,9 @@ define([
 						form : me.dropImageFormNode,
 						handleAs: "json"
 				}).then(function(response){
-							if (response.path){
-								console.log(response.path);
-								me.emit('fileUploaded', {'path':response.path});
+							if (response){
+								me.emit('fileUploaded', {'serverResponse':response});
+								//me.emit('fileUploaded', {'path':response.path});
 							}
 							else {
 								console.log('Raise Error : No path returned');
@@ -55,14 +57,15 @@ define([
 			this.maskNode.style.backgroundImage = "url("+config.baseUrl+"lib/bizComp/img/DropImageBg.png)";
 			
 			on(this.inputFileNode, "change", function(args){
+				console.log("bef");
 				iframe.send({
 						url : me._url,
 						form : me.dropImageFormNode,
 						handleAs: "json"
 				}).then(function(response){
-							if (response.path){
-								console.log(response.path);
-								me.emit('fileUploaded', {'path':response.path});
+							if (response){
+								//me.emit('fileUploaded', {'serverResponse':response});
+								me.emit('fileUploaded', response);
 							}
 							else {
 								console.log('Raise Error : No path returned');
@@ -73,21 +76,6 @@ define([
 							console.log(error);
 						});			
 			});
-			
-			//on(this.submitFormNode, 'click', function(evt){
-				
-			
-			//var dropZone = this.drop_zoneNode;
-			
-			
-			
-			//on(dropZone, 'dragover', this._handleDragOver);
-			//on(dropZone, 'drop', this._handleDragSelect);
-			//dropZone.addEventListener('dragover', lang.hitch(this, "_handleDragOver"), false);
-			//dropZone.addEventListener('drop', lang.hitch(this, "_handleFileSelect"), false);
-			//dropZone.addEventListener('drop', lang.hitch(this, "_handleFileDrop"), false);
-			//console.log(this.listNode);
-			
 			
 		},
 		
