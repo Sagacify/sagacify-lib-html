@@ -109,7 +109,7 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 				else {
 					cellsContainer = new EdgeToEdgeList();
 				}
-				cellsContainer.domNode.style.background = "transparent";
+				//cellsContainer.domNode.style.background = "transparent";
 				this._cellsContainer = cellsContainer;
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);

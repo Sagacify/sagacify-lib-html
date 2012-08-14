@@ -39,7 +39,7 @@ define(['dojo/_base/declare', 'dojox/mobile/Heading', 'dojo/Evented', './TextFie
 			});
 			
 			on(this._textField.domNode, "keyup", function(args){
-				me.emit("textChange", {text:me._textView.domNode.value});
+				me.emit("textChange", {text:me._textField.domNode.value});
 			});
 			
 			on(this._cancelButton.domNode, "click", function(args){
