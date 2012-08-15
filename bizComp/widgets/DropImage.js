@@ -37,7 +37,6 @@ define([
 				}).then(function(response){
 							if (response){
 								me.emit('fileUploaded', {'serverResponse':response});
-								//me.emit('fileUploaded', {'path':response.path});
 							}
 							else {
 								console.log('Raise Error : No path returned');
@@ -64,7 +63,6 @@ define([
 						handleAs: "json"
 				}).then(function(response){
 							if (response){
-								//me.emit('fileUploaded', {'serverResponse':response});
 								me.emit('fileUploaded', response);
 							}
 							else {
