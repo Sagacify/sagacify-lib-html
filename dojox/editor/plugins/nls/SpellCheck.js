@@ -16,8 +16,8 @@ define({ root:
 	iSkipAll: "Skip all like this",
 	iMsg: "No spelling suggestions"
 })
-,
 //end v1.x content
+,
 "zh": true,
 "zh-tw": true,
 "tr": true,

@@ -7,7 +7,7 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/i18n",
-	"dijit/_Widget",
+	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/registry",
@@ -23,20 +23,12 @@ define([
 	"dijit/form/CheckBox" // template
 ], function(declare, lang, array, event, domGeometry, domClass, domConstruct, i18n, Widget, TemplatedMixin, WidgetsInTemplateMixin, registry, Menu, MenuItem, Tooltip, FormSelectWidget, ComboButton, CheckedMultiSelectMenuItem, CheckedMultiSelectItem, CheckedMultiSelect, nlsCheckedMultiSelect){
 
-	//	module:
-	//		dojox/form/CheckedMultiSelect
-	//	summary:
-	//		Extends the core dojox.form.CheckedMultiSelect to provide a "checkbox" selector
-	//
+// module:
+//		dojox/form/CheckedMultiSelect
+// summary:
+//		Extends the core dojox.form.CheckedMultiSelect to provide a "checkbox" selector
 
-	/*=====
-		Widget = dijit._Widget;
-		TemplatedMixin = dijit._TemplatedMixin;
-		WidgetsInTemplateMixin = dijit._WidgetsInTemplateMixin;
-		Menu = dijit.Menu;
-		MenuItem = dijit.MenuItem;
-		FormSelectWidget = dijit.form._FormSelectWidget;
-	=====*/
+
 var formCheckedMultiSelectItem = declare("dojox.form._CheckedMultiSelectItem", [Widget, TemplatedMixin, WidgetsInTemplateMixin], {
 	// summary:
 	//		The individual items for a CheckedMultiSelect
@@ -130,10 +122,9 @@ var formCheckedMultiSelectItem = declare("dojox.form._CheckedMultiSelectItem", [
 var formCheckedMultiSelectMenu = declare("dojox.form._CheckedMultiSelectMenu", Menu, {
 	// summary:
 	//		An internally-used menu for dropdown that allows us a vertical scrollbar
+
 	multiple: false,
 
-	// summary:
-	//		An internally-used menu for dropdown that allows us a vertical scrollbar
 	buildRendering: function(){
 		// summary:
 		//		Stub in our own changes, so that our domNode is not a table
@@ -187,6 +178,7 @@ var formCheckedMultiSelectMenu = declare("dojox.form._CheckedMultiSelectMenu", M
 		//		Handle clicks on an item.
 		// tags:
 		//		private
+		
 		// this can't be done in _onFocus since the _onFocus events occurs asynchronously
 		if(typeof this.isShowingNow == 'undefined'){ // non-popup menu
 			this._markActive();
@@ -223,9 +215,9 @@ var formCheckedMultiSelectMenuItem = declare("dojox.form._CheckedMultiSelectMenu
 	_iconClass: "",
 
 	postMixInProperties: function(){
-	// summary:
-	//		Set the appropriate _subClass value - based on if we are multi-
-	//		or single-select
+		// summary:
+		//		Set the appropriate _subClass value - based on if we are multi-
+		//		or single-select
 		if(this.parent.multiple){
 			this._iconClass = "dojoxCheckedMultiSelectMenuCheckBoxItemIcon";
 			this._type = {type: "checkbox"};
@@ -431,7 +423,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 		//		notification that an item as been added to this dijit.
 	},
 
-	_addOptionItem: function(/* dojox.form.__SelectOption */ option){
+	_addOptionItem: function(/*dojox.form.__SelectOption*/ option){
 		var item;
 		if(this.dropDown){
 			item = new formCheckedMultiSelectMenuItem({
@@ -462,7 +454,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 	},
 
 	reset: function(){
-		// summary: Overridden so that the state will be cleared.
+		// Overridden so that the state will be cleared.
 		this.inherited(arguments);
 		Tooltip.hide(this.domNode);
 	},
@@ -472,6 +464,16 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 		this._handleOnChange(this.value);
 		array.forEach(this._getChildren(), function(item){
 			item._updateBox();
+		});
+		domConstruct.empty(this.containerNode);
+		var self = this;
+		array.forEach(this.value, function(item){
+			var opt = domConstruct.create("option", {
+				"value": item,
+				"label": item,
+				"selected": "selected"
+			});
+			domConstruct.place(opt, self.containerNode);
 		});
 		if(this.dropDown && this.dropDownButton){
 			var i = 0, label = "";
@@ -498,7 +500,8 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 	},
 
 	invertSelection: function(onChange){
-		// summary: Invert the selection
+		// summary:
+		//		Invert the selection
 		// onChange: Boolean
 		//		If null, onChange is not fired.
 		if(this.multiple){

@@ -3,24 +3,25 @@ dojo.provide("dojox.storage.manager");
 // FIXME: refactor this to use an AdapterRegistry
 
 dojox.storage.manager = new function(){
-	// summary: A singleton class in charge of the dojox.storage system
+	// summary:
+	//		A singleton class in charge of the dojox.storage system
 	// description:
 	//		Initializes the storage systems and figures out the best available
 	//		storage options on this platform.
 
 	// currentProvider: Object
-	//	The storage provider that was automagically chosen to do storage
-	//	on this platform, such as dojox.storage.FlashStorageProvider.
+	//		The storage provider that was automagically chosen to do storage
+	//		on this platform, such as dojox.storage.FlashStorageProvider.
 	this.currentProvider = null;
 
 	// available: Boolean
-	//	Whether storage of some kind is available.
+	//		Whether storage of some kind is available.
 	this.available = false;
 
-  // providers: Array
-  //  Array of all the static provider instances, useful if you want to
-  //  loop through and see what providers have been registered.
-  this.providers = [];
+	// providers: Array
+	//		Array of all the static provider instances, useful if you want to
+	//		loop through and see what providers have been registered.
+	this.providers = [];
 
 	this._initialized = false;
 
@@ -59,10 +60,9 @@ dojox.storage.manager = new function(){
 		// summary:
 		//		Instructs the storageManager to use the given storage class for
 		//		all storage requests.
-		// description:
-		//		Example-
-		//			dojox.storage.setProvider(
-		//				dojox.storage.IEStorageProvider)
+		// example:
+		//	|	dojox.storage.setProvider(
+		//	|		dojox.storage.IEStorageProvider)
 
 	};
 
@@ -122,7 +122,8 @@ dojox.storage.manager = new function(){
 	};
 
 	this.isAvailable = function(){ /*Boolean*/
-		// summary: Returns whether any storage options are available.
+		// summary:
+		//		Returns whether any storage options are available.
 		return this.available;
 	};
 
@@ -145,7 +146,8 @@ dojox.storage.manager = new function(){
 	};
 
 	this.removeOnLoad = function(func){ /* void */
-		// summary: Removes the given onLoad listener
+		// summary:
+		//		Removes the given onLoad listener
 		for(var i = 0; i < this._onLoadListeners.length; i++){
 			if(func == this._onLoadListeners[i]){
 				this._onLoadListeners.splice(i, 1);
@@ -173,11 +175,11 @@ dojox.storage.manager = new function(){
 	};
 
 	this.supportsProvider = function(/*string*/ storageClass){ /* Boolean */
-		// summary: Determines if this platform supports the given storage provider.
-		// description:
-		//		Example-
-		//			dojox.storage.manager.supportsProvider(
-		//				"dojox.storage.InternetExplorerStorageProvider");
+		// summary:
+		//		Determines if this platform supports the given storage provider.
+		// example:
+		// |	dojox.storage.manager.supportsProvider(
+		// |		"dojox.storage.InternetExplorerStorageProvider");
 
 		// construct this class dynamically
 		try{
@@ -193,7 +195,8 @@ dojox.storage.manager = new function(){
 	};
 
 	this.getProvider = function(){ /* Object */
-		// summary: Gets the current provider
+		// summary:
+		//		Gets the current provider
 		return this.currentProvider;
 	};
 
@@ -205,15 +208,14 @@ dojox.storage.manager = new function(){
 		//		system. You can either use dojo.connect to connect to this
 		//		function, or can use dojox.storage.manager.addOnLoad() to add
 		//		a listener that does not depend on the dojo.event package.
-		// description:
-		//		Example 1-
-		//			if(dojox.storage.manager.isInitialized() == false){
-		//				dojo.connect(dojox.storage.manager, "loaded", TestStorage, "initialize");
-		//			}else{
-		//				dojo.connect(dojo, "loaded", TestStorage, "initialize");
-		//			}
-		//		Example 2-
-		//			dojox.storage.manager.addOnLoad(someFunction);
+		// example:
+		// |	if(dojox.storage.manager.isInitialized() == false){
+		// |		dojo.connect(dojox.storage.manager, "loaded", TestStorage, "initialize");
+		// |	}else{
+		// |		dojo.connect(dojo, "loaded", TestStorage, "initialize");
+		// |	}
+		// example:
+		// |	dojox.storage.manager.addOnLoad(someFunction);
 
 
 		// FIXME: we should just provide a Deferred for this. That way you

@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"findLabel": "Табу:",
 	"findTooltip": "Табылатын мәтінді енгізу",
@@ -21,6 +20,4 @@ define(
 	"eofDialogTextFind": "табылды",
 	"eofDialogTextReplace": "ауыстырылды"
 })
-
-//end v1.x content
 );

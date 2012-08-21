@@ -13,7 +13,7 @@ form = cgi.FieldStorage()
 dbg = []
 
 def debug(dbgstr):
-  dbg.append(str(dbgstr))
+	dbg.append(str(dbgstr))
 
 def save_uploaded_file(form_field, upload_dir):
 	global form

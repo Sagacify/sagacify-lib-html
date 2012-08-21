@@ -6,14 +6,8 @@ define([
 	"./hccss"
 ], function(declare, domClass, MenuItem, template){
 
-/*=====
-	var MenuItem = dijit.MenuItem;
-=====*/
-
 	// module:
 	//		dijit/CheckedMenuItem
-	// summary:
-	//		A checkbox-like menu item for toggling on and off
 
 	return declare("dijit.CheckedMenuItem", MenuItem, {
 		// summary:
@@ -29,7 +23,7 @@ define([
 			//		Hook so attr('checked', bool) works.
 			//		Sets the class and state for the check box.
 			domClass.toggle(this.domNode, "dijitCheckedMenuItemChecked", checked);
-			this.domNode.setAttribute("aria-checked", checked);
+			this.domNode.setAttribute("aria-checked", checked ? "true" : "false");
 			this._set("checked", checked);
 		},
 
@@ -42,7 +36,7 @@ define([
 			//		callback
 		},
 
-		_onClick: function(/*Event*/ e){
+		_onClick: function(evt){
 			// summary:
 			//		Clicking this item just toggles its state
 			// tags:
@@ -51,7 +45,7 @@ define([
 				this.set("checked", !this.checked);
 				this.onChange(this.checked);
 			}
-			this.inherited(arguments);
+			this.onClick(evt);
 		}
 	});
 });

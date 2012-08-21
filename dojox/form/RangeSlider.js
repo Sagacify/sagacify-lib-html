@@ -26,12 +26,7 @@ define([
 		sortForward = function(a, b){ return a - b; }
 	;
 
-	lang.getObject("form", true, dojox);
 
-	/*=====
-		hTemplate = dijit.form.HorizontalSlider;
-		vTemplate = dijit.form.VerticalSlider;
-	=====*/
 	var RangeSliderMixin = declare("dojox.form._RangeSliderMixin", null, {
 
 		value: [0,100],
@@ -55,9 +50,17 @@ define([
 			});
 
 			this._movableMax = new Moveable(this.sliderHandleMax,{ mover: mover });
-			this.focusNodeMax.setAttribute("aria-valuemin", this.minimum);
-			this.focusNodeMax.setAttribute("aria-valuemax", this.maximum);
 
+			//The valuenow of the sliderHandle (min) usually determines the valuemin of sliderHandleMax
+			//and valuenow of sliderHandleMax usually determines the valueMax of sliderHandle
+			//However, in our RangeSlider dragging one handle past the other one causes both to
+			//'snap' together and move so both sliders will have the same min, max values			
+
+			this.sliderHandle.setAttribute("aria-valuemin", this.minimum);
+			this.sliderHandle.setAttribute("aria-valuemax", this.maximum);
+			this.sliderHandleMax.setAttribute("aria-valuemin", this.minimum);
+			this.sliderHandleMax.setAttribute("aria-valuemax", this.maximum);
+			
 			// a dnd for the bar!
 			var barMover = declare(SliderBarMover, {
 				constructor: function(){
@@ -65,7 +68,13 @@ define([
 				}
 			});
 			this._movableBar = new Moveable(this.progressBar,{ mover: barMover });
-		},
+				
+			// Remove these from the progress bar since it isn't a slider
+			this.focusNode.removeAttribute("aria-valuemin");
+			this.focusNode.removeAttribute("aria-valuemax");
+			this.focusNode.removeAttribute("aria-valuenow");
+
+		},		
 
 		destroy: function(){
 			this.inherited(arguments);
@@ -230,11 +239,12 @@ define([
 			// we have to reset this values. don't know the reason for that
 			this._lastValueReported = "";
 			this.valueNode.value = this.value = value = actValue;
-			this.focusNode.setAttribute("aria-valuenow", actValue[0]);
-			this.focusNodeMax.setAttribute("aria-valuenow", actValue[1]);
 
 			this.value.sort(this._isReversed() ? sortReversed : sortForward);
 
+			this.sliderHandle.setAttribute("aria-valuenow", actValue[0]);
+			this.sliderHandleMax.setAttribute("aria-valuenow", actValue[1]);
+			
 			// not calling the _setValueAttr-function of Slider, but the super-super-class (needed for the onchange-event!)
 			FormValueWidget.prototype._setValueAttr.apply(this, arguments);
 			this._printSliderBar(priorityChange, isMaxVal);
@@ -293,8 +303,7 @@ define([
 				widget._isReversed_ = widget._isReversed();
 			}
 
-			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords
-			var pixelValue = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord];
+			var pixelValue = e[widget._mousePixelCoord] - abspos[widget._startingPixelCoord];
 			widget._setPixelValue_(widget._isReversed_ ? (abspos[widget._pixelCount]-pixelValue) : pixelValue, abspos[widget._pixelCount], false, true);
 		},
 
@@ -324,14 +333,12 @@ define([
 			if(!bar){
 				bar = widget._bar = domGeometry.position(widget.progressBar, true);
 			}
-			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords
 
 			if(!mouseOffset){
-				mouseOffset = widget._mouseOffset = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - bar[widget._startingPixelCoord];
+				mouseOffset = widget._mouseOffset = e[widget._mousePixelCoord] - bar[widget._startingPixelCoord];
 			}
 
-
-			var pixelValueMin = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - mouseOffset,
+			var pixelValueMin = e[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - mouseOffset,
 				pixelValueMax = pixelValueMin + bar[widget._pixelCount];
 				// we don't narrow the slider when it reaches the bumper!
 				// maybe there is a simpler way
@@ -369,13 +376,13 @@ define([
 
 	declare("dojox.form.HorizontalRangeSlider", [HorizontalSlider, RangeSliderMixin], {
 		// summary:
-		//	A form widget that allows one to select a range with two horizontally draggable images
+		//		A form widget that allows one to select a range with two horizontally draggable images
 		templateString: hTemplate
 	});
 
 	declare("dojox.form.VerticalRangeSlider", [VerticalSlider, RangeSliderMixin], {
 		// summary:
-		//	A form widget that allows one to select a range with two vertically draggable images
+		//		A form widget that allows one to select a range with two vertically draggable images
 		templateString: vTemplate
 	});
 

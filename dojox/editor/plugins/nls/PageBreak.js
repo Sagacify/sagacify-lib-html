@@ -3,8 +3,8 @@ define({ root:
 ({
 	"pageBreak": "Page Break"
 })
-,
 //end v1.x content
+,
 "zh": true,
 "zh-tw": true,
 "tr": true,

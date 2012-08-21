@@ -4,14 +4,18 @@ define("dojox/widget/MultiSelectCalendar", [
     "dojo/cldr/supplemental", 
     "dojo/date", 
     "dojo/date/locale", 
-    "dijit/_Widget", "dijit/_Templated", "dijit/_CssStateMixin", "dijit/form/DropDownButton", "dijit/typematic"],
-    function(dojo, dijit, template) {
+    "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin",
+	"dijit/_CssStateMixin", "dijit/form/DropDownButton", "dijit/typematic"
+],
+    function(dojo, dijit, template, supplemental, date, locale,
+		_Widget, _TemplatedMixin, _WidgetsInTemplateMixin,
+		_CssStateMixin, DropDownButton, typematic) {
 
 dojo.experimental("dojox.widget.MultiSelectCalendar");
 
 dojo.declare(
 	"dojox.widget.MultiSelectCalendar",
-	[dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin, dijit._CssStateMixin],
+	[_Widget, _TemplatedMixin, _WidgetsInTemplateMixin, _CssStateMixin],
 	{
 		// summary:
 		//		A simple GUI for choosing several dates in the context of a monthly calendar.
@@ -44,7 +48,7 @@ dojo.declare(
 		//		How to represent the days of the week in the calendar header. See dojo.date.locale
 		dayWidth: "narrow",
 
-		// tabIndex: Integer
+		// tabIndex: String
 		//		Order fields are traversed when user hits the tab key
 		tabIndex: "0",
 		
@@ -81,7 +85,8 @@ dojo.declare(
 		},
 
 		_getValueAttr: function(){
-			// summary: this method returns the list of selected dates in an array structure
+			// summary:
+			//		this method returns the list of selected dates in an array structure
 			if(this.returnIsoRanges){
 				datesWithRanges = this._returnDatesWithIsoRanges(this._sort());
 				return datesWithRanges;
@@ -94,12 +99,12 @@ dojo.declare(
 			// summary:
 			//		Support set("value", ...)
 			// description:
-			// 		Set the passed dates to the selected date and updates the value of this widget
+			//		Set the passed dates to the selected date and updates the value of this widget
 			//		to reflect that
 			// value:
 			//		Can be a Date, the number of milliseconds since 1970 or an array of ISO dates (['2011-07-01', '2001-06-01']).
 			// tags:
-			//      protected
+			//		protected
 			
 			//If we are passed an array of ISO dates, we are going to mark each date in the list as selected
 			//We perform the normalization of the passed date
@@ -190,7 +195,7 @@ dojo.declare(
 			//		This just sets the content of node to the specified text.
 			//		Can't do "node.innerHTML=text" because of an IE bug w/tables, see #3434.
 			// tags:
-			//      private
+			//		private
 			while(node.firstChild){
 				node.removeChild(node.firstChild);
 			}
@@ -199,9 +204,9 @@ dojo.declare(
 
 		_populateGrid: function(){
 			// summary:
-			//      Fills in the calendar grid with each day (1-31)
+			//		Fills in the calendar grid with each day (1-31)
 			// tags:
-			//      private
+			//		private
 
 			var month = new this.dateClassObj(this.currentFocus);
 			month.setDate(1);
@@ -304,7 +309,7 @@ dojo.declare(
 
 		goToToday: function(){
 			// summary:
-			//      We go to today but we do no select it
+			//		We go to today but we do no select it
 			this.set('currentFocus', new this.dateClassObj(), false);
 		},
 
@@ -367,13 +372,13 @@ dojo.declare(
 
 		_adjustDisplay: function(/*String*/ part, /*int*/ amount){
 			// summary:
-			//      Moves calendar forwards or backwards by months or years
+			//		Moves calendar forwards or backwards by months or years
 			// part:
-			//      "month" or "year"
+			//		"month" or "year"
 			// amount:
-			//      Number of months or years
+			//		Number of months or years
 			// tags:
-			//      private
+			//		private
 			this._setCurrentFocusAttr(this.dateFuncObj.add(this.currentFocus, part, amount));
 		},
 
@@ -426,9 +431,9 @@ dojo.declare(
 
 		_onMonthSelect: function(/*Number*/ newMonth){
 			// summary:
-			//      Handler for when user selects a month from the drop down list
+			//		Handler for when user selects a month from the drop down list
 			// tags:
-			//      protected
+			//		protected
 
 			// move to selected month, bounding by the number of days in the month
 			// (ex: dec 31 --> jan 28, not jan 31)
@@ -482,9 +487,9 @@ dojo.declare(
 
 		_onDayClick: function(/*Event*/ evt){
 			// summary:
-			//      Handler for day clicks, selects the date if appropriate
+			//		Handler for day clicks, selects the date if appropriate
 			// tags:
-			//      protected
+			//		protected
 			
 			//If we coming out of selecting a range, we need to skip this onDayClick or else we
 			//are going to deselect a date that has just been selected or deselect one that just was 
@@ -510,9 +515,9 @@ dojo.declare(
 
 		_onDayMouseOver: function(/*Event*/ evt){
 			// summary:
-			//      Handler for mouse over events on days, sets hovered style
+			//		Handler for mouse over events on days, sets hovered style
 			// tags:
-			//      protected
+			//		protected
 
 			// event can occur on <td> or the <span> inside the td,
 			// set node to the <td>.
@@ -528,9 +533,9 @@ dojo.declare(
 		},
 		_setEndRangeAttr: function(/*Date*/ value){
 			// description:
-			// 		records the end of a date range
+			//		records the end of a date range
 			// tags:
-			//      protected
+			//		protected
 			value = new this.dateClassObj(value);
 			value.setHours(1); // to avoid issues when DST shift occurs at midnight, see #8521, #9366
 			this.endRange = value;
@@ -550,9 +555,9 @@ dojo.declare(
 
 		_onDayMouseOut: function(/*Event*/ evt){
 			// summary:
-			//      Handler for mouse out events on days, clears hovered style
+			//		Handler for mouse out events on days, clears hovered style
 			// tags:
-			//      protected
+			//		protected
 	
 			if(!this._currentNode){ return; }
 			
@@ -597,7 +602,7 @@ dojo.declare(
 			// summary:
 			//		Provides keyboard navigation of calendar.
 			// description:
-			//		Called from _onKeyPress() to handle keypress on a stand alone Calendar,
+			//		Called from _onKeyDown() to handle keypress on a stand alone Calendar,
 			//		and also from `dijit.form._DateTimeTextBox` to pass a keypress event 
 			//		from the `dijit.form.DateTextBox` to be handled in this widget
 			// returns:
@@ -670,7 +675,7 @@ dojo.declare(
 			return false;
 		},
 
-		_onKeyPress: function(/*Event*/ evt){
+		_onKeyDown: function(/*Event*/ evt){
 			// summary:
 			//		For handling keypress events on a stand alone calendar
 			if(!this.handleKey(evt)){
@@ -823,18 +828,18 @@ dojo.declare(
 			// summary:
 			//		Notification that a date cell or more were selected.
 			// description:
-			//      Passes on the list of ISO dates that are selected
+			//		Passes on the list of ISO dates that are selected
 			// tags:
-			//      protected
+			//		protected
 		},
 
 		onValueUnselected: function(/*array of ISO dates*/ dates){
 			// summary:
 			//		Notification that a date cell or more were unselected.
 			// description:
-			//      Passes on the list of ISO dates that are unselected
+			//		Passes on the list of ISO dates that are unselected
 			// tags:
-			//      protected
+			//		protected
 		},
 		onChange: function(/*Date*/ date){
 			// summary:
@@ -853,7 +858,7 @@ dojo.declare(
 			// summary:
 			//		May be overridden to disable certain dates in the calendar e.g. `isDisabledDate=dojo.date.locale.isWeekend`
 			// tags:
-			//      extension
+			//		extension
 /*=====
 			return false; // Boolean
 =====*/
@@ -864,7 +869,7 @@ dojo.declare(
 			//		May be overridden to return CSS classes to associate with the date entry for the given dateObject,
 			//		for example to indicate a holiday in specified locale.
 			// tags:
-			//      extension
+			//		extension
 
 /*=====
 			return ""; // String
@@ -938,7 +943,7 @@ dojo.declare(
 );
 
 //FIXME: can we use dijit.Calendar._MonthDropDown directly?
-dojo.declare("dojox.widget._MonthDropDown", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+dojo.declare("dojox.widget._MonthDropDown", [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	// summary:
 	//		The month drop down
 

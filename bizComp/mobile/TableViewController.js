@@ -66,14 +66,22 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 			
 			this.inherited(arguments);
 			dojo.forEach(this._headers, function(header, i){
-				if(header)
-					header.destroyRecursive();
+				if(header){
+					if(header.destroyRecursive)
+						header.destroyRecursive();
+					else
+						domConstruct.destroy(header);
+				}
 			});
 			
 			dojo.forEach(this._cellsBySection, function(section, i){
 				dojo.forEach(section, function(cell, j){
-					if(cell)
-						cell.destroyRecursive();
+					if(cell){
+						if(cell.destroyRecursive)
+							cell.destroyRecursive();
+						else
+							domConstruct.destroy(cell);
+					}
 				});
 			});
 			

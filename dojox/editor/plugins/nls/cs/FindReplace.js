@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"findLabel": "Najít:",
 	"findTooltip": "Zadejte hledaný text.",
@@ -21,5 +20,4 @@ define(
 	"eofDialogTextFind": "byl nalezen",
 	"eofDialogTextReplace": "byl nahrazen"
 })
-//end v1.x content
 );

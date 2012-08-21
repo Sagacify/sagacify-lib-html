@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"findLabel": "Rechercher :",
 	"findTooltip": "Entrez le texte à rechercher",
@@ -21,5 +20,4 @@ define(
 	"eofDialogTextFind": "trouvé",
 	"eofDialogTextReplace": "remplacé"
 })
-//end v1.x content
 );

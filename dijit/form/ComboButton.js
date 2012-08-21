@@ -7,14 +7,8 @@ define([
 	"dojo/text!./templates/ComboButton.html"
 ], function(declare, event, keys, focus, DropDownButton, template){
 
-/*=====
-	var DropDownButton = dijit.form.DropDownButton;
-=====*/
-
 // module:
 //		dijit/form/ComboButton
-// summary:
-//		A combination button and drop-down button.
 
 return declare("dijit.form.ComboButton", DropDownButton, {
 	// summary:
@@ -23,13 +17,13 @@ return declare("dijit.form.ComboButton", DropDownButton, {
 	//		icon to display the drop down.
 	//
 	// example:
-	// |	<button data-dojo-type="dijit.form.ComboButton" onClick="...">
+	// |	<button data-dojo-type="dijit/form/ComboButton" onClick="...">
 	// |		<span>Hello world</span>
-	// |		<div data-dojo-type="dijit.Menu">...</div>
+	// |		<div data-dojo-type="dijit/Menu">...</div>
 	// |	</button>
 	//
 	// example:
-	// |	var button1 = new dijit.form.ComboButton({label: "hello world", onClick: foo, dropDown: "myMenu"});
+	// |	var button1 = new ComboButton({label: "hello world", onClick: foo, dropDown: "myMenu"});
 	// |	dojo.body().appendChild(button1.domNode);
 	//
 

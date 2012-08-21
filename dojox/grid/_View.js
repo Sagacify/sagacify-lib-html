@@ -20,7 +20,7 @@ define([
 	"dojo/dnd/Avatar",
 	"dojo/dnd/Manager"
 ], function(dojo, dijit, dojox, declare, array, lang, connect, has, query,
-	win, template, Source, _Widget, _TemplatedMixin, metrics, util, html, _Builder, Avatar){
+	win, template, Source, _Widget, _TemplatedMixin, metrics, util, html, _Builder, Avatar, Manager){
 
 	// a private function
 	var getStyleText = function(inNode, inStyleText){
@@ -39,12 +39,11 @@ define([
 		defaultWidth: "18em",
 
 		// viewWidth: String
-		// 		Width for the view, in valid css unit
+		//		Width for the view, in valid css unit
 		viewWidth: "",
 
 		templateString: template,
-		
-		themeable: false,
+
 		classTag: 'dojoxGrid',
 		marginBottom: 0,
 		rowPad: 2,
@@ -377,7 +376,7 @@ define([
 		},
 
 		_onDndDropBefore: function(source, nodes, copy){
-			if(dojo.dnd.manager().target !== this.source){
+			if(Manager.manager().target !== this.source){
 				return;
 			}
 			this.source._targetNode = this.source.targetAnchor;
@@ -392,8 +391,8 @@ define([
 		},
 
 		_onDndDrop: function(source, nodes, copy){
-			if(dojo.dnd.manager().target !== this.source){
-				if(dojo.dnd.manager().source === this.source){
+			if(Manager.manager().target !== this.source){
+				if(Manager.manager().source === this.source){
 					this._removingColumn = true;
 				}
 				return;
@@ -696,8 +695,12 @@ define([
 		// scrolling
 		lastTop: 0,
 		firstScroll:0,
+		_nativeScroll: false,
 
 		doscroll: function(inEvent){
+			if(has('ff') >= 13){
+				this._nativeScroll = true;
+			}
 			//var s = dojo.marginBox(this.headerContentNode.firstChild);
 			var isLtr = this.grid.isLeftToRight();
 			if(this.firstScroll < 2){
@@ -723,12 +726,16 @@ define([
 			if(top !== this.lastTop){
 				this.grid.scrollTo(top);
 			}
+			this._nativeScroll = false;
 		},
 
 		setScrollTop: function(inTop){
 			// 'lastTop' is a semaphore to prevent feedback-loop with doScroll above
 			this.lastTop = inTop;
-			this.scrollboxNode.scrollTop = inTop;
+			if(!this._nativeScroll){
+				//fix #15487
+				this.scrollboxNode.scrollTop = inTop;
+			}
 			return this.scrollboxNode.scrollTop;
 		},
 
@@ -827,23 +834,23 @@ define([
 			a.appendChild(b);
 			this.node = a;
 
-			var m = dojo.dnd.manager();
+			var m = Manager.manager();
 			this.oldOffsetY = m.OFFSET_Y;
 			m.OFFSET_Y = 1;
 		},
 		destroy: function(){
-			dojo.dnd.manager().OFFSET_Y = this.oldOffsetY;
+			Manager.manager().OFFSET_Y = this.oldOffsetY;
 			this.inherited(arguments);
 		}
 	});
 
-	var oldMakeAvatar = dojo.dnd.manager().makeAvatar;
-	dojo.dnd.manager().makeAvatar = function(){
+	var oldMakeAvatar = Manager.manager().makeAvatar;
+	Manager.manager().makeAvatar = function(){
 		var src = this.source;
 		if(src.viewIndex !== undefined && !html.hasClass(win.body(),"dijit_a11y")){
 			return new _GridAvatar(this);
 		}
-		return oldMakeAvatar.call(dojo.dnd.manager());
+		return oldMakeAvatar.call(Manager.manager());
 	};
 
 	return _View;

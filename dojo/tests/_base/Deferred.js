@@ -131,9 +131,6 @@ doh.register("tests._base.Deferred",
 			});
 			return td;
 		},
-		function syncWhenWithNoCallback(t){
-			t.is(dojo.when(3), 3);
-		},
 		function progress(t){
 			if(dojo.isBrowser){
 				var td = new doh.Deferred();
@@ -148,15 +145,6 @@ doh.register("tests._base.Deferred",
 				return td;
 			}
 			return null;
-		},
-		function errorHandler(t){
-			var def = new dojo.Deferred();
-			var handledError;
-			dojo.config.deferredOnError = function(e){
-				handledError = e;
-			};
-			def.reject(new Error("test"));
-			t.t(handledError instanceof Error);
 		},
 		function cancelThenDerivative(t){
 			var def = new dojo.Deferred();
@@ -266,14 +254,14 @@ doh.register("tests._base.Deferred",
 
 			t.assertEqual("succeed", retval);
 		},
-		function testDojoPromiseProgressBasic(t) {
+		function testDojoPromiseProgressBasic(t){
 			var a = new dojo.Deferred();
 			var b = new dojo.Deferred();
 			var called = false;
 			
-			a.then(function() {
+			a.then(function(){
 				b.then(function(){
-					if (!called) {
+					if (!called){
 						console.log("Boo. ProgressBasic not called");
 					}
 				}, function(){
@@ -290,15 +278,15 @@ doh.register("tests._base.Deferred",
 			t.t(called);
 		},
 		
-		function testDojoPromiseProgressChain(t) {
+		function testDojoPromiseProgressChain(t){
 			var a = new dojo.Deferred();
 			var b = new dojo.Deferred();
 			var called = false;
 			
-			a.then(function() {
+			a.then(function(){
 				return b;
 			}).then(function(){
-				if (!called) {
+				if (!called){
 					console.log("Boo. ProgressChain not called");
 				}
 			}, function(){

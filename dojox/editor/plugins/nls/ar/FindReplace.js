@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"findLabel": "ايجاد:",
 	"findTooltip": "ادخال نص لايجاد",
@@ -21,6 +20,4 @@ define(
 	"eofDialogTextFind": "موجودة",
 	"eofDialogTextReplace": "مستبدل"
 })
-
-//end v1.x content
 );
