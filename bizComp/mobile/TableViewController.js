@@ -19,6 +19,8 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 		_pullDownDiv: null,
 		
 		_cellsContainer: null,
+		
+		_transparentBg: false,
 						
 		constructor: function(args) {
 			if(args) {
@@ -28,6 +30,7 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 				this.frame = args.frame;
 				this._pullToRefresh = args.pullToRefresh;
 				this.parent = args.parent;
+				this._transparentBg = args.transparentBg;
 			}
 		},		
 		
@@ -117,7 +120,8 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 				else {
 					cellsContainer = new EdgeToEdgeList();
 				}
-				//cellsContainer.domNode.style.background = "transparent";
+				if(this._transparentBg)
+					cellsContainer.domNode.style.background = "transparent";
 				this._cellsContainer = cellsContainer;
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);

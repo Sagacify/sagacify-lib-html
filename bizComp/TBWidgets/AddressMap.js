@@ -6,9 +6,10 @@ define([
 	'dojo/dom-attr',
 	'./Dropdown',
 	'dojo/_base/connect',
-	'dojo/_base/xhr'
+	'dojo/_base/xhr',
+	'dojo/on'
 	], 
-	function(declare, _Widget, Evented, template, domAttr, Dropdown, connect, xhr) {
+	function(declare, _Widget, Evented, template, domAttr, Dropdown, connect, xhr, on) {
 
 	return declare('BizComp.OpeningHourForm', [_Widget, Evented], {
 
@@ -19,50 +20,69 @@ define([
 		},
 		
 		postCreate: function() {
-			this.allCityDropDown = new Dropdown({'selectedIndex':0,'data':countries});
-			this.allCityDropDown.placeAt(this.allcountryNode);
 			var me = this;
-			this.allCityDropDown.on("change", function(args){me.selectACountry(args);});
-			
-			var mapOptions = {
-  				center: new google.maps.LatLng(-34.397, 150.644),
-  				zoom: 8,
-  				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			this.map = new google.maps.Map(this.mapNode,mapOptions);
-			
-		},
-		selectACountry: function(args){
-			this.country = args.value;	
-			this.getResult();
-		},
-		getResult: function() {
-			this.zip = this.zipNode.value;
-			this.city = this.cityNode.value;
-			this.address = this.addressNode.value;
-			this.number  = this.numberNode.value;
-			
-			this.longLatProcess();
-				
-		},
-		longLatProcess: function(){
 			var geocoder = new google.maps.Geocoder();
-			var address = this.address +" "+ this.number +" "+ this.zip +" "+ this.city +" "+ this.country;
-			console.log("address "+address);
-			var me = this;
-			geocoder.geocode( { 'address': address}, function(results, status) {
-				console.log(status== "ok" );
-				me.position =  results[0].geometry.location;
-				me.lat = me.position.$a;
-				me.long = me.position.ab;
-				var myMarker = new google.maps.Marker({	
-					position: new google.maps.LatLng(me.lat, me.long),
-					map: me.map,
-					title: "Cinéma Pathé Bellecour"
+			geocoder.geocode( {"address": "Brussels"}, function(results, status) {
+				var lat = results[0].geometry.location.lat();
+				var lng = results[0].geometry.location.lng();
+				var map = new google.maps.Map(me.mapNode, {
+	  				center: new google.maps.LatLng(lat, lng),
+	  				zoom: 7,
+	  				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				});
 				
+				var marker = new google.maps.Marker({	
+					map: map,
+					draggable: true,
+					visible: false
+				});
+				google.maps.event.addListener(marker, 'dragend', function (event) {
+				    var lat = this.getPosition().lat();
+				    var long = this.getPosition().lng();
+				    
+				    geocoder.geocode( {'location': new google.maps.LatLng(lat, long)}, function(results, status) {
+						me.addressNode.value = results[0].formatted_address;
+						var tz = new TimeZoneDB;
+				        tz.getJSON({
+				            key: "5LM2TNRL0W55",
+				            lat: lat,
+				            lng: lng
+				        }, function(data){
+							me.emit("addressChange", {address:results[0], latLng:{lat:lat, lng:lng}, timeZone:data.gmtOffset/3600});
+				        });
+					});
+				});
+				
+				var bounds = new google.maps.LatLngBounds(
+					  new google.maps.LatLng(lat, lng),
+					  new google.maps.LatLng(lat, lng)
+				);
+				
+				var autocomplete = new google.maps.places.Autocomplete(me.addressNode, {bounds: bounds, types: ['geocode']});
+				google.maps.event.addListener(autocomplete, "place_changed", function(args){
+					geocoder.geocode( {'address': autocomplete.getPlace().formatted_address}, function(results, status) {
+						if(results[0]){
+							var lat = results[0].geometry.location.lat();
+							var lng = results[0].geometry.location.lng();
+							if(!marker.getVisible()) {
+								marker.setVisible(true);
+							}
+							marker.setPosition(new google.maps.LatLng(lat, lng));
+							map.setCenter(new google.maps.LatLng(lat, lng));
+							map.setZoom(17);
+							var tz = new TimeZoneDB;
+					        tz.getJSON({
+					            key: "5LM2TNRL0W55",
+					            lat: lat,
+					            lng: lng
+					        }, function(data){
+								me.emit("addressChange", {address:results[0], latLng:{lat:lat, lng:lng}, timeZone:data.gmtOffset/3600});
+					        });
+						}
+					});
+				});	
 			});
-		}
+		},
 		
 	});
 });
@@ -70,253 +90,3 @@ define([
 
 
 
-
-
-var countries = ['AFGHANISTAN',
-'ALAND ISLANDS',
-'ALBANIA',
-'ALGERIA',
-'AMERICAN SAMOA',
-'ANDORRA',
-'ANGOLA',
-'ANGUILLA',
-'ANTARCTICA',
-'ANTIGUA AND BARBUDA',
-'ARGENTINA',
-'ARMENIA',
-'ARUBA',
-'AUSTRALIA',
-'AUSTRIA',
-'AZERBAIJAN',
-'BAHAMAS',
-'BAHRAIN',
-'BANGLADESH',
-'BARBADOS',
-'BELARUS',
-'BELGIUM',
-'BELIZE',
-'BENIN',
-'BERMUDA',
-'BHUTAN',
-'BOLIVIA PLURINATIONAL STATE OF',
-'BONAIRE SINT EUSTATIUS AND SABA',
-'BOSNIA AND HERZEGOVINA',
-'BOTSWANA',
-'BOUVET ISLAND',
-'BRAZIL',
-'BRITISH INDIAN OCEAN TERRITORY',
-'BRUNEI DARUSSALAM',
-'BULGARIA',
-'BURKINA FASO',
-'BURUNDI',
-'CAMBODIA',
-'CAMEROON',
-'CANADA',
-'CAPE VERDE',
-'CAYMAN ISLANDS',
-'CENTRAL AFRICAN REPUBLIC',
-'CHAD',
-'CHILE',
-'CHINA',
-'CHRISTMAS ISLAND',
-'COCOS KEELING) ISLANDS',
-'COLOMBIA',
-'COMOROS',
-'CONGO',
-'CONGO THE DEMOCRATIC REPUBLIC OF THE',
-'COOK ISLANDS',
-'COSTA RICA',
-'COTE D\'IVOIRE',
-'CROATIA',
-'CUBA',
-'CURACAO',
-'CYPRUS',
-'CZECH REPUBLIC',
-'DENMARK',
-'DJIBOUTI',
-'DOMINICA',
-'DOMINICAN REPUBLIC',
-'ECUADOR',
-'EGYPT',
-'EL SALVADOR',
-'EQUATORIAL GUINEA',
-'ERITREA',
-'ESTONIA',
-'ETHIOPIA',
-'FALKLAND ISLANDS MALVINAS',
-'FAROE ISLANDS',
-'FIJI',
-'FINLAND',
-'FRANCE',
-'FRENCH GUIANA',
-'FRENCH POLYNESIA',
-'FRENCH SOUTHERN TERRITORIES',
-'GABON',
-'GAMBIA',
-'GEORGIA',
-'GERMANY',
-'GHANA',
-'GIBRALTAR',
-'GREECE',
-'GREENLAND',
-'GRENADA',
-'GUADELOUPE',
-'GUAM',
-'GUATEMALA',
-'GUERNSEY',
-'GUINEA',
-'GUINEA-BISSAU',
-'GUYANA',
-'HAITI',
-'HEARD ISLAND AND MCDONALD ISLANDS',
-'HOLY SEE VATICAN CITY STATE',
-'HONDURAS',
-'HONG KONG',
-'HUNGARY',
-'ICELAND',
-'INDIA',
-'INDONESIA',
-'IRAN ISLAMIC REPUBLIC OF',
-'IRAQ',
-'IRELAND',
-'ISLE OF MAN',
-'ISRAEL',
-'ITALY',
-'JAMAICA',
-'JAPAN',
-'JERSEY',
-'JORDAN',
-'KAZAKHSTAN',
-'KENYA',
-'KIRIBATI',
-'KOREA DEMOCRATIC PEOPLE\'S REPUBLIC OF',
-'KOREA REPUBLIC OF',
-'KUWAIT',
-'KYRGYZSTAN',
-'LAO PEOPLE\'S DEMOCRATIC REPUBLIC',
-'LATVIA',
-'LEBANON',
-'LESOTHO',
-'LIBERIA',
-'LIBYAN ARAB JAMAHIRIYA',
-'LIECHTENSTEIN',
-'LITHUANIA',
-'LUXEMBOURG',
-'MACAO',
-'MACEDONIA THE FORMER YUGOSLAV REPUBLIC OF',
-'MADAGASCAR',
-'MALAWI',
-'MALAYSIA',
-'MALDIVES',
-'MALI',
-'MALTA',
-'MARSHALL ISLANDS',
-'MARTINIQUE',
-'MAURITANIA',
-'MAURITIUS',
-'MAYOTTE',
-'MEXICO',
-'MICRONESIA FEDERATED STATES OF',
-'MOLDOVA REPUBLIC OF',
-'MONACO',
-'MONGOLIA',
-'MONTENEGRO',
-'MONTSERRAT',
-'MOROCCO',
-'MOZAMBIQUE',
-'MYANMAR',
-'NAMIBIA',
-'NAURU',
-'NEPAL',
-'NETHERLANDS',
-'NEW CALEDONIA',
-'NEW ZEALAND',
-'NICARAGUA',
-'NIGER',
-'NIGERIA',
-'NIUE',
-'NORFOLK ISLAND',
-'NORTHERN MARIANA ISLANDS',
-'NORWAY',
-'OMAN',
-'PAKISTAN',
-'PALAU',
-'PALESTINIAN TERRITORY OCCUPIED',
-'PANAMA',
-'PAPUA NEW GUINEA',
-'PARAGUAY',
-'PERU',
-'PHILIPPINES',
-'PITCAIRN',
-'POLAND',
-'PORTUGAL',
-'PUERTO RICO',
-'QATAR',
-'REUNION',
-'ROMANIA',
-'RUSSIAN FEDERATION',
-'RWANDA',
-'SAINT BARTHELEMY',
-'SAINT HELENA ASCENSION AND TRISTAN DA CUNHA',
-'SAINT KITTS AND NEVIS',
-'SAINT LUCIA',
-'SAINT MARTIN FRENCH PART',
-'SAINT PIERRE AND MIQUELON',
-'SAINT VINCENT AND THE GRENADINES',
-'SAMOA',
-'SAN MARINO',
-'SAO TOME AND PRINCIPE',
-'SAUDI ARABIA',
-'SENEGAL',
-'SERBIA',
-'SEYCHELLES',
-'SIERRA LEONE',
-'SINGAPORE',
-'SINT MAARTEN DUTCH PART',
-'SLOVAKIA',
-'SLOVENIA',
-'SOLOMON ISLANDS',
-'SOMALIA',
-'SOUTH AFRICA',
-'SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS',
-'SPAIN',
-'SRI LANKA',
-'SUDAN',
-'SURINAME',
-'SVALBARD AND JAN MAYEN',
-'SWAZILAND',
-'SWEDEN',
-'SWITZERLAND',
-'SYRIAN ARAB REPUBLIC',
-'TAIWAN PROVINCE OF CHINA',
-'TAJIKISTAN',
-'TANZANIA UNITED REPUBLIC OF',
-'THAILAND',
-'TIMOR-LESTE',
-'TOGO',
-'TOKELAU',
-'TONGA',
-'TRINIDAD AND TOBAGO',
-'TUNISIA',
-'TURKEY',
-'TURKMENISTAN',
-'TURKS AND CAICOS ISLANDS',
-'TUVALU',
-'UGANDA',
-'UKRAINE',
-'UNITED ARAB EMIRATES',
-'UNITED KINGDOM',
-'UNITED STATES',
-'UNITED STATES MINOR OUTLYING ISLANDS',
-'URUGUAY',
-'UZBEKISTAN',
-'VANUATU',
-'VENEZUELA BOLIVARIAN REPUBLIC OF',
-'VIET NAM',
-'VIRGIN ISLANDS BRITISH',
-'VIRGIN ISLANDS U.S.',
-'WALLIS AND FUTUNA',
-'WESTERN SAHARA',
-'YEMEN',
-'ZAMBIA',
-'ZIMBABWE']
