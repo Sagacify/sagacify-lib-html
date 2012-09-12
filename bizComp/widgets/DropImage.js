@@ -27,7 +27,7 @@ define([
 			}
 		},
 		
-		onClick : function(evt){
+		/*onClick : function(evt){
 			event.stop(evt);
 			var me = this;			
 			iframe.send({
@@ -46,7 +46,7 @@ define([
 							console.log('Raise Error : Server side error');
 							console.log(error);
 						});			
-		},
+		},*/
 		
 		postCreate: function() {
 			this.inherited(arguments);
@@ -63,6 +63,7 @@ define([
 						handleAs: "json"
 				}).then(function(response){
 							if (response){
+								console.log("ok up");
 								me.emit('fileUploaded', response);
 							}
 							else {
@@ -72,6 +73,10 @@ define([
 						function(error, ioArgs){
 							console.log('Raise Error : Server side error');
 							console.log(error);
+						},
+						function(update){
+							console.log("upd");
+							console.log(update);
 						});			
 			});
 			

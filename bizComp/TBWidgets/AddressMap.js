@@ -11,7 +11,7 @@ define([
 	], 
 	function(declare, _Widget, Evented, template, domAttr, Dropdown, connect, xhr, on) {
 
-	return declare('BizComp.OpeningHourForm', [_Widget, Evented], {
+	return declare('BizComp.AddressNode', [_Widget, Evented], {
 
 		templateString: template,
 		
