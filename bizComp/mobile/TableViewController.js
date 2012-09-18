@@ -1,4 +1,17 @@
-define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView', 'dojo/dom-construct', 'dojo/query', 'dojox/mobile/EdgeToEdgeList', 'dojox/mobile/EdgeToEdgeCategory', 'dojox/mobile/RoundRectList', 'dojox/mobile/RoundRectCategory', 'dojo/date/locale', 'spin/Spin'], function(declare, connect, ScrollableView, domConstruct, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
+define([
+	'dojo/_base/declare', 
+	'dojo/_base/connect', 
+	'dojox/mobile/ScrollableView', 
+	'dojo/dom-construct',
+	'dojo/dom-class', 
+	'dojo/query', 
+	'dojox/mobile/EdgeToEdgeList', 
+	'dojox/mobile/EdgeToEdgeCategory', 
+	'dojox/mobile/RoundRectList', 
+	'dojox/mobile/RoundRectCategory', 
+	'dojo/date/locale', 
+	'spin/Spin'], 
+	function(declare, connect, ScrollableView, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
 	return declare('bizComp.TableViewController', [ScrollableView], {
 		
@@ -11,6 +24,8 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 		_cellsBySection: null,
 		
 		_type: "EdgeToEdge",
+		
+		_containerClass: null,
 		
 		_options: null,
 		
@@ -28,6 +43,7 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 				this.frame = args.frame;
 				this._pullToRefresh = args.pullToRefresh;
 				this.parent = args.parent;
+				this._containerClass = args.containerClass;
 			}
 		},		
 		
@@ -111,6 +127,10 @@ define(['dojo/_base/declare', 'dojo/_base/connect', 'dojox/mobile/ScrollableView
 				}
 				//cellsContainer.domNode.style.background = "transparent";
 				this._cellsContainer = cellsContainer;
+				if(this._containerClass){
+					domClass.remove(cellsContainer.domNode);
+					domClass.add(cellsContainer.domNode, this._containerClass);
+				}
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);
 				for (var j = 0; j < numberOfRowsInSection; j++) {

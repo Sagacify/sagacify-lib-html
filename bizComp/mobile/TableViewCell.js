@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-construct'], function(declare, ListItem, TextField, connect, on, domConstruct) {
+define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-construct', 'dojo/query'], function(declare, ListItem, TextField, connect, on, domConstruct, query) {
 	
 	return declare('bizComp.TableViewCell', [ListItem], {
 		
@@ -47,6 +47,12 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 				select.style.border = "none";
 				select.style["-webkit-appearance"] = "none";
 			}
+			
+		},
+		
+		setHeight: function(height) {
+			this.domNode.style.height = height+"px";
+			this.domNode.children[0].children[0].style.top = (((height-12)/2)-14)+"px";
 		},
 		
 	});

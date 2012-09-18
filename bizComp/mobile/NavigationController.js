@@ -77,6 +77,7 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 			viewController.navigationController = this;
 			this._viewControllers.splice(0, 0, viewController);
 			this._updateNavigationBar();
+			
 		},
 		
 		popViewController: function() {

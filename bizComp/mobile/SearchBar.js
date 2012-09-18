@@ -67,7 +67,13 @@ define(['dojo/_base/declare', 'dojox/mobile/Heading', 'dojo/Evented', './TextFie
 		
 		setText: function(text) {
 			this._textField.domNode.value = text;
+		},
+		
+		focus: function() {
+			this._textField.domNode.focus();
 		}
+		
+		
 		
 	});
 });
