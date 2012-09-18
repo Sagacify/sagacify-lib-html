@@ -17,17 +17,8 @@ define([
 ], function(array, declare, dom, domAttr, domClass, domGeometry, event, fxUtils, kernel, keys,
 			_CssStateMixin, _TemplatedMixin, ContentPane, template, manager){
 
-/*=====
-	var _Widget = dijit._Widget;
-	var _TemplatedMixin = dijit._TemplatedMixin;
-	var _CssStateMixin = dijit._CssStateMixin;
-	var ContentPane = dijit.layout.ContentPane;
-=====*/
-
 // module:
 //		dijit/TitlePane
-// summary:
-//		A pane with a title on top, that can be expanded or collapsed.
 
 
 return declare("dijit.TitlePane", [ContentPane, _TemplatedMixin, _CssStateMixin], {
@@ -37,22 +28,22 @@ return declare("dijit.TitlePane", [ContentPane, _TemplatedMixin, _CssStateMixin]
 	// description:
 	//		An accessible container with a title Heading, and a content
 	//		section that slides open and closed. TitlePane is an extension to
-	//		`dijit.layout.ContentPane`, providing all the useful content-control aspects from it.
+	//		`dijit/layout/ContentPane`, providing all the useful content-control aspects from it.
 	//
 	// example:
-	// | 	// load a TitlePane from remote file:
-	// |	var foo = new dijit.TitlePane({ href: "foobar.html", title:"Title" });
-	// |	foo.startup();
+	//	|	// load a TitlePane from remote file:
+	//	|	var foo = new dijit.TitlePane({ href: "foobar.html", title:"Title" });
+	//	|	foo.startup();
 	//
 	// example:
-	// |	<!-- markup href example: -->
-	// |	<div data-dojo-type="dijit.TitlePane" data-dojo-props="href: 'foobar.html', title: 'Title'"></div>
+	//	|	<!-- markup href example: -->
+	//	|	<div data-dojo-type="dijit/TitlePane" data-dojo-props="href: 'foobar.html', title: 'Title'"></div>
 	//
 	// example:
-	// |	<!-- markup with inline data -->
-	// | 	<div data-dojo-type="dijit.TitlePane" title="Title">
-	// |		<p>I am content</p>
-	// |	</div>
+	//	|	<!-- markup with inline data -->
+	//	|	<div data-dojo-type="dijit/TitlePane" title="Title">
+	//	|		<p>I am content</p>
+	//	|	</div>
 
 	// title: String
 	//		Title of the pane
@@ -154,8 +145,6 @@ return declare("dijit.TitlePane", [ContentPane, _TemplatedMixin, _CssStateMixin]
 			}
 		}
 
-		this.arrowNodeInner.innerHTML = open ? "-" : "+";
-
 		this.containerNode.setAttribute("aria-hidden", open ? "false" : "true");
 		this.focusNode.setAttribute("aria-pressed", open ? "true" : "false");
 
@@ -187,7 +176,7 @@ return declare("dijit.TitlePane", [ContentPane, _TemplatedMixin, _CssStateMixin]
 	_setContentAttr: function(/*String|DomNode|Nodelist*/ content){
 		// summary:
 		//		Hook to make set("content", ...) work.
-		// 		Typically called when an href is loaded.  Our job is to make the animation smooth.
+		//		Typically called when an href is loaded.  Our job is to make the animation smooth.
 
 		if(!this.open || !this._wipeOut || this._wipeOut.status() == "playing"){
 			// we are currently *closing* the pane (or the pane is closed), so just let that continue
@@ -241,15 +230,15 @@ return declare("dijit.TitlePane", [ContentPane, _TemplatedMixin, _CssStateMixin]
 		// tags:
 		//		private
 
-		if(e.charOrCode == keys.ENTER || e.charOrCode == ' '){
+		if(e.keyCode == keys.ENTER || e.keyCode == keys.SPACE){
 			if(this.toggleable){
 				this.toggle();
+				event.stop(e);
 			}
-			event.stop(e);
-		}else if(e.charOrCode == keys.DOWN_ARROW && this.open){
+		}else if(e.keyCode == keys.DOWN_ARROW && this.open){
 			this.containerNode.focus();
 			e.preventDefault();
-	 	}
+		}
 	},
 
 	_onTitleClick: function(){

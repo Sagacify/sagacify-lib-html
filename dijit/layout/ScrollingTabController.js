@@ -6,8 +6,9 @@ define([
 	"dojo/dom-style", // domStyle.style
 	"dojo/_base/fx", // Animation
 	"dojo/_base/lang", // lang.hitch
+	"dojo/on",
 	"dojo/query", // query
-	"dojo/_base/sniff", // has("ie"), has("webkit"), has("quirks")
+	"dojo/sniff", // has("ie"), has("webkit"), has("quirks")
 	"../registry",	// registry.byId()
 	"dojo/text!./templates/ScrollingTabController.html",
 	"dojo/text!./templates/_ScrollingTabControllerButton.html",
@@ -19,23 +20,12 @@ define([
 	"../form/Button",
 	"../_HasDropDown",
 	"dojo/NodeList-dom" // NodeList.style
-], function(array, declare, domClass, domGeometry, domStyle, fx, lang, query, has,
+], function(array, declare, domClass, domGeometry, domStyle, fx, lang, on, query, has,
 	registry, tabControllerTemplate, buttonTemplate, TabController, layoutUtils, _WidgetsInTemplateMixin,
 	Menu, MenuItem, Button, _HasDropDown){
 
-/*=====
-var _WidgetsInTemplateMixin = dijit._WidgetsInTemplateMixin;
-var Menu = dijit.Menu;
-var _HasDropDown = dijit._HasDropDown;
-var TabController = dijit.layout.TabController;
-=====*/
-
-
 // module:
 //		dijit/layout/ScrollingTabController
-// summary:
-//		Set of tabs with left/right arrow keys and a menu to switch between tabs not
-//		all fitting on a single row.
 
 
 var ScrollingTabController = declare("dijit.layout.ScrollingTabController", [TabController, _WidgetsInTemplateMixin], {
@@ -102,22 +92,18 @@ var ScrollingTabController = declare("dijit.layout.ScrollingTabController", [Tab
 		// to that the tabs are hidden/shown depending on the container's visibility setting.
 		domStyle.set(this.domNode, "visibility", "");
 		this._postStartup = true;
+
+		// changes to the tab button label or iconClass will have changed the width of the
+		// buttons, so do a resize
+		this.own(on(this.containerNode, "attrmodified-label, attrmodified-iconclass", lang.hitch(this, function(evt){
+			if(this._dim){
+				this.resize(this._dim);
+			}
+		})));
 	},
 
 	onAddChild: function(page, insertIndex){
 		this.inherited(arguments);
-
-		// changes to the tab button label or iconClass will have changed the width of the
-		// buttons, so do a resize
-		array.forEach(["label", "iconClass"], function(attr){
-			this.pane2watches[page.id].push(
-				this.pane2button[page.id].watch(attr, lang.hitch(this, function(){
-					if(this._postStartup && this._dim){
-						this.resize(this._dim);
-					}
-				}))
-			);
-		}, this);
 
 		// Increment the width of the wrapper when a tab is added
 		// This makes sure that the buttons never wrap.
@@ -232,7 +218,7 @@ var ScrollingTabController = declare("dijit.layout.ScrollingTabController", [Tab
 		//		of pixels of possible scroll (ex: 1000) means "scrolled all the way to the right"
 		return (this.isLeftToRight() || has("ie") < 8 || (has("ie") && has("quirks")) || has("webkit")) ? this.scrollNode.scrollLeft :
 				domStyle.get(this.containerNode, "width") - domStyle.get(this.scrollNode, "width")
-					 + (has("ie") == 8 ? -1 : 1) * this.scrollNode.scrollLeft;
+					 + (has("ie") >= 8 ? -1 : 1) * this.scrollNode.scrollLeft;
 	},
 
 	_convertToScrollLeft: function(val){
@@ -247,11 +233,11 @@ var ScrollingTabController = declare("dijit.layout.ScrollingTabController", [Tab
 			return val;
 		}else{
 			var maxScroll = domStyle.get(this.containerNode, "width") - domStyle.get(this.scrollNode, "width");
-			return (has("ie") == 8 ? -1 : 1) * (val - maxScroll);
+			return (has("ie") >= 8 ? -1 : 1) * (val - maxScroll);
 		}
 	},
 
-	onSelectChild: function(/*dijit._Widget*/ page){
+	onSelectChild: function(/*dijit/_WidgetBase*/ page){
 		// summary:
 		//		Smoothly scrolls to a tab when it is selected.
 
@@ -371,7 +357,7 @@ var ScrollingTabController = declare("dijit.layout.ScrollingTabController", [Tab
 		// Disable/enable left/right buttons according to new scroll position
 		this._setButtonClass(x);
 
-		return anim; // dojo._Animation
+		return anim; // dojo/_base/fx/Animation
 	},
 
 	_getBtnNode: function(/*Event*/ e){
@@ -406,8 +392,8 @@ var ScrollingTabController = declare("dijit.layout.ScrollingTabController", [Tab
 		// summary:
 		//		Scrolls the tab list to the left or right by 75% of the widget width.
 		// direction:
-		//		If the direction is 1, the widget scrolls to the right, if it is
-		//		-1, it scrolls to the left.
+		//		If the direction is 1, the widget scrolls to the right, if it is -1,
+		//		it scrolls to the left.
 
 		if(node && domClass.contains(node, "dijitTabDisabled")){return;}
 
@@ -440,7 +426,7 @@ var ScrollingTabControllerButtonMixin = declare("dijit.layout._ScrollingTabContr
 
 	templateString: buttonTemplate,
 
-		// Override inherited tabIndex: 0 from dijit.form.Button, because user shouldn't be
+		// Override inherited tabIndex: 0 from dijit/form/Button, because user shouldn't be
 		// able to tab to the left/right/menu buttons
 	tabIndex: "",
 
@@ -448,9 +434,6 @@ var ScrollingTabControllerButtonMixin = declare("dijit.layout._ScrollingTabContr
 	// either (this override avoids focus() call in FormWidget.js)
 	isFocusable: function(){ return false; }
 });
-/*=====
-ScrollingTabControllerButtonMixin = dijit.layout._ScrollingTabControllerButtonMixin;
-=====*/
 
 // Class used in template
 declare("dijit.layout._ScrollingTabControllerButton",
@@ -476,6 +459,7 @@ declare(
 	loadDropDown: function(callback){
 		this.dropDown = new Menu({
 			id: this.containerId + "_menu",
+			ownerDocument: this.ownerDocument,
 			dir: this.dir,
 			lang: this.lang,
 			textDir: this.textDir
@@ -486,6 +470,8 @@ declare(
 				id: page.id + "_stcMi",
 				label: page.title,
 				iconClass: page.iconClass,
+				disabled: page.disabled,
+				ownerDocument: this.ownerDocument,
 				dir: page.dir,
 				lang: page.lang,
 				textDir: page.textDir,

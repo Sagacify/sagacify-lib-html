@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"findLabel": "ค้นหา:",
 	"findTooltip": "ป้อนข้อความเพื่อหา",
@@ -21,6 +20,4 @@ define(
 	"eofDialogTextFind": "หาพบ",
 	"eofDialogTextReplace": "ถูกแทนที่"
 })
-
-//end v1.x content
 );

@@ -19,9 +19,11 @@ define([
 	'dojo/Evented', 
 	'dojo/text!./templates/ScheduleCell.html', 
 	'dojo/dom-attr',
-	'./Dropdown'
+	'./Dropdown',
+	'dojo/on',
+	'dojo/dom-construct'
 	], 
-	function(declare, _Widget, Evented, template, domAttr, Dropdown) {
+	function(declare, _Widget, Evented, template, domAttr, Dropdown, on, domConstruct) {
 
 	return declare('BizComp.ScheduleCell', [_Widget, Evented], {
 
@@ -44,7 +46,7 @@ define([
 				stepMinute: 10,
 
 			}
-			args.ref = this.openMorningNode,
+			/*args.ref = this.openMorningNode,
 			$(this.openMorningNode).timepicker(Clone(args));
 			
 			args.ref = this.closeMorningNode
@@ -54,7 +56,21 @@ define([
 			$(this.openAfternoonNode).timepicker(Clone(args));
 			
 			args.ref = this.closeAfternoonNode;
-			$(this.closeAfternoonNode).timepicker(Clone(args));
+			$(this.closeAfternoonNode).timepicker(Clone(args));*/
+			
+			var me = this;
+			on(this.buttonNode, "click", function(){
+				var div = domConstruct.create("div");
+				domConstruct.place(div, this, "before");
+				var from = domConstruct.create("input", {}, div);
+				args.ref = from,
+				$(from).timepicker(Clone(args));
+				
+				var to = domConstruct.create("input", {}, div);
+				args.ref = to,
+				$(to).timepicker(Clone(args));
+				me.getResult();
+			});
 			
 		},
 		closeTimePicker: function(aDate, ref){
@@ -66,7 +82,7 @@ define([
 			
 			return firstDate.getTime()<secondDate.getTime();
 		},
-		changeCheckBoxState: function(args){
+		/*changeCheckBoxState: function(args){
 			this.switchTo(args.currentTarget.checked);
 		},
 		switchTo: function(close){
@@ -78,17 +94,24 @@ define([
 				this.openAfternoonNode.selectedDate = null;
 				this.closeMorningNode. selectedDate = null;
 			}		
-		},
+		},*/
 		getResult: function(){
-			if (!this.validate())
+			/*if (!this.validate())
 				return null;
 			var result = new Array();
 			Push(result, (this.stringify(this.openMorningNode)));
 			Push(result, (this.stringify(this.closeMorningNode)));
 			Push(result, (this.stringify(this.openAfternoonNode)));
-			Push(result, (this.stringify(this.closeAfternoonNode)));
-			
-			return result
+			Push(result, (this.stringify(this.closeAfternoonNode)));*/
+			var result = [];
+			for(var i = 0; i < this.containerNode.children.length-1; i++) {
+				var fromto = this.containerNode.children[i];
+				var from = fromto.children[0];
+				var to = fromto.children[1];
+				result.push(this.stringify(from));
+				result.push(this.stringify(to));
+			}
+			return result;
 		},
 		
 		stringify:function(aNode){
@@ -96,7 +119,11 @@ define([
 				return null;
 			} else {
 				var date = aNode.selectedDate;
-				return date.getHours()+":"+date.getMinutes(); 
+				var hours = date.getHours();
+				var hoursString = hours<10?"0"+hours:hours;
+				var minutes = date.getMinutes();
+				var minutesString = minutes<10?"0"+minutes:minutes;
+				return hoursString+":"+minutesString; 
 			}
 		},
 		checkRefAndNextRef: function(ref){

@@ -22,8 +22,8 @@ define({ root:
 	emoticonCrying: "crying",
 	emoticonHappy: "happy"
 })
-,
 //end v1.x content
+,
 "zh": true,
 "zh-tw": true,
 "tr": true,

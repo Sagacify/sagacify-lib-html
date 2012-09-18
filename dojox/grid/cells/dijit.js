@@ -21,12 +21,13 @@ define([
 	"dijit/form/NumberTextBox",
 	"dijit/form/CurrencyTextBox",
 	"dijit/form/HorizontalSlider",
+	"dijit/form/_TextBoxMixin",
 	"dijit/Editor",
 	"../util",
 	"./_base"
 ], function(dojo, dojox, declare, array, lang, json, connect, has, dom, domAttr, domConstruct,
 	domGeometry, ItemFileReadStore, DateTextBox, TimeTextBox, ComboBox, CheckBox, TextBox,
-	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, Editor, util, BaseCell){
+	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, _TextBoxMixin, Editor, util, BaseCell){
 		
 // TODO: shouldn't it be the test file's job to require these modules,
 // if it is using them?  Most of these modules aren't referenced by this file.
@@ -76,6 +77,7 @@ define([
 				this.widgetProps||{},
 				{
 					constraints: lang.mixin({}, this.constraint) || {}, //TODO: really just for ValidationTextBoxes
+					required: (this.constraint || {}).required,
 					value: this._unescapeHTML(inDatum)
 				}
 			);
@@ -112,6 +114,9 @@ define([
 			if(this.widget){
 				setTimeout(lang.hitch(this.widget, function(){
 					util.fire(this, "focus");
+					if(this.focusNode && this.focusNode.tagName === "INPUT"){
+						_TextBoxMixin.selectInputText(this.focusNode);
+					}
 				}), 0);
 			}
 		},
@@ -219,7 +224,8 @@ define([
 		createWidget: function(inNode, inDatum, inRowIndex){
 			// widget needs its value set after creation
 			var widget = new this.widgetClass(this.getWidgetProps(inDatum), inNode);
-			connect.connect(widget, 'onLoad', lang.hitch(this, 'populateEditor'));
+			// use onLoadDeferred because onLoad may have already fired
+			widget.onLoadDeferred.then(lang.hitch(this, 'populateEditor'));
 			return widget;
 		},
 		formatNode: function(inNode, inDatum, inRowIndex){

@@ -3,28 +3,22 @@ define([
 	"dojo/_base/event", // event.stop
 	"dojo/keys", // keys keys.DOWN_ARROW keys.PAGE_DOWN keys.PAGE_UP keys.UP_ARROW
 	"dojo/_base/lang", // lang.hitch
-	"dojo/_base/sniff", // has("mozilla")
-	"dijit/typematic",
+	"dojo/sniff", // has("mozilla")
+	"dojo/mouse", // mouse.wheel
+	"../typematic",
 	"./RangeBoundTextBox",
 	"dojo/text!./templates/Spinner.html",
 	"./_TextBoxMixin"	// selectInputText
-], function(declare, event, keys, lang, has, typematic, RangeBoundTextBox, template, _TextBoxMixin){
-
-/*=====
-	var RangeBoundTextBox = dijit.form.RangeBoundTextBox;
-=====*/
+], function(declare, event, keys, lang, has, mouse, typematic, RangeBoundTextBox, template, _TextBoxMixin){
 
 	// module:
 	//		dijit/form/_Spinner
-	// summary:
-	//		Mixin for validation widgets with a spinner.
-
 
 	return declare("dijit.form._Spinner", RangeBoundTextBox, {
 		// summary:
 		//		Mixin for validation widgets with a spinner.
 		// description:
-		//		This class basically (conceptually) extends `dijit.form.ValidationTextBox`.
+		//		This class basically (conceptually) extends `dijit/form/ValidationTextBox`.
 		//		It modifies the template to have up/down arrows, and provides related handling code.
 
 		// defaultTimeout: Number
@@ -38,7 +32,7 @@ define([
 		// timeoutChangeRate: Number
 		//		Fraction of time used to change the typematic timer between events.
 		//		1.0 means that each typematic event fires at defaultTimeout intervals.
-		//		< 1.0 means that each typematic event fires at an increasing faster rate.
+		//		Less than 1.0 means that each typematic event fires at an increasing faster rate.
 		timeoutChangeRate: 0.90,
 
 		// smallDelta: Number
@@ -63,7 +57,7 @@ define([
 		adjust: function(val /*=====, delta =====*/){
 			// summary:
 			//		Overridable function used to adjust a primitive value(Number/Date/...) by the delta amount specified.
-			// 		The val is adjusted in a way that makes sense to the object type.
+			//		The val is adjusted in a way that makes sense to the object type.
 			// val: Object
 			// delta: Number
 			// tags:
@@ -117,10 +111,10 @@ define([
 
 				this._arrowPressed(node, scrollAmount, this.smallDelta);
 
-				if(!this._wheelTimer){
-					clearTimeout(this._wheelTimer);
+				if(this._wheelTimer){
+					this._wheelTimer.remove();
 				}
-				this._wheelTimer = setTimeout(lang.hitch(this,"_arrowReleased",node), 50);
+				this._wheelTimer = this.defer(function(){ this._arrowReleased(node); }, 50);
 			}
 
 		},
@@ -129,11 +123,13 @@ define([
 			this.inherited(arguments);
 
 			// extra listeners
-			this.connect(this.domNode, !has("mozilla") ? "onmousewheel" : 'DOMMouseScroll', "_mouseWheeled");
-			this._connects.push(typematic.addListener(this.upArrowNode, this.textbox, {charOrCode:keys.UP_ARROW,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout));
-			this._connects.push(typematic.addListener(this.downArrowNode, this.textbox, {charOrCode:keys.DOWN_ARROW,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout));
-			this._connects.push(typematic.addListener(this.upArrowNode, this.textbox, {charOrCode:keys.PAGE_UP,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout));
-			this._connects.push(typematic.addListener(this.downArrowNode, this.textbox, {charOrCode:keys.PAGE_DOWN,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout));
+			this.connect(this.domNode, mouse.wheel, "_mouseWheeled");
+			this.own(
+				typematic.addListener(this.upArrowNode, this.textbox, {charOrCode:keys.UP_ARROW,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout),
+				typematic.addListener(this.downArrowNode, this.textbox, {charOrCode:keys.DOWN_ARROW,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout),
+				typematic.addListener(this.upArrowNode, this.textbox, {charOrCode:keys.PAGE_UP,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout),
+				typematic.addListener(this.downArrowNode, this.textbox, {charOrCode:keys.PAGE_DOWN,ctrlKey:false,altKey:false,shiftKey:false,metaKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout, this.minimumTimeout)
+			);
 		}
 	});
 });

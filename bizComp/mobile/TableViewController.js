@@ -34,6 +34,8 @@ define([
 		_pullDownDiv: null,
 		
 		_cellsContainer: null,
+		
+		_transparentBg: false,
 						
 		constructor: function(args) {
 			if(args) {
@@ -44,6 +46,7 @@ define([
 				this._pullToRefresh = args.pullToRefresh;
 				this.parent = args.parent;
 				this._containerClass = args.containerClass;
+				this._transparentBg = args.transparentBg;
 			}
 		},		
 		
@@ -82,14 +85,22 @@ define([
 			
 			this.inherited(arguments);
 			dojo.forEach(this._headers, function(header, i){
-				if(header)
-					header.destroyRecursive();
+				if(header){
+					if(header.destroyRecursive)
+						header.destroyRecursive();
+					else
+						domConstruct.destroy(header);
+				}
 			});
 			
 			dojo.forEach(this._cellsBySection, function(section, i){
 				dojo.forEach(section, function(cell, j){
-					if(cell)
-						cell.destroyRecursive();
+					if(cell){
+						if(cell.destroyRecursive)
+							cell.destroyRecursive();
+						else
+							domConstruct.destroy(cell);
+					}
 				});
 			});
 			
@@ -125,7 +136,8 @@ define([
 				else {
 					cellsContainer = new EdgeToEdgeList();
 				}
-				//cellsContainer.domNode.style.background = "transparent";
+				if(this._transparentBg)
+					cellsContainer.domNode.style.background = "transparent";
 				this._cellsContainer = cellsContainer;
 				if(this._containerClass){
 					domClass.remove(cellsContainer.domNode);

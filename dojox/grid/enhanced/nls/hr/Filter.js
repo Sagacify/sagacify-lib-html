@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Brisanje filtera",
 	"filterDefDialogTitle": "Filter",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Usporedi sva sljedeća pravila:",
 	"relationAny": "bilo koja pravila",
 	"waiRelAny": "Usporedi bilo koje od sljedećih pravila:",
-	"relationMsgFront": "Odgovara",
+	"relationMsgFront": "Usporedi:",
 	"relationMsgTail": "",
 	"and": "i",
 	"or": "ili",
@@ -81,8 +80,7 @@ define(
 	"clearFilterMsg": "Ovo uklanja filter i prikazuje sve raspoložive slogove.",
 	"anyColumnOption": "Bilo koji stupac",
 	
-	"trueLabel": "True",
-	"falseLabel": "False"
+	"trueLabel": "Istinito",
+	"falseLabel": "Lažno"
 })
-//end v1.x content
 );

@@ -2,10 +2,11 @@ define([
 	"dojo",
 	"doh",
 	"require",
-	"./loader/core",
+	"dojo/sniff",
+	"dojo/has!dojo-publish-privates?./loader/core",
 	"dojo/has!dojo-amd-factory-scan?./loader/modules",
-	"./loader/moduleIds",
-	"./loader/bootstrap"], function(dojo, doh, require){
+	"dojo/has!dojo-publish-privates?./loader/moduleIds",
+	"./loader/bootstrap"], function(dojo, doh, require, has){
 	if(doh.isBrowser){
 		doh.register("tests._base.loader.asyncWithDojoRequire", require.toUrl("./loader/asyncWithDojoRequire.html"));
 
@@ -16,7 +17,9 @@ define([
 		doh.register("tests._base.loader.config?djConfig-require", require.toUrl("./loader/config.html")+"?djConfig-require");
 		doh.register("tests._base.loader.config?djConfig", require.toUrl("./loader/config.html")+"?djConfig");
 		doh.register("tests._base.loader.config?require", require.toUrl("./loader/config.html")+"?require");
-		doh.register("tests._base.loader.config?configApi.html", require.toUrl("./loader/configApi.html"));
+		if(has("dojo-publish-privates")){
+			doh.register("tests._base.loader.config?configApi.html", require.toUrl("./loader/configApi.html"));
+		}
 		doh.register("tests._base.loader.config?config-sniff.html", require.toUrl("./loader/config-sniff.html"));
 		doh.register("tests._base.loader.config?config-sniff-djConfig.html", require.toUrl("./loader/config-sniff-djConfig.html"));
 		doh.register("tests._base.loader.config?config-has.html", require.toUrl("./loader/config-has.html"));
@@ -33,10 +36,10 @@ define([
 		doh.register("tests._base.loader.xdomin-async-2", require.toUrl("./loader/xdomain/xdomain.html"), {async:"legacyAsync", variation:2});
 		// the requirejs test suite. The following tests are not used:
 		//
-		//   * baseUrl: dojo's baseUrl is different--it defaults to the dojo tree. See TODO
-		//   * layers: dojo's build system does things differently
-		//   * afterload: is not constructed in a way that works with doh
-		//   * plugin/sync: this test seems like it will always fail in async mode; TODO check with James
+		//	 * baseUrl: dojo's baseUrl is different--it defaults to the dojo tree. See TODO
+		//	 * layers: dojo's build system does things differently
+		//	 * afterload: is not constructed in a way that works with doh
+		//	 * plugin/sync: this test seems like it will always fail in async mode; TODO check with James
         //
 		doh.register("tests._base.loader.requirejs-simple-sync", require.toUrl("./loader/requirejs/simple.html"), {async:0});
 		doh.register("tests._base.loader.requirejs-simple-async", require.toUrl("./loader/requirejs/simple.html"), {async:1});
@@ -44,9 +47,10 @@ define([
 		doh.register("tests._base.loader.requirejs-config-sync", require.toUrl("./loader/requirejs/config.html"), {async:0});
 		doh.register("tests._base.loader.requirejs-config-async", require.toUrl("./loader/requirejs/config.html"), {async:1});
 
-		doh.register("tests._base.loader.requirejs-dataMain-sync", require.toUrl("./loader/requirejs/dataMain.html"), {async:0});
-		doh.register("tests._base.loader.requirejs-dataMain-async", require.toUrl("./loader/requirejs/dataMain.html"), {async:1});
-
+		if(has("dojo-requirejs-api")){
+			doh.register("tests._base.loader.requirejs-dataMain-sync", require.toUrl("./loader/requirejs/dataMain.html"), {async:0});
+			doh.register("tests._base.loader.requirejs-dataMain-async", require.toUrl("./loader/requirejs/dataMain.html"), {async:1});
+		}
 		doh.register("tests._base.loader.requirejs-simple-nohead-sync", require.toUrl("./loader/requirejs/simple-nohead.html"), {async:0});
 		doh.register("tests._base.loader.requirejs-simple-nohead-async", require.toUrl("./loader/requirejs/simple-nohead.html"), {async:1});
 
@@ -70,7 +74,7 @@ define([
 		    root= qstart!=-1 ? location.href.substring(0, qstart) : location.href,
 			setup= compactPath(root + "/../" + require.toUrl("./loader/requirejs/requirejs-setup.js")),
 			baseUrl= setup.substring(0, setup.length - "/requirejs-setup.js".length);
-		if(dojo.isIE>6){
+		if(has("ie")>6){
 			doh.register("tests._base.loader.requirejs-simple-badbase-sync", require.toUrl("./loader/requirejs/simple-badbase.html"), {
 				async:0,
 				baseUrl:baseUrl,
@@ -88,15 +92,19 @@ define([
 		//doh.register("tests._base.loader.requirejs-circular-sync", require.toUrl("./loader/requirejs/circular.html"), {async:0});
 		doh.register("tests._base.loader.requirejs-circular-async", require.toUrl("./loader/requirejs/circular.html"), {async:1});
 
-		doh.register("tests._base.loader.requirejs-depoverlap-sync", require.toUrl("./loader/requirejs/depoverlap.html"), {async:0});
-		doh.register("tests._base.loader.requirejs-depoverlap-async", require.toUrl("./loader/requirejs/depoverlap.html"), {async:1});
+		if(has("dojo-requirejs-api")){
+			doh.register("tests._base.loader.requirejs-depoverlap-sync", require.toUrl("./loader/requirejs/depoverlap.html"), {async:0});
+			doh.register("tests._base.loader.requirejs-depoverlap-async", require.toUrl("./loader/requirejs/depoverlap.html"), {async:1});
+		}
 
 		doh.register("tests._base.loader.requirejs-urlfetch-sync", require.toUrl("./loader/requirejs/urlfetch/urlfetch.html"), {async:0});
 		doh.register("tests._base.loader.requirejs-urlfetch-async", require.toUrl("./loader/requirejs/urlfetch/urlfetch.html"), {async:1});
 
-		doh.register("tests._base.loader.requirejs-uniques-sync", require.toUrl("./loader/requirejs/uniques/uniques.html"), {async:0});
-		doh.register("tests._base.loader.requirejs-uniques-async", require.toUrl("./loader/requirejs/uniques/uniques.html"), {async:1});
-
+		if(has("dojo-amd-factory-scan")){
+			doh.register("tests._base.loader.requirejs-uniques-sync", require.toUrl("./loader/requirejs/uniques/uniques.html"), {async:0});
+			doh.register("tests._base.loader.requirejs-uniques-async", require.toUrl("./loader/requirejs/uniques/uniques.html"), {async:1});
+		}
+//>>excludeStart("requireJSI18nTests", kwArgs.insertAbsMids);
 		doh.register("tests._base.loader.requirejs-i18nlocaleunknown-sync", require.toUrl("./loader/requirejs/i18n/i18n.html")+"?bundle=i18n!nls/fr-fr/colors", {async:0});
 		doh.register("tests._base.loader.requirejs-i18nlocaleunknown-async", require.toUrl("./loader/requirejs/i18n/i18n.html")+"?bundle=i18n!nls/fr-fr/colors", {async:1});
 
@@ -114,7 +122,7 @@ define([
 
 		doh.register("tests._base.loader.requirejs-i18ncommonlocale-sync", require.toUrl("./loader/requirejs/i18n/common.html")+"?locale=en-us-surfer", {async:0});
 		doh.register("tests._base.loader.requirejs-i18ncommonlocale-async", require.toUrl("./loader/requirejs/i18n/common.html")+"?locale=en-us-surfer", {async:1});
-
+//>>excludeEnd("requireJSI18nTests");
 		doh.register("tests._base.loader.requirejs-paths-sync", require.toUrl("./loader/requirejs/paths/paths.html"), {async:0});
 		doh.register("tests._base.loader.requirejs-paths-async", require.toUrl("./loader/requirejs/paths/paths.html"), {async:1});
 
@@ -131,5 +139,8 @@ define([
 
 		doh.register("tests._base.loader.requirejs-exports-sync", require.toUrl("./loader/requirejs/exports/exports.html"), {async:0});
 		doh.register("tests._base.loader.requirejs-exports-async", require.toUrl("./loader/requirejs/exports/exports.html"), {async:1});
+
+		doh.register("tests._base.loader.require-config", require.toUrl("./loader/config/test.html"), {async:1});
 	}
 });
+

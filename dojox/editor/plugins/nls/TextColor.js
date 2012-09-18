@@ -4,8 +4,8 @@ define({ root:
 	"setButtonText": "Set",
 	"cancelButtonText": "Cancel"
 })
-,
 //end v1.x content
+,
 "zh": true,
 "zh-tw": true,
 "tr": true,

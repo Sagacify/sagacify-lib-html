@@ -25,8 +25,8 @@
 	</style>
 	<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
-	<script type="text/javascript" src="support/test_write_store_music.js"></script>
 	<script type="text/javascript">
+		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojox.grid.enhanced.plugins.Pagination");
 		dojo.require("dojo.parser");
@@ -81,6 +81,7 @@
 			grid.scrollToRow(dijit.byId("row").value - 1);
 		}
 	</script>
+	<script type="text/javascript" src="support/test_write_store_music.js"></script>
 </head>
 <body class="claro">
 	<h1 class="title">dojox.grid.EnhancedGrid - Pagination</h1>
@@ -103,7 +104,7 @@
 		<button data-dojo-type="dijit.form.Button" onclick="scrollToRow()">Go</button>
 	</div>
 	<div id="gridContainer">
-		<div id="grid" dojoType="dojox.grid.EnhancedGrid" store="test_store[0]" structure="layout" plugins="plugins"></div>
+		<div id="grid" dojoType="dojox.grid.EnhancedGrid" store="test_store[0]" structure="layout" plugins="plugins" summary="A customized grid summary"></div>
 	</div><br/>
 	<p><strong>Note:</strong> To see the tundra theme, just append <b style="color:blue;">?theme=tundra</b> to the URL.</p>
 </body>

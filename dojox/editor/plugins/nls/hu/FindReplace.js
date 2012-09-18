@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"findLabel": "Keresés:",
 	"findTooltip": "Adja meg a keresett szöveget",
@@ -21,6 +20,4 @@ define(
 	"eofDialogTextFind": "találat",
 	"eofDialogTextReplace": "cserélve"
 })
-
-//end v1.x content
 );

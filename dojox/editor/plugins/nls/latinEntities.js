@@ -256,8 +256,8 @@ define({ root:
 	rsaquo:"single right-pointing angle quotation mark",
 	euro:"euro sign"
 })
-,
 //end v1.x content
+,
 "zh": true,
 "zh-tw": true,
 "tr": true,

@@ -1,4 +1,4 @@
-define(["dojo", "doh"], function(dojo, doh){
+define(["../../main", "doh/main"], function(dojo, doh){
 
   doh.register("tests._base.lang", [
 		function mixin(t){
@@ -172,7 +172,7 @@ define(["dojo", "doh"], function(dojo, doh){
 			}
 		},
 		
-		function clone(t) {
+		function clone(t){
 			var obj1 = {
 				foo: 'bar',
 				answer: 42,

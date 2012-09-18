@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"findLabel": "Bul:",
 	"findTooltip": "Bulunacak metni girin",
@@ -21,6 +20,4 @@ define(
 	"eofDialogTextFind": "bulundu",
 	"eofDialogTextReplace": "değiştirildi"
 })
-
-//end v1.x content
 );

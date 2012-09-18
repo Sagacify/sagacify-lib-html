@@ -14,20 +14,16 @@ define([
 		// stub, this is planned later:
 		return hex;
 	};
-/*===== 
-	var FormWidget = dijit.form._FormWidget;
-=====*/
+
 	// TODO: shouldn't this extend _FormValueWidget?
 	return declare("dojox.widget.ColorPicker", FormWidget, {
 		// summary:
 		//		a HSV color picker - similar to Photoshop picker
-		//
 		// description:
 		//		Provides an interactive HSV ColorPicker similar to
 		//		PhotoShop's color selction tool. This is an enhanced
 		//		version of the default dijit.ColorPalette, though provides
 		//		no accessibility.
-		//
 		// example:
 		// |	var picker = new dojox.widget.ColorPicker({
 		// |		// a couple of example toggles:
@@ -36,33 +32,32 @@ define([
 		// |		webSafe: false,
 		// |		showRgb: false
 		// |	});
-		//
 		// example:
 		// |	<!-- markup: -->
 		// |	<div dojoType="dojox.widget.ColorPicker"></div>
-		//
+
 		// showRgb: Boolean
-		//	show/update RGB input nodes
+		//		show/update RGB input nodes
 		showRgb: true,
 	
 		// showHsv: Boolean
-		//	show/update HSV input nodes
+		//		show/update HSV input nodes
 		showHsv: true,
 	
 		// showHex: Boolean
-		//	show/update Hex value field
+		//		show/update Hex value field
 		showHex: true,
 
 		// webSafe: Boolean
-		//	deprecated? or just use a toggle to show/hide that node, too?
+		//		deprecated? or just use a toggle to show/hide that node, too?
 		webSafe: true,
 
 		// animatePoint: Boolean
-		//	toggle to use slideTo (true) or just place the cursor (false) on click
+		//		toggle to use slideTo (true) or just place the cursor (false) on click
 		animatePoint: true,
 
 		// slideDuration: Integer
-		//	time in ms picker node will slide to next location (non-dragging) when animatePoint=true
+		//		time in ms picker node will slide to next location (non-dragging) when animatePoint=true
 		slideDuration: 250,
 
 		// liveUpdate: Boolean
@@ -70,15 +65,15 @@ define([
 		liveUpdate: false,
 
 		// PICKER_HUE_H: int
-		//     Height of the hue picker, used to calculate positions
+		//		Height of the hue picker, used to calculate positions
 		PICKER_HUE_H: 150,
 		
 		// PICKER_SAT_VAL_H: int
-		//     Height of the 2d picker, used to calculate positions
+		//		Height of the 2d picker, used to calculate positions
 		PICKER_SAT_VAL_H: 150,
 		
 		// PICKER_SAT_VAL_W: int
-		//     Width of the 2d picker, used to calculate positions
+		//		Width of the 2d picker, used to calculate positions
 		PICKER_SAT_VAL_W: 150,
 
 		// PICKER_HUE_SELECTOR_H: int
@@ -97,9 +92,9 @@ define([
 		PICKER_SAT_SELECTOR_W: 10,
 
 		// value: String
-		//	Default color for this component. Only hex values are accepted as incoming/returned
-		//	values. Adjust this value with `.attr`, eg: dijit.byId("myPicker").attr("value", "#ededed");
-		//	to cause the points to adjust and the values to reflect the current color.
+		//		Default color for this component. Only hex values are accepted as incoming/returned
+		//		values. Adjust this value with `.attr`, eg: dijit.byId("myPicker").attr("value", "#ededed");
+		//		to cause the points to adjust and the values to reflect the current color.
 		value: "#ffffff",
 		
 		_underlay: kernel.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
@@ -223,16 +218,17 @@ define([
 		},
 		
 		setColor: function(/* String */col, force){
-			// summary: Set a color on a picker. Usually used to set
-			//          initial color as an alternative to passing defaultColor option
-			//          to the constructor.
+			// summary:
+			//		Set a color on a picker. Usually used to set
+			//		initial color as an alternative to passing defaultColor option
+			//		to the constructor.
 			col = color.fromString(col);
 			this._updatePickerLocations(col);
 			this._updateColorInputs(col);
 			this._updateValue(col, force);
 		},
 		
-		_setTimer: function(/* d.dnd.Mover */mover){
+		_setTimer: function(/* dojo/dnd/Mover */mover){
 			if(mover.node != this.cursorNode){ return; }
 			// FIXME: should I assume this? focus on mouse down so on mouse up
 			FocusManager.focus(mover.node);
@@ -240,7 +236,7 @@ define([
 			this._timer = setInterval(lang.hitch(this, "_updateColor"), 45);
 		},
 		
-		_clearTimer: function(/* d.dnd.Mover */mover){
+		_clearTimer: function(/* dojo/dnd/Mover */mover){
 			if(!this._timer){ return; }
 			clearInterval(this._timer);
 			this._timer = null;
@@ -248,11 +244,12 @@ define([
 			DOM.setSelectable(this.domNode,true);
 		},
 		
-		_setHue: function(/* Decimal */h){
+		_setHue: function(/* Float */h){
 			// summary:
 			//		Sets a natural color background for the
 			//		underlay image against closest hue value (full saturation)
-			//		h: 0..360
+			// h:
+			//		0..360
 			html.style(this.colorUnderlay, "backgroundColor", color.fromHsv(h,100,100).toHex());
 			
 		},
@@ -261,11 +258,11 @@ define([
 			// summary:
 			//		Function used by the typematic code to handle cursor position and update
 			//		via keyboard.
-			// count:
+			// count: Number
 			//		-1 means stop, anything else is just how many times it was called.
-			// node:
+			// node: DomNode
 			//		The node generating the event.
-			// e:
+			// e: Event
 			//		The event.
 			if(count !== -1){
 				var y = html.style(this.hueCursorNode, "top");
@@ -350,7 +347,8 @@ define([
 		},
 
 		_updateColor: function(){
-			// summary: update the previewNode color, and input values [optional]
+			// summary:
+			//		update the previewNode color, and input values [optional]
 			
 			var hueSelCenter = this.PICKER_HUE_SELECTOR_H/2,
 				satSelCenterH = this.PICKER_SAT_SELECTOR_H/2,
@@ -373,8 +371,9 @@ define([
 		},
 		
 		_colorInputChange: function(e){
-			//summary: updates picker position and inputs
-			//         according to rgb, hex or hsv input changes
+			// summary:
+			//		updates picker position and inputs
+			//		according to rgb, hex or hsv input changes
 			var col, hasit = false;
 			switch(e.target){
 				//transform to hsv to pixels
@@ -406,9 +405,10 @@ define([
 			
 		},
 		
-		_updateValue: function(/* dojox.color.Color */col, /* Boolean */fireChange){
-			// summary: updates the value of the widget
-			//          can cancel reverse onChange by specifying second param
+		_updateValue: function(/* dojox/color/Color */col, /* Boolean */fireChange){
+			// summary:
+			//		updates the value of the widget
+			//		can cancel reverse onChange by specifying second param
 			var hex = col.toHex();
 			
 			this.value = this.valueNode.value = hex;
@@ -419,9 +419,10 @@ define([
 			}
 		},
 		
-		_updatePickerLocations: function(/* dojox.color.Color */col){
-			//summary: update handles on the pickers acording to color values
-			//
+		_updatePickerLocations: function(/* dojox/color/Color */col){
+			// summary:
+			//		update handles on the pickers acording to color values
+			
 			var hueSelCenter = this.PICKER_HUE_SELECTOR_H/2,
 				satSelCenterH = this.PICKER_SAT_SELECTOR_H/2,
 				satSelCenterW = this.PICKER_SAT_SELECTOR_W/2;
@@ -463,9 +464,10 @@ define([
 			
 		},
 		
-		_updateColorInputs: function(/* dojox.color.Color */col){
-			//summary: updates color inputs that were changed through other inputs
-			//or by clicking on the picker
+		_updateColorInputs: function(/* dojox/color/Color */ col){
+			// summary:
+			//		updates color inputs that were changed through other inputs
+			//		or by clicking on the picker
 			
 			var hex = col.toHex();
 			
@@ -494,7 +496,8 @@ define([
 		},
 		
 		_setHuePoint: function(/* Event */evt){
-			// summary: set the hue picker handle on relative y coordinates
+			// summary:
+			//		set the hue picker handle on relative y coordinates
 			var selCenter = this.PICKER_HUE_SELECTOR_H/2;
 			var ypos = evt.layerY - selCenter;
 			if(this.animatePoint){
@@ -512,8 +515,10 @@ define([
 		},
 		
 		_setPoint: function(/* Event */evt){
-			// summary: set our picker point based on relative x/y coordinates
-			//  evt.preventDefault();
+			// summary:
+			//		set our picker point based on relative x/y coordinates
+
+			//	evt.preventDefault();
 			var satSelCenterH = this.PICKER_SAT_SELECTOR_H/2;
 			var satSelCenterW = this.PICKER_SAT_SELECTOR_W/2;
 			var newTop = evt.layerY - satSelCenterH;
@@ -539,7 +544,7 @@ define([
 		},
 		
 		_handleKey: function(/* Event */e){
-			// FIXME: not implemented YET
+			// TODO: not implemented YET
 			// var keys = d.keys;
 		},
 
@@ -553,8 +558,8 @@ define([
 
 		_stopDrag: function(e){
 			// summary:
-			//		Function to hald the mouse down default
-			//		to disable draggong of images out of the color
+			//		Function to halt the mouse down default
+			//		to disable dragging of images out of the color
 			//		picker.
 			Event.stop(e);
 		},

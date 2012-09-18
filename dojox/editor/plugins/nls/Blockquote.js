@@ -3,8 +3,8 @@ define({ root:
 ({
 	"blockquote": "Blockquote"
 })
-,
 //end v1.x content
+,
 "zh": true,
 "zh-tw": true,
 "tr": true,

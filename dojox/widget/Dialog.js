@@ -9,7 +9,6 @@ define([
 		{
 		// summary:
 		//		A Lightbox-like Modal-dialog for HTML Content
-		//
 		// description:
 		//		An HTML-capable Dialog widget with advanced sizing
 		//		options, animated show/hide and other useful options.
@@ -24,8 +23,8 @@ define([
 		// sizeToViewport: Boolean
 		//		If true, fix the size of the dialog to the Viewport based on
 		//		viewportPadding value rather than the calculated or natural
-		//		stlye. If false, base the size on a passed dimension attribute.
-		//		Eitherway, the viewportPadding value is used if the the content
+		//		style. If false, base the size on a passed dimension attribute.
+		//		Either way, the viewportPadding value is used if the the content
 		//		extends beyond the viewport size for whatever reason.
 		sizeToViewport: false,
 
@@ -37,7 +36,7 @@ define([
 		viewportPadding: 35,
 
 		// dimensions: Array
-		//		A two-element array of [widht,height] to animate the Dialog to if sizeToViewport="false"
+		//		A two-element array of [width,height] to animate the Dialog to if sizeToViewport="false"
 		//		Defaults to [300,300]
 		dimensions: null,
 
@@ -74,7 +73,8 @@ define([
 		},
 
 		_setup: function(){
-			// summary: Piggyback on dijit.Dialog's _setup for load-time options, deferred to
+			// summary:
+			//		Piggyback on dijit.Dialog's _setup for load-time options, deferred to
 
 			this.inherited(arguments);
 			if(!this._alreadyInitialized){
@@ -92,7 +92,8 @@ define([
 		},
 
 		_setSize: function(){
-			// summary: cache and set our desired end position
+			// summary:
+			//		cache and set our desired end position
 			this._vp = dojo.window.getBox();
 			var tc = this.containerNode,
 				vpSized = this.sizeToViewport
@@ -140,7 +141,8 @@ define([
 		},
 
 		_handleNav: function(e){
-			// summary: Handle's showing or hiding the close icon
+			// summary:
+			//		Handle's showing or hiding the close icon
 
 			var navou = "_navOut",
 				navin = "_navIn",
@@ -156,7 +158,8 @@ define([
 		// an experiment in a quicksilver-like hide. too choppy for me.
 		/*
 		hide: function(){
-			// summary: Hide the dialog
+			// summary:
+			//		Hide the dialog
 
 			// if we haven't been initialized yet then we aren't showing and we can just return
 			if(!this._alreadyInitialized){
@@ -226,7 +229,8 @@ define([
 		},
 
 		_showContent: function(e){
-			// summary: Show the inner container after sizing animation
+			// summary:
+			//		Show the inner container after sizing animation
 
 			var container = this.containerNode;
 			dojo.style(this.domNode, {

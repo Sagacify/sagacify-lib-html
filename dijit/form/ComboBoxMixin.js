@@ -3,23 +3,16 @@ define([
 	"dojo/_base/Deferred",
 	"dojo/_base/kernel", // kernel.deprecated
 	"dojo/_base/lang", // lang.mixin
-	"dojo/store/util/QueryResults",	// dojo.store.util.QueryResults
+	"dojo/store/util/QueryResults",
 	"./_AutoCompleterMixin",
 	"./_ComboBoxMenu",
 	"../_HasDropDown",
 	"dojo/text!./templates/DropDownBox.html"
 ], function(declare, Deferred, kernel, lang, QueryResults, _AutoCompleterMixin, _ComboBoxMenu, _HasDropDown, template){
 
-/*=====
-	var _AutoCompleterMixin = dijit.form._AutoCompleterMixin;
-	var _ComboBoxMenu = dijit.form._ComboBoxMenu;
-	var _HasDropDown = dijit._HasDropDown;
-=====*/
 
 	// module:
 	//		dijit/form/ComboBoxMixin
-	// summary:
-	//		Provides main functionality of ComboBox widget
 
 	return declare("dijit.form.ComboBoxMixin", [_HasDropDown, _AutoCompleterMixin], {
 		// summary:
@@ -40,10 +33,10 @@ define([
 		baseClass: "dijitTextBox dijitComboBox",
 
 		/*=====
-		// store: [const] dojo.store.api.Store || dojo.data.api.Read
+		// store: [const] dojo/store/api/Store|dojo/data/api/Read
 		//		Reference to data provider object used by this ComboBox.
 		//
-		//		Should be dojo.store.api.Store, but dojo.data.api.Read supported
+		//		Should be dojo/store/api/Store, but dojo/data/api/Read supported
 		//		for backwards compatibility.
 		store: null,
 		=====*/
@@ -66,14 +59,14 @@ define([
 		},
 
 		_setStoreAttr: function(store){
-			// For backwards-compatibility, accept dojo.data store in addition to dojo.store.store.  Remove in 2.0.
+			// For backwards-compatibility, accept dojo.data store in addition to dojo/store/api/Store.  Remove in 2.0.
 			if(!store.get){
 				lang.mixin(store, {
 					_oldAPI: true,
 					get: function(id){
 						// summary:
 						//		Retrieves an object by it's identity. This will trigger a fetchItemByIdentity.
-						//		Like dojo.store.DataStore.get() except returns native item.
+						//		Like dojo/store/DataStore.get() except returns native item.
 						var deferred = new Deferred();
 						this.fetchItemByIdentity({
 							identity: id,
@@ -88,13 +81,14 @@ define([
 					},
 					query: function(query, options){
 						// summary:
-						//		Queries the store for objects.   Like dojo.store.DataStore.query()
+						//		Queries the store for objects.   Like dojo/store/DataStore.query()
 						//		except returned Deferred contains array of native items.
 						var deferred = new Deferred(function(){ fetchHandle.abort && fetchHandle.abort(); });
+						deferred.total = new Deferred();
 						var fetchHandle = this.fetch(lang.mixin({
 							query: query,
 							onBegin: function(count){
-								deferred.total = count;
+								deferred.total.resolve(count);
 							},
 							onComplete: function(results){
 								deferred.resolve(results);
@@ -113,15 +107,16 @@ define([
 		postMixInProperties: function(){
 			// Since _setValueAttr() depends on this.store, _setStoreAttr() needs to execute first.
 			// Unfortunately, without special code, it ends up executing second.
-			if(this.params.store){
-				this._setStoreAttr(this.params.store);
+			var store = this.params.store || this.store;
+			if(store){
+				this._setStoreAttr(store);
 			}
 
 			this.inherited(arguments);
 
 			// User may try to access this.store.getValue() etc.  in a custom labelFunc() function.
 			// It's not available with the new data store for handling inline <option> tags, so add it.
-			if(!this.params.store){
+			if(!this.params.store && !this.store._oldAPI){
 				var clazz = this.declaredClass;
 				lang.mixin(this.store, {
 					getValue: function(item, attr){

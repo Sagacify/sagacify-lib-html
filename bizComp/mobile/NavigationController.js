@@ -16,7 +16,8 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 		postCreate: function() {
 			this.domNode.style.overflow = "hidden";
 			
-			this.navigationBar = new NavigationBar({back:null, href:null, moveTo:"#", label:this._viewControllers[0].name});
+			var label = this._viewControllers[0].name?this._viewControllers[0].name:"";
+			this.navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:label});
         	this.navigationBar.placeAt(this.domNode);
         	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
         	this.navigationBar.startup();		
