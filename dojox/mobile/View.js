@@ -70,8 +70,8 @@ define([
 
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
-
 			this._animEndHandle = this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
+			
 			this._animStartHandle = this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 			if(!config['mblCSS3Transition']){
 				this._transEndHandle = this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
@@ -111,11 +111,9 @@ define([
 				// The 2nd arg is not to hide its sibling views so that they can be
 				// correctly initialized.
 				this.show(true, true);
-
 				this.onStartView();
 				connect.publish("/dojox/mobile/startView", [this]);
 			}
-
 			if(this.domNode.style.visibility != "visible"){ // this check is to avoid screen flickers
 				this.domNode.style.visibility = "visible";
 			}
@@ -348,7 +346,6 @@ define([
 				// show toNode offscreen to avoid flicker when switching "display" and "visibility" styles
 				domClass.add(toNode, "mblAndroidWorkaround");
 			}
-
 			this.onBeforeTransitionOut.apply(this, this._arguments);
 			connect.publish("/dojox/mobile/beforeTransitionOut", [this].concat(lang._toArray(this._arguments)));
 			if(toWidget){
@@ -608,7 +605,6 @@ define([
 				this.onBeforeTransitionIn(this.id);
 				connect.publish("/dojox/mobile/beforeTransitionIn", [this, this.id]);
 			}
-
 			if(doNotHideOthers){
 				this.domNode.style.display = "";
 			}else{
@@ -617,7 +613,6 @@ define([
 				}, this);
 			}
 			this.load && this.load(); // for ContentView
-
 			if(!noEvent){
 				if(out){
 					out.onAfterTransitionOut(out.id);

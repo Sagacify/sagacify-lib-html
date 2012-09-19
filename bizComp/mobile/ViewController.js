@@ -1,5 +1,6 @@
 define([
 	'dojo/_base/declare',
+	'dojo/_base/config',
 	'bizComp/_Widget', 
 	'dojox/mobile/View', 
 	'bizComp/mobile/ActionSheet', 
@@ -9,7 +10,7 @@ define([
 	'bizComp/mobile/NavigationBar',
 	'dojox/mobile/ToolBarButton',
 	'dojo/on'], 
-	function(declare, _Widget, View, ActionSheet, lang, domConstruct, SpinWheelDatePicker, NavigationBar, ToolBarButton, on) {
+	function(declare, config, _Widget, View, ActionSheet, lang, domConstruct, SpinWheelDatePicker, NavigationBar, ToolBarButton, on) {
 	
 	return declare('bizComp.ViewController', [_Widget, View], {
 	
@@ -33,6 +34,13 @@ define([
 		},
 		
 		postCreate: function() {
+			//workaround to bind webkit animations (that should work in 'View' class but does not)
+			this._animEndHandle = this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
+			this._animStartHandle = this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
+			if(!config['mblCSS3Transition']){
+				this._transEndHandle = this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
+			}
+			
 			this.inherited(arguments);
 			if(this.frame)
 				this.setFrame(this.frame);
@@ -124,7 +132,7 @@ define([
 			var pickerSheet = new bizComp.ViewController({id:"blouh", style:"background:rgb(70,70,70);z-index:2;position:absolute;top:"+Window.domNode.clientHeight+"px;left:0px;width:"+Window.domNode.clientWidth+"px;height:244px"});
 			pickerSheet.placeAt(Window.domNode);
 			
-			var navigationBar = new NavigationBar({back:null, href:null, moveTo:"#", label:""});
+			var navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:""});
 			navigationBar.placeAt(pickerSheet.domNode);
 			
 			var cancelButton = new ToolBarButton({label:"Cancel"});
@@ -156,10 +164,10 @@ define([
 			spinWheelDatePicker.domNode.style.left = ((Window.domNode.clientWidth-318)/2)+"px";
 			spinWheelDatePicker.placeAt(pickerSheet.domNode);
 			//workaround to fix the problem of misalignment
-			dojo.forEach(spinWheelDatePicker.domNode.children, function(child, i){
+			/*dojo.forEach(spinWheelDatePicker.domNode.children, function(child, i){
 				if(i <= 2)
 					child.style.paddingTop = "100px";
-			});
+			});*/
 			spinWheelDatePicker.startup();
 			
 			on(todayButton.domNode, "click", function(args){
@@ -174,7 +182,7 @@ define([
 					domConstruct.destroy(mask);
 				});
 				
-				var res = spinWheelDatePicker.getValue();
+				var res = spinWheelDatePicker.get("value").split("-");
 				me.onDatePicked.apply(me, [{"year":res[0], "month":res[1], "day":res[2]}]);
 			});
 			

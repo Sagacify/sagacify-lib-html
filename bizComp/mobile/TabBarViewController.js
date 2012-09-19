@@ -17,12 +17,12 @@ define(['dojo/_base/declare', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/m
 		postCreate: function() {
 			this.tabBar = new TabBar();
 			this.tabBarButtons = [];
-			
+						
 			var viewsContainerView = new ViewController();
 			viewsContainerView.domNode.style.top = "0px";
 			viewsContainerView.domNode.style.left = "0px";
 			viewsContainerView.domNode.style.width = "320px";
-			viewsContainerView.domNode.style.height = this.frame.height-49+"px";
+			viewsContainerView.domNode.style.height = this.frame.height-48+"px";
 			viewsContainerView.placeAt(this.domNode);
 			
 			var me = this;
@@ -31,7 +31,7 @@ define(['dojo/_base/declare', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/m
 				me.tabBar.addChild(tabBarButton);
 				me.tabBarButtons.push(tabBarButton);
 				viewController.domNode.style.display = "none";
-				viewController.placeAt(viewsContainerView);
+				viewController.placeAt(viewsContainerView.domNode);
 				//viewController.setFrame({height:me.frame.height-49});
 			});
 	
@@ -48,7 +48,7 @@ define(['dojo/_base/declare', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/m
 				this._selectedViewControllers.domNode.style.display = "none";
 			this.viewControllers[tabIndex].domNode.style.display = "";
 			this._selectedViewControllers = this.viewControllers[tabIndex];
-			this.tabBarButtons[tabIndex].select();
+			this.tabBarButtons[tabIndex]._setSelectedAttr(true);
 		},
 		
 		startup: function() {

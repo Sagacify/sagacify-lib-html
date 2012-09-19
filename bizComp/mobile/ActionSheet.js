@@ -1,5 +1,6 @@
 define([
 	'dojo/_base/declare', 
+	'dojo/_base/config',
 	'bizComp/_Widget', 
 	'dojox/mobile/View', 
 	'dojo/on', 
@@ -7,7 +8,7 @@ define([
 	'dojo/dom-construct', 
 	'dojo/dom-class', 
 	'dojo/_base/connect'], 
-	function(declare, _Widget, View, on, Button, domConstruct, domClass, connect) {
+	function(declare, config, _Widget, View, on, Button, domConstruct, domClass, connect) {
 	
 	return declare('bizComp.ActionSheet', [_Widget, View], {
 		
@@ -31,6 +32,13 @@ define([
 		},
 		
 		postCreate: function() {
+			//workaround to bind webkit animations (that should work in 'View' class but does not)
+			this._animEndHandle = this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
+			this._animStartHandle = this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
+			if(!config['mblCSS3Transition']){
+				this._transEndHandle = this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
+			}
+			
 			this.inherited(arguments);
 			this.domNode.style.background = "rgb(70,70,70)";
 			//this.domNode.style.zIndex = 10;

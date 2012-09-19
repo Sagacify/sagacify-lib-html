@@ -17,6 +17,12 @@ define(['dojo/_base/declare', 'dojox/mobile/Heading'], function(declare, Heading
 			this.domNode.style.height = scale*44 + "px";
 			this.domNode.children[2].style.fontSize = scale*20 + "px";
 			this.domNode.children[2].style.lineHeight = scale*44 + "px";
+		},
+		
+		_setBackAttr: function(/*String*/back){
+			if(back)
+				this.backButton.domNode.style.display = "";
+			this.inherited(arguments);
 		}
 		
 	});

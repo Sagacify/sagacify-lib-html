@@ -82,7 +82,6 @@ define([
 		},
 		
 		reload: function() {
-			
 			this.inherited(arguments);
 			dojo.forEach(this._headers, function(header, i){
 				if(header){
@@ -173,9 +172,9 @@ define([
 			
 		},
 		
-		load: function() {
+		/*load: function() {
 			this.reload();
-		},
+		},*/
 		
 		setFrame: function(frame) {
 			if(!this.frame)

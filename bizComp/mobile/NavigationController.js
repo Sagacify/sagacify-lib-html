@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-class', 'dojox/mobile/View'], function(declare, ViewController, NavigationBar, connect, on, domClass) {
+define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-class', 'dojo/dom-construct'], function(declare, ViewController, NavigationBar, connect, on, domClass, domConstruct) {
 	
 	return declare('bizComp.NavigationController', [ViewController], {
 		
@@ -14,6 +14,7 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 		},		
 		
 		postCreate: function() {
+			this.inherited(arguments);
 			this.domNode.style.overflow = "hidden";
 			
 			var label = this._viewControllers[0].name?this._viewControllers[0].name:"";
@@ -33,7 +34,7 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 		_updateNavigationBar: function() {
 			
 			this.navigationBar.destroyRecursive();
-			this.navigationBar = new NavigationBar({back:null, href:null, moveTo:"#", label:this._viewControllers[0].name});
+			this.navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:this._viewControllers[0].name});
         	this.navigationBar.placeAt(this.domNode, 0);
         	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
         	this.navigationBar.startup();
@@ -44,12 +45,15 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 				else
 					this.navigationBar._setBackAttr("Back");
 				var me = this;
-	        	dojo.forEach(this.navigationBar.domNode.childNodes, function(childNode, i){
+	        	/*dojo.forEach(this.navigationBar.domNode.childNodes, function(childNode, i){
 					if(domClass.contains(childNode, "mblArrowButton")) {
 		        		connect.connect(childNode, "onclick", this, function(){
 		        			me.popViewController();
 		        		});
 		        	}
+	        	});*/
+	        	on(this.navigationBar.domNode.childNodes[0], "click", function(){
+	        		me.popViewController();
 	        	});
 			}
 			else {
@@ -74,7 +78,10 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 		
 		pushViewController: function(viewController) {
 			viewController.placeAt(this.domNode);
+			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");
+			viewController.domNode.style.position = "";
 			this._viewControllers[0].performTransition(viewController.id, 1, "slide", null);
+			this._viewControllers[0].on("afterTransitionOut", function(){domConstruct.destroy(fakediv);});
 			viewController.navigationController = this;
 			this._viewControllers.splice(0, 0, viewController);
 			this._updateNavigationBar();
@@ -84,9 +91,11 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 		popViewController: function() {
 			if(this._viewControllers.length >= 2) {
 				var viewControllerToPop = this._viewControllers.splice(0, 1)[0];
-				viewControllerToPop.domNode.style.display = "";
+				var fakediv = domConstruct.create("div", {style:"width:"+this._viewControllers[0].frame.width+"px;height:44px"}, this._viewControllers[0].domNode, "first");
+				//this._viewControllers[0].domNode.style.position = "relative";
+				//viewControllerToPop.domNode.style.display = "";
 				viewControllerToPop.performTransition(this._viewControllers[0].id, -1, "slide", null);
-				viewControllerToPop.on("afterTransitionOut", function(){viewControllerToPop.destroyRecursive();});
+				viewControllerToPop.on("afterTransitionOut", function(){domConstruct.destroy(fakediv);viewControllerToPop.destroyRecursive();});
 				this._updateNavigationBar();
 			} 
 		},
