@@ -1,7 +1,8 @@
 define([
 	'dojo/_base/declare', 
 	'dojo/_base/connect', 
-	'dojox/mobile/ScrollableView', 
+	'dojox/mobile/ScrollableView',
+	'dojo/Evented', 
 	'dojo/dom-construct',
 	'dojo/dom-class', 
 	'dojo/query', 
@@ -11,9 +12,9 @@ define([
 	'dojox/mobile/RoundRectCategory', 
 	'dojo/date/locale', 
 	'spin/Spin'], 
-	function(declare, connect, ScrollableView, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
+	function(declare, connect, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
-	return declare('bizComp.TableViewController', [ScrollableView], {
+	return declare('bizComp.TableViewController', [ScrollableView, Evented], {
 		
 		parent: null,
 		
@@ -36,6 +37,8 @@ define([
 		_cellsContainer: null,
 		
 		_transparentBg: false,
+		
+		_slidingAfterLoading: false,
 						
 		constructor: function(args) {
 			if(args) {
@@ -278,11 +281,16 @@ define([
 		
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing) {
 			if(this._pullDownDiv && !this._pullDownDiv.loading) {
-				if(this.getPos().y > 65 && to.y == 0) {
+				/*if(this._slidingAfterLoading){
+					if(this.getPos().y==0)
+						this._slidingAfterLoading = false;
+				}
+				else*/ if(this.getPos().y > 65 && to.y == 0) {
 					to.y = 65;
 					this._nextSlideDest = to;
 					this._pullDownDiv.loading = true;
 					this.reloadTableViewDataSource();
+					this.emit("reload", {});
 				}
 			}
 			this.inherited(arguments);
@@ -312,6 +320,7 @@ define([
 		tableViewDataSourceReloadDone: function() {
 			if(this._pullDownDiv) {
 				this._pullDownDiv.loading = false;
+				//this._slidingAfterLoading = true;
 				this._pullDownDiv.lastUpdateDiv.innerHTML = "Last update: " + locale.format(new Date(), {selector:"date", datePattern:"MM/dd/yy hh:mm:a"});
 				if(this._nextSlideDest)
 					this._nextSlideDest.y = 0;
@@ -332,8 +341,24 @@ define([
 				this.domNode.style.width = width+"px";
 				this._cellsContainer.domNode.style.width = (width-marginside*2)+"px";
 			}
-		}
+		},
 		
+		_loadCss: function(path, id) {
+			var e = document.createElement("link");
+			e.href = path;
+			e.type = "text/css";
+			e.rel = "stylesheet";
+			e.media = "screen";
+			if(id)
+				e.id = id;
+			document.getElementsByTagName("head")[0].appendChild(e);
+		},
+		
+		_unloadCss: function(id){
+			var el = document.getElementById(id);
+			if(el)
+				domConstruct.destroy(el);
+		},
 		
 	});
 });

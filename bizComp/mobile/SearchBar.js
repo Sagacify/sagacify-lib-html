@@ -9,6 +9,8 @@ define(['dojo/_base/declare', 'dojox/mobile/Heading', 'dojo/Evented', './TextFie
 		_textField: null,
 		
 		_cancelButton: null,
+		
+		placeholder: null,
 
 		constructor: function(args) {
 			if(args) {
@@ -18,10 +20,12 @@ define(['dojo/_base/declare', 'dojox/mobile/Heading', 'dojo/Evented', './TextFie
 		},		
 		
 		postCreate: function() {
+			if(!this.placeholder)
+				this.placeholder = "Search";
 			this.inherited(arguments);
 			this._searchField = domConstruct.create("div", {style:"position:absolute;border:1px solid black;background:white;top:5px;left:6px;width:"+(this.width-6)+"px;height:30px;border-radius:25px;-moz-border-radius:25px;"}, this.domNode)
 			
-			this._textField = new TextField({placeholder:"Search", type:"text", style:"position:absolute;left:20px;top:2px;width:"+(this.width-66)+"px;height:22px;font-size:70%;"});
+			this._textField = new TextField({placeholder:this.placeholder, type:"text", style:"position:absolute;left:20px;top:2px;width:"+(this.width-66)+"px;height:22px;font-size:70%;"});
 			this._textField.placeAt(this._searchField);
 			
 			this._cancelButton = new ToolBarButton({label:"Cancel"});

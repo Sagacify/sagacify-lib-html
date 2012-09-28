@@ -6,14 +6,18 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 		
 		constructor: function(args) {
 			if(args)
-				this.directFieldInput = args.directFieldInput;
+				this.directInput = args.directInput;
 		},
 		
 		postCreate: function() {
 			this.inherited(arguments);
-			if(this.clickable)
-				connect.connect(this.domNode, "onclick", this, "onClick");
-			
+			var me = this;
+			if(this.clickable){
+				this.domNode.style.cursor = "pointer";
+				on(this.domNode, "click", function(args){
+					me._setSelectedAttr(true);
+				});
+			}
 			if(this.directInput == "field") {
 				var textField = new TextField();
 				textField.domNode.style.background = "rgba(0,0,0,0)";
@@ -41,11 +45,12 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 				select.style.position = "absolute";
 				select.style.top = "5px";
 				select.style.left = "5px";
-				select.style.width = (Window.frame.width-20-10)+"px";
+				select.style.width = (Window.frame.width-35-10)+"px";
 				select.style.height = "30px";
 				select.style.outline = "none";
 				select.style.border = "none";
 				select.style["-webkit-appearance"] = "none";
+				this.select = select;
 			}
 			
 		},

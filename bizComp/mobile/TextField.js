@@ -26,6 +26,17 @@ define(['dojo/_base/declare', 'bizComp/_Widget'], function(declare, _Widget) {
 		setType: function(type) {
 			this.type = type;
 			this.domNode.type = type;
+		},
+		
+		setValue: function(value) {
+			this.domNode.value = value;	
+		},
+		
+		setEditable: function(editable){
+			if(editable)
+				this.domNode.removeAttribute("readonly");
+			else
+				this.domNode.setAttribute("readonly", "readonly");	
 		}
 		
 	});

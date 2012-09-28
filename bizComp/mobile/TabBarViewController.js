@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'bizComp/mobile/ViewController'], function(declare, _Widget, TabBar, TabBarButton, ViewController) {
+define(['dojo/_base/declare', 'bizComp/_Widget', 'dojo/Evented', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'bizComp/mobile/ViewController'], function(declare, _Widget, Evented, TabBar, TabBarButton, ViewController) {
 	
-	return declare('M2C.Widgets.TabBarViewController', [ViewController], {
+	return declare('M2C.Widgets.TabBarViewController', [ViewController, Evented], {
 		
 		tabBar: null,
 		
@@ -22,7 +22,7 @@ define(['dojo/_base/declare', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/m
 			viewsContainerView.domNode.style.top = "0px";
 			viewsContainerView.domNode.style.left = "0px";
 			viewsContainerView.domNode.style.width = "320px";
-			viewsContainerView.domNode.style.height = this.frame.height-48+"px";
+			viewsContainerView.domNode.style.height = this.frame.height-47+"px";
 			viewsContainerView.placeAt(this.domNode);
 			
 			var me = this;
@@ -44,11 +44,14 @@ define(['dojo/_base/declare', 'bizComp/_Widget', 'dojox/mobile/TabBar', 'dojox/m
 		},
 		
 		selectTab: function(tabIndex) {
-			if (this._selectedViewControllers)
+			if(this._selectedViewControllers == this.viewControllers[tabIndex])
+				return;
+			if(this._selectedViewControllers)
 				this._selectedViewControllers.domNode.style.display = "none";
 			this.viewControllers[tabIndex].domNode.style.display = "";
 			this._selectedViewControllers = this.viewControllers[tabIndex];
 			this.tabBarButtons[tabIndex]._setSelectedAttr(true);
+			this.emit("tabSelected", {tabIndex:tabIndex});
 		},
 		
 		startup: function() {
