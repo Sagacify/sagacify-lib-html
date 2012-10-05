@@ -2,7 +2,7 @@ define([
 	'dojo/_base/declare',
 	'dojo/_base/config',
 	'bizComp/_Widget', 
-	'dojox/mobile/View', 
+	'dojox/mobile/View',
 	'bizComp/mobile/ActionSheet', 
 	'dojo/_base/lang', 
 	'dojo/dom-construct',
@@ -90,7 +90,6 @@ define([
 		},
 		
 		dismissViewController: function() {
-			
 			this.performTransition(null, -1, "revealv", null);
 			
 			var me = this;
@@ -126,7 +125,10 @@ define([
 			return actionSheet;
 		},
 		
-		presentDatePicker: function() {
+		presentDatePicker: function(labels) {
+			if(!labels)
+				labels = {cancel:"Cancel", today:"Today", done:"Done"};
+				
 			var mask = domConstruct.create("div", {style:"background:rgba(0,0,0,0.4);z-index:2;position:absolute;top:0px;left:0px;width:"+Window.domNode.clientWidth+"px;height:"+Window.domNode.clientHeight+"px"}, Window.domNode);
 			
 			var pickerSheet = new bizComp.ViewController({id:"blouh", style:"background:rgb(70,70,70);z-index:2;position:absolute;top:"+Window.domNode.clientHeight+"px;left:0px;width:"+Window.domNode.clientWidth+"px;height:244px"});
@@ -135,7 +137,7 @@ define([
 			var navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:""});
 			navigationBar.placeAt(pickerSheet.domNode);
 			
-			var cancelButton = new ToolBarButton({label:"Cancel"});
+			var cancelButton = new ToolBarButton({label:labels.cancel});
 			cancelButton.domNode.style.float = "left";
 			cancelButton.placeAt(navigationBar.domNode);
 			var me = this;
@@ -148,13 +150,13 @@ define([
 				});
 			});
 			
-			var todayButton = new ToolBarButton({label:"Today"});
+			var todayButton = new ToolBarButton({label:labels.today});
 			todayButton.domNode.style.position = "absolute";
 			todayButton.domNode.style.left = ((navigationBar.domNode.clientWidth-64)/2)+"px";
 			todayButton.placeAt(navigationBar.domNode);
 			
 			
-			var doneButton = new ToolBarButton({label:"Done", btnClass:"mblColorBlue"});
+			var doneButton = new ToolBarButton({label:labels.done, btnClass:"mblColorBlue"});
 			doneButton.domNode.style.float = "right";
 			doneButton.placeAt(navigationBar.domNode);
 			
@@ -169,6 +171,14 @@ define([
 					child.style.paddingTop = "100px";
 			});*/
 			spinWheelDatePicker.startup();
+			
+			console.log(spinWheelDatePicker.domNode.children[0].children[0].children[0])
+			if(labels.month){
+				dojo.forEach(spinWheelDatePicker.domNode.children[0].children[0].children[0].children, function(child, i){
+					child.innerHTML = labels.month(parseInt(child.getAttribute("name"))).substring(0, 3);
+				});
+			}
+			
 			
 			on(todayButton.domNode, "click", function(args){
 			 	spinWheelDatePicker.reset();
