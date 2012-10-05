@@ -40,7 +40,7 @@ define([
 				    var lat = this.getPosition().lat();
 				    var lng = this.getPosition().lng();
 				    
-				    geocoder.geocode( {'location': new google.maps.LatLng(lat, long)}, function(results, status) {
+				    geocoder.geocode( {'location': new google.maps.LatLng(lat, lng)}, function(results, status) {
 						me.addressNode.value = results[0].formatted_address;
 						var tz = new TimeZoneDB;
 				        tz.getJSON({
