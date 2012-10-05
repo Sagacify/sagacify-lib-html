@@ -38,7 +38,7 @@ define([
 				});
 				google.maps.event.addListener(marker, 'dragend', function (event) {
 				    var lat = this.getPosition().lat();
-				    var long = this.getPosition().lng();
+				    var lng = this.getPosition().lng();
 				    
 				    geocoder.geocode( {'location': new google.maps.LatLng(lat, long)}, function(results, status) {
 						me.addressNode.value = results[0].formatted_address;
@@ -48,7 +48,7 @@ define([
 				            lat: lat,
 				            lng: lng
 				        }, function(data){
-							me.emit("addressChange", {address:results[0], latLng:{lat:lat, lng:lng}, timeZone:data.gmtOffset/3600});
+							me.emit("addressChange", {address:results[0], lngLat:[lng, lat], timeZone:data.gmtOffset/3600});
 				        });
 					});
 				});
@@ -76,7 +76,7 @@ define([
 					            lat: lat,
 					            lng: lng
 					        }, function(data){
-								me.emit("addressChange", {address:results[0], latLng:{lat:lat, lng:lng}, timeZone:data.gmtOffset/3600});
+								me.emit("addressChange", {address:results[0], lngLat:[lng, lat], timeZone:data.gmtOffset/3600});
 					        });
 						}
 					});
