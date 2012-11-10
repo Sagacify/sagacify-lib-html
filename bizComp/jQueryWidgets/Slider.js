@@ -22,11 +22,11 @@ define([
 		},
 		
 		startup: function() {
+			console.log("startup slider");
 			var me = this;
 			$('#'+this.domNode.id).slider({orientation:"vertical", range: "min", min: 0, max: 200, value: 100, slide: function( event, ui ) {
 				me.emit("slide", {value:ui.value});
 			}});
-			
 			
 			var sliderButton = this.domNode.children[1];
 			sliderButton.style.width = "15px";
