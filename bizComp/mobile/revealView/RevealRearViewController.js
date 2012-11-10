@@ -19,7 +19,7 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './RevealRearTableViewControlle
 			this.revealRearTableViewController = new RevealRearTableViewController({parent:this, style:"width:320px;height:460px;"});
 			this.revealRearTableViewController.placeAt(this.domNode);
 			this.revealRearTableViewController.load();
-		},
+		}
 			
 	});
 });

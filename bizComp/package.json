@@ -1,0 +1,19 @@
+{
+    "name": "bizComp",
+    "description": "General library",
+    "version": "1.0",
+    "keywords": ["bizComp"],
+    "maintainers": [{
+        "name": "Nexty Team"
+    }],
+    "contributors": [{
+        "name": "Nexty Team"
+    }],
+    "dependencies": {
+        "dojo": "~1.8.1",
+        "dijit": "~1.8.1",
+        "dojox": "~1.8.1"
+    },
+    "homepage": "http://nexty-app.com/",
+    "dojoBuild": "bizComp.profile.js"
+}

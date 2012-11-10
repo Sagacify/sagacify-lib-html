@@ -6,7 +6,7 @@ define([
 	'dojo/text!./templates/OpeningHourForm.html', 
 	'dojo/dom-attr',
 	'./ScheduleCell',
-	'dijit/Calendar',
+	'dijit/Calendar'
 	], 
 	function(declare, on, _Widget, Evented, template, domAttr, ScheduleCell, Calendar) {
 

@@ -28,7 +28,7 @@ define([
 				var map = new google.maps.Map(me.mapNode, {
 	  				center: new google.maps.LatLng(lat, lng),
 	  				zoom: 7,
-	  				mapTypeId: google.maps.MapTypeId.ROADMAP,
+	  				mapTypeId: google.maps.MapTypeId.ROADMAP
 				});
 				
 				var marker = new google.maps.Marker({	
@@ -82,7 +82,7 @@ define([
 					});
 				});	
 			});
-		},
+		}
 		
 	});
 });

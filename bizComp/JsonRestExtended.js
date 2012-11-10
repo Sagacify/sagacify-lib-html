@@ -1,4 +1,4 @@
-define(['dojo/_base/xhr', 'dojo/store/JsonRest', ], 
+define(['dojo/_base/xhr', 'dojo/store/JsonRest'], 
 function(xhr, JsonRest) {
 	
 	return dojo.declare('bizComp.JsonRestExtended', [JsonRest], {
@@ -69,7 +69,7 @@ function(xhr, JsonRest) {
 					load : loadFunc,
 					error : errorFunc
 			});
-		},
+		}
 		
 	});
 		

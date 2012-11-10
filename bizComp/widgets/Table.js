@@ -14,12 +14,15 @@ define([
 			actions : null,
 
 			constructor : function(args) {
-				if args.headers
+				if (args.headers){
 					this.headers = args.headers;
-				if args.data
+				}
+				if (args.data){
 					this.data = args.data;
-				if args.actions
+				}
+				if (args.actions){
 					this.actions = args.actions;
+				}
 
 				//missing class attributes of tr, 
 			},
@@ -29,7 +32,7 @@ define([
 
 				/* Header section */
 				for(var i in this.headers){
-					domConstruct.create("th", {innerHTML:this.headers[i]}), tr);
+					domConstruct.create("th", {innerHTML:this.headers[i]}, tr);
 				}
 				// if actions, create an other header column
 

@@ -43,7 +43,7 @@ define([
 					console.log(inst);
 					inst.settings.instance.closeTimePicker(date,inst.settings.ref);
 				},
-				stepMinute: 10,
+				stepMinute: 10
 
 			}
 			/*args.ref = this.openMorningNode,
