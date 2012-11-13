@@ -51,9 +51,11 @@ define([
 				this._containerClass = args.containerClass;
 				this._transparentBg = args.transparentBg;
 			}
+			this.scrollType = 1;
 		},		
 		
 		postCreate: function() {
+			this.scrollType = 1;
 			if(this._pullToRefresh) {
 				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
 				this.containerNode.style.top = "-500px";

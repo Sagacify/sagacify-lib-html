@@ -14,7 +14,6 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './TextField', 'dojo/dom-constr
 		
 		consructor: function(args) {
 			if(args) {
-				this.placeholder = args.placeholder;
 				if(args.width)
 					this.width = args.width;
 				if(args.height)

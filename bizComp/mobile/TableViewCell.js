@@ -26,16 +26,17 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 				textField.domNode.style.color = "#324F85"
 				textField.domNode.style.position = "absolute";
 				textField.domNode.style.top = "5px";
-				textField.domNode.style.left = "5px";
-				textField.domNode.style.width = (Window.frame.width-20-20)+"px";
+				textField.domNode.style.left = "80px";
+				textField.domNode.style.width = (Window.frame.width-20-110)+"px";
 				textField.domNode.style.height = "30px";
 				textField.domNode.style.textAlign = "right";
 				textField.placeAt(this.domNode.children[0]);
+				this.textField = textField;
 			}
 			else if(this.directInput instanceof Array) {
 				var innerHTML = "";
 				dojo.forEach(this.directInput, function(item, i){
-					innerHTML += "<option>"+item+"</option>";
+					innerHTML += "<option value="+i+">"+item+"</option>";
 				});
 				var select = domConstruct.create("select", {dir:"rtl", innerHTML:innerHTML}, this.domNode.children[0]);
 				select.style.background = "rgba(0,0,0,0)";
@@ -52,7 +53,7 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 				select.style["-webkit-appearance"] = "none";
 				this.select = select;
 			}
-			
+			this.domNode.children[0].style.maxWidth = "200px";
 		},
 		
 		setHeight: function(height) {
