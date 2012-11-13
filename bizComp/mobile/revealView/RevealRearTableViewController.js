@@ -32,8 +32,6 @@ define(['dojo/_base/declare', '../TableViewController', './RevealRearTableViewCe
 			var revealView = this.parent.parent;
 			revealView.setCurrentFrontViewController(revealView.revealFrontViewControllers[indexPath.row]);
 			revealView.revealStart();
-		},
-		
-		
+		}
 	});
 });

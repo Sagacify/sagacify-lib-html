@@ -59,7 +59,7 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 		setHeight: function(height) {
 			this.domNode.style.height = height+"px";
 			this.domNode.children[0].children[0].style.top = (((height-12)/2)-14)+"px";
-		},
+		}
 		
 	});
 });

@@ -12,8 +12,6 @@ define(['dojo', 'bizComp/_Widget'], function(dojo, _Widget) {
 		
 		postCreate: function() {
 			
-		},
-		
-		
+		}		
 	});
 });

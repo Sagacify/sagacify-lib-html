@@ -36,7 +36,7 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './TextField', 'dojo/dom-constr
 		setPlaceholder: function(placeholder) {
 			this.placeholder = placeholder;
 			this.textField.domNode.placeholder = placeholder;
-		},
+		}
 		
 	});
 });

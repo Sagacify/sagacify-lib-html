@@ -29,7 +29,7 @@ define(['dojo/_base/declare', 'dojox/mobile/Heading', 'dojo/Evented', './TextFie
 			this._textField.placeAt(this._searchField);
 			
 			this._cancelButton = new ToolBarButton({label:"Cancel"});
-			this._cancelButton.domNode.style.float = "right";
+			this._cancelButton.domNode.style["float"] = "right";
 			this._cancelButton.domNode.style.display = "none";
 			this._cancelButton.placeAt(this.domNode);
 			

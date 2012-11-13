@@ -1,4 +1,4 @@
-define(['./_Widget', 'dojo/text!./templates/Typehead.html', 'dojo/dom-construct', 
+define(['../_Widget', 'dojo/text!./templates/Typehead.html', 'dojo/dom-construct', 
 'dojo/dom-attr', 'dojo/_base/connect', 'dojo/_base/array', 'bootstrap'], 
 function (_Widget, template, domConstruct, domAttr, connect, array) {
 
@@ -59,7 +59,7 @@ function (_Widget, template, domConstruct, domAttr, connect, array) {
         setTextValue: function (value) {
             domAttr.set(this.inputText, "value", value);
 
-        },
+        }
 
         /*startup: function(){
         if(this.placeholder)
@@ -68,5 +68,4 @@ function (_Widget, template, domConstruct, domAttr, connect, array) {
         }*/
 
     });
-
 });

@@ -115,7 +115,7 @@ define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base
 				});
 				this._updateNavigationBar();
 			} 
-		},
+		}
 			
 	});
 });

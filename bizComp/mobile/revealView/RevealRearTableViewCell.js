@@ -10,7 +10,6 @@ define(['dojo/_base/declare', '../TableViewCell'], function(declare, TableViewCe
 		postCreate: function() {
 			this.inherited(arguments);
 			
-		},		
-		
+		}
 	});
 });

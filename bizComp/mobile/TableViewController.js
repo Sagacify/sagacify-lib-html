@@ -360,7 +360,7 @@ define([
 			var el = document.getElementById(id);
 			if(el)
 				domConstruct.destroy(el);
-		},
+		}
 		
 	});
 });

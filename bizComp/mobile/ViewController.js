@@ -138,7 +138,7 @@ define([
 			navigationBar.placeAt(pickerSheet.domNode);
 			
 			var cancelButton = new ToolBarButton({label:labels.cancel});
-			cancelButton.domNode.style.float = "left";
+			cancelButton.domNode.style["float"] = "left";
 			cancelButton.placeAt(navigationBar.domNode);
 			var me = this;
 			on(cancelButton.domNode, "click", function(args){
@@ -157,7 +157,7 @@ define([
 			
 			
 			var doneButton = new ToolBarButton({label:labels.done, btnClass:"mblColorBlue"});
-			doneButton.domNode.style.float = "right";
+			doneButton.domNode.style["float"] = "right";
 			doneButton.placeAt(navigationBar.domNode);
 			
         	var spinWheelDatePicker = new SpinWheelDatePicker();

@@ -20,7 +20,7 @@ define(['dojo/_base/declare', 'bizComp/_Widget', 'dojo/Evented', 'dojo/dom-const
 					me.emit("directoryBarPressed", {item:item, index:i});
 				});
 			});
-		},
+		}
 	
 	});
 });
