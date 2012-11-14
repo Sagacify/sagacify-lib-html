@@ -51,11 +51,11 @@ define([
 				this._containerClass = args.containerClass;
 				this._transparentBg = args.transparentBg;
 			}
-			this.scrollType = 1;
+			//this.scrollType = 3;
 		},		
 		
 		postCreate: function() {
-			this.scrollType = 1;
+			//this.scrollType = 3;
 			if(this._pullToRefresh) {
 				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
 				this.containerNode.style.top = "-500px";
@@ -174,7 +174,6 @@ define([
 					})
 				});
 			});
-			
 		},
 		
 		/*load: function() {
@@ -250,9 +249,9 @@ define([
 					to.y -= 1;
 				}
 			}
-			console.log(this._headers[0].domNode.clientHeight);
-			console.log(this._cellsBySection[0][0].domNode.clientHeight);
-			console.log(to.y);
+			//console.log(this._headers[0].domNode.clientHeight);
+			//console.log(this._cellsBySection[0][0].domNode.clientHeight);
+			//console.log(to.y);
 			this.scrollTo(to);
 		},
 		
@@ -287,12 +286,17 @@ define([
 					if(this.getPos().y==0)
 						this._slidingAfterLoading = false;
 				}
-				else*/ if(this.getPos().y > 65 && to.y == 0) {
+				else*/ 
+				if(this.getPos().y > 65 && to.y == 0) {
 					to.y = 65;
 					this._nextSlideDest = to;
 					this._pullDownDiv.loading = true;
 					this.reloadTableViewDataSource();
 					this.emit("reload", {});
+					
+					this._pullDownDiv.statusDiv.innerHTML = "Loading...";
+					this._pullDownDiv.arrowImg.style.display = "none";
+					this._pullDownDiv.spinner.style.display = "";
 				}
 			}
 			this.inherited(arguments);
@@ -360,6 +364,15 @@ define([
 			var el = document.getElementById(id);
 			if(el)
 				domConstruct.destroy(el);
+		},
+		
+		handleCellTexts: function(){
+			dojo.forEach(this._cellsBySection, function(section, i){
+				dojo.forEach(section, function(cell, j){
+					if(cell.handleText)
+						cell.handleText();
+				});
+			});
 		}
 		
 	});

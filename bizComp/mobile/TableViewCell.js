@@ -53,12 +53,20 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 				select.style["-webkit-appearance"] = "none";
 				this.select = select;
 			}
-			this.domNode.children[0].style.maxWidth = "200px";
 		},
 		
 		setHeight: function(height) {
 			this.domNode.style.height = height+"px";
 			this.domNode.children[0].children[0].style.top = (((height-12)/2)-14)+"px";
+		},
+		
+		handleText: function(){
+			this.domNode.children[0].style.maxWidth = "200px";
+			this.domNode.children[0].style.textAlign = "right";
+			console.log(this.domNode.children[0].clientHeight);
+			if(this.domNode.children[0].clientHeight >= 40 && this.domNode.children[0].clientHeight <= 42){
+				this.domNode.style.height = "65px";
+			}
 		}
 		
 	});
