@@ -244,7 +244,7 @@ define([
 				to.y -= this._headers[i].domNode.clientHeight;
 				to.y -= 2;
 				for(var j = 0; j < this._cellsBySection[i].length; j++) {
-					console.log(i + ", " + j);
+					//console.log(i + ", " + j);
 					to.y -= this._cellsBySection[i][j].domNode.clientHeight;
 					to.y -= 1;
 				}
@@ -252,7 +252,7 @@ define([
 			//console.log(this._headers[0].domNode.clientHeight);
 			//console.log(this._cellsBySection[0][0].domNode.clientHeight);
 			//console.log(to.y);
-			this.scrollTo(to);
+			this.slideTo(to, 0.5, "ease-out");
 		},
 		
 		scrollTo: function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node) {
