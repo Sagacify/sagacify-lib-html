@@ -1,4 +1,4 @@
-bizcomp-lib-html
+sagacify-lib-html
 ================
 
-HTML BizComp library
+HTML Sagacify library

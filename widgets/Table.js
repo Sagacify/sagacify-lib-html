@@ -1,10 +1,10 @@
 define([
-	'../_Widget', 
+	'./_Widget', 
 	'dojo/Evented', 
 	'dojo/on',
 	'dojo/dom-construct'],
 	function(_Widget, Evented, on, domConstruct) {
-		return dojo.declare('DropImage', [_Widget, Evented], {
+		return dojo.declare('Saga.DropImage', [_Widget, Evented], {
 
 			templateString : "<table><thead data-dojo-attach-point='theadNode'></thead><tbody></tbody></table>",
 
