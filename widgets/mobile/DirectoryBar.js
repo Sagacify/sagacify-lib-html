@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', 'dojo/Evented', 'dojo/dom-construct', 'dojo/on'], function(declare, _Widget, Evented, domConstruct, on) {
+define(['dojo/_base/declare', '../_Widget', 'dojo/Evented', 'dojo/dom-construct', 'dojo/on'], function(declare, _Widget, Evented, domConstruct, on) {
 	
 	return declare('bizComp.DirectoryBar', [_Widget, Evented], {
 	

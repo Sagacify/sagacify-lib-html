@@ -1,4 +1,13 @@
-define(['dojo/_base/declare', './ViewController', './NavigationBar', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-class', 'dojo/dom-construct'], function(declare, ViewController, NavigationBar, connect, on, domClass, domConstruct) {
+define([
+	'dojo/_base/declare', 
+	'./ViewController', 
+	'./NavigationBar', 
+	'dojo/_base/connect', 
+	'dojo/on', 
+	'dojo/dom-class', 
+	'dojo/dom-construct'], 
+	
+	function(declare, ViewController, NavigationBar, connect, on, domClass, domConstruct) {
 	
 	return declare('bizComp.NavigationController', [ViewController], {
 		

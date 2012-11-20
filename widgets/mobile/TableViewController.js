@@ -14,7 +14,7 @@ define([
 	'spin/Spin'], 
 	function(declare, connect, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
-	return declare('bizComp.TableViewController', [ScrollableView, Evented], {
+	return declare('saga.TableViewController', [ScrollableView, Evented], {
 		
 		parent: null,
 		

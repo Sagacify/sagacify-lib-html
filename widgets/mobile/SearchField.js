@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', './TextField', 'dojo/dom-construct'], function(declare, _Widget, TextField, domConstruct) {
+define(['dojo/_base/declare', '../_Widget', './TextField', 'dojo/dom-construct'], function(declare, _Widget, TextField, domConstruct) {
 	
 	return declare('bizComp.TextField', [_Widget], {
 	

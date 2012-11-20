@@ -1,10 +1,10 @@
 define([
 	'dojo/_base/declare', 
 	'dojo/_base/config',
-	'bizComp/_Widget', 
+	'../_Widget', 
 	'dojox/mobile/View', 
 	'dojo/on', 
-	'bizComp/mobile/Button', 
+	'../mobile/Button', 
 	'dojo/dom-construct', 
 	'dojo/dom-class', 
 	'dojo/_base/connect'], 

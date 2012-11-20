@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', 'bizComp/_Widget'], function(declare, _Widget) {
+define(['dojo/_base/declare', '../_Widget'], function(declare, _Widget) {
 	
 	return declare('bizComp.TextView', [_Widget], {
 	

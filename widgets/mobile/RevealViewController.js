@@ -1,6 +1,15 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', './revealView/RevealFrontViewController', './revealView/RevealRearViewController', 'dojox/mobile/View', 'dojo/_base/window'], function(declare, _Widget, RevealFrontViewController, RevealRearViewController, View, win) {
+define([
+	'dojo/_base/declare', 
+	'./ViewController', 
+	'./revealViewController/RevealFrontViewController', 
+	'./revealViewController/RevealRearViewController', 
+	'dojox/mobile/View', 
+	'dojo/_base/window',
+	'dojo/on'], 
 	
-	return declare('bizComp.RevealViewController', [_Widget], {
+	function(declare, ViewController, RevealFrontViewController, RevealRearViewController, View, win, on) {
+	
+	return declare('saga.RevealViewController', [ViewController], {
 		
 		viewControllers: null,
 		
@@ -15,35 +24,31 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './revealView/RevealFrontViewCo
 		containerView: null,
 		
 		constructor: function(args) {
-			this.viewControllers = args.viewControllers;
-			this.revealFrontViewControllers = args.viewControllers;
-			this.revealRearViewController = args.revealViewController;
+			//this.revealFrontViewControllers = args.viewControllers;
 		},		
 		
 		postCreate: function() {
+			this.inherited(arguments);
 			this.domNode.style.overflow = "hidden";
-			
+			var me = this;
 			var revealFrontViewControllers = this.revealFrontViewControllers;
-			/*dojo.forEach(this.viewControllers, function(viewController, i){
-				var revealFrontViewController = new RevealFrontView({viewController:viewController});
-				revealFrontViewControllers.push(revealFrontViewController);
-			});*/
-			
-			if(!this.revealRearViewController) {
-				this.revealRearViewController = new RevealRearViewController({parent:this});
+			if(!revealFrontViewControllers){
+				revealFrontViewControllers = [];
+				dojo.forEach(this.viewControllers, function(viewController, i){
+					var revealFrontViewController = new RevealFrontViewController({viewController:viewController, frame:me.frame});
+					revealFrontViewControllers.push(revealFrontViewController);
+				});	
+				this.revealFrontViewControllers = revealFrontViewControllers;
 			}
-			this.revealRearViewController.domNode.style.position = "absolute";
-			this.revealRearViewController.placeAt(this.domNode);
 			
-        	this.containerView = new View({style:"height:460px; width:246px;"});
+        	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width*0.75+"px;"});//246
     		this.containerView.placeAt(this.domNode);
 
-        	var me = this;
         	this.isRevealed = true;
         	
         	dojo.forEach(this.revealFrontViewControllers, function(revealFrontViewController, i){
         		revealFrontViewController.placeAt(me.containerView.domNode);
-        		revealFrontViewController.setFrame({height:460});
+        		//revealFrontViewController.setFrame({height:460});
         		if(i != 0) {
         			revealFrontViewController.domNode.style.display = "none";
         		}
@@ -69,6 +74,18 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './revealView/RevealFrontViewCo
         	
 		},
 		
+		setRevealRearViewController: function(revealRearViewController){
+			if(!revealRearViewController) {
+				revealRearViewController = new RevealRearViewController({parent:this});
+			}
+			revealRearViewController.domNode.style.position = "absolute";
+			revealRearViewController.placeAt(this.domNode, "first");
+			on(revealRearViewController, "frontViewControllerSelected", function(frontViewController){
+				me.setCurrentFrontViewController(frontViewController);
+			});
+			this.revealRearViewController = revealRearViewController;
+		},
+		
 		setCurrentFrontViewController: function(frontViewController) {
 			this.currentFrontViewController.domNode.style.display = "none";
 			frontViewController.domNode.style.display = "";
@@ -77,7 +94,8 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './revealView/RevealFrontViewCo
 		
 		revealStart: function() {
 			if(dojo.isChrome) {
-				this.containerView.domNode.style.left = "320px";
+				//this.containerView.domNode.style.left = "320px";
+				//this.containerView.domNode.style.left = this.frame.width*0.75+"px";
 			}
 			this.containerView.domNode.style.overflow = "";
         	this.containerView.performTransition(null, 1, "reveal", null);	
@@ -94,7 +112,7 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './revealView/RevealFrontViewCo
 			this.containerView.performTransition(null, -1, "reveal", null);
 			//handle problem with chrome and reveal animation when overflow is not hidden
 			if(dojo.isChrome) {
-				var me = this;
+				/*var me = this;
 				me.timeout = setTimeout(function handleOverflow(){
 					var m = win.doc.defaultView.getComputedStyle(me.containerView.domNode, '')["-webkit-transform"];
 					if(m && m.indexOf("matrix") === 0){
@@ -104,12 +122,13 @@ define(['dojo/_base/declare', 'bizComp/_Widget', './revealView/RevealFrontViewCo
 							me.containerView.domNode.style.overflow = "hidden";
 					}
 					me.timeout = setTimeout(handleOverflow, 1);
-				}, 1);
+				}, 1);*/
 			}
 		},
 		
 		unrevealEnd: function() {
-			this.containerView.domNode.style.left = "246px";
+			//this.containerView.domNode.style.left = "246px";
+			this.containerView.domNode.style.left = this.frame.width*0.75+"px";
 	        this.containerView.domNode.style.overflow = "hidden";
 	        this.containerView.domNode.style.display = "";
 	        this.isRevealed = false;

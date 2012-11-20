@@ -1,4 +1,13 @@
-define(['dojo/_base/declare', 'dojox/mobile/Heading', 'dojo/Evented', './TextField', 'dojox/mobile/ToolBarButton', 'dojo/dom-construct', 'dojo/on'], function(declare, Heading, Evented, TextField, ToolBarButton, domConstruct, on) {
+define([
+	'dojo/_base/declare', 
+	'dojox/mobile/Heading', 
+	'dojo/Evented', 
+	'./TextField', 
+	'dojox/mobile/ToolBarButton', 
+	'dojo/dom-construct', 
+	'dojo/on'], 
+	
+	function(declare, Heading, Evented, TextField, ToolBarButton, domConstruct, on) {
 	
 	return declare('bizComp.mobile.SearchBar', [Heading, Evented], {
 
