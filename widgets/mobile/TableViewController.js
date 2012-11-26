@@ -55,6 +55,7 @@ define([
 		},		
 		
 		postCreate: function() {
+
 			//this.scrollType = 3;
 			if(this._pullToRefresh) {
 				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);

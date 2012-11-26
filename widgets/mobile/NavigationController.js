@@ -36,7 +36,8 @@ define([
 			this.domNode.style.width = this._viewControllers[0].domNode.style.width;
 			this.domNode.style.height = this._viewControllers[0].domNode.style.height+44;
 			
-			this._viewControllers[0]._updateNavigationBar();
+			if(typeof this._viewControllers[0]._updateNavigationBar == "function")
+				this._viewControllers[0]._updateNavigationBar();
 		},
 		
 		

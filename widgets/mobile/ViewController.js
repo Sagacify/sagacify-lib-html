@@ -214,6 +214,5 @@ define([
 		onDatePicked: function() {
 			//meth
 		}
-		
 	});
 });
