@@ -52,6 +52,8 @@ define([
 				this._transparentBg = args.transparentBg;
 			}
 			//this.scrollType = 3;
+			//for(var key in args)
+				//this[key] = args[key];
 		},		
 		
 		postCreate: function() {

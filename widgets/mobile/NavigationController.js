@@ -9,7 +9,7 @@ define([
 	
 	function(declare, ViewController, NavigationBar, connect, on, domClass, domConstruct) {
 	
-	return declare('bizComp.NavigationController', [ViewController], {
+	return declare('saga.NavigationController', [ViewController], {
 		
 		_viewControllers: null,
 		
