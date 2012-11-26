@@ -106,6 +106,7 @@ define([
 			this.containerView.domNode.style.display = "";
 			//this.containerView.domNode.style.overflow = "";
 			this.isRevealed = true;
+			this.onRevealEnd.apply(this, []);
 		},
 		
 		unrevealStart: function() {
@@ -132,6 +133,10 @@ define([
 	        this.containerView.domNode.style.overflow = "hidden";
 	        this.containerView.domNode.style.display = "";
 	        this.isRevealed = false;
+		},
+		
+		onRevealEnd: function(){
+			
 		}
 			
 	});
