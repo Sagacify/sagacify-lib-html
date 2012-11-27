@@ -125,6 +125,7 @@ define([
 					me.timeout = setTimeout(handleOverflow, 1);
 				}, 1);*/
 			}
+			this.onUnrevealStart.apply(this, []);
 		},
 		
 		unrevealEnd: function() {
@@ -136,6 +137,10 @@ define([
 		},
 		
 		onRevealEnd: function(){
+			
+		},
+		
+		onUnrevealStart: function(){
 			
 		}
 			
