@@ -12,6 +12,7 @@ define(['dojo/_base/declare', '../ViewController', './RevealRearTableViewControl
 		},		
 		
 		postCreate: function() {
+			
 			this.domNode.style.width = "320px";
 			this.domNode.style.height = "460px";
 			this.domNode.style.background = "gray";
@@ -19,7 +20,7 @@ define(['dojo/_base/declare', '../ViewController', './RevealRearTableViewControl
 			this.revealRearTableViewController = new RevealRearTableViewController({parent:this, frame:this.frame});
 			this.revealRearTableViewController.placeAt(this.domNode);
 			this.revealRearTableViewController.startup();
+
 		}
-			
 	});
 });

@@ -19,6 +19,7 @@ define([
 			this.inherited(arguments);
 			
 			this.domNode.style.overflow = "hidden";
+			this.domNode.style.background = "white";
 			
 			this._addRevealButton();
 		},
