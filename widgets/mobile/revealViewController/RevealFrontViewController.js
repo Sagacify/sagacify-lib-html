@@ -26,8 +26,16 @@ define([
 		
 		_updateNavigationBar: function() {
 			this.inherited(arguments);
-			if(this._viewControllers.length == 1)
-				this._addRevealButton();
+			if(!this._customNavBar){
+				if(this._viewControllers.length == 1)
+					this._addRevealButton();	
+			}
+			else{
+				if(this._viewControllers.length == 1)
+					this.navigationBar.revealButton.style.display = "";
+				else
+					this.navigationBar.revealButton.style.display = "none";
+			}
 		},
 		
 		_addRevealButton: function(){
