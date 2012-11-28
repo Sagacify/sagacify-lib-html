@@ -31,7 +31,7 @@ define([
 			var me = this;
 
 			if(!this.revealFrontViewController){
-				this.revealFrontViewController = new RevealFrontViewController({viewController:viewController, frame:me.frame});
+				this.revealFrontViewController = new RevealFrontViewController({viewController:this.viewController, frame:me.frame});
 			}
 			
         	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width*0.75+"px;"});//246

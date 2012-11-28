@@ -115,8 +115,8 @@ define([
 		pushViewController: function(viewController) {
 			
 			viewController.placeAt(this.domNode);
-			viewController.domNode.style.height = (viewController.frame.height+88)+"px"; 
-			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:88px"}, viewController.domNode, "first");
+			viewController.domNode.style.height = (viewController.frame.height+44)+"px"; 
+			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");
 			viewController.domNode.style.position = "";
 			this._viewControllers[0].performTransition(viewController.id, 1, "slide", null);
 			var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
@@ -127,18 +127,16 @@ define([
 					domConstruct.destroy(eventsBlocker);
 				}
 			});
-			debugger;
 			viewController.navigationController = this;
 			this._viewControllers.splice(0, 0, viewController);
 			this._updateNavigationBar();
-			
 		},
 		
 		popViewController: function() {
 			if(this._viewControllers.length >= 2) {
 				var viewControllerToPop = this._viewControllers.splice(0, 1)[0];
-				this._viewControllers[0].domNode.style.height = (this._viewControllers[0].frame.height+88)+"px";
-				var fakediv = domConstruct.create("div", {style:"width:"+this._viewControllers[0].frame.width+"px;height:88px"}, this._viewControllers[0].domNode, "first");
+				this._viewControllers[0].domNode.style.height = (this._viewControllers[0].frame.height+44)+"px";
+				var fakediv = domConstruct.create("div", {style:"width:"+this._viewControllers[0].frame.width+"px;height:44px"}, this._viewControllers[0].domNode, "first");
 				viewControllerToPop.performTransition(this._viewControllers[0].id, -1, "slide", null);
 				var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
 				var viewControllerToAppear = this._viewControllers[0];
