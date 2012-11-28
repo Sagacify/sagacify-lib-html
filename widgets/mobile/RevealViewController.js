@@ -11,34 +11,27 @@ define([
 	
 	return declare('saga.RevealViewController', [ViewController], {
 		
-		viewControllers: null,
+		viewController: null,
 		
-		revealFrontViewControllers: null,
+		revealFrontViewController: null,
 		
 		revealRearViewController: null,
 		
 		isRevealed: null,
-		
-		currentFrontViewController: null,
-		
+				
 		containerView: null,
 		
 		constructor: function(args) {
-			//this.revealFrontViewControllers = args.viewControllers;
+
 		},		
 		
 		postCreate: function() {
 			this.inherited(arguments);
 			this.domNode.style.overflow = "hidden";
 			var me = this;
-			var revealFrontViewControllers = this.revealFrontViewControllers;
-			if(!revealFrontViewControllers){
-				revealFrontViewControllers = [];
-				dojo.forEach(this.viewControllers, function(viewController, i){
-					var revealFrontViewController = new RevealFrontViewController({viewController:viewController, frame:me.frame});
-					revealFrontViewControllers.push(revealFrontViewController);
-				});	
-				this.revealFrontViewControllers = revealFrontViewControllers;
+
+			if(!this.revealFrontViewController){
+				this.revealFrontViewController = new RevealFrontViewController({viewController:viewController, frame:me.frame});
 			}
 			
         	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width*0.75+"px;"});//246
@@ -46,22 +39,13 @@ define([
 
         	this.isRevealed = true;
         	
-        	dojo.forEach(this.revealFrontViewControllers, function(revealFrontViewController, i){
-        		revealFrontViewController.placeAt(me.containerView.domNode);
-        		//revealFrontViewController.setFrame({height:460});
-        		if(i != 0) {
-        			revealFrontViewController.domNode.style.display = "none";
+        	this.revealFrontViewController.placeAt(this.containerView.domNode);
+        	this.revealFrontViewController.on("revealButtonPressed", function(args){
+        		if(me.isRevealed)
+        			me.unrevealStart();
+        		else {
+        			me.revealStart();
         		}
-        		else
-        			me.currentFrontViewController = revealFrontViewController;
-        			
-        		revealFrontViewController.on("revealButtonPressed", function(args){
-	        		if(me.isRevealed)
-	        			me.unrevealStart();
-	        		else {
-	        			me.revealStart();
-	        		}
-	        	});
         	});
         	
         	this.containerView.on("afterTransitionOut", function(){
@@ -72,6 +56,10 @@ define([
 					me.revealEnd();
 			});
         	
+		},
+		
+		setViewController: function(viewController){
+			this.revealFrontViewController.setFrontViewController(viewController);
 		},
 		
 		setRevealRearViewController: function(revealRearViewController){
@@ -86,17 +74,7 @@ define([
 			this.revealRearViewController = revealRearViewController;
 		},
 		
-		setCurrentFrontViewController: function(frontViewController) {
-			this.currentFrontViewController.domNode.style.display = "none";
-			frontViewController.domNode.style.display = "";
-			this.currentFrontViewController = frontViewController;
-		},
-		
 		revealStart: function() {
-			if(dojo.isChrome) {
-				//this.containerView.domNode.style.left = "320px";
-				//this.containerView.domNode.style.left = this.frame.width*0.75+"px";
-			}
 			this.containerView.domNode.style.overflow = "";
         	this.containerView.performTransition(null, 1, "reveal", null);	
 		},
@@ -104,32 +82,16 @@ define([
 		revealEnd: function() {
 			this.containerView.domNode.style.left = "0px";
 			this.containerView.domNode.style.display = "";
-			//this.containerView.domNode.style.overflow = "";
 			this.isRevealed = true;
 			this.onRevealEnd.apply(this, []);
 		},
 		
 		unrevealStart: function() {
 			this.containerView.performTransition(null, -1, "reveal", null);
-			//handle problem with chrome and reveal animation when overflow is not hidden
-			if(dojo.isChrome) {
-				/*var me = this;
-				me.timeout = setTimeout(function handleOverflow(){
-					var m = win.doc.defaultView.getComputedStyle(me.containerView.domNode, '')["-webkit-transform"];
-					if(m && m.indexOf("matrix") === 0){
-						var arr = m.split(/[,\s\)]+/);
-						var posX = arr[4];
-						if(posX > 100)
-							me.containerView.domNode.style.overflow = "hidden";
-					}
-					me.timeout = setTimeout(handleOverflow, 1);
-				}, 1);*/
-			}
 			this.onUnrevealStart.apply(this, []);
 		},
 		
 		unrevealEnd: function() {
-			//this.containerView.domNode.style.left = "246px";
 			this.containerView.domNode.style.left = this.frame.width*0.75+"px";
 	        this.containerView.domNode.style.overflow = "hidden";
 	        this.containerView.domNode.style.display = "";

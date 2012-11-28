@@ -13,6 +13,8 @@ define([
 		
 		_viewControllers: null,
 		
+		_customNavBar: false,
+		
 		navigationBar: null,
 
 		constructor: function(args) {
@@ -27,10 +29,16 @@ define([
 			this.domNode.style.overflow = "hidden";
 			
 			var label = this._viewControllers[0].name?this._viewControllers[0].name:"";
-			this.navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:label});
-        	this.navigationBar.placeAt(this.domNode);
-        	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
-        	this.navigationBar.startup();		
+			if(!this.navigationBar){
+				this.navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:label});
+	        	this.navigationBar.placeAt(this.domNode);
+	        	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
+	        	this.navigationBar.startup();		
+			}
+			else{
+				this.navigationBar.placeAt(this.domNode);
+				this._customNavBar = true;
+			}	
         	
 			this._viewControllers[0].placeAt(this.domNode);
 			this.domNode.style.width = this._viewControllers[0].domNode.style.width;
@@ -42,37 +50,41 @@ define([
 		
 		
 		_updateNavigationBar: function() {
-			
-			this.navigationBar.destroyRecursive();
-			this.navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:this._viewControllers[0].name});
-        	this.navigationBar.placeAt(this.domNode, 0);
-        	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
-        	this.navigationBar.startup();
-			
-			if(this._viewControllers.length >= 2) {
-				if(this._viewControllers[1].name)
-					this.navigationBar._setBackAttr(this._viewControllers[1].name);
+			if(!this._customNavBar){
+				this.navigationBar.destroyRecursive();
+				this.navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:this._viewControllers[0].name});
+	        	this.navigationBar.placeAt(this.domNode, 0);
+	        	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
+	        	this.navigationBar.startup();
+				
+				if(this._viewControllers.length >= 2) {
+					if(this._viewControllers[1].name)
+						this.navigationBar._setBackAttr(this._viewControllers[1].name);
+					else
+						this.navigationBar._setBackAttr("Back");
+					var me = this;
+		        	/*dojo.forEach(this.navigationBar.domNode.childNodes, function(childNode, i){
+						if(domClass.contains(childNode, "mblArrowButton")) {
+			        		connect.connect(childNode, "onclick", this, function(){
+			        			me.popViewController();
+			        		});
+			        	}
+		        	});*/
+		        	on(this.navigationBar.domNode.childNodes[0], "click", function(){
+		        		me.popViewController();
+		        	});
+				}
+				else {
+					this.navigationBar._setBackAttr(null);
+				}
+				if(this._viewControllers[0].name)
+					this.navigationBar._setLabelAttr(this._viewControllers[0].name);
 				else
-					this.navigationBar._setBackAttr("Back");
-				var me = this;
-	        	/*dojo.forEach(this.navigationBar.domNode.childNodes, function(childNode, i){
-					if(domClass.contains(childNode, "mblArrowButton")) {
-		        		connect.connect(childNode, "onclick", this, function(){
-		        			me.popViewController();
-		        		});
-		        	}
-	        	});*/
-	        	on(this.navigationBar.domNode.childNodes[0], "click", function(){
-	        		me.popViewController();
-	        	});
+					this.navigationBar._setLabelAttr(null);
 			}
-			else {
-				this.navigationBar._setBackAttr(null);
+			else{
+				
 			}
-			if(this._viewControllers[0].name)
-				this.navigationBar._setLabelAttr(this._viewControllers[0].name);
-			else
-				this.navigationBar._setLabelAttr(null);
 				
 			this._viewControllers[0]._updateNavigationBar();
 		},
@@ -82,8 +94,13 @@ define([
 		},
 		
 		setFrontViewController: function(viewController) {
-			this._viewControllers = [args.viewController];
-				args.viewController.navigationController = this;
+			dojo.forEach(this._viewControllers, function(viewController){
+				if(viewController.destroyRecursive)
+					viewController.destroyRecursive();
+			});
+			this._viewControllers = [viewController];
+			viewController.navigationController = this;
+			viewController.placeAt(this.domNode);
 		},
 		
 		pushViewController: function(viewController) {
