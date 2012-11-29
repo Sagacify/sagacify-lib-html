@@ -44,12 +44,14 @@ define([
 				this._revealButton.placeAt(this.navigationBar.domNode);
 				var me = this;
 				this._revealButton.on("click", function(args){
+					args.preventDefault();
 					me.emit("revealButtonPressed", {});
 				});	
 			}
 			else{
 				var me = this;
 				on(this.navigationBar.revealButton, "click", function(args){
+					args.preventDefault();
 					me.emit("revealButtonPressed", {});
 				});
 			}
