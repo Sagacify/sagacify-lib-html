@@ -15,7 +15,7 @@ function Push(array, obj){
 		
 define([
 	'dojo/_base/declare',
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojo/Evented', 
 	'dojo/text!./templates/ScheduleCell.html', 
 	'dojo/dom-attr',

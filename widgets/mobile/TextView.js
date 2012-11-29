@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget'], function(declare, _Widget) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget'], function(declare, _Widget) {
 	
-	return declare('bizComp.TextView', [_Widget], {
+	return declare('saga.TextView', [_Widget], {
 	
 		templateString:"<textarea style='outline:none;border:none;'></textarea>",
 		

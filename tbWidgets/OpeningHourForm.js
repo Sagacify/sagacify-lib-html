@@ -1,16 +1,16 @@
 define([
 	'dojo/_base/declare',
 	'dojo/on',
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojo/Evented', 
 	'dojo/text!./templates/OpeningHourForm.html', 
 	'dojo/dom-attr',
-	'./ScheduleCell',
+	'saga/tbWidgets/ScheduleCell',
 	'dijit/Calendar'
 	], 
 	function(declare, on, _Widget, Evented, template, domAttr, ScheduleCell, Calendar) {
 
-	return declare('BizComp.OpeningHourForm', [_Widget, Evented], {
+	return declare('saga.OpeningHourForm', [_Widget, Evented], {
 
 		templateString: template,
 		

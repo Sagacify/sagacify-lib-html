@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', 'dojo/Evented', 'dojo/dom-construct', 'dojo/on'], function(declare, _Widget, Evented, domConstruct, on) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/Evented', 'dojo/dom-construct', 'dojo/on'], function(declare, _Widget, Evented, domConstruct, on) {
 	
-	return declare('bizComp.DirectoryBar', [_Widget, Evented], {
+	return declare('saga.DirectoryBar', [_Widget, Evented], {
 	
 		templateString:"<div></div>",
 		

@@ -1,5 +1,5 @@
 define([
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojo/Evented', 
 	'dojo/on',
 	'dojo/dom-construct'],

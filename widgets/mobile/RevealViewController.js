@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', './revealView/RevealFrontViewController', './revealView/RevealRearViewController', 'dojox/mobile/View', 'dojo/_base/window'], function(declare, _Widget, RevealFrontViewController, RevealRearViewController, View, win) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget', './revealView/RevealFrontViewController', './revealView/RevealRearViewController', 'dojox/mobile/View', 'dojo/_base/window'], function(declare, _Widget, RevealFrontViewController, RevealRearViewController, View, win) {
 	
-	return declare('bizComp.RevealViewController', [_Widget], {
+	return declare('saga.RevealViewController', [_Widget], {
 		
 		viewControllers: null,
 		

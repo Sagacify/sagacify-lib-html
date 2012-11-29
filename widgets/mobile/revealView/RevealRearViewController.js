@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', './RevealRearTableViewController'], function(declare, _Widget, RevealRearTableViewController) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget', './RevealRearTableViewController'], function(declare, _Widget, RevealRearTableViewController) {
 	
-	return declare('bizComp.RevealRearViewController', [_Widget], {
+	return declare('saga.RevealRearViewController', [_Widget], {
 		
 		viewControllers: null,
 		

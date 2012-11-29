@@ -1,6 +1,6 @@
-define(['dojo', 'bizComp/_Widget'], function(dojo, _Widget) {
+define(['dojo', 'saga/widgets/_Widget'], function(dojo, _Widget) {
 	
-	return dojo.declare('bizComp.Checkbox', [_Widget], {
+	return dojo.declare('saga.Checkbox', [_Widget], {
 	
 		templateString:"<input type='checkbox'></input>",
 		

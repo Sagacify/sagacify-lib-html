@@ -1,5 +1,5 @@
 define([
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojo/Evented', 
 	'dojo/text!./templates/DropImage.html',
 	'dojo/on',
@@ -12,7 +12,7 @@ define([
 	'dojo/_base/config'],
 	function(_Widget, Evented, template, on, domConstruct, domAttr, connect, lang, iframe, event, config) {
 
-	return dojo.declare('DropImage', [_Widget, Evented], {
+	return dojo.declare('saga.DropImage', [_Widget, Evented], {
 
 		templateString: template,
 		

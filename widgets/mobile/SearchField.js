@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget', './TextField', 'dojo/dom-construct'], function(declare, _Widget, TextField, domConstruct) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget', 'saga/widgets/mobile/TextField', 'dojo/dom-construct'], function(declare, _Widget, TextField, domConstruct) {
 	
-	return declare('bizComp.TextField', [_Widget], {
+	return declare('saga.TextField', [_Widget], {
 	
 		templateString:"<div></div>",
 		

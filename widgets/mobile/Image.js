@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget'], function(declare, _Widget) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget'], function(declare, _Widget) {
 	
-	return declare('bizComp.Button', [_Widget], {
+	return declare('saga.Button', [_Widget], {
 		
 		templateString:"<img></img>",
 		

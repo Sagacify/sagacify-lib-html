@@ -1,6 +1,6 @@
-define(['dojo/_base/declare', 'bizComp/_Widget'], function(declare, _Widget) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget'], function(declare, _Widget) {
 	
-	return declare('bizComp.TextField', [_Widget], {
+	return declare('saga.TextField', [_Widget], {
 	
 		templateString:"<input type='text' style='outline:none;border:none;'></input>",
 		

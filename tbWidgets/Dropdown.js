@@ -1,5 +1,5 @@
 define([
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojo/Evented', 
 	'dojo/text!./templates/Dropdown.html', 
 	'dojo/dom-construct', 
@@ -7,7 +7,7 @@ define([
 	'dojo/_base/connect'], 
 	function(_Widget, Evented, template, domConstruct, domAttr, connect) {
 
-	return dojo.declare('bootstrap.Dropdown', [_Widget, Evented], {
+	return dojo.declare('saga.Dropdown', [_Widget, Evented], {
 
 		templateString: template,
 		
