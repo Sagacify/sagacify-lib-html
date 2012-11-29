@@ -1,8 +1,8 @@
 define([
 	'dojo/_base/declare', 
-	'./ViewController', 
-	'./revealViewController/RevealFrontViewController', 
-	'./revealViewController/RevealRearViewController', 
+	'saga/widgets/ViewController', 
+	'saga/widgets/revealViewController/RevealFrontViewController', 
+	'saga/widgets/revealViewController/RevealRearViewController', 
 	'dojox/mobile/View', 
 	'dojo/_base/window',
 	'dojo/on'], 

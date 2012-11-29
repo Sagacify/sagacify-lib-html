@@ -1,17 +1,17 @@
 define([
 	'dojo/_base/declare',
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojo/Evented', 
 	'dojo/text!./templates/AddressMap.html', 
 	'dojo/dom-attr',
-	'./Dropdown',
+	'saga/tbWidgets/Dropdown',
 	'dojo/_base/connect',
 	'dojo/_base/xhr',
 	'dojo/on'
 	], 
 	function(declare, _Widget, Evented, template, domAttr, Dropdown, connect, xhr, on) {
 
-	return declare('BizComp.AddressNode', [_Widget, Evented], {
+	return declare('saga.AddressNode', [_Widget, Evented], {
 
 		templateString: template,
 		

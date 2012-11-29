@@ -1,8 +1,8 @@
-define(['../_Widget', 'dojo/text!./templates/Typehead.html', 'dojo/dom-construct', 
-'dojo/dom-attr', 'dojo/_base/connect', 'dojo/_base/array', 'bootstrap'], 
+define(['saga/widgets/_Widget', 'dojo/text!./templates/Typehead.html', 'dojo/dom-construct', 
+'dojo/dom-attr', 'dojo/_base/connect', 'dojo/_base/array'], 
 function (_Widget, template, domConstruct, domAttr, connect, array) {
 
-    return dojo.declare('bootstrap.Typeahead', [_Widget], {
+    return dojo.declare('saga.Typeahead', [_Widget], {
 
         templateString: template,
 

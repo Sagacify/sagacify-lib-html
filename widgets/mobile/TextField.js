@@ -1,4 +1,4 @@
-define(['dojo/_base/declare', '../_Widget'], function(declare, _Widget) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget'], function(declare, _Widget) {
 	
 	return declare('saga.TextField', [_Widget], {
 	

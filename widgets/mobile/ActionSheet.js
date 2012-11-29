@@ -1,16 +1,16 @@
 define([
 	'dojo/_base/declare', 
 	'dojo/_base/config',
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojox/mobile/View', 
 	'dojo/on', 
-	'../mobile/Button', 
+	'saga/widgets/mobile/Button', 
 	'dojo/dom-construct', 
 	'dojo/dom-class', 
 	'dojo/_base/connect'], 
 	function(declare, config, _Widget, View, on, Button, domConstruct, domClass, connect) {
 	
-	return declare('bizComp.ActionSheet', [_Widget, View], {
+	return declare('saga.ActionSheet', [_Widget, View], {
 		
 		templateString: "<div></div>",
 		
