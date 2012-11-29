@@ -352,6 +352,14 @@ define([
 			}
 		},
 		
+		addContainerClass: function(cl){
+			domClass.add(this.containerNode, cl);
+		},
+		
+		addUlClass: function(cl){
+			domClass.add(this.containerNode.children[0], cl);
+		},
+		
 		_loadCss: function(path, id) {
 			var e = document.createElement("link");
 			e.href = path;
