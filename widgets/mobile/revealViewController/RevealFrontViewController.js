@@ -21,7 +21,7 @@ define([
 			this.domNode.style.overflow = "hidden";
 			this.domNode.style.background = "white";
 			
-			this._addRevealButton();
+			this._addRevealButton();			
 		},
 		
 		_updateNavigationBar: function() {
