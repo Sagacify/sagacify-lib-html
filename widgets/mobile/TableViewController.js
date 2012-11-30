@@ -177,10 +177,10 @@ define([
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
-					/*on(node, "click", function(evt){
+					on(node, "click", function(evt){
 						alert("row clicked")
 						me.didSelectRowAtIndexPath({section:i, row:j});
-					});*/
+					});
 					on(node, "mouseup", function(evt){
 						console.log("mouseup")
 						alert("mouseup");
@@ -191,6 +191,24 @@ define([
       				  type = "";
 						var simulatedEvent = document.createEvent("MouseEvent");
    					 simulatedEvent.initMouseEvent("mouseup", true, true, window, 1, 
+                              first.screenX, first.screenY, 
+                              first.clientX, first.clientY, false, 
+                              false, false, false, 0/*left*/, null);
+
+					node.dispatchEvent(simulatedEvent);
+    					event.preventDefault();
+					});
+					
+					on(node, "mousedown", function(evt){
+						console.log("mousedown")
+						alert("mousedown");
+					});
+					on(node, "touchstart", function(evt){
+						var touches = event.changedTouches,
+      				  first = touches[0],
+      				  type = "";
+						var simulatedEvent = document.createEvent("MouseEvent");
+   					 simulatedEvent.initMouseEvent("mousedown", true, true, window, 1, 
                               first.screenX, first.screenY, 
                               first.clientX, first.clientY, false, 
                               false, false, false, 0/*left*/, null);
