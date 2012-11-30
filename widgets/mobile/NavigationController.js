@@ -88,6 +88,7 @@ define([
 					this.navigationBar._setLabelAttr(null);
 			}
 			else{
+				this.navigationBar.reset();
 				if(this._viewControllers.length >= 2)
 					this.navigationBar.backButton.style.display = "";
 				else
