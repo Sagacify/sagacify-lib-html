@@ -14,7 +14,7 @@ define([
 	'spin/Spin'], 
 	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
-	return declare('saga.TableViewController', [ScrollableView/*, Evented*/], {
+	return declare('saga.TableViewController', [ScrollableView, Evented], {
 		
 		parent: null,
 		
@@ -179,7 +179,6 @@ define([
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, "click", function(evt){
 						alert("row clicked")
-						evt.preventDefault();
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					});
 				});
@@ -306,7 +305,7 @@ define([
 					this._nextSlideDest = to;
 					this._pullDownDiv.loading = true;
 					this.reloadTableViewDataSource();
-					//this.emit("reload", {});
+					this.emit("reload", {});
 					
 					this._pullDownDiv.statusDiv.innerHTML = "Loading...";
 					this._pullDownDiv.arrowImg.style.display = "none";
