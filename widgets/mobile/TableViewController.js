@@ -181,6 +181,12 @@ define([
 						alert("row clicked")
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					});
+					on(node, "touchstart", function(evt){
+						console.log("touchstart")
+					});
+					on(node, "touchend", function(evt){
+						console.log("touchend")
+					});
 				});
 			});
 		},
