@@ -181,9 +181,9 @@ define([
 						alert("row clicked")
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					});*/
-					on(node, "tap", function(evt){
-						console.log("tap")
-						alert("tap");
+					on(node, "mouseup", function(evt){
+						console.log("mouseup")
+						alert("mouseup");
 					});
 					on(node, "touchend", function(evt){
 						console.log("touchend")
