@@ -186,6 +186,9 @@ define([
 						alert("mouseup");
 					});
 					on(node, "touchend", function(evt){
+						var touches = event.changedTouches,
+      				  first = touches[0],
+      				  type = "";
 						var simulatedEvent = document.createEvent("MouseEvent");
    					 simulatedEvent.initMouseEvent("mouseup", true, true, window, 1, 
                               first.screenX, first.screenY, 
