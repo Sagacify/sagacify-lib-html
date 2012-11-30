@@ -1,6 +1,6 @@
 define([
 	'dojo/_base/declare', 
-	'dojo/_base/connect', 
+	'dojo/on', 
 	'dojox/mobile/ScrollableView',
 	'dojo/Evented', 
 	'dojo/dom-construct',
@@ -12,7 +12,7 @@ define([
 	'dojox/mobile/RoundRectCategory', 
 	'dojo/date/locale', 
 	'spin/Spin'], 
-	function(declare, connect, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
+	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
 	return declare('saga.TableViewController', [ScrollableView, Evented], {
 		
@@ -176,7 +176,7 @@ define([
 			var me = this;
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
-					connect.connect(cell.domNode, "onclick", this, function(){
+					on(cell.domNode, "click", function(){
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					})
 				});

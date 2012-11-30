@@ -37,10 +37,6 @@ define([
 			}
 			else{
 				this.navigationBar.placeAt(this.domNode);
-				var me = this;
-				on(this.navigationBar.backButton, "click", function(){
-	        		me.popViewController();
-	        	});
 				this._customNavBar = true;
 				this._updateNavigationBar();
 			}	
@@ -89,6 +85,10 @@ define([
 			}
 			else{
 				this.navigationBar.reset();
+				var me = this;
+				on(this.navigationBar.backButton, "click", function(){
+	        		me.popViewController();
+	        	});
 				if(this._viewControllers.length >= 2)
 					this.navigationBar.backButton.style.display = "";
 				else
