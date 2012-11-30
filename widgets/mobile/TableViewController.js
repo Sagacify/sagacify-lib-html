@@ -186,7 +186,14 @@ define([
 						alert("mouseup");
 					});
 					on(node, "touchend", function(evt){
-						console.log("touchend")
+						var simulatedEvent = document.createEvent("MouseEvent");
+   					 simulatedEvent.initMouseEvent("mouseup", true, true, window, 1, 
+                              first.screenX, first.screenY, 
+                              first.clientX, first.clientY, false, 
+                              false, false, false, 0/*left*/, null);
+
+					node.dispatchEvent(simulatedEvent);
+    					event.preventDefault();
 					});
 				});
 			});
