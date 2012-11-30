@@ -10,9 +10,10 @@ define([
 	'dojox/mobile/EdgeToEdgeCategory', 
 	'dojox/mobile/RoundRectList', 
 	'dojox/mobile/RoundRectCategory', 
-	'dojo/date/locale', 
+	'dojo/date/locale',
+	'dojo/has', 
 	'spin/Spin'], 
-	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
+	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
 	
 	return declare('saga.TableViewController', [ScrollableView, Evented], {
 		
@@ -178,44 +179,48 @@ define([
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, "click", function(evt){
-						alert("row clicked")
+						//alert("row clicked")
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					});
-					on(node, "mouseup", function(evt){
-						console.log("mouseup")
-						alert("mouseup");
-					});
-					on(node, "touchend", function(evt){
-						var touches = event.changedTouches,
-      				  first = touches[0],
-      				  type = "";
-						var simulatedEvent = document.createEvent("MouseEvent");
-   					 simulatedEvent.initMouseEvent("mouseup", true, true, window, 1, 
-                              first.screenX, first.screenY, 
-                              first.clientX, first.clientY, false, 
-                              false, false, false, 0/*left*/, null);
-
-					node.dispatchEvent(simulatedEvent);
-    					event.preventDefault();
-					});
 					
-					on(node, "mousedown", function(evt){
-						console.log("mousedown")
-						alert("mousedown");
-					});
-					on(node, "touchstart", function(evt){
-						var touches = event.changedTouches,
-      				  first = touches[0],
-      				  type = "";
-						var simulatedEvent = document.createEvent("MouseEvent");
-   					 simulatedEvent.initMouseEvent("mousedown", true, true, window, 1, 
-                              first.screenX, first.screenY, 
-                              first.clientX, first.clientY, false, 
-                              false, false, false, 0/*left*/, null);
-
-					node.dispatchEvent(simulatedEvent);
-    					event.preventDefault();
-					});
+					if(has("android")){
+						on(node, "mouseup", function(evt){
+							console.log("mouseup")
+							//alert("mouseup");
+						});
+						on(node, "touchend", function(evt){
+							var touches = event.changedTouches,
+	      				  first = touches[0],
+	      				  type = "";
+							var simulatedEvent = document.createEvent("MouseEvent");
+	   					 simulatedEvent.initMouseEvent("mouseup", true, true, window, 1, 
+	                              first.screenX, first.screenY, 
+	                              first.clientX, first.clientY, false, 
+	                              false, false, false, 0/*left*/, null);
+	
+						node.dispatchEvent(simulatedEvent);
+	    					event.preventDefault();
+						});
+						
+						on(node, "mousedown", function(evt){
+							console.log("mousedown")
+							//alert("mousedown");
+						});
+						on(node, "touchstart", function(evt){
+							var touches = event.changedTouches,
+	      				  first = touches[0],
+	      				  type = "";
+							var simulatedEvent = document.createEvent("MouseEvent");
+	   					 simulatedEvent.initMouseEvent("mousedown", true, true, window, 1, 
+	                              first.screenX, first.screenY, 
+	                              first.clientX, first.clientY, false, 
+	                              false, false, false, 0/*left*/, null);
+	
+						node.dispatchEvent(simulatedEvent);
+	    					event.preventDefault();
+						});
+					}
+					
 				});
 			});
 		},
