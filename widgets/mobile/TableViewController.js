@@ -176,7 +176,8 @@ define([
 			var me = this;
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
-					on(cell.domNode, "click", function(){
+					on(cell.domNode, "click", function(evt){
+						evt.preventDefault();
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					})
 				});
