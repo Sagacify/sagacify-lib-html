@@ -49,8 +49,8 @@ define([
 			this.domNode.style.width = this._viewControllers[0].domNode.style.width;
 			this.domNode.style.height = this._viewControllers[0].domNode.style.height+44;
 			
-			if(typeof this._viewControllers[0]._updateNavigationBar == "function")
-				this._viewControllers[0]._updateNavigationBar();
+			//if(typeof this._viewControllers[0]._updateNavigationBar == "function")
+				//this._viewControllers[0]._updateNavigationBar();
 		},
 		
 		
@@ -94,8 +94,9 @@ define([
 				else
 					this.navigationBar.backButton.style.display = "none";
 			}
-				
-			this._viewControllers[0]._updateNavigationBar();
+			
+			if(typeof this._viewControllers[0]._updateNavigationBar == "function")	
+				this._viewControllers[0]._updateNavigationBar();
 		},
 		
 		frontViewController: function() {
@@ -114,7 +115,6 @@ define([
 		},
 		
 		pushViewController: function(viewController) {
-			
 			viewController.placeAt(this.domNode);
 			viewController.domNode.style.height = (viewController.frame.height+44)+"px"; 
 			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");
