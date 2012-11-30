@@ -177,13 +177,13 @@ define([
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
-					on(node, "click", function(evt){
+					/*on(node, "click", function(evt){
 						alert("row clicked")
 						me.didSelectRowAtIndexPath({section:i, row:j});
-					});
-					on(node, "touchstart", function(evt){
-						//console.log("touchstart")
-						alert("touchstart");
+					});*/
+					on(node, "tap", function(evt){
+						console.log("tap")
+						alert("tap");
 					});
 					on(node, "touchend", function(evt){
 						console.log("touchend")
