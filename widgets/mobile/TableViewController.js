@@ -182,7 +182,8 @@ define([
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					});
 					on(node, "touchstart", function(evt){
-						console.log("touchstart")
+						//console.log("touchstart")
+						alert("touchstart");
 					});
 					on(node, "touchend", function(evt){
 						console.log("touchend")
