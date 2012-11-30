@@ -1,6 +1,6 @@
 define([
 	'dojo/_base/declare', 
-	'../NavigationController', 
+	'saga/widgets/mobile/NavigationController', 
 	'dojox/mobile/ToolBarButton', 
 	'dojo/Evented',
 	'dojo/on'], 
