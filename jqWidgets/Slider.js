@@ -1,13 +1,13 @@
 define([
 	'dojo/_base/declare', 
-	'bizComp/_Widget', 
+	'saga/widgets/_Widget', 
 	'dojo/Evented', 
 	'dojo/on', 
 	'dojo/dom-construct', 
 	'dojo/dom-class'], 
 	function(declare, _Widget, Evented, View, on, domConstruct, domClass) {
 	
-	return declare('bizComp.Slider', [_Widget, Evented], {
+	return declare('saga.Slider', [_Widget, Evented], {
 		
 		templateString: "<div style='left:10px;width:5px;height:200px;'></div>",
 		

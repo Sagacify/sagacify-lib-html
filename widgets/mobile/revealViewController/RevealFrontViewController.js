@@ -1,6 +1,6 @@
 define([
 	'dojo/_base/declare', 
-	'../NavigationController', 
+	'saga/widgets/mobile/NavigationController', 
 	'dojox/mobile/ToolBarButton', 
 	'dojo/Evented',
 	'dojo/on'], 
@@ -21,7 +21,7 @@ define([
 			this.domNode.style.overflow = "hidden";
 			this.domNode.style.background = "white";
 			
-			this._addRevealButton();
+			this._addRevealButton();			
 		},
 		
 		_updateNavigationBar: function() {
@@ -31,8 +31,14 @@ define([
 					this._addRevealButton();	
 			}
 			else{
-				if(this._viewControllers.length == 1)
+				if(this._viewControllers.length == 1){
 					this.navigationBar.revealButton.style.display = "";
+					var me = this;
+					on(this.navigationBar.revealButton, "click", function(args){
+						args.preventDefault();
+						me.emit("revealButtonPressed", {});
+					});
+				}
 				else
 					this.navigationBar.revealButton.style.display = "none";
 			}
@@ -49,11 +55,7 @@ define([
 				});	
 			}
 			else{
-				var me = this;
-				on(this.navigationBar.revealButton, "click", function(args){
-					args.preventDefault();
-					me.emit("revealButtonPressed", {});
-				});
+				
 			}
 		}
 			

@@ -1,13 +1,13 @@
 define([
 	'dojo/_base/declare',
 	'dojo/_base/config',
-	'../_Widget', 
+	'saga/widgets/_Widget', 
 	'dojox/mobile/View',
-	'./ActionSheet', 
+	'saga/widgets/mobile/ActionSheet', 
 	'dojo/_base/lang', 
 	'dojo/dom-construct',
 	'dojox/mobile/SpinWheelDatePicker',
-	'./NavigationBar',
+	'saga/widgets/mobile/NavigationBar',
 	'dojox/mobile/ToolBarButton',
 	'dojo/on'], 
 	function(declare, config, _Widget, View, ActionSheet, lang, domConstruct, SpinWheelDatePicker, NavigationBar, ToolBarButton, on) {

@@ -37,10 +37,6 @@ define([
 			}
 			else{
 				this.navigationBar.placeAt(this.domNode);
-				var me = this;
-				on(this.navigationBar.backButton, "click", function(){
-	        		me.popViewController();
-	        	});
 				this._customNavBar = true;
 				this._updateNavigationBar();
 			}	
@@ -49,8 +45,8 @@ define([
 			this.domNode.style.width = this._viewControllers[0].domNode.style.width;
 			this.domNode.style.height = this._viewControllers[0].domNode.style.height+44;
 			
-			if(typeof this._viewControllers[0]._updateNavigationBar == "function")
-				this._viewControllers[0]._updateNavigationBar();
+			//if(typeof this._viewControllers[0]._updateNavigationBar == "function")
+				//this._viewControllers[0]._updateNavigationBar();
 		},
 		
 		
@@ -88,13 +84,19 @@ define([
 					this.navigationBar._setLabelAttr(null);
 			}
 			else{
+				this.navigationBar.reset();
+				var me = this;
+				on(this.navigationBar.backButton, "click", function(){
+	        		me.popViewController();
+	        	});
 				if(this._viewControllers.length >= 2)
 					this.navigationBar.backButton.style.display = "";
 				else
 					this.navigationBar.backButton.style.display = "none";
 			}
-				
-			this._viewControllers[0]._updateNavigationBar();
+			
+			if(typeof this._viewControllers[0]._updateNavigationBar == "function")	
+				this._viewControllers[0]._updateNavigationBar();
 		},
 		
 		frontViewController: function() {
@@ -113,7 +115,6 @@ define([
 		},
 		
 		pushViewController: function(viewController) {
-			debugger;
 			viewController.placeAt(this.domNode);
 			viewController.domNode.style.height = (viewController.frame.height+44)+"px"; 
 			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");

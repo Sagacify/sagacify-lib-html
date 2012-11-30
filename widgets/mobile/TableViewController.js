@@ -1,6 +1,6 @@
 define([
 	'dojo/_base/declare', 
-	'dojo/_base/connect', 
+	'dojo/on', 
 	'dojox/mobile/ScrollableView',
 	'dojo/Evented', 
 	'dojo/dom-construct',
@@ -12,7 +12,7 @@ define([
 	'dojox/mobile/RoundRectCategory', 
 	'dojo/date/locale', 
 	'spin/Spin'], 
-	function(declare, connect, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
+	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
 	
 	return declare('saga.TableViewController', [ScrollableView, Evented], {
 		
@@ -62,14 +62,17 @@ define([
 			if(this._pullToRefresh) {
 				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
 				this.containerNode.style.top = "-500px";
-				dojo.style(this._pullDownDiv, "backgroundColor", new dojo.Color([226,231,237]));
+				//dojo.style(this._pullDownDiv, "backgroundColor", new dojo.Color([226,231,237]));
+				this._pullDownDiv.style.backgroundColor = "rgb(226, 231, 237)";
 				
 				var statusDiv = domConstruct.create("div", {style:"top:452px;width:320px; height:20px; position:absolute;text-align:center;font-size:13px;font-weight:bold;", innerHTML:"Pull down to refresh..."}, this._pullDownDiv);
-				dojo.style(statusDiv, "color", new dojo.Color([87,108,137]));
+				//dojo.style(statusDiv, "color", new dojo.Color([87,108,137]));
+				statusDiv.style.backgroundColor = "rgb(87, 108, 137)";
 				this._pullDownDiv.statusDiv = statusDiv;
 				
 				var lastUpdateDiv = domConstruct.create("div", {style:"top:470px; width:320px; height:20px; position:absolute;text-align:center;font-size:12px;", innerHTML:"Last update: " + locale.format(new Date(), {selector:"date", datePattern:"MM/dd/yy hh:mm:a"})}, this._pullDownDiv);
-				dojo.style(lastUpdateDiv, "color", new dojo.Color([87,108,137]));
+				//dojo.style(lastUpdateDiv, "color", new dojo.Color([87,108,137]));
+				lastUpdateDiv.style.backgroundColor = "rgb(87, 108, 137)";
 				this._pullDownDiv.lastUpdateDiv = lastUpdateDiv;
 				
 				var arrowImg = domConstruct.create("img", {style:"display:block;position:absolute;left:25px;top:435px;", src:dojo.moduleUrl("bizComp/mobile/Assets/")+"blueArrow_down.png"}, this._pullDownDiv);
@@ -89,7 +92,7 @@ define([
 			//this.reload();
 		},
 		
-		reload: function() {
+		reload: function(keepFirstSection) {
 			this.inherited(arguments);
 			dojo.forEach(this._headers, function(header, i){
 				if(header){
@@ -102,7 +105,7 @@ define([
 			
 			dojo.forEach(this._cellsBySection, function(section, i){
 				dojo.forEach(section, function(cell, j){
-					if(cell){
+					if(cell && !(keepFirstSection && i==0)){
 						if(cell.destroyRecursive)
 							cell.destroyRecursive();
 						else
@@ -112,17 +115,18 @@ define([
 			});
 			
 			this._headers = [];
-			this._cellsBySection = [];
-			
+			if(keepFirstSection)
+				this._cellsBySection = [this._cellsBySection[0]];
+			else
+				this._cellsBySection = [];
 			
 			this.scrollTo({x:0, y:0});
-			
 			
 			var numberOfSections = this.numberOfSections;
 			if(!(numberOfSections > -1))
 				numberOfSections = this.numberOfSections();
 			
-			for (var i = 0; i < numberOfSections; i++) {
+			for (var i = keepFirstSection?1:0; i < numberOfSections; i++) {
 				
 				var header = this.viewForHeaderInSection(i);
 				if (header) 
@@ -172,7 +176,7 @@ define([
 			var me = this;
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
-					connect.connect(cell.domNode, "onclick", this, function(){
+					on(cell.domNode, "click", function(){
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					})
 				});
@@ -238,6 +242,10 @@ define([
 		},
 		
 		existingCellForRowAtIndexPath: function(indexPath) {
+			if(!this._cellsBySection)
+				return null;
+			if(!this._cellsBySection[indexPath.section])
+				return null;
 			return this._cellsBySection[indexPath.section][indexPath.row];
 		},
 		
@@ -357,7 +365,9 @@ define([
 		},
 		
 		addUlClass: function(cl){
-			domClass.add(this.containerNode.children[0], cl);
+			dojo.forEach(this.containerNode.children, function(ul, i){
+				domClass.add(ul, cl);
+			});
 		},
 		
 		_loadCss: function(path, id) {

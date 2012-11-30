@@ -1,19 +1,19 @@
 {
-    "name": "bizComp",
-    "description": "General library",
+    "name": "Sagacify_library",
+    "description": "Sagacify General library",
     "version": "1.0",
-    "keywords": ["bizComp"],
+    "keywords": ["saga"],
     "maintainers": [{
-        "name": "Nexty Team"
+        "name": "Sagacify Team"
     }],
     "contributors": [{
-        "name": "Nexty Team"
+        "name": "Sagacify Team"
     }],
     "dependencies": {
         "dojo": "~1.8.1",
         "dijit": "~1.8.1",
         "dojox": "~1.8.1"
     },
-    "homepage": "http://nexty-app.com/",
-    "dojoBuild": "bizComp.profile.js"
+    "homepage": "http://sagacify.com/",
+    "dojoBuild": "saga.profile.js"
 }
