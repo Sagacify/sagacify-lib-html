@@ -68,9 +68,9 @@ define([
 			}
 			revealRearViewController.domNode.style.position = "absolute";
 			revealRearViewController.placeAt(this.domNode, "first");
-			on(revealRearViewController, "frontViewControllerSelected", function(frontViewController){
+			/*on(revealRearViewController, "frontViewControllerSelected", function(frontViewController){
 				me.setCurrentFrontViewController(frontViewController);
-			});
+			});*/
 			this.revealRearViewController = revealRearViewController;
 		},
 		

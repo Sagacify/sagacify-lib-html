@@ -177,11 +177,11 @@ define([
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
-					on(node, "click", function(evt){
+					on(node, "touchstart", function(evt){
 						alert("row clicked")
 						evt.preventDefault();
 						me.didSelectRowAtIndexPath({section:i, row:j});
-					})
+					});
 				});
 			});
 		},
