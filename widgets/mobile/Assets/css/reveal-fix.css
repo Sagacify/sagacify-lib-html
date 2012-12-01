@@ -1,6 +1,6 @@
 .mblReveal.mblOut.mblTransition {
-	-webkit-transform: translate3d(-50%,0px,0px) !important;
+	-webkit-transform: translate3d(-73%,0px,0px) !important;
 }
 .mblReveal.mblOut.mblReverse.mblTransition {
-	-webkit-transform: translate3d(50%,0px,0px) !important;
+	-webkit-transform: translate3d(73%,0px,0px) !important;
 }
