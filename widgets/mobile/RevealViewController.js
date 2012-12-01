@@ -77,6 +77,7 @@ define([
 		revealStart: function() {
 			this.containerView.domNode.style.overflow = "";
         	this.containerView.performTransition(null, 1, "reveal", null);	
+        	//this.containerView.domNode.style["-webkit-transform"] = "translate3d(-50%,0px,0px)";
 		},
 		
 		revealEnd: function() {

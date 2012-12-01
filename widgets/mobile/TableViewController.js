@@ -1,7 +1,7 @@
 define([
 	'dojo/_base/declare', 
 	'dojo/on', 
-	'dojox/mobile/ScrollableView',
+	'saga/widgets/mobile/ScrollableViewController',
 	'dojo/Evented', 
 	'dojo/dom-construct',
 	'dojo/dom-class', 
@@ -10,11 +10,12 @@ define([
 	'dojox/mobile/EdgeToEdgeCategory', 
 	'dojox/mobile/RoundRectList', 
 	'dojox/mobile/RoundRectCategory', 
-	'dojo/date/locale', 
+	'dojo/date/locale',
+	'dojo/has', 
 	'spin/Spin'], 
-	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale) {
+	function(declare, on, ScrollableViewController, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
 	
-	return declare('saga.TableViewController', [ScrollableView, Evented], {
+	return declare('saga.TableViewController', [ScrollableViewController, Evented], {
 		
 		parent: null,
 		
@@ -51,14 +52,14 @@ define([
 				this._containerClass = args.containerClass;
 				this._transparentBg = args.transparentBg;
 			}
-			//this.scrollType = 3;
+			//if(has("android") || has("chrome"))
+				//this.scrollType = 3;
 			//for(var key in args)
 				//this[key] = args[key];
 		},		
 		
 		postCreate: function() {
 
-			//this.scrollType = 3;
 			if(this._pullToRefresh) {
 				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
 				this.containerNode.style.top = "-500px";
@@ -178,20 +179,32 @@ define([
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, "click", function(evt){
-						alert("row clicked");
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					});
-					on(node, "mouseout", function(evt){
-						alert("mouse out");
-						me.didSelectRowAtIndexPath({section:i, row:j});
-					});
-					on(node, "touchstart", function(evt){
-						//console.log("touchstart")
-						alert("touchstart");
-					});
-					on(node, "touchend", function(evt){
-						console.log("touchend")
-					});
+					
+					if(has("android")){
+						on(node, "touchend", function(evt){
+							var touches = event.changedTouches,
+		      				first = touches[0],
+		      				type = "";
+							var simulatedEvent = document.createEvent("MouseEvent");
+		   					simulatedEvent.initMouseEvent("click", true, true, window, 1, 
+		                              first.screenX, first.screenY, 
+		                              first.clientX, first.clientY, false, 
+		                              false, false, false, 0/*left*/, null);
+							
+							if(me.clickEvent)
+								node.dispatchEvent(simulatedEvent);
+	    					event.preventDefault();
+						});
+						on(node, "touchstart", function(evt){
+							me.clickEvent = true;
+						});
+						on(node, "touchmove", function(evt){
+							me.clickEvent = false;
+						});
+					}
+					
 				});
 			});
 		},
