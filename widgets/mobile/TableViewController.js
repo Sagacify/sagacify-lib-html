@@ -1,7 +1,7 @@
 define([
 	'dojo/_base/declare', 
 	'dojo/on', 
-	'dojox/mobile/ScrollableView',
+	'saga/widgets/mobile/ScrollableViewController',
 	'dojo/Evented', 
 	'dojo/dom-construct',
 	'dojo/dom-class', 
@@ -13,9 +13,9 @@ define([
 	'dojo/date/locale',
 	'dojo/has', 
 	'spin/Spin'], 
-	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
+	function(declare, on, ScrollableViewController, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
 	
-	return declare('saga.TableViewController', [ScrollableView, Evented], {
+	return declare('saga.TableViewController', [ScrollableViewController, Evented], {
 		
 		parent: null,
 		
@@ -52,14 +52,14 @@ define([
 				this._containerClass = args.containerClass;
 				this._transparentBg = args.transparentBg;
 			}
-			//this.scrollType = 3;
+			//if(has("android") || has("chrome"))
+				//this.scrollType = 3;
 			//for(var key in args)
 				//this[key] = args[key];
 		},		
 		
 		postCreate: function() {
 
-			//this.scrollType = 3;
 			if(this._pullToRefresh) {
 				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
 				this.containerNode.style.top = "-500px";
