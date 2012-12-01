@@ -2,10 +2,11 @@ define([
 	'dojo/_base/declare', 
 	'saga/widgets/mobile/ViewController',
 	'dojox/mobile/ScrollableView',
+	'dojo/Evented',
 	'dojo/dom-construct',
 	'dojo/has'], 
 	
-	function(declare, ViewController, ScrollableView, domConstruct, has) {
+	function(declare, ViewController, ScrollableView, Evented, domConstruct, has) {
 	
 	return declare('saga.ScrollableViewController', [ViewController, ScrollableView], {
 		
