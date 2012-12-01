@@ -184,40 +184,25 @@ define([
 					});
 					
 					if(has("android")){
-						on(node, "mouseup", function(evt){
-							console.log("mouseup")
-							//alert("mouseup");
-						});
 						on(node, "touchend", function(evt){
 							var touches = event.changedTouches,
-	      				  first = touches[0],
-	      				  type = "";
+		      				first = touches[0],
+		      				type = "";
 							var simulatedEvent = document.createEvent("MouseEvent");
-	   					 simulatedEvent.initMouseEvent("mouseup", true, true, window, 1, 
-	                              first.screenX, first.screenY, 
-	                              first.clientX, first.clientY, false, 
-	                              false, false, false, 0/*left*/, null);
-	
-						node.dispatchEvent(simulatedEvent);
+		   					simulatedEvent.initMouseEvent("click", true, true, window, 1, 
+		                              first.screenX, first.screenY, 
+		                              first.clientX, first.clientY, false, 
+		                              false, false, false, 0/*left*/, null);
+							
+							if(me.clickEvent)
+								node.dispatchEvent(simulatedEvent);
 	    					event.preventDefault();
-						});
-						
-						on(node, "mousedown", function(evt){
-							console.log("mousedown")
-							//alert("mousedown");
 						});
 						on(node, "touchstart", function(evt){
-							var touches = event.changedTouches,
-	      				  first = touches[0],
-	      				  type = "";
-							var simulatedEvent = document.createEvent("MouseEvent");
-	   					 simulatedEvent.initMouseEvent("mousedown", true, true, window, 1, 
-	                              first.screenX, first.screenY, 
-	                              first.clientX, first.clientY, false, 
-	                              false, false, false, 0/*left*/, null);
-	
-						node.dispatchEvent(simulatedEvent);
-	    					event.preventDefault();
+							me.clickEvent = true;
+						});
+						on(node, "touchmove", function(evt){
+							me.clickEvent = false;
 						});
 					}
 					
