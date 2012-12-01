@@ -83,6 +83,8 @@ define([
 			viewController.performTransition(null, 1, "revealv", null);
 			
 			viewController.on("afterTransitionOut", function(){
+				if(typeof viewController.startup == "function")
+					viewController.startup();
 				viewController.domNode.style.display = "";
 				viewController.domNode.style.top = "0px";
 				viewController.domNode.style.left = "0px";
