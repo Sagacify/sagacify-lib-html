@@ -178,7 +178,11 @@ define([
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, "click", function(evt){
-						alert("row clicked")
+						alert("row clicked");
+						me.didSelectRowAtIndexPath({section:i, row:j});
+					});
+					on(node, "mouseout", function(evt){
+						alert("mouse out");
 						me.didSelectRowAtIndexPath({section:i, row:j});
 					});
 					on(node, "touchstart", function(evt){
