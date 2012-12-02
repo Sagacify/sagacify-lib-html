@@ -260,6 +260,15 @@ define([
 		didSelectRowAtIndexPath: function(indexPath) {
 			//console.log(indexPath.section + ", " + indexPath.row);
 			//console.log(indexPath);
+			var cell = this.existingCellForRowAtIndexPath(indexPath);
+			var navigationController = this.navigationController?this.navigationController:this.parent?this.parent.navigationController:null;
+			if(navigationController){
+				var cellNode = cell.domNode?cell.domNode:cell;
+				domClass.add(cellNode, "selected");
+				navigationController.frontViewController().on("afterTransitionOut", function(args){
+					domClass.remove(cellNode, "selected");
+				});
+			}
 		},
 		
 		
