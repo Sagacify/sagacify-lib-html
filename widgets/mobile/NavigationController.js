@@ -112,6 +112,10 @@ define([
 			viewController.navigationController = this;
 			viewController.placeAt(this.domNode);
 			this._updateNavigationBar();
+
+			if(viewController.title)
+				this.navigationBar.setTitle(viewController.title);	
+
 		},
 		
 		pushViewController: function(viewController) {
@@ -130,7 +134,12 @@ define([
 			});
 			viewController.navigationController = this;
 			this._viewControllers.splice(0, 0, viewController);
+			
 			this._updateNavigationBar();
+
+			if(viewController.title)
+				this.navigationBar.setTitle(viewController.title);	
+
 		},
 		
 		popViewController: function() {
@@ -150,6 +159,10 @@ define([
 					}
 				});
 				this._updateNavigationBar();
+
+				if(viewControllerToAppear.title)
+					this.navigationBar.setTitle(viewControllerToAppear.title);	
+
 			} 
 		}
 			
