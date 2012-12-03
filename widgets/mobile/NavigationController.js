@@ -85,6 +85,8 @@ define([
 			}
 			else{
 				this.navigationBar.reset();
+				if(this.frontViewController().title)
+					this.navigationBar.setTitle(this.frontViewController().title);
 				var me = this;
 				on(this.navigationBar.backButton, "click", function(){
 	        		me.popViewController();
@@ -120,6 +122,8 @@ define([
 		
 		pushViewController: function(viewController) {
 			viewController.placeAt(this.domNode);
+			if(typeof viewController.startup == "function")
+				viewController.startup();
 			viewController.domNode.style.height = (viewController.frame.height+44)+"px"; 
 			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");
 			viewController.domNode.style.position = "";
