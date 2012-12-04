@@ -6,9 +6,15 @@ function(_Widget, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct) {
 		templateString: "<div></div>",	
 		
 		constructor: function(args){
-			
+
 		},
 		
+		_removeNullDic: function(dic){
+			for(key in dic){
+				if(!dic[key])
+					dic[key] = "";
+			}
+		},	
 		
 		_loadCss: function(path, id) {
 			var e = document.createElement("link");
