@@ -179,7 +179,6 @@ define([
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, "click", function(evt){
-						alert(cell.cancelClick);
 						if(!cell.cancelClick){
 							alert("click cell");
 							me.didSelectRowAtIndexPath({section:i, row:j});	
@@ -191,7 +190,7 @@ define([
 					
 					if(has("android")){
 						on(node, "touchend", function(evt){
-							var touches = event.changedTouches,
+							var touches = evt.changedTouches,
 		      				first = touches[0],
 		      				type = "";
 							var simulatedEvent = document.createEvent("MouseEvent");
@@ -199,16 +198,16 @@ define([
 		                              first.screenX, first.screenY, 
 		                              first.clientX, first.clientY, false, 
 		                              false, false, false, 0/*left*/, null);
-							
-							if(me.clickEvent)
+							alert(cell.cancelClick);
+							if(node.clickEvent)
 								node.dispatchEvent(simulatedEvent);
-	    					event.preventDefault();
+	    					evt.preventDefault();
 						});
 						on(node, "touchstart", function(evt){
-							me.clickEvent = true;
+							node.clickEvent = true;
 						});
 						on(node, "touchmove", function(evt){
-							me.clickEvent = false;
+							node.clickEvent = false;
 						});
 					}
 					

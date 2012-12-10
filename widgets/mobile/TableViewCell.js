@@ -3,6 +3,7 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/And
 	return declare('saga.TableViewCell', [_Widget], {
 		
 		cancelClick: false,
+		cancelAndroidClick: false,
 		
 		constructor: function(args) {
 			
