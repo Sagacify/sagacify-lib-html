@@ -1,7 +1,8 @@
 define([
-	'dojo/_base/declare', 
+	'dojo/_base/declare',
+	'dojo/on', 
 	'dojo/has'],
-	function(declare, has) {
+	function(declare, on, has) {
 		declare('saga.AndroidFix', null, {
 
 			constructor: function(args){
