@@ -1,6 +1,6 @@
 define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_base/connect', 'dojo/on', 'dojo/dom-construct', 'dojo/query'], function(declare, ListItem, TextField, connect, on, domConstruct, query) {
 	
-	return declare('bizComp.TableViewCell', [ListItem], {
+	return declare('saga.TableViewCell', [ListItem], {
 		
 		directInput: null,
 		
@@ -23,7 +23,7 @@ define(['dojo/_base/declare', 'dojox/mobile/ListItem', './TextField', 'dojo/_bas
 				textField.domNode.style.background = "rgba(0,0,0,0)";
 				textField.domNode.style.fontSize = "17px";
 				textField.domNode.style.fontWeight = "bold";
-				textField.domNode.style.color = "#324F85"
+				textField.domNode.style.color = "#324F85";
 				textField.domNode.style.position = "absolute";
 				textField.domNode.style.top = "5px";
 				textField.domNode.style.left = "80px";
