@@ -16,7 +16,7 @@ define([
 		saga.AndroidFix.simulateClick = function(node){
 			if(has('android')){
 				on(node, "touchend", function(evt){
-				var touches = event.changedTouches,
+				var touches = evt.changedTouches,
   				first = touches[0],
   				type = "";
 				var simulatedEvent = document.createEvent("MouseEvent");
@@ -27,13 +27,13 @@ define([
 				
 				if(node.clickEvent)
 					node.dispatchEvent(simulatedEvent);
-					event.preventDefault();
+					evt.preventDefault();
 				});
 				on(node, "touchstart", function(evt){
-					me.createNewMailNode.clickEvent = true;
+					node.clickEvent = true;
 				});
 				on(node, "touchmove", function(evt){
-					me.createNewMailNode.clickEvent = false;
+					node.clickEvent = false;
 				});	
 			}
 		};
