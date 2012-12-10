@@ -179,6 +179,7 @@ define([
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, "click", function(evt){
+						alert(cell.cancelClick);
 						if(!cell.cancelClick){
 							alert("click cell");
 							me.didSelectRowAtIndexPath({section:i, row:j});	
@@ -198,7 +199,7 @@ define([
 		                              first.screenX, first.screenY, 
 		                              first.clientX, first.clientY, false, 
 		                              false, false, false, 0/*left*/, null);
-							alert(cell.cancelClick);
+							
 							if(node.clickEvent)
 								node.dispatchEvent(simulatedEvent);
 	    					evt.preventDefault();
