@@ -17,7 +17,7 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/And
 			var me = this;
 			on(subnode, "click", function(evt){
 				me.cancelClick = true;
-				if(has('Android'))
+				if(has('android'))
 					me.cancelSimulatedClick = true;
 				fun(evt);
 			});
@@ -25,7 +25,7 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/And
 		},
 		
 		disableCancelClick: function(){
-			if(has('Android')){
+			if(has('android')){
 				if(this.cancelSimulatedClick)
 					this.cancelSimulatedClick = false;
 				else
