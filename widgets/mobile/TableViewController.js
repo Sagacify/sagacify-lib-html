@@ -184,7 +184,7 @@ define([
 							me.didSelectRowAtIndexPath({section:i, row:j});	
 						}
 						else{
-							cell.cancelClick = false;
+							cell.disableCancelClick();
 						}
 					});
 					

@@ -1,9 +1,9 @@
-define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/AndroidFix'], function(declare, _Widget, on, AndroidFix) {
+define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/AndroidFix', 'dojo/has'], function(declare, _Widget, on, AndroidFix, has) {
 	
 	return declare('saga.TableViewCell', [_Widget], {
 		
 		cancelClick: false,
-		cancelAndroidClick: false,
+		cancelSimulatedClick: false,
 		
 		constructor: function(args) {
 			
@@ -17,9 +17,23 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/And
 			var me = this;
 			on(subnode, "click", function(evt){
 				me.cancelClick = true;
+				if(has('Android'))
+					me.cancelSimulatedClick = true;
 				fun(evt);
 			});
 			AndroidFix.simulateClick(subnode);
+		},
+		
+		disableCancelClick: function(){
+			if(has('Android')){
+				if(this.cancelSimulatedClick)
+					this.cancelSimulatedClick = false;
+				else
+					this.cancelClick = false;
+			}
+			else{
+				this.cancelClick = false;
+			}
 		}
 		
 	});
