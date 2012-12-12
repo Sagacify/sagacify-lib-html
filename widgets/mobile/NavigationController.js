@@ -134,6 +134,7 @@ define([
 					viewController.domNode.style.height = viewController.frame.height+"px"; 
 					domConstruct.destroy(fakediv);
 					//domConstruct.destroy(eventsBlocker);
+					alert("after trans");
 				}
 			});
 			viewController.navigationController = this;
