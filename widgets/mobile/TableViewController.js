@@ -52,8 +52,8 @@ define([
 				this._containerClass = args.containerClass;
 				this._transparentBg = args.transparentBg;
 			}
-			//if(has("android") || has("chrome"))
-				//this.scrollType = 3;
+			if(has("android") || has("chrome"))
+				this.scrollType = 3;
 			//for(var key in args)
 				//this[key] = args[key];
 		},		

@@ -42,9 +42,11 @@ define([
 		
 		postCreate: function() {
 			this.inherited(arguments);
-			var scrollableView = new ScrollableView();
-			if(has("android") > 2 || has("chrome"))
-				scrollableView.scrollType = 3;
+			
+			if(has("android") || has("chrome"))
+				var scrollableView = new ScrollableView({scrollType:3});
+			else
+				var scrollableView = new ScrollableView();
 			scrollableView.domNode.style.left = this.frame.x+"px";
 			scrollableView.domNode.style.top = this.frame.y+"px";
 			scrollableView.domNode.style.width = this.frame.width+"px";
