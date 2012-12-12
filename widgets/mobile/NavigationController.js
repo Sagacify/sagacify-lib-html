@@ -122,8 +122,8 @@ define([
 		
 		pushViewController: function(viewController) {
 			viewController.placeAt(this.domNode);
-			if(typeof viewController.startup == "function")
-				viewController.startup();
+			//if(typeof viewController.startup == "function")
+				//viewController.startup();
 			viewController.domNode.style.height = (viewController.frame.height+44)+"px"; 
 			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");
 			viewController.domNode.style.position = "";

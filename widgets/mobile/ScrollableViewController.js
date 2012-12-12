@@ -5,14 +5,15 @@ define([
 	'dojo/Evented',
 	'dojo/dom-construct',
 	'dojo/dom-class',
-	'dojo/has'], 
+	'dojo/has',
+	'saga/utils/Utils'], 
 	
-	function(declare, ViewController, ScrollableView, Evented, domConstruct, domClass, has) {
+	function(declare, ViewController, ScrollableView, Evented, domConstruct, domClass, has, Utils) {
 	
 	return declare('saga.ScrollableViewController', [ViewController, ScrollableView], {
 		
 		constructor: function(args) {
-			if(has("android") || has("chrome"))
+			if(has("android") > 2 || has("chrome"))
 				this.scrollType = 3;
 		},
 		
