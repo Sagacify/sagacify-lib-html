@@ -187,7 +187,7 @@ define([
 						}
 					});
 					
-					if(has("android")){
+					/*if(has("android")){
 						on(node, "touchend", function(evt){
 							var touches = evt.changedTouches,
 		      				first = touches[0],
@@ -196,7 +196,7 @@ define([
 		   					simulatedEvent.initMouseEvent("click", true, true, window, 1, 
 		                              first.screenX, first.screenY, 
 		                              first.clientX, first.clientY, false, 
-		                              false, false, false, 0/*left*/, null);
+		                              false, false, false, 0, null);
 							
 							if(node.clickEvent)
 								node.dispatchEvent(simulatedEvent);
@@ -208,7 +208,7 @@ define([
 						on(node, "touchmove", function(evt){
 							node.clickEvent = false;
 						});
-					}
+					}*/
 					
 				});
 			});
