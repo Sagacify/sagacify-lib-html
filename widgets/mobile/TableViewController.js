@@ -187,7 +187,7 @@ define([
 						}
 					});
 					
-					/*if(has("android")){
+					if(has("android") >=3){
 						on(node, "touchend", function(evt){
 							var touches = evt.changedTouches,
 		      				first = touches[0],
@@ -208,7 +208,7 @@ define([
 						on(node, "touchmove", function(evt){
 							node.clickEvent = false;
 						});
-					}*/
+					}
 					
 				});
 			});
