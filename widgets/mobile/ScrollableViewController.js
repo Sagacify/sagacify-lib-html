@@ -37,13 +37,14 @@ define([
 	return declare('saga.ScrollableViewController', [ViewController], {
 		
 		constructor: function(args) {
-			if(has("android") > 2 || has("chrome"))
-				this.scrollType = 3;
+			
 		},
 		
 		postCreate: function() {
 			this.inherited(arguments);
 			var scrollableView = new ScrollableView();
+			if(has("android") > 2 || has("chrome"))
+				scrollableView.scrollType = 3;
 			scrollableView.domNode.style.left = this.frame.x+"px";
 			scrollableView.domNode.style.top = this.frame.y+"px";
 			scrollableView.domNode.style.width = this.frame.width+"px";
