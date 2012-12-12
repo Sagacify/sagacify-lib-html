@@ -132,7 +132,7 @@ define([
 			//var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
 			this._viewControllers[0].on("afterTransitionOut", function(){
 				if(viewController.domNode){
-					viewController.domNode.style.height = viewController.frame.height+"px"; 
+					//viewController.domNode.style.height = viewController.frame.height+"px"; 
 					//domConstruct.destroy(fakediv);
 					//domConstruct.destroy(eventsBlocker);
 				}
@@ -159,7 +159,7 @@ define([
 					if(viewControllerToAppear.domNode){
 					//	domConstruct.destroy(fakediv);
 						domConstruct.destroy(eventsBlocker);
-						viewControllerToAppear.domNode.style.height = viewControllerToAppear.frame.height+"px"; 
+						//viewControllerToAppear.domNode.style.height = viewControllerToAppear.frame.height+"px"; 
 						viewControllerToPop.destroyRecursive();	
 					}
 				});
