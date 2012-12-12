@@ -1,14 +1,13 @@
 define([
 	'dojo/_base/declare', 
 	'saga/widgets/mobile/ViewController',
-	'dojox/mobile/ScrollableView',
-	'dojo/Evented',
+	'saga/widgets/mobile/_ScrollableView',
 	'dojo/dom-construct',
 	'dojo/dom-class',
 	'dojo/has',
 	'saga/utils/Utils'], 
 	
-	function(declare, ViewController, ScrollableView, Evented, domConstruct, domClass, has, Utils) {
+	function(declare, ViewController, ScrollableView, domConstruct, domClass, has, Utils) {
 	
 	/*return declare('saga.ScrollableViewController', [ViewController, ScrollableView], {
 		
@@ -43,10 +42,7 @@ define([
 		postCreate: function() {
 			this.inherited(arguments);
 			
-			if(has("android") || has("chrome"))
-				var scrollableView = new ScrollableView({scrollType:3});
-			else
-				var scrollableView = new ScrollableView();
+			var scrollableView = new ScrollableView();
 			scrollableView.domNode.style.left = this.frame.x+"px";
 			scrollableView.domNode.style.top = this.frame.y+"px";
 			scrollableView.domNode.style.width = this.frame.width+"px";
