@@ -27,6 +27,7 @@ define([
 		postCreate: function() {
 			this.inherited(arguments);
 			this.domNode.style.overflow = "hidden";
+			this.domNode.style.backgroundColor = "red";
 			
 			var label = this._viewControllers[0].name?this._viewControllers[0].name:"";
 			if(!this.navigationBar){
