@@ -1,7 +1,7 @@
 define([
 	'dojo/_base/declare', 
 	'dojo/on', 
-	'saga/widgets/mobile/ScrollableViewController',
+	'dojox/mobile/ScrollableView',
 	'dojo/Evented', 
 	'dojo/dom-construct',
 	'dojo/dom-class', 
@@ -13,9 +13,9 @@ define([
 	'dojo/date/locale',
 	'dojo/has', 
 	'spin/Spin'], 
-	function(declare, on, ScrollableViewController, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
+	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
 	
-	return declare('saga.TableViewController', [ScrollableViewController, Evented], {
+	return declare('saga.TableViewController', [ScrollableView, Evented], {
 		
 		parent: null,
 		
