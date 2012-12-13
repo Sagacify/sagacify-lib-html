@@ -187,7 +187,7 @@ define([
 						}
 					});
 					
-					if(has("android") >=3){
+					if(has("android") >=3 && !(keepFirstSection && i==0)){
 						on(node, "touchend", function(evt){
 							var touches = evt.changedTouches,
 		      				first = touches[0],
