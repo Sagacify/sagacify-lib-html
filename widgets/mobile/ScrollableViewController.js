@@ -49,7 +49,7 @@ define([
 			scrollableView.domNode.style.height = this.frame.height+"px";
 			
 			for(var i = this.domNode.children.length-1; i >= 0; i--)
-				scrollableView.containerNode.appendChild(this.domNode.children[i], "first");
+				domConstruct.place(this.domNode.children[i], scrollableView.containerNode, "first");
 
 			scrollableView.placeAt(this.domNode);
 			scrollableView.startup();
