@@ -1,6 +1,14 @@
-define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/Evented', 'dojox/mobile/TabBar', 'dojox/mobile/TabBarButton', 'saga/widgets/mobile/ViewController'], function(declare, _Widget, Evented, TabBar, TabBarButton, ViewController) {
+define([
+	'dojo/_base/declare', 
+	'saga/widgets/_Widget', 
+	'saga/widgets/mobile/TabBar', 
+	'saga/widgets/mobile/TabBarButton', 
+	'saga/widgets/mobile/ViewController',
+	'dojo/on'], 
 	
-	return declare('M2C.Widgets.TabBarViewController', [ViewController, Evented], {
+	function(declare, _Widget, TabBar, TabBarButton, ViewController, on) {
+	
+	return declare('M2C.Widgets.TabBarViewController', [ViewController], {
 		
 		tabBar: null,
 		
@@ -8,55 +16,56 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/Evented', 'dojox/mob
 		
 		viewControllers: null,
 		
+		selectedTabIndex: 0,
+		
 		constructor: function(args){
-			this.viewControllers = args.viewControllers;
-			this._tabBarButtonElements = args.tabBarButtonElements;
-			this._selectedTabIndex = args.selectedTabIndex;
+			if(args)
+				this._selectedTabIndex = args.selectedTabIndex;
 		},
 		
 		postCreate: function() {
-			this.tabBar = new TabBar();
+			this.tabBar = new TabBar({width:this.frame.width});
 			this.tabBarButtons = [];
-						
-			var viewsContainerView = new ViewController();
-			viewsContainerView.domNode.style.top = "0px";
-			viewsContainerView.domNode.style.left = "0px";
-			viewsContainerView.domNode.style.width = "320px";
-			viewsContainerView.domNode.style.height = this.frame.height-47+"px";
+			
+			var frame = this.getFrame();
+			frame.height -= 49;
+			var viewsContainerView = new ViewController({frame:frame});
 			viewsContainerView.placeAt(this.domNode);
 			
 			var me = this;
 			dojo.forEach(this.viewControllers, function(viewController, i){ 
-				var tabBarButton = new TabBarButton({label:me._tabBarButtonElements[i].label, onClick:function(){me.selectTab(i);},icon1:me._tabBarButtonElements[i].iconUnselectedPath, icon2:me._tabBarButtonElements[i].iconSelectedPath});
-				me.tabBar.addChild(tabBarButton);
+				var tabBarButton = new TabBarButton(viewController.tabBarButtonInfo);
+				me.tabBar.addButton(tabBarButton);
 				me.tabBarButtons.push(tabBarButton);
+				on(tabBarButton.domNode, "click", function(evt){
+					me.selectTab(i);
+				});
 				viewController.domNode.style.display = "none";
 				viewController.placeAt(viewsContainerView.domNode);
-				//viewController.setFrame({height:me.frame.height-49});
 			});
-	
+
 			this.tabBar.placeAt(this.domNode);
-			if(this._selectedTabIndex)
-				this.selectTab(this._selectedTabIndex);
-			else
-				this.selectTab(0);
-			this.tabBar.startup();
+			this.viewControllers[0].domNode.style.display = "";
+			this.tabBar.selectTab(0);
+			this.selectTab(this.selectedTabIndex);
 		},
 		
 		selectTab: function(tabIndex) {
-			if(this._selectedViewControllers == this.viewControllers[tabIndex])
+			if(this.selectedTabIndex == tabIndex)
 				return;
-			if(this._selectedViewControllers)
-				this._selectedViewControllers.domNode.style.display = "none";
+			this.viewControllers[this.selectedTabIndex].domNode.style.display = "none";
 			this.viewControllers[tabIndex].domNode.style.display = "";
-			this._selectedViewControllers = this.viewControllers[tabIndex];
-			this.tabBarButtons[tabIndex]._setSelectedAttr(true);
-			this.emit("tabSelected", {tabIndex:tabIndex});
+			this.onTabSelected.apply(this, [tabIndex]);
+			this.selectedTabIndex = tabIndex;
 		},
 		
 		startup: function() {
 			this.domNode.style.width = this.domNode.parentNode.style.width;
 			this.domNode.style.height = this.domNode.parentNode.style.height;
+		},
+		
+		onTabSelected: function(){
+			
 		}
 		
 	});

@@ -5,9 +5,11 @@ define([
 	'saga/widgets/mobile/revealViewController/RevealRearViewController', 
 	'dojox/mobile/View', 
 	'dojo/_base/window',
-	'dojo/on'], 
+	'dojo/on',
+	'dojo/has',
+	'dojo/dom-class'], 
 	
-	function(declare, ViewController, RevealFrontViewController, RevealRearViewController, View, win, on) {
+	function(declare, ViewController, RevealFrontViewController, RevealRearViewController, View, win, on, has, domClass) {
 	
 	return declare('saga.RevealViewController', [ViewController], {
 		
@@ -22,7 +24,9 @@ define([
 		containerView: null,
 		
 		constructor: function(args) {
-
+			if(has("android")){
+				this._loadCss("saga/widgets/mobile/Assets/css/reveal-fix.css");
+			}
 		},		
 		
 		postCreate: function() {
@@ -31,7 +35,8 @@ define([
 			var me = this;
 
 			if(!this.revealFrontViewController){
-				this.revealFrontViewController = new RevealFrontViewController({viewController:this.viewController, frame:me.frame});
+				var frame = this.getFrame();
+				this.revealFrontViewController = new RevealFrontViewController({viewController:this.viewController, frame:this.frame});
 			}
 			
         	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width*0.75+"px;"});//246
@@ -55,11 +60,18 @@ define([
 				else
 					me.revealEnd();
 			});
+			
+			domClass.add(this.containerView.domNode, "global");
         	
 		},
 		
 		setViewController: function(viewController){
 			this.revealFrontViewController.setFrontViewController(viewController);
+		},
+		
+		showViewController: function(viewController){
+			this.setViewController(viewController);
+			this.revealStart();
 		},
 		
 		setRevealRearViewController: function(revealRearViewController){

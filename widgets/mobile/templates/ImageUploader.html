@@ -1,0 +1,19 @@
+<div style="padding-bottom: 10px">
+    <button class="uploadButton" data-dojo-attach-point="uploadButton">${label}</button>
+    <div class="popover top nonVisible">
+    <div class="arrow"></div>
+        <div class="popover-inner">
+            <h3 class="popover-title">Add a picture</h3>
+            <div class="popover-content">
+                <button class="btn" data-dojo-attach-point="libraryButton">Choose from library</button>
+                <button class="btn" data-dojo-attach-point="cameraButton">Take a picture</button>
+                <button class="btn cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div data-dojo-attach-point="imageContainerNode" style="display: none">
+        <figure id="imageFigure" data-dojo-attach-point="imageFigureNode">
+	    	<img src="app/resources/img/bidon.jpg" alt="" data-dojo-attach-point="imageNode">
+	    </figure>
+	</div>
+</div>

@@ -1,23 +1,30 @@
-define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/Evented', 'dojo/dom-construct', 'dojo/on'], function(declare, _Widget, Evented, domConstruct, on) {
+define([
+	'dojo/_base/declare', 
+	'saga/widgets/_Widget', 
+	'dojo/text!./templates/DirectoryBar.html', 
+	'saga/utils/Utils', 
+	'dojo/on'], 
 	
-	return declare('saga.DirectoryBar', [_Widget, Evented], {
+	function(declare, _Widget, template, Utils, on) {
 	
-		templateString:"<div></div>",
+	return declare('saga.DirectoryBar', [_Widget], {
+	
+		templateString: template,
 		
-		_items: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"],
+		height: 480,
+		
+		//_items: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"],
 				
 		consructor: function(args) {
-			if(args) {
-				
-			}
+			
 		},
 		
 		postCreate: function() {
-			var me = this;
-			dojo.forEach(this._items, function(item, i) {
-				var div = domConstruct.create("div", {innerHTML:"<font color=gray>"+item+"</font>", style:"text-align:center;line-height:15px;width:15px;height:15px;font-size:70%;font-color:red;"}, me.domNode);
-				on(div, "click", function(args){
-					me.emit("directoryBarPressed", {item:item, index:i});
+			this.searchImg.src = Utils.svgSupport()?"saga/widgets/mobile/Assets/img/search.svg":"saga/widgets/mobile/Assets/img/search.png";
+			this.ulNode.style.height = this.height+"px";
+			dojo.forEach(this.ulNode.children, function(letterNode, i){
+				on(letterNode, "mousemove", function(evt){
+					console.log(i);
 				});
 			});
 		}

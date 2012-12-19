@@ -1,7 +1,8 @@
 define([
 	'dojo/_base/declare', 
 	'dojo/on', 
-	'dojox/mobile/ScrollableView',
+	'saga/widgets/mobile/ViewController',
+	'saga/widgets/mobile/_ScrollableView',
 	'dojo/Evented', 
 	'dojo/dom-construct',
 	'dojo/dom-class', 
@@ -13,9 +14,9 @@ define([
 	'dojo/date/locale',
 	'dojo/has', 
 	'spin/Spin'], 
-	function(declare, on, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
+	function(declare, on, ViewController, ScrollableView, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
 	
-	return declare('saga.TableViewController', [ScrollableView, Evented], {
+	return declare('saga.TableViewController', [ViewController], {
 		
 		parent: null,
 		
@@ -59,10 +60,20 @@ define([
 		},		
 		
 		postCreate: function() {
+			this.inherited(arguments);
+			
+			var scrollableView = new ScrollableView();
+			scrollableView.domNode.style.left = this.frame.x+"px";
+			scrollableView.domNode.style.top = this.frame.y+"px";
+			scrollableView.domNode.style.width = this.frame.width+"px";
+			scrollableView.domNode.style.height = this.frame.height+"px";
+			scrollableView.placeAt(this.domNode);
+			scrollableView.startup();
+			this.scrollableView = scrollableView;
 
 			if(this._pullToRefresh) {
-				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.containerNode);
-				this.containerNode.style.top = "-500px";
+				this._pullDownDiv = domConstruct.create("div", {style:"width:320px; height:500px; position:relative;"}, this.scrollableView.containerNode);
+				this.scrollableView.containerNode.style.top = "-500px";
 				//dojo.style(this._pullDownDiv, "backgroundColor", new dojo.Color([226,231,237]));
 				this._pullDownDiv.style.backgroundColor = "rgb(226, 231, 237)";
 				
@@ -87,8 +98,8 @@ define([
 	        	this._pullDownDiv.spinner = spinner.el;
       		}
 
-        	if(this.frame)
-        		this.setFrame(this.frame);
+        	/*if(this.frame)
+        		this.setFrame(this.frame);*/
         	
 			//this.reload();
 		},
@@ -130,9 +141,13 @@ define([
 			for (var i = keepFirstSection?1:0; i < numberOfSections; i++) {
 				
 				var header = this.viewForHeaderInSection(i);
-				if (header) 
-					this.containerNode.appendChild(header.domNode);
-				this._headers.push(header);
+				if (header){
+					if(header.domNode)
+						this.scrollableView.containerNode.appendChild(header.domNode);
+					else
+						this.scrollableView.containerNode.appendChild(header);
+					this._headers.push(header);
+				}
 					
 				var cells = [];
 				
@@ -170,7 +185,7 @@ define([
 					//cell.setDelegate({delegate:this, indexPath:{section:i, row:j}});
 				}
 				this._cellsBySection.push(cells);
-				this.containerNode.appendChild(cellsContainer.domNode);
+				this.scrollableView.containerNode.appendChild(cellsContainer.domNode);
 				
 			}
 					
@@ -218,7 +233,7 @@ define([
 			this.reload();
 		},*/
 		
-		setFrame: function(frame) {
+		/*setFrame: function(frame) {
 			if(!this.frame)
 				this.frame = {};
 			
@@ -246,7 +261,7 @@ define([
 				this._pullDownDiv.arrowImg.style.left = ((frame.width -320)/2 + 25) + "px";
 				this._pullDownDiv.spinner.style.left = ((frame.width -320)/2 + 40) + "px";
 			}
-		},
+		},*/
 		
 		numberOfSections: 0,
 		
@@ -295,14 +310,10 @@ define([
 				to.y -= this._headers[i].domNode.clientHeight;
 				to.y -= 2;
 				for(var j = 0; j < this._cellsBySection[i].length; j++) {
-					//console.log(i + ", " + j);
 					to.y -= this._cellsBySection[i][j].domNode.clientHeight;
 					to.y -= 1;
 				}
 			}
-			//console.log(this._headers[0].domNode.clientHeight);
-			//console.log(this._cellsBySection[0][0].domNode.clientHeight);
-			//console.log(to.y);
 			this.slideTo(to, 0.5, "ease-out");
 		},
 		
@@ -343,7 +354,7 @@ define([
 					this._nextSlideDest = to;
 					this._pullDownDiv.loading = true;
 					this.reloadTableViewDataSource();
-					this.emit("reload", {});
+					//this.emit("reload", {});
 					
 					this._pullDownDiv.statusDiv.innerHTML = "Loading...";
 					this._pullDownDiv.arrowImg.style.display = "none";
@@ -354,7 +365,7 @@ define([
 		},
 		
 		_runSlideAnimation: function(/*Object*/from, /*Object*/to, /*Number*/duration, /*String*/easing, node, idx) {
-			if(node == this.containerNode){
+			if(node == this.scrollableView.containerNode){
 				this._nextSlideDest = null;
 			}
 			this.inherited(arguments);
@@ -371,7 +382,7 @@ define([
 		},
 		
 		reloadTableViewDataSource: function() {
-			//to be implemented by subclasses
+			//to be implemented by subclasses and call tableViewDataSourceReloadDone when reload done
 		},
 		
 		tableViewDataSourceReloadDone: function() {
@@ -401,11 +412,11 @@ define([
 		},
 		
 		addContainerClass: function(cl){
-			domClass.add(this.containerNode, cl);
+			domClass.add(this.scrollableView.containerNode, cl);
 		},
 		
 		addUlClass: function(cl){
-			dojo.forEach(this.containerNode.children, function(ul, i){
+			dojo.forEach(this.scrollableView.containerNode.children, function(ul, i){
 				domClass.add(ul, cl);
 			});
 		},

@@ -1,19 +1,22 @@
 define([
 	'dojo/_base/declare', 
 	'./ViewController', 
-	'./NavigationBar', 
+	'./NavigationBar',
+	'./NavigationBar_dojox', 
 	'dojo/_base/connect', 
 	'dojo/on', 
 	'dojo/dom-class', 
 	'dojo/dom-construct'], 
 	
-	function(declare, ViewController, NavigationBar, connect, on, domClass, domConstruct) {
+	function(declare, ViewController, NavigationBar, NavigationBar_dojox, connect, on, domClass, domConstruct) {
 	
 	return declare('saga.NavigationController', [ViewController], {
 		
 		_viewControllers: null,
 		
 		_customNavBar: false,
+		
+		navBarStyle: "custom",
 		
 		navigationBar: null,
 
@@ -31,10 +34,18 @@ define([
 			
 			var label = this._viewControllers[0].name?this._viewControllers[0].name:"";
 			if(!this.navigationBar){
-				this.navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:label});
-	        	this.navigationBar.placeAt(this.domNode);
-	        	domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
-	        	this.navigationBar.startup();		
+				if(this.navBarStyle == "dojox"){
+					this.navigationBar = new NavigationBar_dojox({back:"", href:null, moveTo:"#", label:label});
+	        		this.navigationBar.placeAt(this.domNode);
+	        		domClass.add(this.navigationBar.domNode, "mblHeadingCenterTitle");
+	        		this.navigationBar.startup();	
+				}
+				else{
+					this.navigationBar = new NavigationBar();
+					this.navigationBar.placeAt(this.domNode);
+					this._customNavBar = true;
+					this._updateNavigationBar();
+				}
 			}
 			else{
 				this.navigationBar.placeAt(this.domNode);
