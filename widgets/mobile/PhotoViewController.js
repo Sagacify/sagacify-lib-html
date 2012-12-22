@@ -33,7 +33,7 @@ define([
 	        	view.domNode.style.width = (me.frame.width)+"px";
 	        	view.domNode.style.height = (me.frame.height)+"px";
 	        	view.domNode.style.textAlign = "center";
-	        	view.domNode.style.overflow = "hidden";
+	        	//view.domNode.style.overflow = "hidden";
 	        	if(image.base64)
 	        		var img = domConstruct.create("img", {src:"data:image/jpeg;base64,"+base64, border:"1", style:"vertical-align:middle;max-width:"+(me.frame.width-10)+"px;max-height:"+(me.frame.height-36)+"px;"}, view.domNode);
 	        	else if(image.src)
@@ -42,13 +42,13 @@ define([
  	        		var img = domConstruct.create("img", {id:"image"+i, src:image, border:"1", style:"position:absolute;vertical-align:middle;max-width:"+(me.frame.width)+"px;max-height:"+(me.frame.height)+"px;"}, view.domNode);
  	        	img.onload = function(evt){
  	        		var shrinkedSize = me._sizeForShrinkedImage(img, {width:me.frame.width, height:me.frame.height});
- 	        		console.log(shrinkedSize)
  	        		img.frame = {x:(me.frame.width-shrinkedSize.width)/2, y:0, width:shrinkedSize.width, height:shrinkedSize.height};
  	        		img.style.left = img.frame.x+"px";
  	        	}
         		var swapView = new SwapView({selected:true});
 	  			swapView.addChild(view);
 	        	swapView.placeAt(me.domNode);
+	        	swapView.domNode.style.overflow = "hidden";
 	        	swapView.startup();
 	        	if(i == me.indexToShow)
 	        		swapViewToShow = swapView;
