@@ -13,6 +13,8 @@ define([
 		
 		images: null,
 		
+		imageNodes: null,
+		
 		indexToShow: null,
 		
 		pageIndicator: false,
@@ -28,6 +30,7 @@ define([
 			this.domNode.style.background = "black";
 			var me = this;
         	var swapViewToShow;
+        	this.imageNodes = [];
         	dojo.forEach(this.images, function(image, i){
         		var view = new View();
 	        	view.domNode.style.width = (me.frame.width)+"px";
@@ -40,6 +43,7 @@ define([
  	        		var img = domConstruct.create("img", {src:image.src, border:"1", style:"vertical-align:middle;max-width:"+(me.frame.width-10)+"px;max-height:"+(me.frame.height-36)+"px;"}, view.domNode);
  	        	else
  	        		var img = domConstruct.create("img", {id:"image"+i, src:image, border:"1", style:"position:absolute;vertical-align:middle;max-width:"+(me.frame.width)+"px;max-height:"+(me.frame.height)+"px;"}, view.domNode);
+ 	        	me.imageNodes.push(img);
  	        	img.onload = function(evt){
  	        		var shrinkedSize = me._sizeForShrinkedImage(img, {width:me.frame.width, height:me.frame.height});
  	        		img.frame = {x:(me.frame.width-shrinkedSize.width)/2, y:0, width:shrinkedSize.width, height:shrinkedSize.height};
@@ -66,29 +70,19 @@ define([
         	
 		},
 		
+		addZoom: function(){
+			var me = this;
+			dojo.forEach(this.imageNodes, function(img, i){
+				me.addZoomOnImage(img.id);
+			});
+		},
+		
 		//warning: zoom and slide not compatible 
-		addZommOnImage: function(imageID, containerID){
+		addZoomOnImage: function(imageID){
 			var me = this;
 			var hammer, height, image, offset, origin, prevScale, scale, screenOrigin, translate, width, wrap;
 
 	        image = $("#"+imageID);
-	        /*image.on("mousedown", function(evt){
-	        	console.log(evt);
-	        	image.mousedownCoord = {x:evt.clientX, y:evt.clientY};
-	        });
-	        image.on("mouseup", function(evt){
-	        	image.mousedownCoord = null;
-	        });
-	        image.on("mousemove", function(evt){
-	        	if(image.mousedownCoord){
-	        		var diff = evt.clientX-image.mousedownCoord.x;
-		        	console.log(diff);
-		        	console.log(image.scale);
-		        	image[0].left += diff;
-		        	image[0].style.left = image[0].left+"px";
-		        	evt.stopPropagation();
-		        }
-	        });*/
 			
 			var down = function(evt){
 				if(me._pointInImage(image[0], {x:evt.clientX, y:evt.clientY})) {
@@ -119,7 +113,7 @@ define([
 			on(image[0].parentNode, "touchmove", move);
 			
 			
-	        wrap = $("#"+containerID);
+	        wrap = $("#"+image[0].parentNode.id);
 	        width = image.width();
 	        height = image.height();
 	        offset = wrap.offset();
