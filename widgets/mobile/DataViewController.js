@@ -15,6 +15,8 @@ define([
 		dataItemSortKey: null,
 		
 		processedData: null,
+		
+		searchBarFixed: false,
 				
 		constructor: function(args) {
 			if(args.dataItemKey){
@@ -26,12 +28,10 @@ define([
 		postCreate: function() {
 			this.inherited(arguments);
 			if(this.dataItemFilterKey){
-				var searchBar = new SearchBar();
-				searchBar.placeAt(this.scrollableView.containerNode);
-				this.searchBar = searchBar;
+				this.addSearchBar(this.searchBarFixed);
 				var me = this;
-				on(searchBar.searchFieldNode, "keyup", function(evt){
-					me.filterData(searchBar.searchFieldNode.value);
+				on(this.searchBar.searchFieldNode, "keyup", function(evt){
+					me.filterData(me.searchBar.searchFieldNode.value);
 					me.reload();
 				});
 			}

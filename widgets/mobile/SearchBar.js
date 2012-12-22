@@ -10,6 +10,8 @@ define([
 	return declare('bizComp.mobile.SearchBar', [_Widget], {
 
 		templateString: template,
+		
+		height: 43,
 
 		constructor: function(args) {
 			

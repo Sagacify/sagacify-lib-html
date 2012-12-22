@@ -23,10 +23,10 @@ define([
 				
 		containerView: null,
 		
+		swipeEnabled: true,
+		
 		constructor: function(args) {
-			if(has("android")){
-				this._loadCss("saga/widgets/mobile/Assets/css/reveal-fix.css");
-			}
+			
 		},		
 		
 		postCreate: function() {
@@ -39,7 +39,7 @@ define([
 				this.revealFrontViewController = new RevealFrontViewController({viewController:this.viewController, frame:this.frame});
 			}
 			
-        	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width*0.75+"px;"});//246
+        	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width+"px;"});//246
     		this.containerView.placeAt(this.domNode);
 
         	this.isRevealed = true;
@@ -52,18 +52,11 @@ define([
         			me.revealStart();
         		}
         	});
-        	
-        	this.containerView.on("afterTransitionOut", function(){
-        		if(me.isRevealed) {
-	        		me.unrevealEnd();
-	        	}
-				else
-					me.revealEnd();
-			});
 			
 			domClass.add(this.containerView.domNode, "global");
-        	
-		},
+        	domClass.add(this.containerView.domNode, "swipeme");
+        	this.containerView.domNode.style.zIndex = 1;
+     	},
 		
 		setViewController: function(viewController){
 			this.revealFrontViewController.setFrontViewController(viewController);
@@ -80,34 +73,26 @@ define([
 			}
 			revealRearViewController.domNode.style.position = "absolute";
 			revealRearViewController.placeAt(this.domNode, "first");
-			/*on(revealRearViewController, "frontViewControllerSelected", function(frontViewController){
-				me.setCurrentFrontViewController(frontViewController);
-			});*/
 			this.revealRearViewController = revealRearViewController;
 		},
 		
-		revealStart: function() {
-			this.containerView.domNode.style.overflow = "";
-        	this.containerView.performTransition(null, 1, "reveal", null);	
-        	//this.containerView.domNode.style["-webkit-transform"] = "translate3d(-50%,0px,0px)";
+		revealStart: function(){
+			var me = this;
+			$('.swipeme').animate({left: 0}, 800, 'easeOutQuint', function(){me.revealEnd()});
 		},
 		
 		revealEnd: function() {
-			this.containerView.domNode.style.left = "0px";
-			this.containerView.domNode.style.display = "";
 			this.isRevealed = true;
 			this.onRevealEnd.apply(this, []);
 		},
 		
 		unrevealStart: function() {
-			this.containerView.performTransition(null, -1, "reveal", null);
 			this.onUnrevealStart.apply(this, []);
+			var me = this;
+			$('.swipeme').animate({left: this.frame.width*0.75}, 800, 'easeOutQuint', function(){me.unrevealEnd()});
 		},
 		
 		unrevealEnd: function() {
-			this.containerView.domNode.style.left = this.frame.width*0.75+"px";
-	        this.containerView.domNode.style.overflow = "hidden";
-	        this.containerView.domNode.style.display = "";
 	        this.isRevealed = false;
 		},
 		
@@ -117,6 +102,55 @@ define([
 		
 		onUnrevealStart: function(){
 			
+		},
+		
+		startup: function(){
+			var swiped = $('.swipeme'),
+                max = Math.floor(this.frame.width*0.75),
+                check = 0,
+                positionL,
+	            me = this;
+	         
+	        //Warning: remove line "cancelEvent(event);" from drag method of hammer.js code to work properly with dojo animations 
+	        swiped.on('drag', function (event) {
+	        	if(this.swipeEnabled){
+	                event.preventDefault();
+	                positionL = Math.floor(swiped.position().left);
+	                if(event.direction == 'right' && positionL < max){
+	                    swiped.css({
+	                        "left": event.distance
+	                    });
+	                }
+	                else if(event.direction == 'left' && positionL != 0){
+	                    swiped.css({
+	                        "left": max - event.distance
+	                    });
+	                }
+	            }
+	        });
+	        
+	        swiped.on('dragend', function (event) {
+				if(this.swipeEnabled){
+	                event.preventDefault();
+	                swiped.offset().left < max/2?me.revealStart():me.unrevealStart();
+	            }
+	        });
+	
+			swiped.on('swipe', function (event) {
+				if(this.swipeEnabled){
+	                event.preventDefault();
+	                if(event.direction == 'right')
+	                    me.unrevealStart();
+	                else if(event.direction == 'left')
+	                    me.revealStart();
+				}
+	        });
+	       
+	        
+		},
+		
+		enableSwipe: function(enabled){
+			this.swipeEnabled = enabled;
 		}
 			
 	});

@@ -21,8 +21,22 @@ define([
 			if(this.searchBar)
 				this.searchBar.searchFieldNode.style.width = (this.frame.width-50)+"px";
 			
-			var directoryBar = new DirectoryBar({height:this.frame.height-20});
+			var directoryBar = new DirectoryBar({height:this.frame.height-20, searchItem:!this.searchBarFixed});
 			directoryBar.placeAt(this.domNode);
+			var me = this;
+			on(directoryBar, "letterSelected", function(letterIndex){
+				if(letterIndex == -1)
+					me.scrollableView.slideTo({y:0}, 0.5, "ease-out");
+				else
+					me.scrollToSection(me._barCorrespondances[letterIndex], me.searchBarFixed?0:43);
+			});
+			
+			on(this.searchBar.searchFieldNode, "keyup", function(evt){
+				if(me.searchBar.searchFieldNode.value)
+					directoryBar.domNode.style.display = "none";
+				else
+					directoryBar.domNode.style.display = "";
+			});
 		},
 		
 		numberOfSections: function(){
