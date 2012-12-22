@@ -113,7 +113,7 @@ define([
 	         
 	        //Warning: remove line "cancelEvent(event);" from drag method of hammer.js code to work properly with dojo animations 
 	        swiped.on('drag', function (event) {
-	        	if(this.swipeEnabled){
+	        	if(me.swipeEnabled){
 	                event.preventDefault();
 	                positionL = Math.floor(swiped.position().left);
 	                if(event.direction == 'right' && positionL < max){
@@ -130,14 +130,14 @@ define([
 	        });
 	        
 	        swiped.on('dragend', function (event) {
-				if(this.swipeEnabled){
+				if(me.swipeEnabled){
 	                event.preventDefault();
 	                swiped.offset().left < max/2?me.revealStart():me.unrevealStart();
 	            }
 	        });
 	
 			swiped.on('swipe', function (event) {
-				if(this.swipeEnabled){
+				if(me.swipeEnabled){
 	                event.preventDefault();
 	                if(event.direction == 'right')
 	                    me.unrevealStart();

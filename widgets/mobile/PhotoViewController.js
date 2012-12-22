@@ -25,8 +25,6 @@ define([
 		
 		postCreate: function(){
 			this.inherited(arguments);
-			if(Window.revealViewController)
-				revealViewController.stop();
 			this.domNode.style.background = "black";
 			var me = this;
         	var swapViewToShow;
