@@ -181,15 +181,8 @@ define([
 		_sizeForShrinkedImage: function(image, shrinkSize) {
 			var width = image.width;
 			var height = image.height;
-			if(width <= shrinkSize.width && height <= shrinkSize.height) {
-				return {width:width, height:height};
-			}
-			else {
-				if(width > height)
-					return {width:shrinkSize.width, height:(shrinkSize.width/width)*height};
-				else
-					return {width:(shrinkSize.height/height)*width, height:shrinkSize.height};
-			}		
+			var scale = Math.min(1, shrinkSize.width/width, shrinkSize.height/height);
+			return {width:scale*width, height:scale*height};		
 		}
 	});
 });
