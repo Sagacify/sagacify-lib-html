@@ -40,7 +40,9 @@ define([
  	        	else
  	        		var img = domConstruct.create("img", {id:"image"+i, src:image, border:"1", style:"position:absolute;vertical-align:middle;max-width:"+(me.frame.width)+"px;max-height:"+(me.frame.height)+"px;"}, view.domNode);
  	        	img.onload = function(evt){
- 	        		img.frame = {x:(me.frame.width-img.width)/2, y:0, width:img.width, height:img.height};
+ 	        		var shrinkedSize = me._sizeForShrinkedImage(img, {width:me.frame.width, height:me.frame.height});
+ 	        		console.log(shrinkedSize)
+ 	        		img.frame = {x:(me.frame.width-shrinkedSize.width)/2, y:0, width:shrinkedSize.width, height:shrinkedSize.height};
  	        		img.style.left = img.frame.x+"px";
  	        	}
         		var swapView = new SwapView({selected:true});
@@ -181,7 +183,20 @@ define([
 			img.style.left = frame.x+"px";
 			img.style.top = frame.y+"px";
 			img.frame = frame;
-		}
+		},
 		
+		_sizeForShrinkedImage: function(image, shrinkSize) {
+			var width = image.width;
+			var height = image.height;
+			if(width <= shrinkSize.width && height <= shrinkSize.height) {
+				return {width:width, height:height};
+			}
+			else {
+				if(width > height)
+					return {width:shrinkSize.width, height:(shrinkSize.width/width)*height};
+				else
+					return {width:(shrinkSize.height/height)*width, height:shrinkSize.height};
+			}		
+		}
 	});
 });
