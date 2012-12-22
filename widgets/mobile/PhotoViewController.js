@@ -112,8 +112,8 @@ define([
 					evt.stopPropagation();
 				}
 			}
-			on(image[0].parentNode, "mousemove", move);
-			on(image[0].parentNode, "touchmove", move);
+			//on(image[0].parentNode, "mousemove", move);
+			//on(image[0].parentNode, "touchmove", move);
 			
 			
 	        wrap = $("#"+containerID);
@@ -163,7 +163,7 @@ define([
 	            wrap.css('-webkit-transform', "translate3d(" + translate.x + "px, " + translate.y + "px, 0)");
 	            width = newWidth;
 	            image.scale = scale;
-	
+	            console.log(translate.y)
 	            return height = newHeight;
 	        });
 	
