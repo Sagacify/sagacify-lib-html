@@ -15,6 +15,8 @@ define([
 		
 		images: null,
 		
+		photoPresentation: "push",
+		
 		constructor: function(args) {
 
 		},
@@ -27,7 +29,13 @@ define([
         		photoMosaicItem.placeAt(me.photoContainerNode);
         		on(photoMosaicItem.domNode, "click", function(evt){
         			var photoViewController = new PhotoViewController({frame:me.frame, images:me.images, indexToShow:i});
-        			me.navigationController.pushViewController(photoViewController);
+        			if(me.photoPresentation == "push"){
+        				me.navigationController.pushViewController(photoViewController);
+        				Window.revealViewController.enableSwipe(false);
+        				on(me.navigationController.navigationBar.backButton, "click", function(evt){
+        					Window.revealViewController.enableSwipe(true);	
+        				});
+        			}
         		});
         	});
 		},
