@@ -2,7 +2,7 @@ define([
 	'dojo/_base/declare', 
 	'saga/widgets/mobile/ViewController',
 	'dojox/mobile/View',
-	'dojox/mobile/SwapView',
+	'saga/widgets/mobile/_SwapView',
 	'dojox/mobile/PageIndicator',
 	'dojo/dom-construct',
 	'dojo/on'], 
@@ -33,7 +33,7 @@ define([
         		var view = new View();
 	        	view.domNode.style.width = (me.frame.width)+"px";
 	        	view.domNode.style.height = (me.frame.height)+"px";
-	        	view.domNode.style.textAlign = "center";
+	        	//view.domNode.style.textAlign = "center";
 	        	//view.domNode.style.overflow = "hidden";
 	        	if(image.base64)
 	        		var img = domConstruct.create("img", {src:"data:image/jpeg;base64,"+base64, border:"1", style:"vertical-align:middle;max-width:"+(me.frame.width-10)+"px;max-height:"+(me.frame.height-36)+"px;"}, view.domNode);
@@ -49,9 +49,11 @@ define([
  	        		img.style.top = img.frame.y+"px";
  	        	}
         		var swapView = new SwapView({selected:true});
+        		swapView.domNode.style.width = (me.frame.width)+"px";
+        		swapView.domNode.style.height = (me.frame.height)+"px";
 	  			swapView.addChild(view);
 	        	swapView.placeAt(me.domNode);
-	        	//swapView.domNode.style.overflow = "hidden";
+	        	//swapView.domNode.style.position = "absolute";
 	        	swapView.startup();
 	        	if(i == me.indexToShow)
 	        		swapViewToShow = swapView;

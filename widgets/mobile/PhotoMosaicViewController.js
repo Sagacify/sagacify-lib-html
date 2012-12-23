@@ -31,7 +31,8 @@ define([
         			var photoViewController = new PhotoViewController({frame:me.frame, images:me.images, indexToShow:i});
         			if(me.photoPresentation == "push"){
         				me.navigationController.pushViewController(photoViewController);
-        				Window.revealViewController.enableSwipe(false);
+        				if(Window.revealViewController)
+        					Window.revealViewController.enableSwipe(false);
         				on(me.navigationController.navigationBar.backButton, "click", function(evt){
         					Window.revealViewController.enableSwipe(true);	
         				});
