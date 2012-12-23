@@ -225,7 +225,7 @@ define([
 				
 				var me = this;
 				this.loadingBar.on("afterTransitionOut", function(){
-					if(me.loadingStatus == "loaded" || me.loadingStatus == "loadingToDismiss"){
+					if(me.loadingStatus == "loaded" || me.loadingStatus == "loadingToDismiss" || me.loadingStatus == "transitionToLoading"){
 						me.loadingBar.domNode.style.display = "";
 						me.loadingBar.domNode.style.top = "0px";
 						me.loadingBar.domNode.style.left = "0px";
@@ -236,7 +236,7 @@ define([
 						else
 							me.loadingStatus = "loading";	
 					}
-					else if(me.loadingStatus == "loading" || me.loadingStatus == "loadingToPresent"){
+					else{
 						me.loadingBar.domNode.style.display = "";
 						me.loadingBar.domNode.style.top = "-50px";
 						me.loadingBar.domNode.style.left = "0px";
@@ -255,26 +255,17 @@ define([
 			else{
 				this.loadingStatus = "transitionToLoading";
 				this.loadingBar.performTransition(null, -1, "revealv", null);
-				
-				this.dismissLoadingBar();	
 			}
 		},
 		
 		dismissLoadingBar: function(){
-			/*domClass.remove(this.loadingBar.domNode, "mblRevealv");
-			domClass.remove(this.loadingBar.domNode, "mblOut");
-			domClass.remove(this.loadingBar.domNode, "mblReverse");
-			this.loadingBar.domNode.style["-webkit-transform-origin"] = "";
-			this.loadingBar.domNode.style.display = "";
-			this.loadingBar.domNode.style.top = "0px";
-			this.loadingBar.domNode.style.left = "0px";*/
+
 			if(this.loadingStatus == "transitionToLoading"){
 				this.loadingStatus = "loadingToDismiss";	
 			}
 			else{
 				this.loadingStatus = "transitionToLoaded";
 				this.loadingBar.performTransition(null, 1, "revealv", null);
-				this.presentLoadingBar();
 			}
 		},
 		
