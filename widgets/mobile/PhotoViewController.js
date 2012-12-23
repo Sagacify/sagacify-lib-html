@@ -40,7 +40,7 @@ define([
 	        	else if(image.src)
  	        		var img = domConstruct.create("img", {src:image.src, border:"1", style:"vertical-align:middle;max-width:"+(me.frame.width-10)+"px;max-height:"+(me.frame.height-36)+"px;"}, view.domNode);
  	        	else
- 	        		var img = domConstruct.create("img", {id:"image"+i, src:image, border:"1", style:"vertical-align:middle;max-width:"+(me.frame.width)+"px;max-height:"+(me.frame.height)+"px;"}, view.domNode);
+ 	        		var img = domConstruct.create("img", {id:"image"+i, src:image, border:"1", style:"position:absolute;vertical-align:middle;max-width:"+(me.frame.width)+"px;max-height:"+(me.frame.height)+"px;"}, view.domNode);
  	        	me.imageNodes.push(img);
  	        	img.onload = function(evt){
  	        		var shrinkedSize = me._sizeForShrinkedImage(img, {width:me.frame.width, height:me.frame.height});
@@ -51,7 +51,7 @@ define([
         		var swapView = new SwapView({selected:true});
 	  			swapView.addChild(view);
 	        	swapView.placeAt(me.domNode);
-	        	swapView.domNode.style.overflow = "hidden";
+	        	//swapView.domNode.style.overflow = "hidden";
 	        	swapView.startup();
 	        	if(i == me.indexToShow)
 	        		swapViewToShow = swapView;
