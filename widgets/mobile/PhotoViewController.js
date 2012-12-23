@@ -107,8 +107,8 @@ define([
 					var newFrame = {x:image[0].frame.x+xdiff, y:image[0].frame.y+ydiff, width:image[0].frame.width, height:image[0].frame.height};
 					me._setImageFrame(image[0], newFrame);
 					image[0]._lastDragPosition = {x:evt.clientX, y:evt.clientY};
-					evt.stopPropagation();
 				}
+				evt.stopPropagation();
 			}
 			on(image[0].parentNode, "mousemove", move);
 			on(image[0].parentNode, "touchmove", move);
@@ -148,7 +148,6 @@ define([
 	        hammer.bind('transform', function(event) {
 	            var newHeight, newWidth;
 	            scale = prevScale * event.scale;
-	
 	            newWidth = image.width() * scale;
 	            newHeight = image.height() * scale;
 	
