@@ -101,7 +101,7 @@ define([
 			on(document.body, "touchend", up);	
 			
 			var move = function(evt){
-				if(image[0]._lastDragPosition) {
+				if(image[0]._lastDragPosition && !image[0].zooming) {
 					var xdiff = evt.clientX - image[0]._lastDragPosition.x;
 					var ydiff = evt.clientY - image[0]._lastDragPosition.y;
 					var newFrame = {x:image[0].frame.x+xdiff, y:image[0].frame.y+ydiff, width:image[0].frame.width, height:image[0].frame.height};
@@ -140,6 +140,7 @@ define([
 	        });
 	
 	       hammer.bind('transformstart', function(event) {
+	       		image[0].zooming = true;
 	            screenOrigin.x = (event.originalEvent.touches[0].clientX + event.originalEvent.touches[1].clientX) / 2;
 	            return screenOrigin.y = (event.originalEvent.touches[0].clientY + event.originalEvent.touches[1].clientY) / 2;
 	        });
@@ -156,16 +157,23 @@ define([
 	
 	            translate.x += -origin.x * (newWidth - width) / newWidth;
 	            translate.y += -origin.y * (newHeight - height) / newHeight;
+	            
+	           	/*var frame = image[0].frame;
+	           	frame.x = 0;
+	           	frame.y = 0;
+	            frame.width = newWidth;
+	            frame.height = newHeight;
+	            me._setImageFrame(image[0], frame);*/
 	
 	            image.css('-webkit-transform', "scale3d(" + scale + ", " + scale + ", 1)");
-	            wrap.css('-webkit-transform', "translate3d(" + translate.x + "px, " + translate.y + "px, 0)");
+	            //wrap.css('-webkit-transform', "translate3d(" + translate.x + "px, " + translate.y + "px, 0)");
 	            width = newWidth;
 	            image.scale = scale;
-	            console.log(translate.y)
 	            return height = newHeight;
 	        });
 	
 	        hammer.bind('transformend', function(event) {
+	        	image[0].zooming = false;
 	            return prevScale = scale;
 	        });
 	           
@@ -178,6 +186,8 @@ define([
 		_setImageFrame: function(img, frame){
 			img.style.left = frame.x+"px";
 			img.style.top = frame.y+"px";
+			img.width = frame.width;
+			img.height = frame.height;
 			img.frame = frame;
 		},
 		
