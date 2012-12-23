@@ -107,6 +107,7 @@ define([
 					this.statusDiv.innerHTML = "Loading...";
 					this.arrowImg.style.display = "none";
 					this.pullToRefreshNode.spinner.style.display = "";
+					domClass.remove(this.arrowImg, "endPull");
 				}
 			}
 			this.inherited(arguments);

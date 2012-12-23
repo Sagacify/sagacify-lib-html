@@ -44,8 +44,9 @@ define([
  	        	me.imageNodes.push(img);
  	        	img.onload = function(evt){
  	        		var shrinkedSize = me._sizeForShrinkedImage(img, {width:me.frame.width, height:me.frame.height});
- 	        		img.frame = {x:(me.frame.width-shrinkedSize.width)/2, y:0, width:shrinkedSize.width, height:shrinkedSize.height};
+ 	        		img.frame = {x:(me.frame.width-shrinkedSize.width)/2, y:(me.frame.height-shrinkedSize.height)/2, width:shrinkedSize.width, height:shrinkedSize.height};
  	        		img.style.left = img.frame.x+"px";
+ 	        		img.style.top = img.frame.y+"px";
  	        	}
         		var swapView = new SwapView({selected:true});
 	  			swapView.addChild(view);
