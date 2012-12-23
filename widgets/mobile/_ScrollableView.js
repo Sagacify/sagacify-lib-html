@@ -53,6 +53,7 @@ define([
 		},
 		
 		scrollTo: function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node) {
+			this.onScroll.apply(this, [to]);
 			if(this.pullToRefresh) {
 				if(this.pullToRefreshNode.loading) {
 					this.statusDiv.innerHTML = "Loading...";
@@ -96,6 +97,7 @@ define([
 		},
 		
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing) {
+			this.onScroll.apply(this, [to]);
 			if(this.pullToRefresh && !this.pullToRefreshNode.loading) {
 				if(this.getPos().y > 80 && to.y == 0) {
 					to.y = 80;
@@ -139,8 +141,11 @@ define([
 				else
 					this.slideTo({y:0}, 0.3, "ease-out");
 			}
-		}
+		},
 		
+		onScroll: function(){
+			
+		}
 		
 	});
 });

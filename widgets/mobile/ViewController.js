@@ -6,11 +6,13 @@ define([
 	'saga/widgets/mobile/ActionSheet', 
 	'dojo/_base/lang', 
 	'dojo/dom-construct',
+	'dojo/dom-class',
 	'dojox/mobile/SpinWheelDatePicker',
 	'saga/widgets/mobile/NavigationBar',
 	'dojox/mobile/ToolBarButton',
+	'saga/widgets/mobile/LoadingBar',
 	'dojo/on'], 
-	function(declare, config, _Widget, View, ActionSheet, lang, domConstruct, SpinWheelDatePicker, NavigationBar, ToolBarButton, on) {
+	function(declare, config, _Widget, View, ActionSheet, lang, domConstruct, domClass, SpinWheelDatePicker, NavigationBar, ToolBarButton, LoadingBar, on) {
 	
 	return declare('saga.ViewController', [_Widget, View], {
 	
@@ -27,6 +29,8 @@ define([
 		iconUnselectedPath: null,
 		
 		iconSelectedPath: null,
+		
+		loadingStatus: "loaded",
 				
 		constructor: function(args){
 			if(args)
@@ -133,7 +137,7 @@ define([
 				
 			var mask = domConstruct.create("div", {style:"background:rgba(0,0,0,0.4);z-index:2;position:absolute;top:0px;left:0px;width:"+Window.domNode.clientWidth+"px;height:"+Window.domNode.clientHeight+"px"}, Window.domNode);
 			
-			var pickerSheet = new bizComp.ViewController({id:"blouh", style:"background:rgb(70,70,70);z-index:2;position:absolute;top:"+Window.domNode.clientHeight+"px;left:0px;width:"+Window.domNode.clientWidth+"px;height:244px"});
+			var pickerSheet = new saga.ViewController({id:"blouh", style:"background:rgb(70,70,70);z-index:2;position:absolute;top:"+Window.domNode.clientHeight+"px;left:0px;width:"+Window.domNode.clientWidth+"px;height:244px"});
 			pickerSheet.placeAt(Window.domNode);
 			
 			var navigationBar = new NavigationBar({back:"", href:null, moveTo:"#", label:""});
@@ -207,6 +211,71 @@ define([
 			});
 			
 			return spinWheelDatePicker;
+		},
+		
+		presentLoadingBar: function(){
+			if(!this.loadingBar){
+				var loadingBar = new LoadingBar();
+				loadingBar.setWidth(this.frame.width);
+				loadingBar.domNode.style.position = "absolute";
+				loadingBar.domNode.style.top = "-50px";
+				loadingBar.domNode.style.zIndex = 100;
+				loadingBar.placeAt(this.domNode);
+				this.loadingBar = loadingBar;
+				
+				var me = this;
+				this.loadingBar.on("afterTransitionOut", function(){
+					if(me.loadingStatus == "loaded" || me.loadingStatus == "loadingToDismiss"){
+						me.loadingBar.domNode.style.display = "";
+						me.loadingBar.domNode.style.top = "0px";
+						me.loadingBar.domNode.style.left = "0px";
+						if(me.loadingStatus == "loadingToDismiss"){
+							me.loadingStatus = "loading";
+							var interval = setInterval(function(){me.dismissLoadingBar();clearInterval(interval);}, 0);
+						}
+						else
+							me.loadingStatus = "loading";	
+					}
+					else if(me.loadingStatus == "loading" || me.loadingStatus == "loadingToPresent"){
+						me.loadingBar.domNode.style.display = "";
+						me.loadingBar.domNode.style.top = "-50px";
+						me.loadingBar.domNode.style.left = "0px";
+						if(me.loadingStatus == "loadingToPresent"){
+							me.loadingStatus = "loaded";
+							var interval = setInterval(function(){me.presentLoadingBar();clearInterval(interval);}, 0);
+						}
+						else
+							me.loadingStatus = "loaded";
+					}
+				});
+			}
+			if(this.loadingStatus == "transitionToLoaded"){
+				this.loadingStatus = "loadingToPresent";
+			}
+			else{
+				this.loadingStatus = "transitionToLoading";
+				this.loadingBar.performTransition(null, -1, "revealv", null);
+				
+				this.dismissLoadingBar();	
+			}
+		},
+		
+		dismissLoadingBar: function(){
+			/*domClass.remove(this.loadingBar.domNode, "mblRevealv");
+			domClass.remove(this.loadingBar.domNode, "mblOut");
+			domClass.remove(this.loadingBar.domNode, "mblReverse");
+			this.loadingBar.domNode.style["-webkit-transform-origin"] = "";
+			this.loadingBar.domNode.style.display = "";
+			this.loadingBar.domNode.style.top = "0px";
+			this.loadingBar.domNode.style.left = "0px";*/
+			if(this.loadingStatus == "transitionToLoading"){
+				this.loadingStatus = "loadingToDismiss";	
+			}
+			else{
+				this.loadingStatus = "transitionToLoaded";
+				this.loadingBar.performTransition(null, 1, "revealv", null);
+				this.presentLoadingBar();
+			}
 		},
 		
 		_updateNavigationBar: function() {

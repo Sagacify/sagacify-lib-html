@@ -11,6 +11,8 @@ define([
 	
 	return declare('saga.ScrollableViewController', [ViewController], {
 		
+		scrollableView: null,
+		
 		constructor: function(args) {
 			
 		},
@@ -29,7 +31,7 @@ define([
 
 			scrollableView.placeAt(this.domNode);
 			scrollableView.startup();
-			
+			this.scrollableView = scrollableView;
 		}
 		
 	});
