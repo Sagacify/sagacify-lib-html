@@ -101,14 +101,16 @@ define([
 			on(document.body, "touchend", up);	
 			
 			var move = function(evt){
-				if(image[0]._lastDragPosition && !image[0].zooming) {
-					var xdiff = evt.clientX - image[0]._lastDragPosition.x;
-					var ydiff = evt.clientY - image[0]._lastDragPosition.y;
-					var newFrame = {x:image[0].frame.x+xdiff, y:image[0].frame.y+ydiff, width:image[0].frame.width, height:image[0].frame.height};
-					me._setImageFrame(image[0], newFrame);
-					image[0]._lastDragPosition = {x:evt.clientX, y:evt.clientY};
+				if(image[0]._lastDragPosition) {
+					if(!image[0].zooming){
+						var xdiff = evt.clientX - image[0]._lastDragPosition.x;
+						var ydiff = evt.clientY - image[0]._lastDragPosition.y;
+						var newFrame = {x:image[0].frame.x+xdiff, y:image[0].frame.y+ydiff, width:image[0].frame.width, height:image[0].frame.height};
+						me._setImageFrame(image[0], newFrame);
+						image[0]._lastDragPosition = {x:evt.clientX, y:evt.clientY};	
+					}
+					evt.stopPropagation();
 				}
-				evt.stopPropagation();
 			}
 			on(image[0].parentNode, "mousemove", move);
 			on(image[0].parentNode, "touchmove", move);
