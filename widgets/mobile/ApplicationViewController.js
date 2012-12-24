@@ -14,7 +14,7 @@ define([
 		mask: null,	
 		
 		constructor: function(args) {
-			
+			Window = this;
 		},	
 		
 		postCreate: function() {

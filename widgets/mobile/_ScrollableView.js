@@ -98,6 +98,7 @@ define([
 		
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing) {
 			this.onScroll.apply(this, [to]);
+			this.onSlide.apply(this, [to]);
 			if(this.pullToRefresh && !this.pullToRefreshNode.loading) {
 				if(this.getPos().y > 80 && to.y == 0) {
 					to.y = 80;
@@ -144,6 +145,10 @@ define([
 		},
 		
 		onScroll: function(){
+			
+		},
+		
+		onSlide: function(){
 			
 		}
 		

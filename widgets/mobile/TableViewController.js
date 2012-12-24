@@ -13,9 +13,10 @@ define([
 	'dojox/mobile/RoundRectList', 
 	'dojox/mobile/RoundRectCategory', 
 	'dojo/date/locale',
-	'dojo/has', 
+	'dojo/has',
+	'dojo/_base/lang', 
 	'spin/Spin'], 
-	function(declare, on, ViewController, ScrollableView, SearchBar, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has) {
+	function(declare, on, ViewController, ScrollableView, SearchBar, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has, lang) {
 	
 	return declare('saga.TableViewController', [ViewController], {
 				
@@ -46,6 +47,8 @@ define([
 		searchBar: null,
 		
 		searchBarFixed: false,
+		
+		swapHeader: null,
 						
 		constructor: function(args) {
 			if(args) {
@@ -57,10 +60,6 @@ define([
 				this._containerClass = args.containerClass;
 				this._transparentBg = args.transparentBg;
 			}
-			if(has("android") || has("chrome"))
-				this.scrollType = 3;
-			//for(var key in args)
-				//this[key] = args[key];
 		},		
 		
 		postCreate: function() {
@@ -74,11 +73,8 @@ define([
 			scrollableView.placeAt(this.domNode);
 			scrollableView.startup();
 			this.scrollableView = scrollableView;
-
-        	/*if(this.frame)
-        		this.setFrame(this.frame);*/
-        	
-			//this.reload();
+			
+			this.stickHeaders();
 		},
 		
 		reload: function(keepFirstSection) {
@@ -205,40 +201,6 @@ define([
 			});
 		},
 		
-		/*load: function() {
-			this.reload();
-		},*/
-		
-		/*setFrame: function(frame) {
-			if(!this.frame)
-				this.frame = {};
-			
-			if(frame.x) {
-				this.frame.x = frame.x;
-				this.domNode.style.left = frame.x + "px";
-			}
-			if(frame.y) {
-				this.frame.y = frame.y;
-				this.domNode.style.top = frame.y + "px";
-			}
-			if(frame.width) {
-				this.frame.width = frame.width;
-				this.domNode.style.width = frame.width + "px";
-			}
-			if(frame.height) {
-				this.frame.height = frame.height;
-				this.domNode.style.height = frame.height + "px";
-			}
-			
-			if(this._pullToRefresh) {
-				this._pullDownDiv.style.width = frame.width + "px";
-				this._pullDownDiv.statusDiv.style.width = frame.width + "px";
-				this._pullDownDiv.lastUpdateDiv.style.width = frame.width + "px";
-				this._pullDownDiv.arrowImg.style.left = ((frame.width -320)/2 + 25) + "px";
-				this._pullDownDiv.spinner.style.left = ((frame.width -320)/2 + 40) + "px";
-			}
-		},*/
-		
 		numberOfSections: 0,
 		
 		numberOfRowsInSection: function(section) {
@@ -313,7 +275,7 @@ define([
 			this.scrollableView.tableViewDataSourceReloadDone();
 		},
 		
-		setWidth:function(width) {
+		/*setWidth:function(width) {
 			if(this._type == "EdgeToEdge") {
 				this.domNode.style.width = width+"px";
 				this._cellsContainer.domNode.style.width = width+"px";
@@ -325,7 +287,7 @@ define([
 				this.domNode.style.width = width+"px";
 				this._cellsContainer.domNode.style.width = (width-marginside*2)+"px";
 			}
-		},
+		},*/
 		
 		addSearchBar: function(fixed){
 			var searchBar = new SearchBar();
@@ -338,17 +300,81 @@ define([
 			this.searchBar = searchBar;
 		},
 		
-		handlePullDownArrow: function(height){
-			debugger;
-			if(height > 65){
-				this.arrowImg.style["-webkit-transform"] = "rotate(360deg)";
+		sectionSize: function(section){
+			var sectionSize = 0;
+			var header = this.existingViewForHeaderInSection(section);
+			if(header){
+				var headerNode = header.domNode?header.domNode:header;
+				sectionSize = headerNode.clientHeight;	
 			}
-			else if(height < 5){
-				this.arrowImg.style["-webkit-transform"] = "rotate(180deg)";
+			for(var i = 0; i < this.numberOfRowsInSection(section); i++){
+				var row = this.existingCellForRowAtIndexPath({section:section, row:i});
+				if(row){
+					var rowNode = row.domNode?row.domNode:row;
+					sectionSize += rowNode.clientHeight;	
+				}
 			}
-			else{
-				this.arrowImg.style["-webkit-transform"] = "rotate("+(180+(height-5)*3)+"deg)";
+			return sectionSize;
+		},
+		
+		stickHeaders: function(){
+			var swapHeader = domConstruct.create("div", {id:"swapHeader", style:"position:absolute;top:0px;left:0px;width:"+this.frame.width+"px;"}, this.domNode);
+			this.swapHeader = swapHeader;
+			
+			var me = this;
+			var getCurrentSection = function(curY){
+				if(curY > 0)
+					return -1;
+				var numberOfSections = typeof me.numberOfSections == "function"?me.numberOfSections():me.numberOfSections;
+				var totalSize = 0; 
+				for(var i = 0; i < numberOfSections; i++){
+					totalSize += me.sectionSize(i);
+					if(totalSize > -curY)
+						return i; 
+				}
+				return numberOfSections-1;
 			}
+			
+			var currentSwapSection = -1;
+			var handleSwap = function(){
+				var curY = me.scrollableView.getPos().y;
+				var currentSection = getCurrentSection(curY);
+				if(currentSection != currentSwapSection){
+					currentSwapSection = currentSection;
+					domConstruct.empty(me.swapHeader);
+					if(currentSwapSection != -1){
+						var header = me.existingViewForHeaderInSection(currentSwapSection);
+						if(header){
+							var headerNode = header.domNode?header.domNode:header;
+							domConstruct.place(lang.clone(headerNode), me.swapHeader);
+						}
+					}
+				}
+				var sectionsSize = 0;
+				for(var i = 0; i <= currentSection; i++)
+					sectionsSize += me.sectionSize(i);
+				me.swapHeader.style.top = Math.min(0, sectionsSize-me.swapHeader.clientHeight+curY)+"px";
+			}
+			
+			on(this.scrollableView, "scroll", function(to){
+				//console.log("scroll from: "+me.scrollableView.getPos().y+" to:"+to.y);
+				if(me.swapInterval)
+					clearInterval(me.swapInterval);
+				handleSwap();
+			});
+			
+			on(this.scrollableView, "slide", function(to){
+				//console.log("slide from: "+me.scrollableView.getPos().y+" to:"+to.y);
+				if(me.swapInterval)
+					clearInterval(me.swapInterval);
+				
+				me.swapInterval = setInterval(function(){
+					handleSwap();
+					var curY = me.scrollableView.getPos().y;
+					if(curY == to.y)
+						clearInterval(me.swapInterval);
+				}, 1);
+			});
 		},
 		
 		addContainerClass: function(cl){
@@ -359,23 +385,6 @@ define([
 			dojo.forEach(this.scrollableView.containerNode.children, function(ul, i){
 				domClass.add(ul, cl);
 			});
-		},
-		
-		_loadCss: function(path, id) {
-			var e = document.createElement("link");
-			e.href = path;
-			e.type = "text/css";
-			e.rel = "stylesheet";
-			e.media = "screen";
-			if(id)
-				e.id = id;
-			document.getElementsByTagName("head")[0].appendChild(e);
-		},
-		
-		_unloadCss: function(id){
-			var el = document.getElementById(id);
-			if(el)
-				domConstruct.destroy(el);
 		},
 		
 		handleCellTexts: function(){
