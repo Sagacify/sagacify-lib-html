@@ -49,6 +49,8 @@ define([
 		searchBarFixed: false,
 		
 		swapHeader: null,
+		
+		stickedHeaders: false,
 						
 		constructor: function(args) {
 			if(args) {
@@ -74,7 +76,8 @@ define([
 			scrollableView.startup();
 			this.scrollableView = scrollableView;
 			
-			this.stickHeaders();
+			if(this.stickedHeaders)
+				this.stickHeaders();
 		},
 		
 		reload: function(keepFirstSection) {
