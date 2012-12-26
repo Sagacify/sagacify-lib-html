@@ -1,6 +1,6 @@
 define([
 	'dojo/_base/declare', 
-	'dojox/mobile/SwapView',
+	'dojox/mobile/SwapView'
 	], 
 	
 	function(declare, SwapView){
@@ -41,7 +41,7 @@ define([
 			this._beingFlipped = true;
 			this.inherited(arguments);
 			this._beingFlipped = false;
-		},
+		}
 
 	});
 });

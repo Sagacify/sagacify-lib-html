@@ -11,6 +11,8 @@ define([
 		
 		scrollableViewController: null,
 		
+		bgImgSrc: null,
+		
 		constructor: function(args) {
 			
 		},	
@@ -29,7 +31,7 @@ define([
 			backScrollableView.domNode.style.background = "black";
 			backScrollableView.placeAt(div);
 			backScrollableView.startup();
-			domConstruct.create("img", {width:frame.width, src:"http://pcdn.500px.net/20811705/dd5b15fc4cd24a988adf476bdd87af4c65a38e6c/4.jpg"}, backScrollableView.containerNode);
+			domConstruct.create("img", {width:frame.width, style:"width:"+frame.width+"px", src:this.bgImgSrc}, backScrollableView.containerNode);
 			backScrollableView.containerNode.style.top = "-170px";
 			
 			domConstruct.create("div", {style:"background:transparent;height:100px"}, this.scrollableViewController.scrollableView.containerNode, "first");
@@ -52,7 +54,7 @@ define([
 					backScrollableView.scrollTo({y:to.y/3});
 				}
 			});	
-		},
+		}
 		
 		
 	});

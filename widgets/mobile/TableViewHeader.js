@@ -15,7 +15,7 @@ define([
 		
 		postCreate: function() {
 			
-		},
+		}
 
 	});
 });

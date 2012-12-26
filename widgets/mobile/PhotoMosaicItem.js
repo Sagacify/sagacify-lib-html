@@ -23,7 +23,7 @@ define([
         		evt.preventDefault();
         	});
         	this.imgNode.src = this.src;
-		},
+		}
 		
 	});
 });

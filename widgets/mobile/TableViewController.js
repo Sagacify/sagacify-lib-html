@@ -14,8 +14,7 @@ define([
 	'dojox/mobile/RoundRectCategory', 
 	'dojo/date/locale',
 	'dojo/has',
-	'dojo/_base/lang', 
-	'spin/Spin'], 
+	'dojo/_base/lang'], 
 	function(declare, on, ViewController, ScrollableView, SearchBar, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has, lang) {
 	
 	return declare('saga.TableViewController', [ViewController], {

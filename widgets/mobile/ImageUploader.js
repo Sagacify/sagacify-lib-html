@@ -2,13 +2,13 @@ define([
 	'dojo/_base/declare',
 	'saga/widgets/_Widget',
 	'dojo/on',
-	'app/stores/UserStore',
-	'app/stores/ImageStore',
 	'dojo/text!./templates/ImageUploader.html',
 	'saga/utils/AndroidFix'], 
 
-	function(declare, _Widget, on, UserStore, ImageStore, template, AndroidFix) {
+	function(declare, _Widget, on, template, AndroidFix) {
 		return declare('i4.ImageUploader', [_Widget], {
+			
+			imageStore: null,
 			
 			templateString : template,
 			
@@ -71,7 +71,7 @@ define([
 			
 			uploadImage: function(device, callback) {
 	    		function onSuccess(img64) {
-					return ImageStore.singleton().createImage({type:"base64", img:img64}).then(function(image){
+					return this.imageStore.createImage({type:"base64", img:img64}).then(function(image){
 						callback(null, image);
 					}, function(error){
 						callback(error);

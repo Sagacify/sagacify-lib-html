@@ -19,7 +19,7 @@ define([
 			on(this.linkNode, "click", function(evt){
 				evt.preventDefault();
 			});
-		},
+		}
 		
 	});
 });
