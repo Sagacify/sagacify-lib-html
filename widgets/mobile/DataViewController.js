@@ -67,7 +67,8 @@ define([
 			else{
 				var me = this;
 				var filteredData = this.data.filter(function(item){
-					return item[me.dataItemFilterKey].substring(0, text.length).toLowerCase() == text.toLowerCase();
+					//return item[me.dataItemFilterKey].substring(0, text.length).toLowerCase() == text.toLowerCase();
+					return item[me.dataItemFilterKey].match(new RegExp(text, "gi"));
 				});	
 				this.processData(filteredData);	
 			}

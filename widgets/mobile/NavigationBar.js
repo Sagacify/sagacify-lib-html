@@ -31,7 +31,7 @@ define([
 			on(this.cancelButton, "click", function(evt){
 				evt.preventDefault();
 			});
-			on(this.addUserButton, "click", function(evt){
+			on(this.addButton, "click", function(evt){
 				evt.preventDefault();
 			});
 			on(this.infoButton, "click", function(evt){
