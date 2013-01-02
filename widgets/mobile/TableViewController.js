@@ -113,6 +113,7 @@ define([
 			if(!(numberOfSections > -1))
 				numberOfSections = this.numberOfSections();
 			
+			var noItem = true;
 			for (var i = keepFirstSection?1:0; i < numberOfSections; i++) {
 				
 				var header = this.viewForHeaderInSection(i);
@@ -148,6 +149,7 @@ define([
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);
 				for (var j = 0; j < numberOfRowsInSection; j++) {
+					noItem = false;
 					var cell = this.cellForRowAtIndexPath({section:i, row:j});
 					if (cell) {
 						if(cell.domNode)
@@ -160,8 +162,19 @@ define([
 					//cell.setDelegate({delegate:this, indexPath:{section:i, row:j}});
 				}
 				this._cellsBySection.push(cells);
-				this.scrollableView.containerNode.appendChild(cellsContainer.domNode);	
+				this.scrollableView.containerNode.appendChild(cellsContainer.domNode);
+				if(noItem){
+					var cell = this.cellForNoItem();
+					if(cell) {
+						if(cell.domNode)
+							cellsContainer.addChild(cell);
+						else
+							cellsContainer.domNode.appendChild(cell);
+					}
+				}	
 			}
+			
+			
 					
 			var me = this;
 			dojo.forEach(this._cellsBySection, function(cells, i){
@@ -231,6 +244,9 @@ define([
 			}
 		},
 		
+		cellForNoItem: function(){
+			//To be implemented by subclasses
+		},
 		
 		existingViewForHeaderInSection: function(section) {
 			return this._headers[section];
