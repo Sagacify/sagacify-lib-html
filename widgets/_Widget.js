@@ -1,7 +1,7 @@
 define(['dijit/_Widget', 'dijit/_TemplatedMixin', 'dijit/_WidgetsInTemplateMixin', 'dojo/dom-construct'], 
 function(_Widget, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct) {
 	
-	return dojo.declare('bizComp._Widget', [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
+	return dojo.declare('saga._Widget', [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 			
 		templateString: "<div></div>",	
 		
