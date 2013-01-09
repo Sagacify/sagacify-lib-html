@@ -52,35 +52,41 @@ define([
 		},
 		
 		presentNumPad: function(){
-			if(!this.numPad){
-				this.numPad = new NumPad();
-				this.numPad.domNode.style.top = this.domNode.clientHeight+"px";
-				this.numPad.domNode.style.left = "0px";
-				this.numPad.domNode.style.zIndex = "2";
-				this.numPad.domNode.style.position = "absolute";
-				this.numPad.placeAt(this.domNode);
-				this.numPadVisible = false;
-				var me = this;
-				this.numPad.on("afterTransitionOut", function(){
-					if(!me.numPadVisible){
-						me.numPad.domNode.style.display = "";
-						me.numPad.domNode.style.top = (me.domNode.clientHeight-me.numPad.domNode.clientHeight)+"px";
-						me.numPad.domNode.style.left = "0px";
-						me.numPadVisible = true;
-					}
-					else{
-						me.numPad.domNode.style.top = me.domNode.clientHeight+"px";
-						me.numPadVisible = false;
-					}
-				});
-			}
+			if(this.numPadVisible)
+				return;
 			this.numPad.domNode.style.display = "";
 			this.numPad.performTransition(null, 1, "revealv", null);
 		},
 		
 		dismissNumPad: function(){
+			if(!this.numPadVisible)
+				return;
 			this.numPad.performTransition(null, -1, "revealv", null);
 		},
+		
+		startup: function(){
+			this.numPad = new NumPad();
+			this.numPad.domNode.style.top = this.frame.height+"px";
+			this.numPad.domNode.style.left = "0px";
+			this.numPad.domNode.style.zIndex = "2";
+			this.numPad.domNode.style.position = "absolute";
+			this.numPad.domNode.style.display = "none";
+			this.numPad.placeAt(this.domNode);
+			this.numPadVisible = false;
+			var me = this;
+			this.numPad.on("afterTransitionOut", function(){
+				if(!me.numPadVisible){
+					me.numPad.domNode.style.display = "";
+					me.numPad.domNode.style.top = (me.domNode.clientHeight-me.numPad.domNode.clientHeight)+"px";
+					me.numPad.domNode.style.left = "0px";
+					me.numPadVisible = true;
+				}
+				else{
+					me.numPad.domNode.style.top = me.domNode.clientHeight+"px";
+					me.numPadVisible = false;
+				}
+			});
+		}
 
 	});
 });

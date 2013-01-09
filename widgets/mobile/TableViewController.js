@@ -6,7 +6,8 @@ define([
 	'saga/widgets/mobile/SearchBar',
 	'dojo/Evented', 
 	'dojo/dom-construct',
-	'dojo/dom-class', 
+	'dojo/dom-class',
+	'dojo/dom-style',
 	'dojo/query', 
 	'dojox/mobile/EdgeToEdgeList', 
 	'dojox/mobile/EdgeToEdgeCategory', 
@@ -15,7 +16,7 @@ define([
 	'dojo/date/locale',
 	'dojo/has',
 	'dojo/_base/lang'], 
-	function(declare, on, ViewController, ScrollableView, SearchBar, Evented, domConstruct, domClass, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has, lang) {
+	function(declare, on, ViewController, ScrollableView, SearchBar, Evented, domConstruct, domClass, domStyle, query, EdgeToEdgeList, EdgeToEdgeCategory, RoundRectList, RoundRectCategory, locale, has, lang) {
 	
 	return declare('saga.TableViewController', [ViewController], {
 				
@@ -80,6 +81,7 @@ define([
 		},
 		
 		reload: function(keepFirstSection) {
+			
 			this.inherited(arguments);
 			dojo.forEach(this._headers, function(header, i){
 				if(header){
@@ -100,14 +102,13 @@ define([
 					}
 				});
 			});
-			
 			this._headers = [];
 			if(keepFirstSection)
 				this._cellsBySection = [this._cellsBySection[0]];
 			else
 				this._cellsBySection = [];
-			
-			this.scrollableView.scrollTo({x:0, y:0});
+
+			//this.scrollableView.scrollTo({x:0, y:0});
 			
 			var numberOfSections = this.numberOfSections;
 			if(!(numberOfSections > -1))
@@ -128,7 +129,7 @@ define([
 				var cells = [];
 				
 				var cellsContainer;
-				if (this._type == "RoundRect") {
+				/*if (this._type == "RoundRect") {
 					cellsContainer = new RoundRectList();
 					//fix the size between the edge of the table and the cells					
 					if(this._options && this._options.roundrect_marginside) {
@@ -145,7 +146,8 @@ define([
 				if(this._containerClass){
 					domClass.remove(cellsContainer.domNode);
 					domClass.add(cellsContainer.domNode, this._containerClass);
-				}
+				}*/
+				cellsContainer = domConstruct.create("ul", {"class":this.classForSection(i)});
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);
 				for (var j = 0; j < numberOfRowsInSection; j++) {
@@ -153,27 +155,28 @@ define([
 					var cell = this.cellForRowAtIndexPath({section:i, row:j});
 					if (cell) {
 						if(cell.domNode)
-							cellsContainer.addChild(cell);
+							cellsContainer.appendChild(cell.domNode);
+							//cellsContainer.addChild(cell);
 						else
-							cellsContainer.domNode.appendChild(cell);
+							cellsContainer.appendChild(cell);
 					}
 						
 					cells.push(cell);
 					//cell.setDelegate({delegate:this, indexPath:{section:i, row:j}});
 				}
 				this._cellsBySection.push(cells);
-				this.scrollableView.containerNode.appendChild(cellsContainer.domNode);
+				this.scrollableView.containerNode.appendChild(cellsContainer);
 				if(noItem){
 					var cell = this.cellForNoItem();
 					if(cell) {
 						if(cell.domNode)
-							cellsContainer.addChild(cell);
+							cellsContainer.appendChild(cell.domNode);
+							//cellsContainer.addChild(cell);
 						else
-							cellsContainer.domNode.appendChild(cell);
+							cellsContainer.appendChild(cell);
 					}
 				}	
 			}
-			
 			
 					
 			var me = this;
@@ -248,6 +251,10 @@ define([
 			//To be implemented by subclasses
 		},
 		
+		classForSection: function(section){
+			//To be implemented by subclasses
+		},
+		
 		existingViewForHeaderInSection: function(section) {
 			return this._headers[section];
 		},
@@ -264,11 +271,14 @@ define([
 			var to = {x:0, y:0};
 			for(var i = 0; i < section; i++) {
 				to.y -= this._headers[i].domNode?this._headers[i].domNode.clientHeight:this._headers[i].clientHeight;
-				//to.y -= 2;
-				for(var j = 0; j < this._cellsBySection[i].length; j++) {
-					to.y -= this._cellsBySection[i][j].domNode.clientHeight;
-					//to.y -= 1;
+
+				if(this._cellsBySection[i].length > 0){
+					var cs = domStyle.getComputedStyle(this._cellsBySection[i][0].domNode.parentNode);
+					to.y -= (this._cellsBySection[i][0].domNode.parentNode.clientHeight+parseInt(cs.marginTop, 10)+parseInt(cs.marginBottom, 10));
 				}
+				//for(var j = 0; j < this._cellsBySection[i].length; j++) {
+					//to.y -= this._cellsBySection[i][j].domNode.clientHeight;
+				//}
 			}
 			if(this.searchBar && !this.searchBarFixed)
 				to.y -= this.searchBar.height;

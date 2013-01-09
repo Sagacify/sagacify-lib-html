@@ -16,6 +16,14 @@ define([
 		
 		title: null,
 		
+		buttonHeight: 39,
+		
+		cancelButtonClass: "",
+		
+		destructiveButtonClass: "",
+		
+		otherButtonClass: "",
+		
 		cancelButtonTitle: null,
 		
 		destructiveButtonTitle: null,
@@ -23,12 +31,7 @@ define([
 		otherButtonTitles: [],
 		
 		constructor: function(args) {
-			if(args) {
-				this.title = args.title;
-				this.cancelButtonTitle = args.cancelButtonTitle;
-				this.destructiveButtonTitle = args.destructiveButtonTitle;
-				this.otherButtonTitles = args.otherButtonTitles; 
-			}
+			
 		},
 		
 		postCreate: function() {
@@ -43,9 +46,9 @@ define([
 			this.domNode.style.background = "rgb(70,70,70)";
 			//this.domNode.style.zIndex = 10;
 			this.domNode.style.width = Window.frame.width+"px";
-			var height = 40 + 40 + 39*this.otherButtonTitles.length;
+			var height = 44 + 45 + (this.buttonHeight+5)*this.otherButtonTitles.length;
 			if(this.destructiveButtonTitle)
-				height += 39;
+				height += this.buttonHeight;
 			this.domNode.style.height = height+"px";
 			
 			var me = this;
@@ -54,8 +57,8 @@ define([
 			if(this.destructiveButtonTitle) {
 				button = new Button({label:this.destructiveButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
 				button.placeAt(this.domNode);
-				domClass.add(button.domNode, "mblRedButton");
-				top += 39;
+				domClass.add(button.domNode, this.destructiveButtonClass);
+				top += this.buttonHeight;
 				on(button.domNode, "click", function(){
 					me.onDestructiveButtonPressed.apply(me);
 				});
@@ -63,8 +66,9 @@ define([
 			
 			dojo.forEach(this.otherButtonTitles, function(otherButtonTitle, i) {
 				button = new Button({label:otherButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
+				domClass.add(button.domNode, me.otherButtonClass);
 				button.placeAt(me.domNode);
-				top += 39;
+				top += me.buttonHeight+5;
 				on(button.domNode, "click", function(){
 					me.onOtherButtonPressed.apply(me, [{"index":i}]);
 				});
@@ -79,7 +83,7 @@ define([
 				button = new Button({label:"Cancel", style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
 				button.placeAt(this.domNode);
 			}
-			domClass.add(button.domNode, "blackBtn");
+			domClass.add(button.domNode, this.cancelButtonClass);
 			on(button.domNode, "click", function(){
 				me.onCancelButtonPressed.apply(me);
 			});

@@ -22,16 +22,16 @@ define([
 		
 		postCreate: function() {
 			this.inherited(arguments);
-			on(this.revealButton, "click", function(evt){
+			/*on(this.revealButton, "click", function(evt){
 				evt.preventDefault();
-			});
+			});*/
 			on(this.backButton, "click", function(evt){
 				evt.preventDefault();
 			});
-			on(this.cancelButton, "click", function(evt){
+			/*on(this.addButton, "click", function(evt){
 				evt.preventDefault();
 			});
-			on(this.addButton, "click", function(evt){
+			on(this.cancelButton, "click", function(evt){
 				evt.preventDefault();
 			});
 			on(this.infoButton, "click", function(evt){
@@ -47,7 +47,7 @@ define([
 			this.cancelImg.src = svgSupport?"saga/widgets/mobile/Assets/img/remove.svg":"saga/widgets/mobile/Assets/img/remove.png";
 			this.addUserImg.src = svgSupport?"saga/widgets/mobile/Assets/img/add.svg":"saga/widgets/mobile/Assets/img/add.png";
 			this.settingsImg.src = svgSupport?"saga/widgets/mobile/Assets/img/settings.svg":"saga/widgets/mobile/Assets/img/settings.png";
-			this.infoImg.src = svgSupport?"saga/widgets/mobile/Assets/img/info.svg":"saga/widgets/mobile/Assets/img/info.png";
+			this.infoImg.src = svgSupport?"saga/widgets/mobile/Assets/img/info.svg":"saga/widgets/mobile/Assets/img/info.png";*/
 			
 			var me = this;
 			dojo.forEach(this.domNode.children, function(child, i){
