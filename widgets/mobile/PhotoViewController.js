@@ -5,9 +5,10 @@ define([
 	'saga/widgets/mobile/_SwapView',
 	'dojox/mobile/PageIndicator',
 	'dojo/dom-construct',
+	'dojo/dom-style',
 	'dojo/on'], 
 	
-	function(declare, ViewController, View, SwapView, PageIndicator, domConstruct, on) {
+	function(declare, ViewController, View, SwapView, PageIndicator, domConstruct, domStyle, on) {
 	
 	return declare('saga.PhotoViewController', [ViewController], {
 		
@@ -19,6 +20,8 @@ define([
 		
 		pageIndicator: false,
 		
+		_swapViews: null,
+		
 		constructor: function(args) {
 
 		},
@@ -29,6 +32,7 @@ define([
 			var me = this;
         	var swapViewToShow;
         	this.imageNodes = [];
+        	this._swapViews = [];
         	dojo.forEach(this.images, function(image, i){
         		var view = new View();
 	        	view.domNode.style.width = (me.frame.width)+"px";
@@ -49,6 +53,7 @@ define([
  	        		img.style.top = img.frame.y+"px";
  	        	}
         		var swapView = new SwapView({selected:true});
+        		me._swapViews.push(swapView);
         		swapView.domNode.style.width = (me.frame.width)+"px";
         		swapView.domNode.style.height = (me.frame.height)+"px";
 	  			swapView.addChild(view);
@@ -69,6 +74,13 @@ define([
         	}
         	
         	
+		},
+		
+		getVisibleIndex: function(){
+			for(var i = 0; i < this._swapViews.length; i++){
+				if(domStyle.getComputedStyle(this._swapViews[i].domNode).display != "none")
+					return i;
+			}
 		},
 		
 		addZoom: function(){

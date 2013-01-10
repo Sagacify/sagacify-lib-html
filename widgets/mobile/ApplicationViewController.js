@@ -68,7 +68,6 @@ define([
 			this.numPad = new NumPad();
 			this.numPad.domNode.style.top = this.frame.height+"px";
 			this.numPad.domNode.style.left = "0px";
-			this.numPad.domNode.style.zIndex = "2";
 			this.numPad.domNode.style.position = "absolute";
 			this.numPad.domNode.style.display = "none";
 			this.numPad.placeAt(this.domNode);

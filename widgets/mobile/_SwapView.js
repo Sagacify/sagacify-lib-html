@@ -12,6 +12,7 @@ define([
 	return declare("saga.mobile._SwapView", [SwapView], {
 		
 		scrollTo: function(/*Object*/to){
+			console.log("scrollto")
 			if(!this._beingFlipped){
 				var newView, x;
 				if(to.x < 0){

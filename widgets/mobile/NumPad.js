@@ -12,6 +12,8 @@ define([
 	return declare('saga.NumPad', [_Widget, View], {
 		
 		templateString: template,
+		
+		focus: false,
 				
 		constructor: function(args) {
 			
@@ -46,6 +48,13 @@ define([
 				on(li, "touchend", function(evt){
 					domClass.remove(li, "selected");					
 				});
+			});
+			
+			on(this.domNode, "focus", function(evt){
+				me.focus = true;
+			});
+			on(this.domNode, "blur", function(evt){
+				me.focus = false;
 			});
 		},
 		
