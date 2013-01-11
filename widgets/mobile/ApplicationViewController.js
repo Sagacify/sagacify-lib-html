@@ -68,50 +68,69 @@ define([
 		
 		presentLoadingBar: function(){
 			var me = this;
-			console.log(this.loadingBar.status);
-			if(this.loadingBar.status == "loading" || this.loadingBar.status == "transitionToLoading" || this.loadingBar.status == "loadingToDismiss"){
-				this.loadingBar.counter++;
+			/*if(this.loadingBar.status == "loading" || this.loadingBar.status == "transitionToLoading" || this.loadingBar.status == "loadingToDismiss"){
+				this.loadingBar.counter
 				return;	
+			}*/
+			this.loadingBar.counter++;
+			console.log("loading: "+this.loadingBar.counter);
+			if(this.loadingBar.counter > 1)
+				return;
+			//this.loadingBar.performTransition(null, -1, "revealv", null);
+			//this.loadingBar.status = "transitionToLoading";
+			if(this.currentPresentLoadingBarAnimation)
+				return;
+			if(this.currentPresentDismissBarAnimation){
+				this.currentPresentDismissBarAnimation.stop();
+				this.currentPresentDismissBarAnimation = null;
+				return;
 			}
+			
 			this.loadingBar.domNode.style.display = "";
 			this.loadingBar.domNode.style.opacity = 1;
 			this.loadingBar.domNode.style.top = "-50px";
-			//this.loadingBar.performTransition(null, -1, "revealv", null);
-			this.loadingBar.status = "transitionToLoading";
-			fx.animateProperty({
+			this.currentPresentLoadingBarAnimation = fx.animateProperty({
 				node:me.loadingBar.domNode,
 				duration:200,
 				properties:{
 					top:0
 				},
 				onEnd: function(){
-					me.loadingBar.domNode.style.display = "";
-					me.loadingBar.domNode.style.top = "0px";
+					//me.loadingBar.domNode.style.display = "";
+					//me.loadingBar.domNode.style.top = "0px";
 					/*if(me.loadingBar.status == "loadingToDismiss")
 						me.dismissLoadingBar();
 					else*/
-						me.loadingBar.status = "loading";
+				//		me.loadingBar.status = "loading";
+					me.currentPresentLoadingBarAnimation = null;
 				}
 			}).play();
 		},
 		
 		dismissLoadingBar: function(){
-			console.log(this.loadingBar.status);
 			this.loadingBar.counter--;
-			console.log(this.loadingBar.counter);
-			if(this.loadingBar.status == "loaded"/* || this.loadingBar.counter > 0*/)
+			console.log("unloading: "+this.loadingBar.counter);
+			if(this.loadingBar.counter > 0)
 				return;
-			/*if(this.loadingBar.status == "transitionToLoading")
+			
+			/*if(this.loadingBar.status == "loaded" || this.loadingBar.counter > 0)
+				return;
+			if(this.loadingBar.status == "transitionToLoading")
 				this.loadingBar.status = "loadingToDismiss";
 			else{*/
-				var me = this;
-				fx.fadeOut({
-					node:me.loadingBar.domNode,
-					onEnd:function(){
-						me.loadingBar.domNode.style.display = "none";
-						me.loadingBar.status = "loaded";
-					}
-				}).play();
+			if(this.currentPresentDismissBarAnimation)
+				return;
+			
+			var me = this;
+			this.currentPresentDismissBarAnimation = fx.fadeOut({
+				node:me.loadingBar.domNode,
+				onEnd:function(){
+					me.loadingBar.domNode.style.display = "none";
+					//me.loadingBar.status = "loaded";
+					console.log("end fadeout")
+					me.currentPresentDismissBarAnimation = null;
+				}
+			}).play();
 			//}
 		},
 		
@@ -137,26 +156,24 @@ define([
 				}
 			});
 			
-			if(!this.loadingBar){
-				var loadingBar = new LoadingBar();
-				loadingBar.setWidth(this.frame.width);
-				loadingBar.domNode.style.position = "absolute";
-				loadingBar.domNode.style.display = "none";
-				loadingBar.domNode.style.zIndex = 100;
-				loadingBar.status = "loaded";
-				loadingBar.counter = 0;
-				loadingBar.placeAt(this.domNode);
-				this.loadingBar = loadingBar;
-				var me = this;
-				/*this.loadingBar.on("afterTransitionOut", function(){
-					me.loadingBar.domNode.style.display = "";
-					me.loadingBar.domNode.style.top = "0px";
-					if(me.loadingBar.status == "loadingToDismiss")
-						me.dismissLoadingBar();
-					else
-						me.loadingBar.status = "loading";
-				});*/
-			}
+			var loadingBar = new LoadingBar();
+			loadingBar.setWidth(this.frame.width);
+			loadingBar.domNode.style.position = "absolute";
+			loadingBar.domNode.style.display = "none";
+			loadingBar.domNode.style.zIndex = 100;
+			loadingBar.status = "loaded";
+			loadingBar.counter = 0;
+			loadingBar.placeAt(this.domNode);
+			this.loadingBar = loadingBar;
+			var me = this;
+			/*this.loadingBar.on("afterTransitionOut", function(){
+				me.loadingBar.domNode.style.display = "";
+				me.loadingBar.domNode.style.top = "0px";
+				if(me.loadingBar.status == "loadingToDismiss")
+					me.dismissLoadingBar();
+				else
+					me.loadingBar.status = "loading";
+			});*/
 		}
 
 	});

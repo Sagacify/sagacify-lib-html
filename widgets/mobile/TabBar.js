@@ -12,7 +12,7 @@
 	
 	return declare('saga.TabBar', [_Widget], {
 		
-		buttons: [],
+		buttons: null,
 		
 		width: 320,
 		
@@ -27,6 +27,7 @@
 		postCreate: function() {
 			this.inherited(arguments);
 			this.navNode.style.width = this.width+"px";
+			this.buttons = [];
 		},
 		
 		addButton: function(tabBarButton){

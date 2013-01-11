@@ -31,9 +31,28 @@ define([
 		},
 		
 		setWidth: function(width){
+			this.width = width;
 			this.domNode.style.width = width+"px";
 			this.spinner.el.style.left = (width/2-45)+"px";
 			this.labelNode.style.left = (width/2-20)+"px";
+			
+			this.specialLabelNode.style.left = "20px";
+			this.specialLabelNode.style.width = (width-40)+"px";
+		},
+		
+		setSpecialMessage: function(message){
+			this.domNode.style.height = "90px";
+			this.specialLabelNode.style.display = "";
+			this.specialLabelNode.innerHTML = message;
+			this.labelNode.style.display = "none";
+			this.spinner.el.style.left = (this.width/2)+"px";
+		},
+		
+		removeSpecialMessage: function(message){
+			this.domNode.style.height = "50px";
+			this.specialLabelNode.style.display = "none";
+			this.labelNode.style.display = "";
+			this.spinner.el.style.left = (this.width/2-45)+"px";
 		}
 		
 	});
