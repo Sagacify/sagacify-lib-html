@@ -142,6 +142,8 @@ define([
 			this._viewControllers[0].performTransition(viewController.id, 1, "slide", null);
 			var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
 			this._viewControllers[0].on("afterTransitionOut", function(){
+				if(typeof viewController.viewDidAppear == "function")
+					viewController.viewDidAppear();
 				if(viewController.domNode){
 					viewController.domNode.style.height = viewController.frame.height+"px"; 
 					domConstruct.destroy(fakediv);

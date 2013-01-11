@@ -4,9 +4,11 @@ define([
 	'saga/widgets/mobile/Alert',
 	'saga/widgets/mobile/NumPad',
 	'dojo/dom-construct',
-	'dojo/on'], 
+	'dojo/on',
+	'saga/widgets/mobile/LoadingBar',
+	'dojo/_base/fx'], 
 	
-	function(declare, ViewController, Alert, NumPad, domConstruct, on) {
+	function(declare, ViewController, Alert, NumPad, domConstruct, on, LoadingBar, fx) {
 	
 	return declare('saga.ApplicationViewController', [ViewController], {
 		
@@ -64,6 +66,55 @@ define([
 			this.numPad.performTransition(null, -1, "revealv", null);
 		},
 		
+		presentLoadingBar: function(){
+			var me = this;
+			console.log(this.loadingBar.status);
+			if(this.loadingBar.status == "loading" || this.loadingBar.status == "transitionToLoading" || this.loadingBar.status == "loadingToDismiss"){
+				this.loadingBar.counter++;
+				return;	
+			}
+			this.loadingBar.domNode.style.display = "";
+			this.loadingBar.domNode.style.opacity = 1;
+			this.loadingBar.domNode.style.top = "-50px";
+			//this.loadingBar.performTransition(null, -1, "revealv", null);
+			this.loadingBar.status = "transitionToLoading";
+			fx.animateProperty({
+				node:me.loadingBar.domNode,
+				duration:200,
+				properties:{
+					top:0
+				},
+				onEnd: function(){
+					me.loadingBar.domNode.style.display = "";
+					me.loadingBar.domNode.style.top = "0px";
+					/*if(me.loadingBar.status == "loadingToDismiss")
+						me.dismissLoadingBar();
+					else*/
+						me.loadingBar.status = "loading";
+				}
+			}).play();
+		},
+		
+		dismissLoadingBar: function(){
+			console.log(this.loadingBar.status);
+			this.loadingBar.counter--;
+			console.log(this.loadingBar.counter);
+			if(this.loadingBar.status == "loaded"/* || this.loadingBar.counter > 0*/)
+				return;
+			/*if(this.loadingBar.status == "transitionToLoading")
+				this.loadingBar.status = "loadingToDismiss";
+			else{*/
+				var me = this;
+				fx.fadeOut({
+					node:me.loadingBar.domNode,
+					onEnd:function(){
+						me.loadingBar.domNode.style.display = "none";
+						me.loadingBar.status = "loaded";
+					}
+				}).play();
+			//}
+		},
+		
 		startup: function(){
 			this.numPad = new NumPad();
 			this.numPad.domNode.style.top = this.frame.height+"px";
@@ -85,6 +136,27 @@ define([
 					me.numPadVisible = false;
 				}
 			});
+			
+			if(!this.loadingBar){
+				var loadingBar = new LoadingBar();
+				loadingBar.setWidth(this.frame.width);
+				loadingBar.domNode.style.position = "absolute";
+				loadingBar.domNode.style.display = "none";
+				loadingBar.domNode.style.zIndex = 100;
+				loadingBar.status = "loaded";
+				loadingBar.counter = 0;
+				loadingBar.placeAt(this.domNode);
+				this.loadingBar = loadingBar;
+				var me = this;
+				/*this.loadingBar.on("afterTransitionOut", function(){
+					me.loadingBar.domNode.style.display = "";
+					me.loadingBar.domNode.style.top = "0px";
+					if(me.loadingBar.status == "loadingToDismiss")
+						me.dismissLoadingBar();
+					else
+						me.loadingBar.status = "loading";
+				});*/
+			}
 		}
 
 	});

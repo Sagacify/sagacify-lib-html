@@ -33,7 +33,7 @@ define([
 		setWidth: function(width){
 			this.domNode.style.width = width+"px";
 			this.spinner.el.style.left = (width/2-45)+"px";
-			this.labelNode.style.left = (width/2-15)+"px";
+			this.labelNode.style.left = (width/2-20)+"px";
 		}
 		
 	});

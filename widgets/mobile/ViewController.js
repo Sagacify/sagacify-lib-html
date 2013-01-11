@@ -10,9 +10,9 @@ define([
 	'dojox/mobile/SpinWheelDatePicker',
 	'saga/widgets/mobile/NavigationBar',
 	'dojox/mobile/ToolBarButton',
-	'saga/widgets/mobile/LoadingBar',
-	'dojo/on'], 
-	function(declare, config, _Widget, View, ActionSheet, lang, domConstruct, domClass, SpinWheelDatePicker, NavigationBar, ToolBarButton, LoadingBar, on) {
+	'dojo/on',
+	'dojo/_base/fx'], 
+	function(declare, config, _Widget, View, ActionSheet, lang, domConstruct, domClass, SpinWheelDatePicker, NavigationBar, ToolBarButton, on, fx) {
 	
 	return declare('saga.ViewController', [_Widget, View], {
 	
@@ -48,6 +48,7 @@ define([
 			this.inherited(arguments);
 			if(this.frame)
 				this.setFrame(this.frame);
+				
 		},
 		
 		getFrame: function() {
@@ -213,7 +214,9 @@ define([
 			return spinWheelDatePicker;
 		},
 		
-		presentLoadingBar: function(){
+		/*presentLoadingBar: function(){
+			if(this.loadingStatus == "transitionToLoading" || this.loadingStatus == "loading")
+				return;
 			if(!this.loadingBar){
 				var loadingBar = new LoadingBar();
 				loadingBar.setWidth(this.frame.width);
@@ -259,15 +262,18 @@ define([
 		},
 		
 		dismissLoadingBar: function(){
-
+			if(this.loadingStatus == "transitionToLoaded" || this.loadingStatus == "loaded")
+				return;
 			if(this.loadingStatus == "transitionToLoading"){
+				debugger;
 				this.loadingStatus = "loadingToDismiss";	
 			}
 			else{
+				debugger;
 				this.loadingStatus = "transitionToLoaded";
 				this.loadingBar.performTransition(null, 1, "revealv", null);
 			}
-		},
+		},*/
 		
 		_updateNavigationBar: function() {
 			//method to be overidden by the view controller to handle his navigation bar	
