@@ -3,9 +3,10 @@ define([
 	 'saga/widgets/_Widget',
 	 'dojox/mobile/View',
 	 'dojo/text!./templates/LoadingBar.html',
-	 'dojo/_base/config'], 
+	 'dojo/_base/config',
+	 'dojo/_base/fx'], 
 	 
-	 function(declare, _Widget, View, template, config) {
+	 function(declare, _Widget, View, template, config, fx) {
 	
 	return declare('saga.LoadingBar', [_Widget, View], {
 	
@@ -41,18 +42,30 @@ define([
 		},
 		
 		setSpecialMessage: function(message){
-			this.domNode.style.height = "90px";
 			this.specialLabelNode.style.display = "";
 			this.specialLabelNode.innerHTML = message;
 			this.labelNode.style.display = "none";
 			this.spinner.el.style.left = (this.width/2)+"px";
+			fx.animateProperty({
+				node:this.domNode,
+				duration:200,
+				properties:{
+					height:90
+				}
+			}).play();
 		},
 		
 		removeSpecialMessage: function(message){
-			this.domNode.style.height = "50px";
 			this.specialLabelNode.style.display = "none";
 			this.labelNode.style.display = "";
 			this.spinner.el.style.left = (this.width/2-45)+"px";
+			fx.animateProperty({
+				node:this.domNode,
+				duration:200,
+				properties:{
+					height:50
+				}
+			}).play();
 		}
 		
 	});

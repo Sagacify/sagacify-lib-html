@@ -101,18 +101,24 @@ define([
 			this.onSlide.apply(this, [to]);
 			if(this.pullToRefresh && !this.pullToRefreshNode.loading) {
 				if(this.getPos().y > 80 && to.y == 0) {
-					to.y = 80;
-					this._nextSlideDest = to;
-					this.pullToRefreshNode.loading = true;
-					this.tableViewController.reloadTableViewDataSource();
-					//this.emit("reload", {});
-					
-					this.statusDiv.innerHTML = "Loading...";
-					this.arrowImg.style.display = "none";
-					this.pullToRefreshNode.spinner.style.display = "";
-					domClass.remove(this.arrowImg, "endPull");
+					if(this.cancelNextTableViewDataSourceReloadDone){
+						this.cancelNextTableViewDataSourceReloadDone = false;
+					}
+					else{
+						to.y = 80;
+						this._nextSlideDest = to;
+						this.pullToRefreshNode.loading = true;
+						this.tableViewController.reloadTableViewDataSource();
+						//this.emit("reload", {});
+						
+						this.statusDiv.innerHTML = "Loading...";
+						this.arrowImg.style.display = "none";
+						this.pullToRefreshNode.spinner.style.display = "";
+						domClass.remove(this.arrowImg, "endPull");	
+					}
 				}
 			}
+				
 			this.inherited(arguments);
 		},
 		
@@ -136,6 +142,8 @@ define([
 		tableViewDataSourceReloadDone: function() {
 			if(this.pullToRefresh) {
 				this.pullToRefreshNode.loading = false;
+				if(this.getPos().y > 80)
+					this.cancelNextTableViewDataSourceReloadDone = true;
 				this.lastUpdateDiv.innerHTML = "Last update: " + locale.format(new Date(), {selector:"date", datePattern:"MM/dd/yy hh:mm:a"});
 				if(this._nextSlideDest)
 					this._nextSlideDest.y = 0;

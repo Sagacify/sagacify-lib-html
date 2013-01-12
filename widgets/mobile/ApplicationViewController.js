@@ -73,7 +73,7 @@ define([
 				return;	
 			}*/
 			this.loadingBar.counter++;
-			console.log("loading: "+this.loadingBar.counter);
+			//console.log("loading: "+this.loadingBar.counter);
 			if(this.loadingBar.counter > 1)
 				return;
 			//this.loadingBar.performTransition(null, -1, "revealv", null);
@@ -109,7 +109,7 @@ define([
 		
 		dismissLoadingBar: function(){
 			this.loadingBar.counter--;
-			console.log("unloading: "+this.loadingBar.counter);
+			//console.log("unloading: "+this.loadingBar.counter);
 			if(this.loadingBar.counter > 0)
 				return;
 			
@@ -127,7 +127,6 @@ define([
 				onEnd:function(){
 					me.loadingBar.domNode.style.display = "none";
 					//me.loadingBar.status = "loaded";
-					console.log("end fadeout")
 					me.currentPresentDismissBarAnimation = null;
 				}
 			}).play();

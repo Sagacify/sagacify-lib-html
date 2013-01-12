@@ -81,7 +81,6 @@ define([
 		},
 		
 		reload: function(keepFirstSection) {
-			
 			this.inherited(arguments);
 			dojo.forEach(this._headers, function(header, i){
 				if(header){
@@ -102,6 +101,15 @@ define([
 					}
 				});
 			});
+			
+			if(this.noItemCell){
+				if(this.noItemCell.destroyRecursive)
+					this.noItemCell.destroyRecursive();
+				else
+					domConstruct.destroy(this.noItemCell);
+				this.noItemCell = null;
+			}
+			
 			this._headers = [];
 			if(keepFirstSection)
 				this._cellsBySection = [this._cellsBySection[0]];
@@ -113,7 +121,6 @@ define([
 			var numberOfSections = this.numberOfSections;
 			if(!(numberOfSections > -1))
 				numberOfSections = this.numberOfSections();
-			
 			var noItem = true;
 			for (var i = keepFirstSection?1:0; i < numberOfSections; i++) {
 				
@@ -166,17 +173,19 @@ define([
 				}
 				this._cellsBySection.push(cells);
 				this.scrollableView.containerNode.appendChild(cellsContainer);
-				if(noItem){
-					var cell = this.cellForNoItem();
-					if(cell) {
-						if(cell.domNode)
-							cellsContainer.appendChild(cell.domNode);
-							//cellsContainer.addChild(cell);
-						else
-							cellsContainer.appendChild(cell);
-					}
-				}	
 			}
+			
+			if(noItem){
+				var cell = this.cellForNoItem();
+				if(cell) {
+					if(cell.domNode)
+						this.scrollableView.containerNode.appendChild(cell.domNode);
+						//cellsContainer.addChild(cell);
+					else
+						this.scrollableView.containerNode.appendChild(cell);
+					this.noItemCell = cell;
+				}
+			}	
 			
 					
 			var me = this;
