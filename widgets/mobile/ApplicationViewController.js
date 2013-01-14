@@ -26,31 +26,38 @@ define([
 			this.inherited(arguments);
 		},
 		
-		showAlert: function(){
-			if(!this.alert){
-				this.mask = domConstruct.create("div", {style:"background:rgba(0,0,0,0.4);z-index:2;position:absolute;top:0px;left:0px;width:"+this.domNode.clientWidth+"px;height:"+this.domNode.clientHeight+"px"}, this.domNode);
-				var alert = new Alert();
-				alert.placeAt(this.domNode);
-				this.alert = alert;
-				var me = this;
-				$('.modalView a').click(function() {
-					me.dismissAlert();
-	        	});
-	        	on(this.mask, "click", function(evt){
-	        		me.dismissAlert();
-	        	});
-			}
+		showAlert: function(title, message){
 			this.mask.style.display = "";
 			this.alert.domNode.style.display = "";
-			$('.modalView').fadeTo(500, 1);
+			this.alert.domNode.style.marginTop = (-this.alert.domNode.clientHeight/2)+"px";
+			this.alert.titleNode.innerHTML = title?title:"";
+			this.alert.messageNode.innerHTML = message?message:"";
+			fx.fadeIn({
+				node:this.mask
+			}).play();
+			fx.fadeIn({
+				node:this.alert.domNode
+			}).play();
 		},
 		
-		dismissAlert: function(){
+		dismissAlert: function(callback){
 			var me = this;
-			this.mask.style.display = "none";
-			$('.modalView').fadeTo(500, 0, function(){
-				me.alert.domNode.style.display = "none";
-			});
+			fx.fadeOut({
+				node:me.mask,
+				onEnd:function(){
+					me.mask.style.display = "none";
+				}
+			}).play();
+			fx.fadeOut({
+				node:me.alert.domNode,
+				onEnd:function(){
+					me.alert.domNode.style.display = "none";
+					domConstruct.empty(me.alert.buttonsContainer);
+					if(callback)
+						callback();
+				}
+			}).play();
+			this.onDismissAlert.apply(this, []);
 		},
 		
 		presentNumPad: function(){
@@ -173,6 +180,23 @@ define([
 				else
 					me.loadingBar.status = "loading";
 			});*/
+			
+			this.mask = domConstruct.create("div", {id:"mask", style:"display:none;opacity:0;background:rgba(0,0,0,0.4);z-index:100;position:absolute;top:0px;left:0px;width:"+this.frame.width+"px;height:"+this.frame.height+"px"}, this.domNode);
+			var alert = new Alert();
+			alert.domNode.style.opacity = 0;
+			alert.placeAt(this.domNode);
+			this.alert = alert;
+			var me = this;
+        	on(alert.closeNode, "click", function(evt){
+        		me.dismissAlert();
+        	});
+        	on(this.mask, "click", function(evt){
+        		me.dismissAlert();
+        	});
+		},
+		
+		onDismissAlert: function(){
+			
 		}
 
 	});

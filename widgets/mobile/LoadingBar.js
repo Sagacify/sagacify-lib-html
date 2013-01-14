@@ -12,6 +12,8 @@ define([
 	
 		templateString:template,
 		
+		loadingLabel: "Loading...",
+		
 		consructor: function(args) {
 			
 		},
@@ -39,6 +41,10 @@ define([
 			
 			this.specialLabelNode.style.left = "20px";
 			this.specialLabelNode.style.width = (width-40)+"px";
+		},
+		
+		setLoadingLabel: function(label){
+			this.labelNode.innerHTML = label;
 		},
 		
 		setSpecialMessage: function(message){
