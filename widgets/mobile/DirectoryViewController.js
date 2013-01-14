@@ -21,8 +21,8 @@ define([
 			this.inherited(arguments);
 			if(this.searchBar)
 				this.searchBar.searchFieldNode.style.width = (this.frame.width-50)+"px";
-			
-			var directoryBar = new DirectoryBar({height:this.frame.height-20, searchItem:!this.searchBarFixed});
+
+			var directoryBar = new DirectoryBar({height:this.frame.height-20, searchItem:!this.searchBarFixed, star:this.staredItems()!=undefined});
 			directoryBar.placeAt(this.domNode);
 			var me = this;
 			on(directoryBar, "letterSelected", function(letterIndex){
@@ -81,65 +81,75 @@ define([
 			var sortedItems = data.sort(function(item1, item2){
 				return item1[me.dataItemSortKey] > item2[me.dataItemSortKey];
 			});	
+			
+			var staredItems = this.staredItems();
+			var offsetStar = 0;
+			if(staredItems){
+				offsetStar = 1;
+				this._classifiedItems.push([]);
+				dojo.forEach(staredItems, function(staredItem, i){
+					me._classifiedItems[0].push(staredItem);
+				});
+			}
 
 			for(var i = 0; i < 27; i++)
 				this._classifiedItems.push([]);
 			
 			dojo.forEach(sortedItems, function(item, i){
 				var firstChar = item[me.dataItemSortKey].charAt(0);
-				var correspondingIndex = 26;
+				var correspondingIndex = 26+offsetStar;
 				if(firstChar == 'A' || firstChar == 'a')
-					correspondingIndex = 0;
+					correspondingIndex = 0+offsetStar;
 				if(firstChar == 'B' || firstChar == 'b')
-					correspondingIndex = 1;
+					correspondingIndex = 1+offsetStar;
 				if(firstChar == 'C' || firstChar == 'c')
-					correspondingIndex = 2;
+					correspondingIndex = 2+offsetStar;
 				if(firstChar == 'D' || firstChar == 'd')
-					correspondingIndex = 3;
+					correspondingIndex = 3+offsetStar;
 				if(firstChar == 'E' || firstChar == 'e')
-					correspondingIndex = 4;
+					correspondingIndex = 4+offsetStar;
 				if(firstChar == 'F' || firstChar == 'f')
-					correspondingIndex = 5;
+					correspondingIndex = 5+offsetStar;
 				if(firstChar == 'G' || firstChar == 'g')
-					correspondingIndex = 6;
+					correspondingIndex = 6+offsetStar;
 				if(firstChar == 'H' || firstChar == 'h')
-					correspondingIndex = 7;
+					correspondingIndex = 7+offsetStar;
 				if(firstChar == 'I' || firstChar == 'i')
-					correspondingIndex = 8;
+					correspondingIndex = 8+offsetStar;
 				if(firstChar == 'J' || firstChar == 'j')
-					correspondingIndex = 9;
+					correspondingIndex = 9+offsetStar;
 				if(firstChar == 'K' || firstChar == 'k')
-					correspondingIndex = 10;
+					correspondingIndex = 10+offsetStar;
 				if(firstChar == 'L' || firstChar == 'l')
-					correspondingIndex = 11;
+					correspondingIndex = 11+offsetStar;
 				if(firstChar == 'M' || firstChar == 'm')
-					correspondingIndex = 12;
+					correspondingIndex = 12+offsetStar;
 				if(firstChar == 'N' || firstChar == 'n')
-					correspondingIndex = 13;
+					correspondingIndex = 13+offsetStar;
 				if(firstChar == 'O' || firstChar == 'o')
-					correspondingIndex = 14;
+					correspondingIndex = 14+offsetStar;
 				if(firstChar == 'P' || firstChar == 'p')
-					correspondingIndex = 15;
+					correspondingIndex = 15+offsetStar;
 				if(firstChar == 'Q' || firstChar == 'q')
-					correspondingIndex = 16;
+					correspondingIndex = 16+offsetStar;
 				if(firstChar == 'R' || firstChar == 'r')
-					correspondingIndex = 17;
+					correspondingIndex = 17+offsetStar;
 				if(firstChar == 'S' || firstChar == 's')
-					correspondingIndex = 18;
+					correspondingIndex = 18+offsetStar;
 				if(firstChar == 'T' || firstChar == 't')
-					correspondingIndex = 19;
+					correspondingIndex = 19+offsetStar;
 				if(firstChar == 'U' || firstChar == 'u')
-					correspondingIndex = 20;
+					correspondingIndex = 20+offsetStar;
 				if(firstChar == 'V' || firstChar == 'v')
-					correspondingIndex = 21;
+					correspondingIndex = 21+offsetStar;
 				if(firstChar == 'W' || firstChar == 'w')
-					correspondingIndex = 22;
+					correspondingIndex = 22+offsetStar;
 				if(firstChar == 'X' || firstChar == 'x')
-					correspondingIndex = 23;
+					correspondingIndex = 23+offsetStar;
 				if(firstChar == 'Y' || firstChar == 'y')
-					correspondingIndex = 24;
+					correspondingIndex = 24+offsetStar;
 				if(firstChar == 'Z' || firstChar == 'z')
-					correspondingIndex = 25;
+					correspondingIndex = 25+offsetStar;
 					
 				me._classifiedItems[correspondingIndex].push(item);
 			});
@@ -153,66 +163,72 @@ define([
 					me._barCorrespondances.push(me._barCorrespondances[i-1]);
 			});
 		
-			me.processedData = [];
-			dojo.forEach(me._classifiedItems, function(itemGroup, i) {
+			this.processedData = [];
+			dojo.forEach(this._classifiedItems, function(itemGroup, i) {
 				if(itemGroup.length > 0) {
 					var letter = "#";
-					if(i == 0)
+					if(staredItems && i == 0){
+						letter = "Main";
+					}	
+					if(i == 0+offsetStar)
 						letter = "A";
-					if(i == 1)
+					if(i == 1+offsetStar)
 						letter = "B";
-					if(i == 2)
+					if(i == 2+offsetStar)
 						letter = "C";
-					if(i == 3)
+					if(i == 3+offsetStar)
 						letter = "D";
-					if(i == 4)
+					if(i == 4+offsetStar)
 						letter = "E";
-					if(i == 5)
+					if(i == 5+offsetStar)
 						letter = "F";
-					if(i == 6)
+					if(i == 6+offsetStar)
 						letter = "G";
-					if(i == 7)
+					if(i == 7+offsetStar)
 						letter = "H";
-					if(i == 8)
+					if(i == 8+offsetStar)
 						letter = "I";
-					if(i == 9)
+					if(i == 9+offsetStar)
 						letter = "J";
-					if(i == 10)
+					if(i == 10+offsetStar)
 						letter = "K";
-					if(i == 11)
+					if(i == 11+offsetStar)
 						letter = "L";
-					if(i == 12)
+					if(i == 12+offsetStar)
 						letter = "M";
-					if(i == 13)
+					if(i == 13+offsetStar)
 						letter = "N";
-					if(i == 14)
+					if(i == 14+offsetStar)
 						letter = "O";
-					if(i == 15)
+					if(i == 15+offsetStar)
 						letter = "P";
-					if(i == 16)
+					if(i == 16+offsetStar)
 						letter = "Q";
-					if(i == 17)
+					if(i == 17+offsetStar)
 						letter = "R";
-					if(i == 18)
+					if(i == 18+offsetStar)
 						letter = "S";
-					if(i == 19)
+					if(i == 19+offsetStar)
 						letter = "T";
-					if(i == 20)
+					if(i == 20+offsetStar)
 						letter = "U";
-					if(i == 21)
+					if(i == 21+offsetStar)
 						letter = "V";
-					if(i == 22)
+					if(i == 22+offsetStar)
 						letter = "W";
-					if(i == 23)
+					if(i == 23+offsetStar)
 						letter = "X";
-					if(i == 24)
+					if(i == 24+offsetStar)
 						letter = "Y";
-					if(i == 25)
+					if(i == 25+offsetStar)
 						letter = "Z";
 					me.processedData.push({letter:letter, rows:itemGroup});
 				}
 			});
-
+		},
+		
+		staredItems: function(){
+			//To be implemented by subclasses
 		}
 
 	});

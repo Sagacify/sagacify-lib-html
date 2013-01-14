@@ -10,6 +10,8 @@ define([
 		
 		data: null,
 		
+		dataItemKey: null,
+		
 		dataItemFilterKey: null,
 		
 		dataItemSortKey: null,
@@ -19,14 +21,16 @@ define([
 		searchBarFixed: false,
 				
 		constructor: function(args) {
-			if(args.dataItemKey){
-				this.dataItemFilterKey = args.dataItemKey;
-				this.dataItemSortKey = args.dataItemKey;
-			}
+
 		},	
 		
 		postCreate: function() {
 			this.inherited(arguments);
+			if(this.dataItemKey){
+				this.dataItemFilterKey = this.dataItemKey;
+				this.dataItemSortKey = this.dataItemKey;
+			}
+			
 			if(this.dataItemFilterKey){
 				this.addSearchBar(this.searchBarFixed);
 				var me = this;

@@ -14,6 +14,8 @@ define([
 		
 		height: 480,
 		
+		star: false,
+		
 		searchItem: true,
 		
 		//_items: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"],
@@ -24,9 +26,12 @@ define([
 		
 		postCreate: function() {
 			this.searchImg.src = Utils.svgSupport()?"saga/widgets/mobile/Assets/img/search.svg":"saga/widgets/mobile/Assets/img/search.png";
-			
+			if(this.star)
+				this.starNode.style.display = "";
 			var me = this;
 			dojo.forEach(this.ulNode.children, function(letterNode, i){
+				if(me.star)
+					letterNode.style.height = (100/28)+"%";
 				on(letterNode, "click", function(evt){
 					me.onLetterSelected.apply(me, [i]);
 				});

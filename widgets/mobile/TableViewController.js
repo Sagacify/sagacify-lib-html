@@ -51,6 +51,8 @@ define([
 		swapHeader: null,
 		
 		stickedHeaders: false,
+		
+		highlightCellSelection: false,
 						
 		constructor: function(args) {
 			if(args) {
@@ -186,13 +188,19 @@ define([
 					this.noItemCell = cell;
 				}
 			}	
-			
-					
+						
 			var me = this;
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, "click", function(evt){
+						var navigationController = me.navigationController?me.navigationController:me.parent?me.parent.navigationController:null;
+						if(navigationController && me.highlightCellSelection){
+							domClass.add(node, "selected");
+							navigationController.frontViewController().on("afterTransitionOut", function(args){
+								domClass.remove(node, "selected");
+							});
+						}
 						if(!cell.cancelClick){
 							me.didSelectRowAtIndexPath({section:i, row:j});	
 						}
