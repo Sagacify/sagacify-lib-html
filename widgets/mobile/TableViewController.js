@@ -193,7 +193,7 @@ define([
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
-					on(node, "click", function(evt){
+					on(node, selectEvent, function(evt){
 						var navigationController = me.navigationController?me.navigationController:me.parent?me.parent.navigationController:null;
 						if(navigationController && me.highlightCellSelection){
 							domClass.add(node, "selected");
@@ -201,15 +201,15 @@ define([
 								domClass.remove(node, "selected");
 							});
 						}
-						if(!cell.cancelClick){
+						//if(!cell.cancelClick){
 							me.didSelectRowAtIndexPath({section:i, row:j});	
-						}
+						/*}
 						else{
 							cell.disableCancelClick();
-						}
+						}*/
 					});
 					
-					if(has("android") >=3 && !(keepFirstSection && i==0)){
+					/*if(has("android") >=3 && !(keepFirstSection && i==0)){
 						on(node, "touchend", function(evt){
 							var touches = evt.changedTouches,
 		      				first = touches[0],
@@ -230,7 +230,7 @@ define([
 						on(node, "touchmove", function(evt){
 							node.clickEvent = false;
 						});
-					}
+					}*/
 					
 				});
 			});

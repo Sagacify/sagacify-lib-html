@@ -84,7 +84,7 @@ define([
 			
 			var staredItems = this.staredItems();
 			var offsetStar = 0;
-			if(staredItems){
+			if(staredItems && !this.searchBar.searchFieldNode.value){
 				offsetStar = 1;
 				this._classifiedItems.push([]);
 				dojo.forEach(staredItems, function(staredItem, i){

@@ -6,9 +6,10 @@ define([
 	'dojo/dom-construct',
 	'dojo/on',
 	'saga/widgets/mobile/LoadingBar',
-	'dojo/_base/fx'], 
+	'dojo/_base/fx',
+	'saga/utils/Utils'], 
 	
-	function(declare, ViewController, Alert, NumPad, domConstruct, on, LoadingBar, fx) {
+	function(declare, ViewController, Alert, NumPad, domConstruct, on, LoadingBar, fx, Utils) {
 	
 	return declare('saga.ApplicationViewController', [ViewController], {
 		
@@ -20,6 +21,9 @@ define([
 		
 		constructor: function(args) {
 			Window = this;
+			selectEvent = Utils.detectWebOrNative()=="Web"?"click":"tap";
+			downEvent = Utils.detectWebOrNative()=="Web"?"mousedown":"touchstart";
+			upEvent = Utils.detectWebOrNative()=="Web"?"mouseup":"touchend";
 		},	
 		
 		postCreate: function() {
@@ -187,10 +191,10 @@ define([
 			alert.placeAt(this.domNode);
 			this.alert = alert;
 			var me = this;
-        	on(alert.closeNode, "click", function(evt){
+        	on(alert.closeNode, selectEvent, function(evt){
         		me.dismissAlert();
         	});
-        	on(this.mask, "click", function(evt){
+        	on(this.mask, selectEvent, function(evt){
         		me.dismissAlert();
         	});
 		},

@@ -27,13 +27,13 @@ define([
         	dojo.forEach(this.images, function(image, i){
         		var photoMosaicItem = new PhotoMosaicItem({src:image.src?image.src:image});
         		photoMosaicItem.placeAt(me.photoContainerNode);
-        		on(photoMosaicItem.domNode, "click", function(evt){
+        		on(photoMosaicItem.domNode, selectEvent, function(evt){
         			var photoViewController = new PhotoViewController({frame:me.frame, images:me.images, indexToShow:i});
         			if(me.photoPresentation == "push"){
         				me.navigationController.pushViewController(photoViewController);
         				if(Window.revealViewController)
         					Window.revealViewController.enableSwipe(false);
-        				on(me.navigationController.navigationBar.backButton, "click", function(evt){
+        				on(me.navigationController.navigationBar.backButton, selectEvent, function(evt){
         					Window.revealViewController.enableSwipe(true);	
         				});
         			}

@@ -25,7 +25,7 @@ define([
 			/*on(this.revealButton, "click", function(evt){
 				evt.preventDefault();
 			});*/
-			on(this.backButton, "click", function(evt){
+			on(this.backButton, selectEvent, function(evt){
 				evt.preventDefault();
 			});
 			/*on(this.addButton, "click", function(evt){
@@ -61,7 +61,7 @@ define([
 			dojo.forEach(this.clonedChildren, function(clonedChild, i){
 				 var node = domConstruct.place(lang.clone(clonedChild), me.domNode);
 				 me[domAttr.get(node, "data-dojo-attach-point")] = node;
-				 on(node, "click", function(evt){
+				 on(node, selectEvent, function(evt){
 					evt.preventDefault();
 				});
 			});

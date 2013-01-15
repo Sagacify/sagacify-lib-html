@@ -34,7 +34,7 @@ define([
 		};
 		
 		saga.Utils.detectWebOrNative = function(){
-			if(document.URL.indexOf('http://') == -1 && document.URL.indexOf('https://') == -1)
+			if(document.URL.indexOf('http://') == -1 && document.URL.indexOf('https://') == -1 && saga.Utils.detectOS()!=null)
 				return "Native";
 			else
 				return "Web";

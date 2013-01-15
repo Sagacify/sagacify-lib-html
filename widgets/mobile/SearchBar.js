@@ -7,7 +7,7 @@ define([
 	
 	function(declare, _Widget, template, domConstruct, on) {
 	
-	return declare('bizComp.mobile.SearchBar', [_Widget], {
+	return declare('saga.mobile.SearchBar', [_Widget], {
 
 		templateString: template,
 		

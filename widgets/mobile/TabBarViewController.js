@@ -37,7 +37,7 @@ define([
 				var tabBarButton = new TabBarButton(viewController.tabBarButtonInfo);
 				me.tabBar.addButton(tabBarButton);
 				me.tabBarButtons.push(tabBarButton);
-				on(tabBarButton.domNode, "click", function(evt){
+				on(tabBarButton.domNode, selectEvent, function(evt){
 					me.selectTab(i);
 				});
 				viewController.domNode.style.display = "none";

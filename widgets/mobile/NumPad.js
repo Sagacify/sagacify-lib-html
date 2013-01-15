@@ -27,27 +27,24 @@ define([
 			if(!config['mblCSS3Transition']){
 				this._transEndHandle = this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
 			}
+			//this.domNode.style["-webkit-touch-callout"] = "none";
 			var me = this;
 			dojo.forEach(this.domNode.children, function(li, i){
 				var text = li.children[0].innerHTML;
-				on(li, "click", function(evt){
+				on(li, selectEvent, function(evt){
 					evt.preventDefault();
 					me.onKeySelected.apply(me, [text]);
 					if(text == "OK")
 						Window.dismissNumPad();
+					evt.stopPropagation();
 				});
-				on(li, "mousedown", function(evt){
+				on(li, downEvent, function(evt){
 					domClass.add(li, "selected");					
 				});
-				on(li, "mouseup", function(evt){
+				on(li, upEvent, function(evt){
 					domClass.remove(li, "selected");					
 				});
-				on(li, "touchstart", function(evt){
-					domClass.add(li, "selected");					
-				});
-				on(li, "touchend", function(evt){
-					domClass.remove(li, "selected");					
-				});
+				
 			});
 			
 			on(this.domNode, "focus", function(evt){

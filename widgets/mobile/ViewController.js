@@ -148,7 +148,7 @@ define([
 			cancelButton.domNode.style["float"] = "left";
 			cancelButton.placeAt(navigationBar.domNode);
 			var me = this;
-			on(cancelButton.domNode, "click", function(args){
+			on(cancelButton.domNode, selectEvent, function(args){
 			 	pickerSheet.performTransition(null, -1, "revealv", null);
 			
 				pickerSheet.on("afterTransitionOut", function(){
@@ -187,11 +187,11 @@ define([
 			}
 			
 			
-			on(todayButton.domNode, "click", function(args){
+			on(todayButton.domNode, selectEvent, function(args){
 			 	spinWheelDatePicker.reset();
 			});
 			
-			on(doneButton.domNode, "click", function(args){
+			on(doneButton.domNode, selectEvent, function(args){
 			 	pickerSheet.performTransition(null, -1, "revealv", null);
 			
 				pickerSheet.on("afterTransitionOut", function(){

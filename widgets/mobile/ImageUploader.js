@@ -34,7 +34,7 @@ define([
 					me.onImageUpload.apply(me, [image]);
 				}
 				
-				on(this.libraryButton, "click", function(evt){
+				on(this.libraryButton, selectEvent, function(evt){
 					evt.preventDefault();
 					me.uploadImage("Library", function(err, image){
 						if(!err){
@@ -43,7 +43,7 @@ define([
 					});
 				});
 				
-				on(this.cameraButton, "click", function(evt){
+				on(this.cameraButton, selectEvent, function(evt){
 					evt.preventDefault();
 					me.uploadImage("Camera", function(err, image){
 						if(!err){
@@ -52,17 +52,17 @@ define([
 					});
 				});
 				
-				$('button.uploadButton').live('click',function(e){
+				$('button.uploadButton').live(selectEvent,function(e){
 	                e.preventDefault();
 	                $('.popover').fadeTo(200,1);
 	            })
 	            AndroidFix.simulateClick(this.uploadButton);
-	            $('#imageFigure').live('click',function(e){
+	            $('#imageFigure').live(selectEvent,function(e){
 	                e.preventDefault();
 	                $('.popover').fadeTo(200,1);
 	            })
 	            AndroidFix.simulateClick(this.imageFigureNode);
-	            $('button.cancel').live('click',function(e){
+	            $('button.cancel').live(selectEvent,function(e){
 	                e.preventDefault();
 	                $('.popover').fadeTo(200,0);
 	            })

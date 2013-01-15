@@ -83,7 +83,7 @@ define([
 			        		});
 			        	}
 		        	});*/
-		        	on(this.navigationBar.domNode.childNodes[0], "click", function(){
+		        	on(this.navigationBar.domNode.childNodes[0], selectEvent, function(){
 		        		me.popViewController();
 		        	});
 				}
@@ -100,7 +100,7 @@ define([
 				if(this.frontViewController().title)
 					this.navigationBar.setTitle(this.frontViewController().title);
 				var me = this;
-				on(this.navigationBar.backButton, "click", function(){
+				on(this.navigationBar.backButton, selectEvent, function(){
 	        		me.popViewController();
 	        	});
 				if(this._viewControllers.length >= 2)

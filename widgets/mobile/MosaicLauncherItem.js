@@ -16,7 +16,7 @@ define([
 		
 		postCreate: function(){
 			this.inherited(arguments);	
-			on(this.linkNode, "click", function(evt){
+			on(this.linkNode, selectEvent, function(evt){
 				evt.preventDefault();
 			});
 		}

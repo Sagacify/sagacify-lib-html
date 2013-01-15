@@ -59,7 +59,7 @@ define([
 				button.placeAt(this.domNode);
 				domClass.add(button.domNode, this.destructiveButtonClass);
 				top += this.buttonHeight;
-				on(button.domNode, "click", function(){
+				on(button.domNode, selectEvent, function(){
 					me.onDestructiveButtonPressed.apply(me);
 				});
 			}
@@ -69,7 +69,7 @@ define([
 				domClass.add(button.domNode, me.otherButtonClass);
 				button.placeAt(me.domNode);
 				top += me.buttonHeight+5;
-				on(button.domNode, "click", function(){
+				on(button.domNode, selectEvent, function(){
 					me.onOtherButtonPressed.apply(me, [{"index":i}]);
 				});
 			});
@@ -84,7 +84,7 @@ define([
 				button.placeAt(this.domNode);
 			}
 			domClass.add(button.domNode, this.cancelButtonClass);
-			on(button.domNode, "click", function(){
+			on(button.domNode, selectEvent, function(){
 				me.onCancelButtonPressed.apply(me);
 			});
 			

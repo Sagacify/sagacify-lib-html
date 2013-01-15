@@ -36,7 +36,7 @@
 			var me = this;
 			dojo.forEach(this.buttons, function(button, i){
 				button.domNode.style.width = (100/me.buttons.length)+"%";
-				on(button.domNode, "click", function(evt){
+				on(button.domNode, selectEvent, function(evt){
 					evt.preventDefault();
 					me.selectTab(i);
 				});

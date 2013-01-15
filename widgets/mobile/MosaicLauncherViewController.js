@@ -24,7 +24,7 @@ define([
 				this.items.push(item);
 				item.placeAt(this.itemContainerNode);
 				var me = this;
-				on(item.domNode, "click", function(evt){
+				on(item.domNode, selectEvent, function(evt){
 					me.didSelectItemAtIndex(i);
 				});
 			}

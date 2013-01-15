@@ -23,7 +23,7 @@ define([
 		attachToApp: function(){
 			var button = domConstruct.create("button", {id:"debuggerButton", innerHTML:"D", style:"position:absolute;z-index:100;width:30px;background:red"}, Window.domNode);
 			var me = this;
-			on(button, "click", function(evt){
+			on(button, selectEvent, function(evt){
 				Window.presentViewController(me);
 			}); 
 		},

@@ -15,7 +15,7 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/And
 		
 		attachSubnodeClickEvent: function(subnode, fun){
 			var me = this;
-			on(subnode, "click", function(evt){
+			on(subnode, selectEvent, function(evt){
 				me.cancelClick = true;
 				if(has('android')>2)
 					me.cancelSimulatedClick = true;

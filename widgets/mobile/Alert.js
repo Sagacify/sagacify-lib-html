@@ -20,7 +20,7 @@ define([
 		
 		postCreate: function() {
 			this.inherited(arguments);
-			on(this.closeNode, "click", function(evt){
+			on(this.closeNode, selectEvent, function(evt){
 				evt.preventDefault();
 			});
 		}

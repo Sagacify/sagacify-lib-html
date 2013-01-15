@@ -32,11 +32,11 @@ define([
 			dojo.forEach(this.ulNode.children, function(letterNode, i){
 				if(me.star)
 					letterNode.style.height = (100/28)+"%";
-				on(letterNode, "click", function(evt){
+				on(letterNode, selectEvent, function(evt){
 					me.onLetterSelected.apply(me, [i]);
 				});
 			});
-			on(this.searchImg, "click", function(evt){
+			on(this.searchImg, selectEvent, function(evt){
 				me.onLetterSelected.apply(me, [-1]);
 			});
 			if(this.searchItem){
