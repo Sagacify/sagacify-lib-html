@@ -22,8 +22,8 @@ define([
 		constructor: function(args) {
 			Window = this;
 			selectEvent = Utils.detectWebOrNative()=="Web"?"click":"tap";
-			downEvent = Utils.detectWebOrNative()=="Web"?"mousedown":"touchstart";
-			upEvent = Utils.detectWebOrNative()=="Web"?"mouseup":"touchend";
+			downEvent = Utils.detectWebOrNative()=="Web"?"touchstart":"touchstart";
+			upEvent = Utils.detectWebOrNative()=="Web"?"touchend":"touchend";
 		},	
 		
 		postCreate: function() {

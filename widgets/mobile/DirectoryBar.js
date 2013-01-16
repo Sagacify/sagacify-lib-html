@@ -47,10 +47,10 @@ define([
 				this.ulNode.style.height = this.height+"px";
 			}
 			
-			on(this.ulNode, "mousedown", function(evt){
+			on(this.ulNode, downEvent, function(evt){
 				domClass.add(me.ulNode, "selected");
 			});
-			on(this.ulNode, "mouseup", function(evt){
+			on(this.ulNode, upEvent, function(evt){
 				domClass.remove(me.ulNode, "selected");
 			});
 		},

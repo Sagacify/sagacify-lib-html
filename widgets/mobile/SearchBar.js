@@ -3,9 +3,10 @@ define([
 	'saga/widgets/_Widget',
 	'dojo/text!./templates/SearchBar.html',
 	'dojo/dom-construct', 
-	'dojo/on'], 
+	'dojo/on',
+	'dojo/has'], 
 	
-	function(declare, _Widget, template, domConstruct, on) {
+	function(declare, _Widget, template, domConstruct, on, has) {
 	
 	return declare('saga.mobile.SearchBar', [_Widget], {
 
@@ -19,6 +20,14 @@ define([
 		
 		postCreate: function() {
 			this.inherited(arguments);
+			if(has("android"))
+				this.searchFieldNode.type = "text";
+				
+			var me = this;
+			on(this.formNode, "submit", function(evt){
+				evt.preventDefault();
+				me.searchFieldNode.blur();
+			});
 		}
 		
 	});
