@@ -3,17 +3,20 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/And
 	return declare('saga.TableViewCell', [_Widget], {
 		
 		cancelClick: false,
+		
 		cancelSimulatedClick: false,
+		
+		clickable: false,
 		
 		constructor: function(args) {
 			
 		},
 		
 		postCreate: function() {
-			
-		},
+			this.inherited(arguments);	
+		}
 		
-		attachSubnodeClickEvent: function(subnode, fun){
+		/*attachSubnodeClickEvent: function(subnode, fun){
 			var me = this;
 			on(subnode, selectEvent, function(evt){
 				me.cancelClick = true;
@@ -34,7 +37,7 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/on', 'saga/utils/And
 			else{
 				this.cancelClick = false;
 			}
-		}
+		}*/
 		
 	});
 });

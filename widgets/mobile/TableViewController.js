@@ -195,7 +195,7 @@ define([
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, selectEvent, function(evt){
 						var navigationController = me.navigationController?me.navigationController:me.parent?me.parent.navigationController:null;
-						if(navigationController && me.highlightCellSelection){
+						if(navigationController && cell.clickable){
 							domClass.add(node, "selected");
 							navigationController.frontViewController().on("afterTransitionOut", function(args){
 								domClass.remove(node, "selected");
@@ -253,7 +253,7 @@ define([
 		didSelectRowAtIndexPath: function(indexPath) {
 			//console.log(indexPath.section + ", " + indexPath.row);
 			//console.log(indexPath);
-			var cell = this.existingCellForRowAtIndexPath(indexPath);
+			/*var cell = this.existingCellForRowAtIndexPath(indexPath);
 			var navigationController = this.navigationController?this.navigationController:this.parent?this.parent.navigationController:null;
 			if(navigationController){
 				var cellNode = cell.domNode?cell.domNode:cell;
@@ -261,7 +261,7 @@ define([
 				navigationController.frontViewController().on("afterTransitionOut", function(args){
 					domClass.remove(cellNode, "selected");
 				});
-			}
+			}*/
 		},
 		
 		cellForNoItem: function(){
