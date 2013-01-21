@@ -6,9 +6,10 @@ define([
 	'dojo/_base/lang',
 	'dojo/dom-construct',
 	'dojo/dom-attr',
+	'dojo/dom-class',
 	'saga/utils/Utils'], 
 	
-	function(declare, _Widget, template, on, lang, domConstruct, domAttr, Utils) {
+	function(declare, _Widget, template, on, lang, domConstruct, domAttr, domClass, Utils) {
 	
 	return declare('saga.NavigationBar', [_Widget], {
 		
@@ -28,6 +29,7 @@ define([
 			on(this.backButton, selectEvent, function(evt){
 				evt.preventDefault();
 			});
+			
 			/*on(this.addButton, "click", function(evt){
 				evt.preventDefault();
 			});
@@ -64,6 +66,14 @@ define([
 				 on(node, selectEvent, function(evt){
 					evt.preventDefault();
 				});
+				if(node.nodeName == "BUTTON"){
+					on(node, downEvent, function(evt){
+						domClass.add(node, "selected");
+					});
+					on(node, upEvent, function(evt){
+						domClass.remove(node, "selected");
+					});
+				}
 			});
 			this.setTitle("");
 		},
