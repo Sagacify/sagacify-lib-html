@@ -55,36 +55,36 @@ define([
 			var top = 20;
 			var button;
 			if(this.destructiveButtonTitle) {
-				button = new Button({label:this.destructiveButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
-				button.placeAt(this.domNode);
-				domClass.add(button.domNode, this.destructiveButtonClass);
+				//button = new Button({label:this.destructiveButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
+				button = domConstruct.create("button", {innerHTML:this.destructiveButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"}, me.domNode);
+				domClass.add(button, this.destructiveButtonClass);
 				top += this.buttonHeight;
-				on(button.domNode, selectEvent, function(){
+				on(button, selectEvent, function(){
 					me.onDestructiveButtonPressed.apply(me);
 				});
 			}
 			
 			dojo.forEach(this.otherButtonTitles, function(otherButtonTitle, i) {
-				button = new Button({label:otherButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
-				domClass.add(button.domNode, me.otherButtonClass);
-				button.placeAt(me.domNode);
+				//button = new Button({label:otherButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
+				button = domConstruct.create("button", {innerHTML:otherButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"}, me.domNode);
+				domClass.add(button, me.otherButtonClass);
 				top += me.buttonHeight+5;
-				on(button.domNode, selectEvent, function(){
+				on(button, selectEvent, function(){
 					me.onOtherButtonPressed.apply(me, [{"index":i}]);
 				});
 			});
 			
 			top += 10;
 			if(this.cancelButtonTitle) {
-				button = new Button({label:this.cancelButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
-				button.placeAt(this.domNode);
+				//button = new Button({label:this.cancelButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
+				button = domConstruct.create("button", {innerHTML:this.cancelButtonTitle, style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"}, me.domNode);
 			}
 			else {
 				button = new Button({label:"Cancel", style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"});
-				button.placeAt(this.domNode);
+				button = domConstruct.create("button", {innerHTML:"Cancel", style:"position:absolute;top:"+top+"px;left:"+20+"px;width:"+(Window.frame.width-40)+"px"}, me.domNode);
 			}
-			domClass.add(button.domNode, this.cancelButtonClass);
-			on(button.domNode, selectEvent, function(){
+			domClass.add(button, this.cancelButtonClass);
+			on(button, selectEvent, function(){
 				me.onCancelButtonPressed.apply(me);
 			});
 			
