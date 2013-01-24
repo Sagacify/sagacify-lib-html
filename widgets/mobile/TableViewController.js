@@ -196,9 +196,15 @@ define([
 					on(node, selectEvent, function(evt){
 						var navigationController = me.navigationController?me.navigationController:me.parent?me.parent.navigationController:null;
 						if(navigationController && cell.clickable){
-							domClass.add(node, "selected");
+							if(typeof cell.select == "function")
+								cell.select();
+							else
+								domClass.add(node, "selected");
 							navigationController.frontViewController().on("afterTransitionOut", function(args){
-								domClass.remove(node, "selected");
+								if(typeof cell.unselect == "function")
+									cell.unselect();
+								else
+									domClass.remove(node, "selected");
 							});
 						}
 						//if(!cell.cancelClick){
