@@ -87,12 +87,14 @@ define([
 			viewController.placeAt(Window.domNode);
 			viewController.performTransition(null, 1, "revealv", null);
 			
+			var eventsBlocker = domConstruct.create("div", {style:"z-index:1000;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, Window.domNode);
 			viewController.on("afterTransitionOut", function(){
 				if(typeof viewController.startup == "function")
 					viewController.startup();
 				viewController.domNode.style.display = "";
 				viewController.domNode.style.top = "0px";
 				viewController.domNode.style.left = "0px";
+				domConstruct.destroy(eventsBlocker);
 			});
 		},
 		

@@ -187,6 +187,7 @@ define([
 			
 			this.mask = domConstruct.create("div", {id:"mask", style:"display:none;opacity:0;background:rgba(0,0,0,0.4);z-index:100;position:absolute;top:0px;left:0px;width:"+this.frame.width+"px;height:"+this.frame.height+"px"}, this.domNode);
 			var alert = new Alert();
+			alert.domNode.style.display = "none";
 			alert.domNode.style.opacity = 0;
 			alert.placeAt(this.domNode);
 			this.alert = alert;
