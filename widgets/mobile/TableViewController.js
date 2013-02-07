@@ -315,7 +315,8 @@ define([
 			if(to.y < min)
 				to.y = min;
 				
-			this.scrollableView.slideTo(to, 0.5, "ease-out");
+			//this.scrollableView.slideTo(to, 0.5, "ease-out");
+			this.scrollableView.scrollTo(to);
 		},
 		
 		reloadTableViewDataSource: function() {

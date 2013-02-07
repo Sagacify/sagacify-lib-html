@@ -23,7 +23,7 @@ define([
 			Window = this;
 			selectEvent = Utils.detectWebOrNative()=="Web"?"click":"tap";
 			downEvent = Utils.detectWebOrNative()=="Web"?"mousedown":"touchstart";
-			upEvent = Utils.detectWebOrNative()=="Web"?"mouseupd":"touchend";
+			upEvent = Utils.detectWebOrNative()=="Web"?"mouseup":"touchend";
 		},	
 		
 		postCreate: function() {
