@@ -88,7 +88,8 @@ define([
 							domClass.add(this.arrowImg, "animEndPull");
 					}
 					//this.handlePullDownArrow(to.y);
-					this.arrowImg.style.display = "";
+					//this.arrowImg.style.display = "";
+					this.arrowImg.style.opacity = 1;
 					this.pullToRefreshNode.spinner.style.display = "none";
 				}
 			}
@@ -112,7 +113,8 @@ define([
 						//this.emit("reload", {});
 						
 						this.statusDiv.innerHTML = "Loading...";
-						this.arrowImg.style.display = "none";
+						//this.arrowImg.style.display = "none";
+						this.arrowImg.style.opacity = 0;
 						this.pullToRefreshNode.spinner.style.display = "";
 						domClass.remove(this.arrowImg, "endPull");	
 					}
