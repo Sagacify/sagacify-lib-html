@@ -34,22 +34,21 @@ define([
 		
 		
 
-		get: function(target, options){
-			console.log(this.bearerString);
-
+		get: function(target, options, query){
 			var headers = options || {};
 			headers.Accept = this.accepts;
 			headers.Authorization = "bearer "+localStorage.access_token;
 			console.log(this.bearerString);
-			console.log("GET "+target);
+			console.log("GET "+target + (query || ""));
 			var me = this;
 			var deferred = new Deferred();
-			xhr("GET", {
-				url:target,
+			var xhrDeferred = xhr("GET", {
+				url:target + (query || ""),
 				handleAs: "json",
 				preventCache: true,
 				headers: headers,
 				load: function(data){
+					console.log(data);
 					deferred.resolve(data);
 				},
 				error: function(error){
@@ -57,11 +56,12 @@ define([
 						me.login(function(data){
 							headers.Authorization = "bearer "+localStorage.access_token;
 							xhr("GET", {
-								url:target,
+								url:target + (query || ""),
 								handleAs: "json",
 								preventCache: true,
 								headers: headers,
 								load: function(data){
+									console.log(data);
 									deferred.resolve(data);
 								},
 								error: function(error){
@@ -69,12 +69,13 @@ define([
 								}
 							});
 						}, function(error){
-
+							me.loginFail();
 							deferred.reject(error);
 						});
 					}
 				}
 			});
+			deferred.ioArgs = xhrDeferred.ioArgs;
 			return deferred;
 		},
 		
@@ -128,6 +129,7 @@ define([
 								}
 							});
 						}, function(loginError){
+							me.loginFail();
 							deferred.reject(loginError);
 						});
 					}
@@ -147,6 +149,7 @@ define([
 			headers["If-Match"] = options.overwrite === true ? "*" : null,
 			headers["If-None-Match"] = options.overwrite === false ? "*" : null
 			console.log("PUT "+target);
+			console.log(object);
 			var deferred = new Deferred();
 			xhr.put({
 				url: target,
@@ -175,6 +178,7 @@ define([
 								}
 							});
 						}, function(loginError){
+							me.loginFail();
 							deferred.reject(loginError);
 						});
 					}
@@ -230,6 +234,7 @@ define([
 						});
 					}
 					else{
+						me.loginFail();
 						deferred.reject(error);
 					}
 				}
@@ -239,7 +244,12 @@ define([
 		
 		login: function(success, failure){
 			
-		}		
+		},
+		
+		loginFail: function(){
+			
+		}
+			
 	});
 	
 	saga.JsonStore.singleton = function() {
