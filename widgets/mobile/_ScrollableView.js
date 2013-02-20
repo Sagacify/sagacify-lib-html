@@ -6,9 +6,10 @@ define([
 	'dojo/date/locale',
 	'dojo/has',
 	'dojo/dom-class',
-	'dojo/on'], 
+	'dojo/on',
+	'saga/utils/Utils'], 
 	
-	function(declare, _Widget, ScrollableView, template, locale, has, domClass, on) {
+	function(declare, _Widget, ScrollableView, template, locale, has, domClass, on, Utils) {
 	
 	return declare('saga._ScrollableView', [_Widget, ScrollableView], {
 		
@@ -19,12 +20,15 @@ define([
 		tableViewController: null,
 		
 		constructor: function(args) {
-			if(has("android") > 2 || has("chrome"))
-				this.scrollType = 3;
+			//if(has("android") > 2 || has("chrome"))
+				//this.scrollType = 3;
 		},
 		
 		postCreate: function(){
 			this.inherited(arguments);
+			if(!Utils.svgSupport()){
+				this.arrowImg.src = "saga/widgets/mobile/Assets/img/pullToRefresh.png";
+			}
 			if(this.pullToRefresh) {
 				this.pullToRefreshNode.style.display = "";
 				this.containerNode.style.top = "-500px";
