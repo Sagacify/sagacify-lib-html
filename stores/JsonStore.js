@@ -100,7 +100,7 @@ define([
 			headers["If-None-Match"] = options.overwrite === false ? "*" : null
 			console.log("POST "+target);
 			console.log(object);
-			
+
 			var deferred = new Deferred();
 			xhr.post({
 				url: target,
