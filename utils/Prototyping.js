@@ -7,15 +7,8 @@ define([
 		});
 		
 		Prototyping.setup = function(){
-			Array.prototype.contains = function(obj) {
-				/*var i = this.length;
-				while (i--) {
-					if (this[i] == obj) {
-						return true;
-					}
-				}
-				return false;*/
-				return this.indexOf(obj) != -1;
+			Array.prototype.contains = function(item) {
+				return this.indexOf(item) != -1;
 			};
 			
 			Array.prototype.containsObject = function(_id){
