@@ -109,6 +109,7 @@ define([
 				preventCache: true,
 				headers: headers,
 				load: function(data){
+					console.log(data);
 					deferred.resolve(data);
 				},
 				error: function(error){
