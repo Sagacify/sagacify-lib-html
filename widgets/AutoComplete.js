@@ -38,8 +38,6 @@ define([
                         if (!this.navigationMode) {
                             this.navigationMode = true;
                         };
-                        // debugger;
-                        // this.currentHover = me.autocompeteNode.
                     };
 
                     if (evt.keyIdentifier == "enter") {
@@ -60,38 +58,24 @@ define([
                     };
 
                 });
-                // this.addSelecteditem("un_tag");
-                // this.addSuggestItem('other_tag');
           	},
-        	
             addSelecteditem: function(item){
-                var li = domConstruct.create("li");
-                li.innerHTML = item[this.key];
-                var a = domConstruct.create("a");
-                domClass.add(a, 'removeTag');
-                a.innerHTML = "X";
-                dojo.place(a, li);
-                dojo.place(li, this.tagListNode);
-            
+                var li = this.generateSelectedNode(item);
+                dojo.place(li, this.selectedListNode);
+
                 var me = this;
                 this.selectedItems.push(item);
 
-
-                on(a, 'click', function(evt){
-                    evt.preventDefault();
-                   	this.parentNode.remove();
-                    me.selectedItems = me.selectedItems.filter(function(selectedItem){return selectedItem.username != item.username;});
-                });
-
             },
+
 
             addSuggestedItem: function(item){
                 
                 this.showSuggestedItem();
 
-                var li = domConstruct.create('li');
-                li.innerHTML = item[this.key];
-                dojo.place(li, this.autocompeteNode, 'last');
+                var li = this.generateSuggestedNode(item);
+                dojo.place(li, this.suggestedListNode, 'last');
+
                 var me = this;
                 on(li, 'click', function(evt){
                     evt.preventDefault();
@@ -100,16 +84,18 @@ define([
                 this.suggestedItems.push(item[this.key]);
             },
 
+
+
             removeSuggestedItems: function(){
                 
                 this.hideSuggestedItem();
 
-                dojo.empty(this.autocompeteNode);
+                dojo.empty(this.suggestedListNode);
                 this.suggestedItems = [];
             },
 
             removeSelectedItems: function(){
-                dojo.empty(this.tagListNode);
+                dojo.empty(this.selectedListNode);
                 this.selectedItems = [];
             },
 
@@ -122,11 +108,11 @@ define([
             }, 
 
             showSuggestedItem: function(){
-                this.suggestedItemsNode.style.display = '';
+                this.suggestedContainerNode.style.display = '';
             },
 
             hideSuggestedItem: function(){
-                this.suggestedItemsNode.style.display = 'none';
+                this.suggestedContainerNode.style.display = 'none';
             },
 
             inputChange: function(){
@@ -139,9 +125,6 @@ define([
                 });
             },
 
-            reloadSearch: function(){
-                // this.addSuggestItem("yvan");
-            }, 
 
             getItems: function(){
                 return this.selectedItems;
@@ -149,6 +132,53 @@ define([
 
             currentString:function(){
                 return this.inputNode.value;
-            }
+            },
+
+
+
+            //Call to kill a selected node
+            deleteSelectedNode: function(node, item){
+                var newItems = [];
+                for (var i = 0; i < this.selectedItems.length; i++) {
+                    if (!(this.selectedItems[i] == item)) {
+                        newItems.push(this.selectedItems[i]);
+                    };
+                };
+                this.selectedItems = newItems;
+
+                domConstruct.destroy(node);
+            },
+
+
+            //OVERRIDE ME
+            generateSelectedNode: function(item){
+                var li = domConstruct.create("li");
+                li.innerHTML = item[this.key];
+                var a = domConstruct.create("a");
+                domClass.add(a, 'removeTag');
+                a.innerHTML = "X";
+                dojo.place(a, li);
+
+                var me = this;
+                on(a, 'click', function(evt){
+                    evt.preventDefault();
+                    me.deleteSelectedNode(li);
+                });
+
+                return li;
+            },
+
+
+            generateSuggestedNode: function(item){
+                var li = domConstruct.create('li');
+                li.innerHTML = item[this.key];
+                return li;
+            },
+
+            reloadSearch: function(){
+
+            }, 
+
+
         });
 }); 
