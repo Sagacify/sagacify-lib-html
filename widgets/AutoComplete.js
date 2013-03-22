@@ -70,7 +70,6 @@ define([
 
 
             addSuggestedItem: function(item){
-                
                 this.showSuggestedItem();
 
                 var li = this.generateSuggestedNode(item);
@@ -124,7 +123,6 @@ define([
             		};
                 });
             },
-
 
             getItems: function(){
                 return this.selectedItems;
