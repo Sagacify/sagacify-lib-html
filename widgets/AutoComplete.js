@@ -175,7 +175,7 @@ define([
 
             reloadSearch: function(){
 
-            }, 
+            }
 
 
         });
