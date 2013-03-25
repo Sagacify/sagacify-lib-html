@@ -14,6 +14,18 @@ define([
 			Array.prototype.containsObject = function(_id){
 				return this.filter(function(item){return item._id == _id;}).length > 0;
 			};
+			
+			String.prototype.inject = function(occurences){
+				var strToReturn = this;
+				occurences.forEach(function(occurence){
+					strToReturn = strToReturn.replace("%s", occurence);
+				});
+				return strToReturn;
+			};
+			
+			String.prototype.startsWith = function(str){
+				return this.slice(0, str.length) == str;
+			};
 		};
 		
 		return Prototyping;

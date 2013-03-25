@@ -27,7 +27,10 @@ define([
                 // inputNode
                 var me = this;
                 on(this.inputNode, 'keyup', function(evt){
-                    me.inputChange();
+                	if(this.value)
+                    	me.inputChange();
+                    else
+                    	me.removeSuggestedItems();
                 });
                 on(this.inputNode, 'change', function(evt){
                     console.log("change");
@@ -42,8 +45,13 @@ define([
                         // this.currentHover = me.autocompeteNode.
                     };
 
-                    if (evt.keyIdentifier == "enter") {
+                    if (evt.keyIdentifier == "Enter") {
                         this.navigationMode = true;
+                        if(this.value)
+                        	var selectedItem = {};
+                        	selectedItem[me.key] = this.value;
+                        	me.addSelecteditem(selectedItem);
+                        	this.value = "";
                     };
 
                     if (evt.keyIdentifier == "left") {
@@ -149,6 +157,11 @@ define([
 
             currentString:function(){
                 return this.inputNode.value;
+            },
+            
+            reset: function(){
+            	this.removeSuggestedItems();
+            	this.removeSelectedItems();
             }
         });
 }); 

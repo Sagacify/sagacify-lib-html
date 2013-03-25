@@ -38,6 +38,15 @@ define([
 			var headers = options || {};
 			headers.Accept = this.accepts;
 			headers.Authorization = "bearer "+localStorage.access_token;
+			if(query instanceof Object){
+				var queryString = "?";
+				for (queryKey in query){
+					if(queryString != "?")
+						queryString += "&";
+					queryString += queryKey+"="+query[queryKey];
+				}
+				query = queryString;
+			}
 			console.log(this.bearerString);
 			console.log("GET "+target + (query || ""));
 			var me = this;
@@ -80,15 +89,7 @@ define([
 		},
 		
 		post: function(target, object, options, removeAuth){
-			// summary:
-			//		Stores an object. This will trigger a PUT request to the server
-			//		if the object has an id, otherwise it will trigger a POST request.
-			// object: Object
-			//		The object to store.
-			// options: dojo.store.api.Store.PutDirectives?
-			//		Additional metadata for storing the data.  Includes an "id"
-			//		property if a specific id is to be used.
-			//	returns: Number
+			var me = this;
 			options = options || {};
 			
 			var headers = options || {};
@@ -114,6 +115,10 @@ define([
 				},
 				error: function(error){
 					if(error.response.status == 401){
+						if(target == "/auth/local/login"){
+							me.loginFail();
+							return;
+						}
 						me.login(function(loginData){
 							headers.Authorization = "bearer "+localStorage.access_token;
 							xhr("POST", {
@@ -130,6 +135,7 @@ define([
 								}
 							});
 						}, function(loginError){
+							debugger
 							me.loginFail();
 							deferred.reject(loginError);
 						});
@@ -140,7 +146,7 @@ define([
 		},
 		
 		put: function(target, object, options){
-			
+			var me = this;
 			options = options || {};
 			
 			var headers = options || {};
@@ -190,11 +196,7 @@ define([
 		
 		
 		remove: function(target, options){
-			// summary:
-			//		Deletes an object by its identity. This will trigger a DELETE request to the server.
-			// id: Number
-			//		The identity to use to delete the object
-			
+			var me = this;
 			options = options || {};
 
 			var headers = options || {};
@@ -244,7 +246,7 @@ define([
 		},
 		
 		login: function(success, failure){
-			
+			debugger
 		},
 		
 		loginFail: function(){
