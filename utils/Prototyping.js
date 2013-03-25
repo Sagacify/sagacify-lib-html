@@ -16,8 +16,6 @@ define([
 			};
 
 			Date.prototype.verbose = function(){
-
-				debugger;
 				var me = this;
 				function verboseWithFutureDate(aLastDate)
 				{
