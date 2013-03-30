@@ -117,6 +117,7 @@ define([
 					if(error.response.status == 401){
 						if(target == "/auth/local/login"){
 							me.loginFail();
+							deferred.reject(error);
 							return;
 						}
 						me.login(function(loginData){
