@@ -15,6 +15,15 @@ define([
 				return this.filter(function(item){return item._id == _id;}).length > 0;
 			};
 			
+			Array.prototype.removeObject = function(_id){
+				for(var i = 0; i < this.length; i++){
+					if(this[i]._id == _id){
+						this.splice(i, 1);
+						return;	
+					}
+				}
+			};
+			
 			String.prototype.inject = function(occurences){
 				var strToReturn = this;
 				occurences.forEach(function(occurence){
