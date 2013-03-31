@@ -28,8 +28,7 @@ define([
 		// authorization string
 		// 
 
-
-		
+	
 		bearerString: "bearer "+localStorage.access_token,
 		
 		
