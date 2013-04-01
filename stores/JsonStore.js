@@ -113,6 +113,7 @@ define([
 					deferred.resolve(data);
 				},
 				error: function(error){
+					debugger;
 					if(error.response.status == 401){
 						if(target == "/auth/local/login"){
 							me.loginFail();
@@ -128,9 +129,11 @@ define([
 								preventCache: true,
 								headers: headers,
 								load: function(data){
+									debugger;
 									deferred.resolve(data);
 								},
 								error: function(error){
+									debugger;
 									deferred.reject(error);
 								}
 							});
