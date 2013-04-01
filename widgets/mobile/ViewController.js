@@ -267,11 +267,11 @@ define([
 			if(this.loadingStatus == "transitionToLoaded" || this.loadingStatus == "loaded")
 				return;
 			if(this.loadingStatus == "transitionToLoading"){
-				debugger;
+//				debugger;
 				this.loadingStatus = "loadingToDismiss";	
 			}
 			else{
-				debugger;
+//				debugger;
 				this.loadingStatus = "transitionToLoaded";
 				this.loadingBar.performTransition(null, 1, "revealv", null);
 			}

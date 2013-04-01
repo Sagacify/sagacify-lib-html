@@ -135,7 +135,6 @@ define([
 								}
 							});
 						}, function(loginError){
-							debugger
 							me.loginFail();
 							deferred.reject(loginError);
 						});
@@ -246,7 +245,6 @@ define([
 		},
 		
 		login: function(success, failure){
-			debugger
 		},
 		
 		loginFail: function(){

@@ -65,19 +65,42 @@ define([
 					var difference =  Math.abs(me.getTime() - aLastDate.getTime());
 					difference = difference/1000;
 					if (difference < 60) {
-						return "There was a moment.";
+						var t = Math.floor(difference);
+						if (t <= 1) {
+							return "About a minute ago";
+						} else {
+							return t + " seconds ago";
+						}
+						
 					}
 					var indicator = 3600; //minutes - de 3600
 					if (difference < indicator) {
-						return Math.floor(difference / 60.0) + " minutes ago";
+						var t = Math.floor(difference / 60.0);
+						if (t == 1) {
+							return "About a minute ago";	
+						} else {
+							return t + " minutes ago";	
+						}
 					}
 					indicator = indicator * 24; // hours -  de 24h
 					if (difference < indicator) {
-						return Math.floor(difference / 3600.0) + " hours ago";
+						var t = Math.floor(difference / 3600.0);
+						if (t == 1) {
+							return "About an hour ago";
+						} else {
+							return t + " hours ago";
+						}
+						
 					}
 					indicator = indicator * 15; // day - de 1 mois
 					if (difference < indicator) {
-						return Math.floor(difference / 86400.0) + " days ago";
+						var t = Math.floor(difference / 86400.0);
+						if (t == 1) {
+							return "About a day ago";
+						} else {
+							return Math.floor(difference / 86400.0) + " days ago";
+						}
+						
 					}
 
 					return me.toLocaleString();
