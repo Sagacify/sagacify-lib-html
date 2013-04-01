@@ -68,6 +68,8 @@ define([
                 });
           	},
             addSelecteditem: function(item){
+            	if(this.selectedItems.containsObject(item._id))
+            		return;
                 var li = this.generateSelectedNode(item);
                 dojo.place(li, this.selectedListNode);
 
@@ -78,6 +80,8 @@ define([
 
 
             addSuggestedItem: function(item){
+            	if(this.selectedItems.containsObject(item._id))
+            		return;
                 this.showSuggestedItem();
 
                 var li = this.generateSuggestedNode(item);
