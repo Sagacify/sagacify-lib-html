@@ -43,7 +43,7 @@ define([
 					var difference =  Math.abs(me.getTime() - aLastDate.getTime());
 					difference = difference/1000;
 					if (difference < 60) {
-						return "There was a moment.";
+						return "A moment ago";
 					}
 					var indicator = 3600; //minutes - de 3600
 					if (difference < indicator) {
