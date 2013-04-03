@@ -36,6 +36,14 @@ define([
 				return this.slice(0, str.length) == str;
 			};
 
+			Date.prototype.getWeekDayName = function(){
+				return this.weekDayName()[this.getDay()];
+			};
+
+			Date.prototype.weekDayName = function(){
+				return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+			};
+
 			Date.prototype.verbose = function(){
 				var me = this;
 				function verboseWithFutureDate(aLastDate)
@@ -57,7 +65,7 @@ define([
 					if (difference < indicator) {
 						return "In "+Math.floor(difference / 86400.0)+" days";
 					}
-					return me.toLocaleString();
+					return me.toLocaleDateString();
 				};
 
 				function verboseWithLastDate(aLastDate)
@@ -82,6 +90,7 @@ define([
 							return t + " minutes ago";	
 						}
 					}
+
 					indicator = indicator * 24; // hours -  de 24h
 					if (difference < indicator) {
 						var t = Math.floor(difference / 3600.0);
@@ -92,18 +101,19 @@ define([
 						}
 						
 					}
-					indicator = indicator * 15; // day - de 1 mois
+
+					//Dans les 6 jours
+					indicator = indicator * 6; // day - de 1 mois
 					if (difference < indicator) {
 						var t = Math.floor(difference / 86400.0);
 						if (t == 1) {
-							return "About a day ago";
+							return "Yesterday at "+me.toLocaleTimeString();
 						} else {
-							return Math.floor(difference / 86400.0) + " days ago";
+							return me.getWeekDayName() + " at " + me.toLocaleTimeString();
+							// return Math.floor(difference / 86400.0) + " days ago";
 						}
-						
 					}
-
-					return me.toLocaleString();
+					return me.toLocaleDateString();
 				};
 
 				var now = new Date();
