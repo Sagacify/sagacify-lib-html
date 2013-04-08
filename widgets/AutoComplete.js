@@ -22,6 +22,10 @@ define([
 
         	},
         	
+            focus: function(){
+                this.inputNode.focus();
+            },
+
         	postCreate : function() {
 
                 // inputNode
