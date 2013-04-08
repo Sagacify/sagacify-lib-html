@@ -134,6 +134,12 @@ define([
                 var me = this;
                 this.reloadSearch(function(data){
                 	me.removeSuggestedItems();
+
+                    if (!data.length) {
+                        me.showAddItemButton(me.currentString());
+                        return;
+                    };
+                    me.hideAddItemButton();
                 	for (var i = 0; i < data.length; i++) {
                 		me.addSuggestedItem(data[i]);
             		};
@@ -196,6 +202,14 @@ define([
 
             reloadSearch: function(){
 
+            }, 
+
+            showAddItemButton: function(){
+
+            }, 
+
+            hideAddItemButton : function(){
+                
             }
 
 
