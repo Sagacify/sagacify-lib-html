@@ -26,6 +26,7 @@ define([
 			/*on(this.revealButton, "click", function(evt){
 				evt.preventDefault();
 			});*/
+
 			on(this.backButton, selectEvent, function(evt){
 				evt.preventDefault();
 			});
