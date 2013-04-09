@@ -17,16 +17,20 @@ define([
 		
 		postCreate: function() {
 			this.inherited(arguments);
-			if(this.notification)
-				this.newItemsNode.innerHTML = this.notification;
-			else
-				this.newItemsNode.style.display = "none";
-				
-			if(this.imgSrc)
+			if(this.notification) {
+				if (this.newItemsNode) {
+					this.newItemsNode.innerHTML = this.notification;	
+				};				
+			} else {
+				if (this.newItemsNode) {
+					this.newItemsNode.style.display = "none";	
+				};
+			}
+			if(this.imgNode) {
 				this.imgNode.src = this.imgSrc;
-			else
-				this.imgNode.style.display = "none";
-			
+			} else {
+				// this.imgNode.style.display = "none";
+			}
 		}
 		
 	});
