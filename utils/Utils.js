@@ -14,6 +14,10 @@ define([
 			}
 		});
 		
+		saga.Utils.isFirefox = function(){
+			return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+		};
+		
 		saga.Utils.svgSupport = function(){
 			var support = has("android")?has("android")>=3:true;
 			return support;
