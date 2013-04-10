@@ -47,7 +47,7 @@ define([
                         };
                     };
 
-                    if (evt.keyIdentifier == "Enter") {
+                    if (evt.keyCode == 13) {
                         this.navigationMode = true;
                         if(this.value)
                         	var selectedItem = {};
@@ -152,6 +152,10 @@ define([
 
             currentString:function(){
                 return this.inputNode.value;
+            },
+
+            clearString: function(){
+                return this.inputNode.value = "";
             },
             
             reset: function(){
