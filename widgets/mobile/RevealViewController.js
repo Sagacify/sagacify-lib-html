@@ -39,7 +39,7 @@ define([
 				this.revealFrontViewController = new RevealFrontViewController({viewController:this.viewController, frame:this.frame});
 			}
 			
-        	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width+"px;"});//246
+        	this.containerView = new View({style:"height:"+this.frame.height+"px; width:"+this.frame.width+"px;position:absolute;"});//246
     		this.containerView.placeAt(this.domNode);
 
         	this.isRevealed = true;
