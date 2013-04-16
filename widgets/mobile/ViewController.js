@@ -2,6 +2,7 @@ define([
 	'dojo/_base/declare',
 	'dojo/_base/config',
 	'saga/widgets/_Widget', 
+	'dojo/text!./templates/ViewController.html',
 	'dojox/mobile/View',
 	'saga/widgets/mobile/ActionSheet', 
 	'dojo/_base/lang', 
@@ -12,10 +13,12 @@ define([
 	'dojox/mobile/ToolBarButton',
 	'dojo/on',
 	'dojo/_base/fx'], 
-	function(declare, config, _Widget, View, ActionSheet, lang, domConstruct, domClass, SpinWheelDatePicker, NavigationBar, ToolBarButton, on, fx) {
+	function(declare, config, _Widget, template, View, ActionSheet, lang, domConstruct, domClass, SpinWheelDatePicker, NavigationBar, ToolBarButton, on, fx) {
 	
 	return declare('saga.ViewController', [_Widget, View], {
 	
+		templateString: template,
+
 		parent: null,
 		
 		frame: null,
