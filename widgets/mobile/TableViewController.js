@@ -194,18 +194,30 @@ define([
 				dojo.forEach(cells, function(cell, j){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, selectEvent, function(evt){
+						var revealViewController = me.revealViewController;
 						var navigationController = me.navigationController?me.navigationController:me.parent?me.parent.navigationController:null;
-						if(navigationController && cell.clickable){
+						if((revealViewController || navigationController) && cell.clickable){
 							if(typeof cell.select == "function")
 								cell.select();
 							else
 								domClass.add(node, "selected");
-							navigationController.frontViewController().on("afterTransitionOut", function(args){
+
+							var unselectCell = function(cell){
 								if(typeof cell.unselect == "function")
 									cell.unselect();
 								else
 									domClass.remove(node, "selected");
-							});
+							}
+							if(navigationController){
+								navigationController.frontViewController().on("afterTransitionOut", function(args){
+									unselectCell(cell)
+								});
+							}
+							if(revealViewController){
+								on(revealViewController, "revealEnd", function(args){
+									unselectCell(cell);
+								});
+							}
 						}
 						//if(!cell.cancelClick){
 							me.didSelectRowAtIndexPath({section:i, row:j});	
