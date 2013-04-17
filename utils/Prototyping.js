@@ -35,6 +35,10 @@ define([
 			String.prototype.startsWith = function(str){
 				return this.slice(0, str.length) == str;
 			};
+			
+			String.prototype.endsWith = function(str){
+				return this.slice(this.length-str.length, this.length) == str
+			};
 
 			Date.prototype.getWeekDayName = function(){
 				return this.weekDayName()[this.getDay()];
