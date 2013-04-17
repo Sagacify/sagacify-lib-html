@@ -136,27 +136,8 @@ define([
 				}
 					
 				var cells = [];
-				
-				var cellsContainer;
-				/*if (this._type == "RoundRect") {
-					cellsContainer = new RoundRectList();
-					//fix the size between the edge of the table and the cells					
-					if(this._options && this._options.roundrect_marginside) {
-						cellsContainer.domNode.style.marginLeft = this._options.roundrect_marginside+"px";
-						cellsContainer.domNode.style.marginRight = this._options.roundrect_marginside+"px";
-					}
-				}
-				else {
-					cellsContainer = new EdgeToEdgeList();
-				}
-				if(this._transparentBg)
-					cellsContainer.domNode.style.background = "transparent";
-				this._cellsContainer = cellsContainer;
-				if(this._containerClass){
-					domClass.remove(cellsContainer.domNode);
-					domClass.add(cellsContainer.domNode, this._containerClass);
-				}*/
-				cellsContainer = domConstruct.create("ul", {"class":this.classForSection(i)});
+
+				cellsContainer = domConstruct.create("ul", {"class":this.classForSection(i)});	
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);
 				for (var j = 0; j < numberOfRowsInSection; j++) {
