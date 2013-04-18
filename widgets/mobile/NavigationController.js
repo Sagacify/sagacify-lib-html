@@ -168,6 +168,11 @@ define([
 				viewControllerToPop.performTransition(this._viewControllers[0].id, -1, "slide", null);
 				var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
 				var viewControllerToAppear = this._viewControllers[0];
+
+				if(typeof viewControllerToPop.viewWillDisappear == "function"){
+					viewControllerToPop.viewWillDisappear();
+				}
+
 				viewControllerToPop.on("afterTransitionOut", function(){
 					if(viewControllerToAppear.domNode){
 						domConstruct.destroy(fakediv);
