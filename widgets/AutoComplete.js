@@ -18,15 +18,13 @@ define([
             
             key: "_id",
 
-        	constructor : function(args) {
-
-        	},
-        	
             focus: function(){
                 this.inputNode.focus();
             },
 
         	postCreate : function() {
+
+                this.inherited(arguments);
 
                 // inputNode
                 var me = this;
