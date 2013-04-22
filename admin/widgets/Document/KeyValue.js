@@ -2,7 +2,7 @@
 define([
 	'dojo/_base/declare',  
 	'saga/widgets/_Widget',
-	'dojo/text!./templates/KeySingleValue.html',
+	'dojo/text!./templates/KeyValue.html',
 	'./InputString',
 	'./InputNumber',
 	'./InputBoolean',
@@ -10,13 +10,14 @@ define([
 	'./InputLinkedObject',
 	'./ArrayValue',
 	'./DicValue',
+	'./DocumentHeader',
 	'dojo/on',
 	'dojo/dom-construct',
 	'dojo/_base/lang',
 	'exports'],
 
-    function(declare, _Widget, template, InputString, InputNumber, InputBoolean, InputDate, InputLinkedObject, ArrayValue, DicValue, on, domConstruct, lang, exports){
-         declare('admin.KeySingleValue', [_Widget], {
+    function(declare, _Widget, template, InputString, InputNumber, InputBoolean, InputDate, InputLinkedObject, ArrayValue, DicValue, DocumentHeader, on, domConstruct, lang, exports){
+         declare('admin.KeyValue', [_Widget], {
 
 			templateString: template,
 			
@@ -121,7 +122,8 @@ define([
 						this.input.placeAt(this.domNode);
 						break;
 						default:
-						this.input = new InputLinkedObject({collection:this.collection});
+						//this.input = new InputLinkedObject({collection:this.collection});
+						this.input = new DocumentHeader({collection:this.collection});
 						this.input.placeAt(this.domNode);
 						if(this.bind[this.key]){
 							var delButton = domConstruct.create("button", {innerHTML:"Delete"}, this.domNode);
@@ -187,6 +189,6 @@ define([
         	
         });
         
-     exports.create = admin.KeySingleValue;
-     return admin.KeySingleValue;
+     exports.create = admin.KeyValue;
+     return admin.KeyValue;
 }); 

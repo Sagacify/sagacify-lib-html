@@ -8,13 +8,14 @@ define([
 	'./InputBoolean',
 	'./InputDate',
 	'./InputLinkedObject',
+	'./DocumentHeader',
 	'./DicValue',
 	'./InputImage',
 	'dojo/on',
 	'dojo/dom-construct',
 	'dojo/_base/lang'],
 
-    function(declare, _Widget, template, InputString, InputNumber, InputBoolean, InputDate, InputLinkedObject, DicValue, InputImage, on, domConstruct, lang){
+    function(declare, _Widget, template, InputString, InputNumber, InputBoolean, InputDate, InputLinkedObject, DocumentHeader, DicValue, InputImage, on, domConstruct, lang){
          return declare('admin.ArrayValue', [_Widget], {
 
 			templateString: template,
@@ -68,7 +69,10 @@ define([
          				var input = new InputImage();
          				break;
          				default:
-         				var input = new DicValue({schema:type, keyStack:lang.clone(this.keyStack)});
+         				if(type._id)
+         					var input = new DocumentHeader({embedded: true, schema:type, keyStack:lang.clone(this.keyStack)});
+         				else
+         					var input = new DicValue({schema:type, keyStack:lang.clone(this.keyStack)});
          				break;
          			}
          		}
@@ -87,7 +91,8 @@ define([
 						input = new InputDate();
 						break;
 						default:
-						input = new InputLinkedObject({collection:this.collection});
+						//input = new InputLinkedObject({collection:this.collection});
+						input = new DocumentHeader({collection:this.collection});
 						break;
 					}
 				}

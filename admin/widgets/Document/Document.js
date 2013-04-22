@@ -3,12 +3,12 @@ define([
 	'dojo/_base/declare',  
 	'saga/widgets/_Widget',
 	'dojo/text!./templates/Document.html',
-	'./KeySingleValue',
-	'./KeyArrayValue',
+	'./KeyValue',
+	//'./KeyArrayValue',
 	'dojo/on',
 	'admin/stores/AdminStore'],
 
-    function(declare, _Widget, template, KeySingleValue, KeyArrayValue, on, AdminStore){
+    function(declare, _Widget, template, KeyValue, /*KeyArrayValue,*/ on, AdminStore){
          return declare('admin.Document', [_Widget], {
 
 			templateString: template,
@@ -88,7 +88,7 @@ define([
           	fillSchema: function(){
           		this.keyValueItems = {};
 				if(this._id){
-	          		var keyValueItem = new KeySingleValue({bind:this.doc, key:"_id", type:"String", keyStack:[]});
+	          		var keyValueItem = new KeyValue({bind:this.doc, key:"_id", type:"String", keyStack:[]});
 	          		keyValueItem.setReadOnly(true);
 	          		keyValueItem.placeAt(this.itemsNode);
 	          		this.keyValueItems._id = keyValueItem;
@@ -102,7 +102,7 @@ define([
 	          				this.keyValueItems[key] = keyValueItem;
 	          			}
 	          			else {*/
-	          				var keyValueItem = new KeySingleValue({bind:this.doc, key:key, type:this.schema[key], collection:this._collectionsByModel__?this._collectionsByModel__[this.schema[key]	]:this.schema._collectionsByModel__[this.schema[key]], keyStack:[]});
+	          				var keyValueItem = new KeyValue({bind:this.doc, key:key, type:this.schema[key], collection:this._collectionsByModel__?this._collectionsByModel__[this.schema[key]]:this.schema._collectionsByModel__[this.schema[key]], keyStack:[]});
 	          				keyValueItem.placeAt(this.itemsNode);
 	          				this.keyValueItems[key] = keyValueItem;	
 	          			//}

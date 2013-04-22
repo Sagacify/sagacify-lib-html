@@ -86,6 +86,10 @@ define(['dojo/_base/declare'], function(declare){
 		return UrlManager.getCollection(collection)+"/"+_id;
 	};
 	
+	UrlManager.getDocumentSummary = function(collection, _id) {
+		return UrlManager.getDocument(collection, _id)+"/summary";
+	};
+	
 	UrlManager.getDocumentArray = function(collection, _id, arrayKey) {
 		return UrlManager.getDocument(collection, _id)+"/"+arrayKey;
 	};

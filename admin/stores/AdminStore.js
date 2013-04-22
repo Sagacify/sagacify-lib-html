@@ -18,6 +18,10 @@ define([
                 return this.get(UrlManager.getDocument(collection, _id));  
             },
             
+            getDocumentSummary: function(collection, _id){
+                return this.get(UrlManager.getDocumentSummary(collection, _id));  
+            },
+            
             getDocumentArray: function(collection, _id, arrayKey){
                 return this.get(UrlManager.getDocumentArray(collection, _id, arrayKey));  
             },

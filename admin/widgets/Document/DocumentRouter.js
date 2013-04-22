@@ -53,6 +53,7 @@ define([
           		var getSchema = function(){
           			var deferred = new Deferred();
           			adminStore.getSchema(me.collection).then(function(schema){
+          				_collectionsByModel__ = schema._collectionsByModel__;
 						console.log(schema);
 						deferred.resolve(schema);
 					}, function(error){
@@ -115,6 +116,7 @@ define([
         			route = route.substring(0, route.length-1);
 				if(route.charAt(0)=='/')
         			route = route.substring(1, route.length);
+
           		domConstruct.empty(this.docNode);
 
           		var me = this;
@@ -255,9 +257,10 @@ define([
 				        	});
 				        }
 						
+						var docsGrid;
 						var adminStore = AdminStore.singleton();
 						adminStore.getSchema(this.schema._collectionsByModel__[subschema[0]]).then(function(schema){
-			          		var docsGrid = new DocsGrid({schema:schema, target:"/adminapi/collections/"+me.collection+"/"+me._id+"/"+arrayKey, renderActionCell:renderActionCell});
+			          		docsGrid = new DocsGrid({schema:schema, target:"/adminapi/collections/"+me.collection+"/"+me._id+"/"+arrayKey, renderActionCell:renderActionCell});
 			          		docsGrid.placeAt(me.docNode);
 			          		docsGrid.startup();
 			          		
@@ -268,8 +271,8 @@ define([
 						});	
 					}
 				}
-				
 				else if(bind instanceof Object){
+					debugger
 					var type = subschema._meta__?subschema._meta__.type:"";
 					switch(type){
 						case "Image":
@@ -283,6 +286,11 @@ define([
 						dic.setValue(bind);
 						break;
 					}
+				}
+				//linked
+				else{
+					var documentRouter = new admin.DocumentRouter({collection:splitRoute[1], _id:splitRoute[2]!="new"?splitRoute[2]:null});
+					documentRouter.placeAt(this.docNode);
 				}
 					
           		

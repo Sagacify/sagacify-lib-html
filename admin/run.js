@@ -32,7 +32,7 @@ require({
 		'dgrid',
 
 		// For reference, this is what a more verbose package declaration looks like.
-		{ name: 'admin', location: 'admin', map: {} }
+		{ name: 'admin', location: 'saga/admin', map: {} }
 	]
 // Require `app`. This loads the main application module, `app/main`, since we registered the `app` package above.
 }, [ 'admin' ]);
