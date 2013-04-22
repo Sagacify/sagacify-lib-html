@@ -2,7 +2,7 @@
 define([
 	'dojo/_base/declare',  
 	'saga/widgets/_Widget',
-	'dojo/text!./templates/Container.html',
+	'dojo/text!./templates/AdminRouter.html',
 	'./Database/Database',
 	'./Collection/Collection',
 	'./Document/DocumentRouter',
@@ -11,7 +11,7 @@ define([
 	'admin/stores/AdminStore'],
 
     function(declare, _Widget, template, Database, Collection, DocumentRouter, on, domConstruct, AdminStore){
-    return declare('admin.Container', [_Widget], {
+    return declare('admin.AdminRouter', [_Widget], {
 
 		templateString: template,
 		

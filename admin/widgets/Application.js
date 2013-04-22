@@ -4,13 +4,13 @@ define([
 	'dojo/_base/array',
 	'dojo/on', 
 	'saga/widgets/_Widget',
-	'./Container',
+	'./AdminRouter',
 	'./Auth/Login',
 	'./Auth/Register',
 	'dojo/text!./templates/Application.html',
 	'admin/stores/AdminStore'],
 
-    function(declare, array, on, _Widget, Container, Login, Register, template, AdminStore){
+    function(declare, array, on, _Widget, AdminRouter, Login, Register, template, AdminStore){
          return declare('admin.Application', [_Widget], {
 
 			templateString: template,
@@ -47,12 +47,12 @@ define([
     			switch (splitRoute[0])
     			{
     				case "collections":
-    					if(!(this._subController instanceof Container)){
+    					if(!(this._subController instanceof AdminRouter)){
     						if(this._subController)
     							this._subController.destroyRecursive();
-							var container = new Container();
-							this._subController = container;
-							container.placeAt(this.domNode);
+							var adminRouter = new AdminRouter();
+							this._subController = adminRouter;
+							adminRouter.placeAt(this.domNode);
     					}
     					this._subController.route(route);
     					//this._subController.route(route.substring(route.indexOf('/')+1, route.length));
