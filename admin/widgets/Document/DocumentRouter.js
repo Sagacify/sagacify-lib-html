@@ -32,6 +32,8 @@ define([
 			image: null,
 			
 			keyValueItems: null,
+			
+			linkedInDoc: false,
         	        	        	             	
         	constructor : function(args) {
 
@@ -174,8 +176,20 @@ define([
           			file.placeAt(this.docNode);
           		}
           		else{
-          			var doc = new Document({_id:this._id, doc:this.doc, schema:this.schema, collection:this.collection});
-          			doc.placeAt(this.docNode);	
+          			var me = this;
+          			var doc = new Document({_id:this._id, doc:this.doc, schema:this.schema, collection:this.collection, linkedInDoc:this.linkedInDoc});
+          			doc.placeAt(this.docNode);
+          			on(doc, "cancel", function(args){
+          				me.onCancel();
+          			});	
+          			
+          			on(doc, "create", function(args){
+          				me.onCreate();
+          			});
+          			
+          			on(doc, "save", function(args){
+          				me.onSave();
+          			});
           		}
           	},
           	
@@ -197,6 +211,7 @@ define([
           		
           		var bind = this.doc;
           		var bindSchema = this.schema;
+          		var parentBind = bind;
 				for(var i = 0; i < nbRouteParts; i++){
 					if(bind instanceof Array){
 						bindSchema = bindSchema[0];
@@ -212,6 +227,8 @@ define([
 						}
 						bind = bind[splitRoute[i]];
 					}
+					if(i == nbRouteParts-2)
+						parentBind = bind;
 				}
 				
 				console.log(subschema)
@@ -282,7 +299,7 @@ define([
 						});	
 					}
 				}
-				else if(bind instanceof Object){
+				else if(bind instanceof Object && bind._id){
 					var type = subschema._meta__?subschema._meta__.type:"";
 					switch(type){
 						case "Image":
@@ -299,9 +316,8 @@ define([
 				}
 				//linked
 				else{
-					debugger
 					if(!this.subLinkedDoc || this.subLinkedDoc._id != bind){
-						this.subLinkedDoc = new admin.DocumentRouter({collection:_collectionsByModel__[subschema], _id:bind});
+						this.subLinkedDoc = new admin.DocumentRouter({collection:_collectionsByModel__[subschema], _id:(bind instanceof Object)?bind._id:bind, linkedInDoc:true});
 					}
 
 					this.subLinkedDoc.placeAt(this.docNode);
@@ -310,9 +326,15 @@ define([
 						subroute += splitRoute[i]+"/";
 					}
 					this.subLinkedDoc.route(subroute);
-				}
 					
-          		
+					on(this.subLinkedDoc, "create", function(doc){
+						parentBind[splitRoute[splitRoute.length-1]] = doc._id;
+					});
+					
+					on(this.subLinkedDoc, "delete", function(doc){
+						parentBind[splitRoute[splitRoute.length-1]] = null;
+					});
+				}
           	},
           	
           	showSetAddExisting: function(splitRoute){
@@ -426,7 +448,19 @@ define([
 					});	
 				}
 				
-          	}
+         },
+         
+         onCancel: function(){
+         	
+         },
+         
+         onSave: function(){
+         	
+         },
+         
+         onCreate: function(){
+         	
+         }
           	
         });
 }); 

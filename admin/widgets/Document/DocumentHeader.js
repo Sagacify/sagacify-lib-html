@@ -46,8 +46,7 @@ define([
 						dojo.forEach(me.keyStack, function(key){
 							hash += key+"/";
 						});
-						//History.pushState(null, null, hash+(me.inArray?me.value._id:""));
-						History.pushState(null, null, hash+me.value._id);
+						History.pushState(null, null, hash+(me.inArray?me.value._id:""));
 					//}
 				});
          	},

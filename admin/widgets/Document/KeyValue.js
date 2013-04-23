@@ -138,7 +138,7 @@ define([
 						else{
 							var addExistingButton = domConstruct.create("button", {innerHTML:"Set existing"}, this.domNode);
 							//var addNewButton = domConstruct.create("button", {innerHTML:"Set new"}, this.domNode);
-							var addNewLink = domConstruct.create("a", {href:"/bla", target:"_blank", innerHTML:"Set new"}, this.domNode);
+							var addNewLink = domConstruct.create("a", {href:"", target:"_blank", innerHTML:"Set new"}, this.domNode);
 						}
 						on(addExistingButton, "click", function(evt){
 							var hash = History.getState().hash;
@@ -148,6 +148,18 @@ define([
 								hash += key+"/"
 							});
 							History.pushState(null, null, hash+"set_existing");
+						});
+						on(addNewLink, "click", function(evt){
+							evt.preventDefault();
+							var hash = History.getState().hash;
+							if(hash.charAt(hash.length-1) != '/')
+								hash += "/";
+							dojo.forEach(me.keyStack, function(key){
+								hash += key+"/"
+							});
+							debugger
+							History.pushState(null, null, hash);
+							debugger
 						});
 						/*on(addNewButton, "click", function(evt){
 							var hash = History.getState().hash;

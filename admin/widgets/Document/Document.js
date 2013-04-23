@@ -26,6 +26,8 @@ define([
 			backURI: null,
 			
 			_collectionsByModel__: null,
+			
+			linkedInDoc: false,
         	        	        	             	
         	constructor : function(args) {
 
@@ -45,6 +47,7 @@ define([
 						if(me._id){
 							adminStore.setDocument(me.collection, me._id, me.doc).then(function(result){
 								console.log(result);
+								me.onSave(result.object);
 								History.pushState(null, null, "/admin/collections/"+me.collection);
 							}, function(error){
 								console.log(error);
@@ -57,7 +60,7 @@ define([
 								var hash = History.getState().hash;
 								var splitHash = hash.split("/");
 								var lastRoutePart = splitHash[splitHash.length-1];
-								if(lastRoutePart != "set_new" && lastRoutePart != "add_new")
+								if(lastRoutePart != "set_new" && lastRoutePart != "add_new" && !me.linkedInDoc)
 									History.pushState(null, null, "/admin/collections/"+me.collection);
 							}, function(error){
 								console.log(error);
@@ -73,6 +76,7 @@ define([
 					on(this.deleteButton, "click", function(evt){
 						adminStore.deleteDocument(me.collection, me._id).then(function(result){
 							console.log(result);
+							me.onDelete();
 							History.pushState(null, null, "/admin/collections/"+me.collection);
 						}, function(error){
 							console.log(error);
@@ -81,6 +85,7 @@ define([
 				}
 				
 				on(this.cancelButton, "click", function(evt){
+					me.onCancel();
 					History.back();
 				});
           	},
@@ -111,6 +116,18 @@ define([
           	},
           	
           	onCreation: function(){
+          		
+          	},
+          	
+          	onSave: function(){
+          		
+          	},
+          	
+          	onCancel: function(){
+          		
+          	},
+          	
+          	onDelete: function(){
           		
           	}
         	
