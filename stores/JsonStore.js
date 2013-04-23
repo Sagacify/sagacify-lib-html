@@ -46,8 +46,10 @@ define([
 				}
 				query = queryString;
 			}
-			console.log(this.bearerString);
-			console.log("GET "+target + (query || ""));
+			if (debugMode) {
+				console.log(this.bearerString);
+				console.log("GET "+target + (query || ""));
+			};	
 			var me = this;
 			var deferred = new Deferred();
 			var xhrDeferred = xhr("GET", {
@@ -56,7 +58,9 @@ define([
 				preventCache: true,
 				headers: headers,
 				load: function(data){
-					console.log(data);
+					if (debugMode) {
+						console.log(data);
+					}
 					deferred.resolve(data);
 				},
 				error: function(error){
@@ -69,7 +73,9 @@ define([
 								preventCache: true,
 								headers: headers,
 								load: function(data){
-									console.log(data);
+									if (debugMode) {
+										console.log(data);
+									}
 									deferred.resolve(data);
 								},
 								error: function(error){
@@ -98,9 +104,12 @@ define([
 			headers["Content-Type"] = "application/json";
 			headers["If-Match"] = options.overwrite === true ? "*" : null,
 			headers["If-None-Match"] = options.overwrite === false ? "*" : null
-			console.log("POST "+target);
-			console.log(object);
 
+			if (debugMode) {
+				console.log("POST "+target);
+				console.log(object);
+			};
+			
 			var deferred = new Deferred();
 			xhr.post({
 				url: target,
@@ -109,7 +118,9 @@ define([
 				preventCache: true,
 				headers: headers,
 				load: function(data){
-					console.log(data);
+					if (debugMode) {
+						console.log(data);
+					}
 					deferred.resolve(data);
 				},
 				error: function(error){
@@ -157,8 +168,12 @@ define([
 			headers["Content-Type"] = "application/json";
 			headers["If-Match"] = options.overwrite === true ? "*" : null,
 			headers["If-None-Match"] = options.overwrite === false ? "*" : null
-			console.log("PUT "+target);
-			console.log(object);
+
+			if (debugMode) {
+				console.log("PUT "+target);
+				console.log(object);
+			}
+
 			var deferred = new Deferred();
 			xhr.put({
 				url: target,
@@ -207,7 +222,10 @@ define([
 			headers["Content-Type"] = "application/json";
 			headers["If-Match"] = options.overwrite === true ? "*" : null,
 			headers["If-None-Match"] = options.overwrite === false ? "*" : null
-			console.log("DELETE "+target);
+
+			if (debugMode) {
+				console.log("DELETE "+target);
+			}
 			var deferred = new Deferred();
 			dojo.xhrDelete({
 				url:target,
@@ -215,7 +233,9 @@ define([
 				preventCache: true,
 				headers:headers,
 				load: function(data){
-					console.log("del ok");
+					if (debugMode) {
+						console.log("del ok");
+					}
 					deferred.resolve(data);
 				},
 				error: function(error){
