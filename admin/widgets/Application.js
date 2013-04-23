@@ -61,9 +61,9 @@ define([
 	    				if(this._subController){
     						this._subController.destroyRecursive();
     					}
-    					var accountCreation = new AccountCreation();
-    					this._subController = accountCreation;
-    					accountCreation.placeAt(this.domNode);
+    					var register = new Register();
+    					this._subController = register;
+    					register.placeAt(this.domNode);
     					break;
     				case "login":
     					if(this._subController){

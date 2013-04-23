@@ -70,7 +70,7 @@ define([
          				break;
          				default:
          				if(type._id)
-         					var input = new DocumentHeader({embedded: true, schema:type, keyStack:lang.clone(this.keyStack)});
+         					var input = new DocumentHeader({embedded: true, schema:type, keyStack:lang.clone(this.keyStack), inArray:true});
          				else
          					var input = new DicValue({schema:type, keyStack:lang.clone(this.keyStack)});
          				break;
@@ -92,7 +92,7 @@ define([
 						break;
 						default:
 						//input = new InputLinkedObject({collection:this.collection});
-						input = new DocumentHeader({collection:this.collection});
+						input = new DocumentHeader({collection:this.collection, keyStack:lang.clone(this.keyStack), inArray:true});
 						break;
 					}
 				}

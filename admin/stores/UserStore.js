@@ -5,8 +5,8 @@ define(["dojo/_base/declare",
 	function(declare, Deferred, JsonStore, UrlManager){
 		declare("Store.UserStore", [JsonStore], {
     		
-    		register: function(user){
-    			return this.post(UrlManager.userRegister(), user, {}, true);
+    		register: function(username, password){
+    			return this.post(UrlManager.userRegister(), {username:username, password:password}, {}, true);
     		},
     		
     		login: function(username, password){
