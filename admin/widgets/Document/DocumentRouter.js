@@ -116,8 +116,11 @@ define([
         			route = route.substring(0, route.length-1);
 				if(route.charAt(0)=='/')
         			route = route.substring(1, route.length);
-
-          		domConstruct.empty(this.docNode);
+				
+          		//domConstruct.empty(this.docNode);
+          		while(this.docNode.hasChildNodes()) {
+    				this.docNode.removeChild(this.docNode.lastChild);
+				}
 
           		var me = this;
           		var splitRoute = route.split("/");
@@ -178,12 +181,26 @@ define([
           	
           	showSubPart: function(splitRoute){
           		var me = this;
+          		
+          		var subschema = this.schema;
+          		var nbRouteParts = splitRoute.length;
+				for(var i = 0; i < splitRoute.length; i++){
+					if(subschema instanceof Array)
+						subschema = subschema[0];
+					else if(subschema instanceof Object)
+						subschema = subschema[splitRoute[i]];
+					else{
+						nbRouteParts = i;
+						i = splitRoute.length;
+					}
+				}
+          		
           		var bind = this.doc;
           		var bindSchema = this.schema;
-				for(var i = 0; i < splitRoute.length; i++){
+				for(var i = 0; i < nbRouteParts; i++){
 					if(bind instanceof Array){
 						bindSchema = bindSchema[0];
-						bind = bind.filter(function(item){return item._id == splitRoute[i]})[0];
+						bind = bind.filter(function(item){return item._id == splitRoute[i] || item == splitRoute[i]})[0];
 					}
 					else{
 						bindSchema = bindSchema;
@@ -196,16 +213,10 @@ define([
 						bind = bind[splitRoute[i]];
 					}
 				}
-				var subschema = this.schema;
-				for(var i = 0; i < splitRoute.length; i++){
-					if(subschema instanceof Array)
-						subschema = subschema[0];
-					else
-						subschema = subschema[splitRoute[i]];
-				}
 				
-				console.log(bind)
 				console.log(subschema)
+				console.log(bind)
+				
 				if(bind instanceof Array){
 					var isEmbedded = subschema[0] instanceof Object;
 					var arrayKey = splitRoute[splitRoute.length-1];
@@ -272,7 +283,6 @@ define([
 					}
 				}
 				else if(bind instanceof Object){
-					debugger
 					var type = subschema._meta__?subschema._meta__.type:"";
 					switch(type){
 						case "Image":
@@ -289,8 +299,17 @@ define([
 				}
 				//linked
 				else{
-					var documentRouter = new admin.DocumentRouter({collection:splitRoute[1], _id:splitRoute[2]!="new"?splitRoute[2]:null});
-					documentRouter.placeAt(this.docNode);
+					debugger
+					if(!this.subLinkedDoc || this.subLinkedDoc._id != bind){
+						this.subLinkedDoc = new admin.DocumentRouter({collection:_collectionsByModel__[subschema], _id:bind});
+					}
+
+					this.subLinkedDoc.placeAt(this.docNode);
+					var subroute = "";
+					for(var i = nbRouteParts; i < splitRoute.length; i++){
+						subroute += splitRoute[i]+"/";
+					}
+					this.subLinkedDoc.route(subroute);
 				}
 					
           		

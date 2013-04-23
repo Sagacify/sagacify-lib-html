@@ -64,7 +64,7 @@ define([
 			}
 			
 		var cleanDoc = function(doc){
-			if(doc._id && doc._id.substring(0,4)=="new_")
+			if(doc._id && (doc._id.substring(0,4)=="new_" || doc._id == "new"))
 				delete doc._id;
 			for(var key in doc){
 				if(doc[key] instanceof Array)

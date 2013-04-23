@@ -123,7 +123,7 @@ define([
 						break;
 						default:
 						//this.input = new InputLinkedObject({collection:this.collection});
-						this.input = new DocumentHeader({collection:this.collection});
+						this.input = new DocumentHeader({collection:this.collection, keyStack:lang.clone(this.keyStack)});
 						this.input.placeAt(this.domNode);
 						if(this.bind[this.key]){
 							var delButton = domConstruct.create("button", {innerHTML:"Delete"}, this.domNode);
