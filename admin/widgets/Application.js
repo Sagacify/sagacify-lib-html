@@ -35,7 +35,6 @@ define([
         		var stateHash = History.getState().hash;
         		var	route = stateHash.substring(7, stateHash.length);
         		this.route(route);
-
           	},
         	
         	route: function(route) {
