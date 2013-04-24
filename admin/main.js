@@ -8,7 +8,6 @@ define([ 'dojo/has', 'require' ], function (has, require) {
 			Config.setup();
 			
 			//window.addEventListener('storage', function(evt){alert("ok")}, false)
-			
 			startupQueue = [];
 			startup = function(){
         		dojo.forEach(startupQueue, function(objectToStart) {
