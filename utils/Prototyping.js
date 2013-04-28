@@ -7,12 +7,19 @@ define([
 		});
 		
 		Prototyping.setup = function(){
+			
 			Array.prototype.contains = function(item) {
 				return this.indexOf(item) != -1;
 			};
 			
 			Array.prototype.containsObject = function(_id){
 				return this.filter(function(item){return item._id == _id;}).length > 0;
+			};
+			
+			Array.prototype.remove = function(item){
+				var index = this.indexOf(item);
+				if(index != -1)
+					this.splice(index, 1);
 			};
 			
 			Array.prototype.removeObject = function(_id){
