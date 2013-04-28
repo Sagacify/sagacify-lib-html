@@ -34,6 +34,9 @@ define([
 				return "Opera";
 			if(navigator.userAgent.match(/IEMobile/i))
 				return "IE";
+			if (navigator.userAgent.match(/AppleWebKit/i)) {
+				return "Safari";
+			};
 			return null;
 		};
 		
@@ -53,6 +56,7 @@ define([
 		saga.Utils.simulateClick = function(node){
 			saga.Utils.simulateEvent(node, "click");	
 		};
+
 		
 		return saga.Utils;
 });

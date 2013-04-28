@@ -7,7 +7,7 @@ define([
 		});
 		
 		Prototyping.setup = function(){
-			
+
 			Array.prototype.contains = function(item) {
 				return this.indexOf(item) != -1;
 			};
@@ -133,6 +133,8 @@ define([
 				} else {
 					return verboseWithFutureDate(now);
 				}
+
+
 			};
 		};
 		

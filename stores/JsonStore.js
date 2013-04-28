@@ -127,9 +127,9 @@ define([
 					deferred.resolve(data);
 				},
 				error: function(error){
-
+					debugger;
 					if(error.response.status == 401){
-						if(target == "/auth/local/login"){
+						if (target.endsWith("/auth/local/login")) {
 							me.loginFail();
 							deferred.reject(error);
 							return;
