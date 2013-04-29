@@ -16,6 +16,12 @@ define([
 				return this.filter(function(item){return item._id == _id;}).length > 0;
 			};
 			
+			Array.prototype.remove = function(item){
+				var index = this.indexOf(item);
+				if(index != -1)
+					this.splice(index, 1);
+			};
+			
 			Array.prototype.removeObject = function(_id){
 				for(var i = 0; i < this.length; i++){
 					if(this[i]._id == _id){
