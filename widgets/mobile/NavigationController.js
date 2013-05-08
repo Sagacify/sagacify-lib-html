@@ -160,7 +160,7 @@ define([
 
 		},
 		
-		popViewController: function() {
+		popViewController: function(callback) {
 			if(this._viewControllers.length >= 2) {
 				var viewControllerToPop = this._viewControllers.splice(0, 1)[0];
 				this._viewControllers[0].domNode.style.height = (this._viewControllers[0].frame.height+44)+"px";
@@ -179,6 +179,9 @@ define([
 						domConstruct.destroy(eventsBlocker);
 						viewControllerToAppear.domNode.style.height = viewControllerToAppear.frame.height+"px"; 
 						viewControllerToPop.destroyRecursive();	
+						if (callback) {
+							callback();
+						};
 					}
 				});
 				this._updateNavigationBar();

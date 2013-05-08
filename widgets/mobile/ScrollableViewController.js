@@ -32,6 +32,30 @@ define([
 			scrollableView.placeAt(this.domNode);
 			scrollableView.startup();
 			this.scrollableView = scrollableView;
+		},
+
+		scrollTo: function(to){
+			this.scrollableView.scrollTo(to);
+		},
+
+		slideTo: function(to){
+			this.scrollableView.slideTo(to);
+		},
+
+		scrollToBottom: function(){
+			this.scrollTo({y:this.frame.height-this.scrollableView.containerNode.clientHeight})
+		},
+
+		slideToBottom: function(){
+			this.slideTo({y:this.frame.height-this.scrollableView.containerNode.clientHeight})
+		},
+
+		scrollToTop: function(){
+			this.scrollTo({y:0})
+		},
+
+		slideToTop: function(){
+			this.slideTo({y:0})
 		}
 		
 	});

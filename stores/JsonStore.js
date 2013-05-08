@@ -54,6 +54,9 @@ define([
 			var deferred = new Deferred();
 			var xhrDeferred = xhr("GET", {
 				url:target + (query || ""),
+				content: {test:"ok"},
+				postData: json.toJson({test:"ok"}),
+				data: json.toJson({test:"ok"}),
 				handleAs: "json",
 				preventCache: true,
 				headers: headers,
@@ -124,9 +127,8 @@ define([
 					deferred.resolve(data);
 				},
 				error: function(error){
-
 					if(error.response.status == 401){
-						if(target == "/auth/local/login"){
+						if (target.endsWith("/auth/local/login")) {
 							me.loginFail();
 							deferred.reject(error);
 							return;
@@ -212,7 +214,7 @@ define([
 		},
 		
 		
-		remove: function(target, options){
+		remove: function(target, object, options){
 			var me = this;
 			options = options || {};
 
@@ -229,6 +231,7 @@ define([
 			var deferred = new Deferred();
 			dojo.xhrDelete({
 				url:target,
+				data: object,
 				handleAs: "json",
 				preventCache: true,
 				headers:headers,

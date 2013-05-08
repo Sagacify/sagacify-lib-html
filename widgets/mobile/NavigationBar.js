@@ -15,7 +15,7 @@ define([
 		
 		templateString: template,
 		
-		clonedChildren: [],
+		clonedChildren: null,
 		
 		constructor: function(args){
 			
@@ -51,7 +51,7 @@ define([
 			this.addUserImg.src = svgSupport?"saga/widgets/mobile/Assets/img/add.svg":"saga/widgets/mobile/Assets/img/add.png";
 			this.settingsImg.src = svgSupport?"saga/widgets/mobile/Assets/img/settings.svg":"saga/widgets/mobile/Assets/img/settings.png";
 			this.infoImg.src = svgSupport?"saga/widgets/mobile/Assets/img/info.svg":"saga/widgets/mobile/Assets/img/info.png";*/
-			
+			this.clonedChildren = [];
 			var me = this;
 			dojo.forEach(this.domNode.children, function(child, i){
 				me.clonedChildren.push(lang.clone(child));
