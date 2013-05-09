@@ -1,12 +1,71 @@
 define([
-	'dojo/_base/declare'
+	'dojo/_base/declare',
+	'saga/utils/AvatarGeneration',
+	'dojo/dom-style'	
 	],
-	function(declare){
+	function(declare, AvatarGeneration, domStyle){
 		declare("Prototyping", null, {
 
 		});
 		
 		Prototyping.setup = function(){
+
+			HTMLImageElement.prototype.loadPicture= function(picture){
+				if (!picture) {
+					return
+				};
+
+                this.src = picture.path;
+                // (new AvatarPicture()).generateImg(this, this.data.author.name, this.data.author.name);    
+			};
+
+			HTMLImageElement.prototype.loadUser = function(user){
+				if (!user) {
+					return;
+				};
+				if (user.profilePicture) {
+					this.loadPicture(user.profilePicture);
+				} else {
+					this.loadAvatar(user.name);
+				}
+			};
+
+
+			// HTMLImageElement.prototype.loadUser = function(user){
+			// 	if (!user) {
+			// 		return;
+			// 	};
+			// 	if (user.profilePicture) {
+			// 		this.loadPicture(user.profilePicture);
+			// 	} else {
+			// 		this.loadAvatar(user.name);
+			// 	}
+			// };
+
+			HTMLImageElement.prototype.loadGroup = function(group){
+				if (!group) {
+					return;
+				};
+				if (group.logo) {
+					this.loadPicture(group.logo);
+				} else {
+					this.loadAvatar(group.name);
+				}
+			};
+
+			HTMLImageElement.prototype.loadAvatar = function(name){
+                //No picture available
+                var width = domStyle.get(this, "width");
+                var height = domStyle.get(this, "height");
+                
+                canvasArray = (new AvatarGeneration()).createAvatar(this.parentNode, "100", "100", "Calibri", name);
+                
+                var data = canvasArray[0].toDataURL();
+                // domAttr.set(this, "src", data);
+                this.src = data;
+                this.style.background = canvasArray[1];
+			};
+
 
 			Array.prototype.contains = function(item) {
 				return this.indexOf(item) != -1;
@@ -133,9 +192,9 @@ define([
 				} else {
 					return verboseWithFutureDate(now);
 				}
-
-
 			};
+
+
 		};
 		
 		return Prototyping;
