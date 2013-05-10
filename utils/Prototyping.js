@@ -31,17 +31,6 @@ define([
 			};
 
 
-			// HTMLImageElement.prototype.loadUser = function(user){
-			// 	if (!user) {
-			// 		return;
-			// 	};
-			// 	if (user.profilePicture) {
-			// 		this.loadPicture(user.profilePicture);
-			// 	} else {
-			// 		this.loadAvatar(user.name);
-			// 	}
-			// };
-
 			HTMLImageElement.prototype.loadGroup = function(group){
 				if (!group) {
 					return;
