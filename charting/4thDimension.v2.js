@@ -13,9 +13,11 @@
 	var memory = [];
 	var dimensions = {};
 	// Default url is the current host
-	var hostname = window.location.host;
+	//var hostname = window.location.host;
+	var hostname = '127.0.0.1';
 	// Default port is port 80 (HTTP)
-	var port = 80;
+	//var port = 80;
+	var port = 8080;
 	// Checks if the socket.io library is loaded.
 	var SOCKET_IO_EXISTS = false;
 	var socket;
@@ -39,7 +41,8 @@
 	// List of graphs axes.
 	var axis = {
 		'x': undefined,
-		'y': undefined
+		'y': undefined,
+		'z': undefined
 	};
 
 	// Url names the REST API is going to make requests to.
@@ -57,8 +60,38 @@
 
 	// Class names used by divs and other useful dom elements.
 	var CLASS_NAMES = {
-		root 	: 'root'
+		root 	: 'root',
+		select 	: 'select',
+		model 	: 'model'
 	};
+
+	// Initialize the dimension and draws the chart with the selected
+	// configuration and data.
+	function render_Chart() {
+		var root = d.getElementsByClassName('root');
+		var selectedValues = [];
+		var selects;
+		for(var i = 0; i < root.length; i++) {
+			selects = root[i].getElementsByTagName('select');
+			for(var k = 0; k < selects.length; k++) {
+				if(selectedValues[i]) {
+					selectedValues[i] += '.' + selects[k].options[selects[k].selectedIndex].text;
+				}
+				else {
+					selectedValues[i] = selects[k].options[selects[k].selectedIndex].text;
+				}
+				if(selects[k].options[selects[k].selectedIndex].getAttribute('type')) {
+					selectedValues[i] += '.' + selects[k].options[selects[k].selectedIndex].getAttribute('type');
+				}
+			}
+		}
+		var dimension;
+		for(var j = 0; j < selectedValues.length; j++) {
+			dimension = selectedValues[j].split('.');
+			set_Dimension(dimension[0] + '.' + dimension[1], dimension[2]);
+			set_Axis(dimension[0] + '.' + dimension[1], dimension[3]);
+		}
+	}
 
 	// Makes a REST API call to the server to get database collection names.
 	// As of now (13/05/2013) only MongoDB (NoSQL) collections are supported.
@@ -90,8 +123,8 @@
 	function get_Request(name, callback) {
 		if(SOCKET_IO_EXISTS) {
 			socket = io.connect(hostname + ':' + port);
-			socket.emit(API_URLS['SOCKET_IO'][name], { name: true });
-			socket.on(API_URLS['SOCKET_IO'][name], function(data) {
+			socket.emit('req_' + API_URLS['SOCKET_IO'][name], { name: true });
+			socket.on('res_' + API_URLS['SOCKET_IO'][name], function(data) {
 				callback(data);
 			});
 		}
@@ -100,56 +133,129 @@
 		}
 	}
 
-	// Initialize three select inputs to let the use choose :
-	// - the collection
-	// - the model
-	// - the axis the values will by bound to
-	function init_Selects() {
+	// Makes the GET requests to get the necessary information to 
+	// initialize the corresponding drop-down menus.
+	function init_Selects(nAxis) {
 		API_get_Collections(function(collections) {
-			var parent = main['parent'];
-			var root = d.createElement('div');
-			root.className = CLASS_NAMES['root'];
-			parent.appendChild(root);
-			var colSelect = d.createElement('select');
-			root.appendChild(colSelect);
 			if(collections) {
-				var colOption;
-				for(var i = 0; i < collections.length; i++) {
-					colOption = d.createElement('option');
-					colOption.setAttribute('value', collections[i]);
-					colOption.innerHTML = collections[i];
-					colSelect.appendChild(colOption);
-				}
-				var modSelect = d.createElement('select');
-				root.appendChild(modSelect);
 				API_get_Models(function(models) {
 					if(models) {
-						var modOption;
-						for(var j = 0; j < models.length; j++) {
-							modOption = d.createElement('option');
-							modOption.setAttribute('value', models[j]);
-							modOption.innerHTML = models[j];
-							modSelect.appendChild(modOption);
-						}
-						var axisSelect = d.createElement('select');
-						root.appendChild(axisSelect);
-						var axisOption;
-						var axisName;
-						for(var k = 1; k <= 2; k++) {
-							axisName = (k === 1) ? 'x' : 'y';
-							axisOption = d.createElement('option');
-							axisOption.setAttribute('value', axisName);
-							axisOption.innerHTML = axisName;
-							axisSelect.appendChild(axisOption);
-						}
-						var submit = d.createElement('button');
-						submit.setAttribute('name', 'submit');
-						submit.innerHTML = 'Render';
-						root.appendChild(submit);
+						construct_DOMElements(collections, models, nAxis);
 					}
 				});
 			}
 		});
+	}
+
+	// Initialize the appropriate number of select menus to let the
+	// user configure the graph data that will be used.
+	function construct_DOMElements(collections, models, nAxis) {
+		var parent = main['parent'];			
+			
+		// Filters the displayed options in the model select drop-down menu.
+		function click_Collection(className, text, model) {
+			var elements = className.split('_');
+			var index = elements[elements.length - 1];
+			var modSelect = d.getElementsByClassName(CLASS_NAMES['model'] + '_' + index);
+			modSelect[0].innerHTML = '';
+			var modOption;
+			var split;
+			var attr;
+			var type;
+			for(var i = 0; i < model.length; i++) {
+				split = model[i].split('.');
+				attr = split[0];
+				type = split[1];
+				modOption = d.createElement('option');
+				modOption.setAttribute('type', type);
+				modOption.className = text;
+				modOption.innerHTML = attr;
+				modSelect[0].appendChild(modOption);
+			}
+		}
+
+		// Initialize three select inputs to let the user choose :
+		// - the collection
+		// - the model attribute
+		// - the axis the values will be bound to
+		function construct_SelectCollections(collections, models, nAxis, i) {
+			var root = d.createElement('div');
+			root.className = CLASS_NAMES['root'];
+			parent.appendChild(root);
+
+			// Creates the select drop-down menu for the collection name choice.
+			var colSelect = d.createElement('select');
+			colSelect.className = CLASS_NAMES['select'] + '_' + i;
+			root.appendChild(colSelect);
+			colSelect.onchange = function(e) {
+				click_Collection(this.className, this.options[this.selectedIndex].text, models[this.options[this.selectedIndex].text]);
+			};
+
+			var colOption;
+			var modSelect = d.createElement('select');
+			modSelect.className = CLASS_NAMES['model'] + '_' + i;
+			root.appendChild(modSelect);
+			for(var i = 0; i < collections.length; i++) {
+				colOption = d.createElement('option');
+				colOption.setAttribute('value', collections[i]);
+				colOption.innerHTML = collections[i];
+				colSelect.appendChild(colOption);
+				if(i === 0) {
+					construct_SelectModels(models[collections[0]], collections[0], modSelect);
+				}
+			}
+			// Creates the select drop-down menu for the axis choice.
+			var axisSelect = d.createElement('select');
+			root.appendChild(axisSelect);
+			var axisOption;
+			var axisName;
+			for(var k = 1; k <= nAxis; k++) {
+				axisName = (k === 1) ? 'x' : (k === 2) ? 'y' : 'z';
+				axisOption = d.createElement('option');
+				axisOption.setAttribute('value', axisName);
+				axisOption.innerHTML = axisName;
+				axisSelect.appendChild(axisOption);
+			}
+			var lineBreak = d.createElement('br');
+			root.appendChild(lineBreak);
+		}
+
+		// Creates the select drop-down menu for the key name choice.
+		function construct_SelectModels(model, collection, modSelect) {
+			var modOption;
+			var split;
+			var attr;
+			var type;
+			for(var key in model) {
+				split = model[key].split('.');
+				attr = split[0];
+				type = split[1];
+				modOption = d.createElement('option');
+				modOption.setAttribute('type', type);
+				modOption.className = collection;
+				modOption.innerHTML = attr;
+				modSelect.appendChild(modOption);
+			}
+		}
+
+		// Create a submit button.
+		function construct_ButtonSubmit(root) {
+			var submit = d.createElement('button');
+			submit.setAttribute('name', 'submit');
+			submit.innerHTML = 'Render';
+			root.appendChild(submit);
+			submit.onclick = function(e) {
+				render_Chart();
+			};
+		}
+
+		// For each dimension used in the selected chart type three
+		// drop-down select menus will be created.
+		for(var i = 0; i < nAxis; i++) {
+			construct_SelectCollections(collections, models, nAxis, i);
+		}
+		// /!\ Replace Parent /!\
+		construct_ButtonSubmit(parent);
 	}
 
 	// Initialize new Axis by pairing it with an existing dimension.
@@ -203,7 +309,9 @@
 				parent 				: parent
 			});
 		}
-		init_Selects();
+		// You have to specify the number of dimensions your chart type will be using
+		// by passing it as an INT parameter to the init_Selects() method.
+		init_Selects(3);
 		dom_AxisSelection();
 	}
 
@@ -257,7 +365,7 @@
 			return counter;
 		}
 		if(arguments.length < 2) { return console.error(e.notEnoughArgs); }
-		if(count_Dimensions() === 2) { return console.error(e.maxDimensions); }
+		if(count_Dimensions() > 3) { return console.error(e.maxDimensions); }
 		if(!(get_Homogeneity(key))) {
 			console.error(e.noHomgeneity);
 		}
@@ -318,7 +426,7 @@
 		var homogeneity = true;
 		if(dimensions) {
 			for(var dimension in dimensions) {
-				if(!(get_Homogeneity(dimensions, data))) {
+				if(!(get_Homogeneity(dimension, data))) {
 					homogeneity = false;
 				}
 			}
@@ -331,7 +439,6 @@
 				store_Json(data);
 			}
 			else {
-				console.log(Object.prototype.toString.call(data));
 				return console.error(e.wrongType);
 			}
 			if(arguments.length > 1) {
@@ -356,6 +463,9 @@
 			return true;
 		}
 		else {
+			console.log(target);
+			console.log(key);
+			console.log(key in target);
 			if(is_Object(target)) {
 				return (key in target) ? true : false;
 			}
