@@ -146,6 +146,7 @@
 			});
 		}
 		else {
+			// Cross-browser Ajax support.
 			var objects = [
 				function() { return new XMLHttpRequest() },
 				function() { return new ActiveXObject("MSxml2.XMLHHTP") },
@@ -168,15 +169,19 @@
 			var xhr = XHRobject();
 			xhr.open("POST", API_URLS['AJAX'][name], true);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			var ajaxData = {
+				name: true
+			};
+			var ajaxString;
 			if(window.JSON) {
-				d = JSON.stringify(d);
+				ajaxString = JSON.stringify(ajaxData);
 			}
 			else {
 				// Load the JSON2 file by Douglas Crockford that implements
 				// the JSON format and related methods (e.g: parse and stringify)
 				// https://github.com/douglascrockford/JSON-js
 			}
-			xhr.send(d);
+			xhr.send(ajaxString);
 			xhr.onreadystatechange = function() {
 				if((xhr.readyState === 4) && (xhr.status === 200)) {
 					callback(JSON.parse(xhr.responseText));
