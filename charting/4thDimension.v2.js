@@ -60,9 +60,11 @@
 
 	// Class names used by divs and other useful dom elements.
 	var CLASS_NAMES = {
-		root 	: 'root',
-		select 	: 'select',
-		model 	: 'model'
+		root 		: 'root',
+		select 		: 'select',
+		model 		: 'model',
+		container 	: 'container',
+		chart 		: 'chart'
 	};
 
 	// Initialize the dimension and draws the chart with the selected
@@ -91,6 +93,21 @@
 			set_Dimension(dimension[0] + '.' + dimension[1], dimension[2]);
 			set_Axis(dimension[0] + '.' + dimension[1], dimension[3]);
 		}
+		// TO DO : CREATE A CHART ROUTER THAT ROUTES CHART TYPE WITH THEIR NAME
+		render_BarChart();
+	}
+
+	// After preparing axes and dimensions this method will render a chart in with D3.js.
+	function render_BarChart() {
+		var chart = d3.select('.' + CLASS_NAMES['container'])
+					  .append('div')
+					  .attr('class', CLASS_NAMES['chart']);
+		chart.selecteAll('div')
+			 .data(memory)
+			 .enter()
+			 .append('div')
+			 .style('width', function(d) { return d * 10 + 'px'; })
+			 .text(function(d) { return d; });
 	}
 
 	// Makes a REST API call to the server to get database collection names.
@@ -129,7 +146,42 @@
 			});
 		}
 		else {
-			// Use Ajax
+			var objects = [
+				function() { return new XMLHttpRequest() },
+				function() { return new ActiveXObject("MSxml2.XMLHHTP") },
+				function() { return new ActiveXObject("MSxml3.XMLHHTP") },
+				function() { return new ActiveXObject("Microsoft.XMLHTTP") }
+			];
+			function XHRobject() {
+				var xhr = false;
+				for(var i = 0; i < objects.length; i++) {
+					try {
+						xhr = objects[i]();
+					}
+					catch(e) {
+						continue;
+					}
+					break;
+				}
+				return xhr;
+			}
+			var xhr = XHRobject();
+			xhr.open("POST", API_URLS['AJAX'][name], true);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			if(window.JSON) {
+				d = JSON.stringify(d);
+			}
+			else {
+				// Load the JSON2 file by Douglas Crockford that implements
+				// the JSON format and related methods (e.g: parse and stringify)
+				// https://github.com/douglascrockford/JSON-js
+			}
+			xhr.send(d);
+			xhr.onreadystatechange = function() {
+				if((xhr.readyState === 4) && (xhr.status === 200)) {
+					callback(JSON.parse(xhr.responseText));
+				}
+			}
 		}
 	}
 
