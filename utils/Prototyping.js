@@ -30,7 +30,6 @@ define([
 				}
 			};
 
-
 			HTMLImageElement.prototype.loadGroup = function(group){
 				if (!group) {
 					return;
@@ -53,6 +52,12 @@ define([
                 // domAttr.set(this, "src", data);
                 this.src = data;
                 this.style.background = canvasArray[1];
+			};
+
+			Array.prototype.popFirst= function(){
+				this.reverse();
+				this.pop();
+				this.reverse();
 			};
 
 
