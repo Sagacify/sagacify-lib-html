@@ -67,7 +67,6 @@ define([
 
 		onError: function(deferred){
 			return function(error){
-				debugger;
 				deferred.reject(error);
 			}
 		},

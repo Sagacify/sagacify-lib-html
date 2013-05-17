@@ -100,6 +100,12 @@ define([
 				return this.slice(this.length-str.length, this.length) == str
 			};
 
+
+			String.prototype.isEmail = function(str){
+				var re = /\S+@\S+\.\S+/;
+				return re.test(this);
+			};
+
 			Date.prototype.getWeekDayName = function(){
 				return this.weekDayName()[this.getDay()];
 			};
