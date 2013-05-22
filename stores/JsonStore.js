@@ -62,9 +62,10 @@ define([
 
 		onLoadFunction: function(deferred){
 			return function(data){
-				if (DebugMode) {
+				// if (DebugMode) {
+					console.log("load success");
 					console.log(data);
-				}
+				// }
 				deferred.resolve(data);
 			}
 		}, 
@@ -109,8 +110,9 @@ define([
 				});
 			}
 
-			xhr(httpMethod, request);
-
+			var xhrDeferred =  xhr(httpMethod, request);
+			deferred.ioArgs = xhrDeferred.ioArgs;
+				
 			return deferred;
 		},
 
