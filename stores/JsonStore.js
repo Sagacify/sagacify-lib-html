@@ -33,6 +33,7 @@ define([
 		},
 
 		configureUrlWithDict: function(target, query){
+
 			if(query instanceof Object){
 				var queryString = "?";
 				for (queryKey in query){
@@ -41,6 +42,9 @@ define([
 					queryString += queryKey+"="+query[queryKey];
 				}
 			}
+			if (query instanceof String) {
+				return target+queryString;
+			};
 			return target + (queryString || "");
 		},
 
@@ -134,7 +138,16 @@ define([
 		
 		loginFail: function(){
 			
-		}
+		}, 
+
+		getIdentity: function(object){
+			if(object._id)
+				return object._id;
+			console.log("Error for getting object identifier (not _id");
+			console.log(object);
+			return null;
+		},
+
 			
 	});
 	
