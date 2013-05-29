@@ -112,7 +112,7 @@ define([
 
 			var xhrDeferred =  xhr(httpMethod, request);
 			deferred.ioArgs = xhrDeferred.ioArgs;
-				
+
 			return deferred;
 		},
 
@@ -126,9 +126,7 @@ define([
 		
 		put: function(target, object, options, removeAuth){
 			return this.executeRequest("PUT", target, options, null, object, removeAuth);
-
 		},
-		
 		
 		remove: function(target, object, options, removeAuth){
 			return this.executeRequest("DELETE", target, options, null, object, removeAuth);
