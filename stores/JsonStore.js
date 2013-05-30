@@ -63,7 +63,6 @@ define([
 		onLoadFunction: function(deferred){
 			return function(data){
 				// if (DebugMode) {
-					console.log("load success");
 					console.log(data);
 				// }
 				deferred.resolve(data);
@@ -91,6 +90,13 @@ define([
 		},
 
 		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
+
+			if (DebugMode) {
+				console.log(httpMethod + " - " + target);
+				console.log(queryDict);
+				console.log(data);
+			};
+
 			var me = this;
 			var deferred = new Deferred();
 
