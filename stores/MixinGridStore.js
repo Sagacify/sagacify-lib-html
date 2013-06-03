@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"admin/stores/util/QueryResults",
+	"./util/QueryResults",
 	], 
 	function(declare, QueryResults) {
 	
