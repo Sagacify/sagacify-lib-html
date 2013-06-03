@@ -22,7 +22,6 @@ var profile = {
 		// them and naively assumes they are scripts.
 		copyOnly: function (filename, mid) {
 			return ((/saga\/charting\//.test(filename) || /saga\/time-picker\//.test(filename) || /saga\/maps\//.test(filename)) && !/\.css$/.test(filename));
-			//return ((/saga\/time-picker\//.test(filename) || /saga\/maps\//.test(filename)) && !/\.css$/.test(filename));
 		},
 
 		// Files that are AMD modules.
@@ -31,6 +30,11 @@ var profile = {
 		amd: function (filename, mid) {
 			return !this.copyOnly(filename, mid) && /\.js$/.test(filename);
 		},
+
+		// amdExcludes: function (filename, mid) {
+		// 	return mid
+		// 	'charting':1
+		// },
 
 		// Files that should not be copied when the `mini` build flag is set to true.
 		// In this case, we are excluding this package configuration file which is not necessary in a built copy of

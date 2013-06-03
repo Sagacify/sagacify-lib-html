@@ -152,7 +152,7 @@ define([
 			console.log("Error for getting object identifier (not _id");
 			console.log(object);
 			return null;
-		},
+		}
 
 			
 	});
