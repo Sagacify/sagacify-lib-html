@@ -53,10 +53,17 @@ define([
 			},
 
 			callDefault: function(){
+				if (!this.defaultPushStateArgs) {
+					return;
+				};
 				this.defaultPushState.apply(History.pushState, this.defaultPushStateArgs);
-			} 
+				this.defaultPushStateArgs = null;
+			}, 
 
-
+			reset: function(){
+				this.locked = false;
+				this.defaultPushStateArgs = null;
+			}
 		});
 		
 		return saga.HistoryLock;
