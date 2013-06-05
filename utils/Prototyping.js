@@ -197,8 +197,6 @@ define([
 					return verboseWithFutureDate(now);
 				}
 			};
-
-
 		};
 		
 		return Prototyping;
