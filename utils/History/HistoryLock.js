@@ -28,7 +28,7 @@ define([
 
 			lock : function(handlingPush){
 				if(this.locked){
-					debugger;
+
 				} else {
 					this.handlingPush = handlingPush;
 					this.locked = true;
@@ -37,7 +37,7 @@ define([
 
 			unlock : function(){
 				if(!this.locked){
-					debugger;
+
 				} else {
 					this.locked = false;
 					this.callDefault();

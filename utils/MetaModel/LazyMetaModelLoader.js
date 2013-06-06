@@ -11,18 +11,15 @@ define([
                 } else {
                   var me = this;
                   FormStore.getMetaModel(className).then(function(response){
-	                  me.getMetaModel()[className] = response;
-	                  callback(me.getMetaModel()[className]);
+	                  // me.getMetaModel()[className] = response;
+	                  callback(response);
                   });                                  
                 }
              },
 
              getMetaModel: function(){
-				return saga.LazyMetaModelLoader.getMetaModel();
-             	// if (!this.metaModels) {
-             	// 	this.metaModels = {};
-             	// };
-             	// return this.metaModels;
+              
+				      return saga.LazyMetaModelLoader.getMetaModel();
              }
 		});
 
