@@ -1,14 +1,68 @@
 define([
 	'dojo/_base/declare',
 	'saga/utils/AvatarGeneration',
-	'dojo/dom-style'	
+	'dojo/dom-style', 
+	'dojo/date/locale',
+	'dojo/on'	
 	],
-	function(declare, AvatarGeneration, domStyle){
+	function(declare, AvatarGeneration, domStyle, locale, on){
 		declare("Prototyping", null, {
 
 		});
 		
 		Prototyping.setup = function(){
+
+			HTMLInputElement.prototype.inputDateCalendar = function(date, onChangeCallback){
+				this.savedDate = date;
+
+				this.isADateInput = true;
+				
+				this.dateFormatingPicker = 'dd/mm/yyyy';
+				this.dateFormatingDojo = 'dd/MM/yyyy';
+				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
+
+				var me = this;
+			    me.pickDate = $(this).pickadate({
+					weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+					format:this.dateFormatingPicker,
+					formatSubmit: this.dateFormatingPicker,
+					// Buttons
+					today: 'Today',
+					clear: 'Clear',
+					showMonthsShort: true, 
+					onSet: function(){
+						if (onChangeCallback) {
+							onChangeCallback();	
+						};
+					}
+                });
+			}
+
+			HTMLInputElement.prototype.inputTimeCalendar = function(date, onChangeCallback){
+				this.savedDate = date;
+				this.dateFormatingPicker = 'HH:i';
+				this.dateFormatingDojo = "HH:m";
+
+				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
+				this.value = timeStr
+				var me = this;
+			    this.picker = $(this).pickatime({
+					// formatSubmit: formatPicker,
+					format:this.dateFormatingPicker,
+					onSet: function(){
+						if (onChangeCallback) {
+							onChangeCallback()	
+						};
+						
+					}					
+                });
+			}
+
+			HTMLInputElement.prototype.getDate = function(){
+				 var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
+				 return result
+			}
+
 
 			HTMLImageElement.prototype.loadPicture= function(picture){
 				if (!picture) {
@@ -197,8 +251,6 @@ define([
 					return verboseWithFutureDate(now);
 				}
 			};
-
-
 		};
 		
 		return Prototyping;
