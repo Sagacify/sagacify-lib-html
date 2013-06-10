@@ -54,7 +54,6 @@ define([
 				request.url = query;
 				request.handleAs = "json";
 				request.preventCache = true;
-				request.headers = headers;
 				request.postData=json.toJson((data || {}));
 				request.load= this.onLoadFunction(deferred);
 			return request;
@@ -104,7 +103,6 @@ define([
 
 			var query = this.configureUrlWithDict(target, queryDict);
 			var request = this.configureRequestContent(query, headers, deferred, data);
-
 			if (disableRelog) {
 				request.error = this.onError(deferred);
 			} else {
