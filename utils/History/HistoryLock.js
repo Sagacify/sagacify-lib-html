@@ -26,28 +26,28 @@ define([
 					me.reprocessingPushState();
 				}
 
-				this.defaultBack = History.back;
-				History.back = function(){
-					debugger
-					/* HistoryLock class (Yvan)*/
-					// me.defaultBackArgs = arguments;
-					// me.reprocessingPushState();
-				}
+				// this.defaultBack = History.back;
+				// // History.back = function(){
+				// // 	debugger
+				// // 	/* HistoryLock class (Yvan)*/
+				// // 	// me.defaultBackArgs = arguments;
+				// // 	// me.reprocessingPushState();
+				// // }
 
-				history.forward = function(){
-					debugger
-				}
+				// // history.forward = function(){
+				// // 	debugger
+				// // }
 
-				History.Adapter.bind(window,'statechange',function(){
-					// debugger
-					console.log("Change state!");
-				    // if (!window.stateChangeIsLocal) {
-				    //     someAjaxLoadFunction(History.getState().url);
-				    // }
-				    // else {
-				    //     window.stateChangeIsLocal = false;
-				    // }
-				});				
+				// // History.Adapter.bind(window,'statechange',function(){
+				// // 	// debugger
+				// // 	console.log("Change state!");
+				// //     // if (!window.stateChangeIsLocal) {
+				// //     //     someAjaxLoadFunction(History.getState().url);
+				// //     // }
+				// //     // else {
+				// //     //     window.stateChangeIsLocal = false;
+				// //     // }
+				// // });				
 
 			},
 
