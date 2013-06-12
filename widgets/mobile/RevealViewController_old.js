@@ -105,10 +105,10 @@ define([
 		},
 		
 		revealStart: function() {
-			if(dojo.isChrome) {
+			//if(dojo.isChrome) {
 				//this.containerView.domNode.style.left = "320px";
 				//this.containerView.domNode.style.left = this.frame.width*0.75+"px";
-			}
+			//}
 			this.containerView.domNode.style.overflow = "";
         	this.containerView.performTransition(null, 1, "reveal", null);	
 		},
@@ -124,7 +124,7 @@ define([
 		unrevealStart: function() {
 			this.containerView.performTransition(null, -1, "reveal", null);
 			//handle problem with chrome and reveal animation when overflow is not hidden
-			if(dojo.isChrome) {
+			//if(dojo.isChrome) {
 				/*var me = this;
 				me.timeout = setTimeout(function handleOverflow(){
 					var m = win.doc.defaultView.getComputedStyle(me.containerView.domNode, '')["-webkit-transform"];
@@ -136,7 +136,7 @@ define([
 					}
 					me.timeout = setTimeout(handleOverflow, 1);
 				}, 1);*/
-			}
+			//}
 			this.onUnrevealStart.apply(this, []);
 		},
 		

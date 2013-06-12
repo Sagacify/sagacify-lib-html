@@ -50,13 +50,14 @@ define([
 
 		configureRequestContent: function(query, headers, deferred, data){
 			var request = {};
-				request.headers = headers;
-				request.url = query;
-				request.handleAs = "json";
-				request.preventCache = true;
-				request.headers = headers;
-				request.postData=json.toJson((data || {}));
-				request.load= this.onLoadFunction(deferred);
+			request.url = query;
+			request.handleAs = "json";
+			request.preventCache = true;
+			request.headers = headers;
+			if(data) {
+				request.postData = json.toJson(data);
+			}
+			request.load = this.onLoadFunction(deferred);
 			return request;
 		},
 
@@ -89,14 +90,56 @@ define([
 				};
 		},
 
-		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
-
-			if (DebugMode) {
-				console.log(httpMethod + " - " + target);
-				console.log(queryDict);
-				console.log(data);
+		/*configureJqueryRequest: function(request) {
+			var jQueryRequest = {
+				type 	: request.method, 
+				url 	: request.url,
+				dataType: request.handleAs,
+				cache 	: request.preventCache,
+				headers : request.headers
 			};
+			if(request.postData) {
+				jQueryRequest.data = request.postData;
+			}
+			return jQueryRequest;
+		},
 
+		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
+			var me = this;
+			var deferred = new Deferred();
+
+			var query = this.configureUrlWithDict(target, queryDict);
+
+			var headers = this.configureHeader(headersOptions, removeAuth);
+			var request = this.configureRequestContent(query, headers, deferred, data);
+
+			var jQueryRequest = this.configureJqueryRequest(request);
+
+			$.ajax(jQueryRequest).done(function(data) {
+				me.onLoadFunction(deferred)(data);
+			}).fail(function(jqXHR, error) {
+				if(disableRelog) {
+					me.onError(deferred)(error);
+				}
+				else {
+					this.handlingRelog(deferred, function() {
+						var headers = me.configureHeader(headersOptions, removeAuth);
+						var request = me.configureRequestContent(query, headers, deferred);
+
+						var jQueryRequest = this.configureJqueryRequest(request);
+						$.ajax(jQueryRequest).done(function(data) {
+							me.onLoadFunction(deferred)(data);
+						}).fail(function(jqXHR, error) {
+							me.onError(deferred)(error);
+						});
+					});
+				}
+			});
+
+			return deferred;
+		},*/
+
+		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
 			var me = this;
 			var deferred = new Deferred();
 
@@ -116,8 +159,7 @@ define([
 				});
 			}
 
-			var xhrDeferred =  xhr(httpMethod, request);
-			deferred.ioArgs = xhrDeferred.ioArgs;
+			xhr(httpMethod, request);
 
 			return deferred;
 		},

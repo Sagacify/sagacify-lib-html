@@ -12,9 +12,9 @@ define([
 		templateString: "<div style='left:10px;width:5px;height:200px;'></div>",
 		
 		constructor: function(args) {
-			if(args) {
+			//if(args) {
 				
-			}
+			//}
 		},
 		
 		postCreate: function() {

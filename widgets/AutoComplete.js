@@ -40,32 +40,32 @@ define([
                 on(this.inputNode, 'keydown', function(evt){
 
                     if (evt.keyIdentifier == "Down") {
-                        if (!this.navigationMode) {
-                            this.navigationMode = true;
-                        };
-                    };
+                        this.navigationMode =  this.navigationMode || true;
+                        console.log('down');
+                    }
 
                     if (evt.keyCode == 13) {
                         this.navigationMode = true;
-                        if(this.value)
+                        if(this.value) {
                         	var selectedItem = {};
                         	selectedItem[me.key] = this.value;
                         	me.addSelecteditem(selectedItem);
                         	this.value = "";
-                    };
+                        }
+                    }
 
                     if (evt.keyIdentifier == "left") {
                         if (this.navigationMode) {
-
-                        };
+                            console.log('left');
+                        }
                         
-                    };
+                    }
 
                     if (evt.keyIdentifier == "right") {
                         if (this.navigationMode) {
-
-                        };
-                    };
+                            console.log('right');
+                        }
+                    }
                 });
           	},
             addSelecteditem: function(item){
