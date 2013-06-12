@@ -1,8 +1,9 @@
 define([
 	'dojo/_base/declare',
-	'dojo/dom-style'	
+	'dojo/dom-style',
+	'dojo/on'
 	],
-	function(declare, AvatarGeneration, domStyle){
+	function(declare, AvatarGeneration, domStyle, on){
 		declare("saga.HistoryLock", null, {
 
 			locked :false,
@@ -24,6 +25,30 @@ define([
 					me.defaultPushStateArgs = arguments;
 					me.reprocessingPushState();
 				}
+
+				// this.defaultBack = History.back;
+				// // History.back = function(){
+				// // 	debugger
+				// // 	/* HistoryLock class (Yvan)*/
+				// // 	// me.defaultBackArgs = arguments;
+				// // 	// me.reprocessingPushState();
+				// // }
+
+				// // history.forward = function(){
+				// // 	debugger
+				// // }
+
+				// // History.Adapter.bind(window,'statechange',function(){
+				// // 	// debugger
+				// // 	console.log("Change state!");
+				// //     // if (!window.stateChangeIsLocal) {
+				// //     //     someAjaxLoadFunction(History.getState().url);
+				// //     // }
+				// //     // else {
+				// //     //     window.stateChangeIsLocal = false;
+				// //     // }
+				// // });				
+
 			},
 
 			lock : function(handlingPush){

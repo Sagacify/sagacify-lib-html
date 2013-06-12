@@ -60,7 +60,10 @@ define([
 
 			HTMLInputElement.prototype.getDate = function(){
 				 var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
-				 return result
+				 if (!result) {
+				 	return new Date();
+				 };
+				 return result;
 			}
 
 

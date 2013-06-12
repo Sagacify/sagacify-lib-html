@@ -1,16 +1,16 @@
 define([
 	'dojo/_base/declare',
-	'dojo/dom-style'	
+  'app/stores/ClientAdminStore'
 	],
-	function(declare, AvatarGeneration, domStyle){
+	function(declare, ClientAdminStore){
 		declare("saga.LazyMetaModelLoader", null, {
 
-             loadForm: function(className, callback){
-                if (this.getMetaModel()[className]) {
-                  callback(this.getMetaModel()[className]);
+             loadForm: function(collectionName, callback){
+                if (this.getMetaModel()[collectionName]) {
+                  callback(this.getMetaModel()[collectionName]);
                 } else {
                   var me = this;
-                  FormStore.getMetaModel(className).then(function(response){
+                  this.getStore(collectionName).getMetaModel(collectionName).then(function(response){
 	                  // me.getMetaModel()[className] = response;
 	                  callback(response);
                   });                                  
@@ -18,8 +18,13 @@ define([
              },
 
              getMetaModel: function(){
-              
 				      return saga.LazyMetaModelLoader.getMetaModel();
+             }, 
+
+             getStore: function(collectionName){
+              this.store = new ClientAdminStore()
+              this.store.collectionName = collectionName;
+              return this.store;
              }
 		});
 
