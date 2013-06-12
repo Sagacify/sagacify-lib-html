@@ -42,10 +42,10 @@ define([
 					queryString += queryKey+"="+query[queryKey];
 				}
 			}
-			if (query instanceof String) {
-				return target+queryString;
+			if (typeof query == "string") {
+				return target+query;
 			};
-			return target + (queryString || "");
+			return target;
 		},
 
 		configureRequestContent: function(query, headers, deferred, data){
@@ -147,7 +147,6 @@ define([
 
 			var query = this.configureUrlWithDict(target, queryDict);
 			var request = this.configureRequestContent(query, headers, deferred, data);
-
 			if (disableRelog) {
 				request.error = this.onError(deferred);
 			} else {

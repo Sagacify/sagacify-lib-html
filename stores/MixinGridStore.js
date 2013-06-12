@@ -16,6 +16,10 @@ define([
 					query += "-";
 				query += options.sort[0].attribute;
 			}
+
+			if (this.searchText) {
+				query +="&filter="+this.searchText;
+			};
 			
 			if(this.fullSearch)
 				query += "&*="+this.fullSearch;
@@ -38,6 +42,7 @@ define([
 			this.qr = QueryResults(results)
 			return this.qr;
 		}, 
+
 
 		getTarget: function(){
 			/* override me */
