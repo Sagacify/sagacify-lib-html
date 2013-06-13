@@ -41,11 +41,12 @@ define([
 						queryString += "&";
 					queryString += queryKey+"="+query[queryKey];
 				}
+				target +=queryString
 			}
-			if (query instanceof String) {
-				return target+queryString;
+			if (typeof query == "string") {
+				return target+query;
 			};
-			return target + (queryString || "");
+			return target;
 		},
 
 		configureRequestContent: function(query, headers, deferred, data){
