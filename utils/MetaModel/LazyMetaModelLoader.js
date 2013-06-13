@@ -1,6 +1,6 @@
 define([
-	'dojo/_base/declare',
-  'app/stores/ClientAdminStore'
+	'dojo/_base/declare'
+  //'app/stores/ClientAdminStore'
 	],
 	function(declare, ClientAdminStore){
 		declare("saga.LazyMetaModelLoader", null, {
