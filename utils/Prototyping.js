@@ -11,6 +11,10 @@ define([
 		});
 		
 		Prototyping.setup = function(){
+			History.openInTab = function(url){
+			  var win=window.open(url, '_blank');
+			  win.focus();				
+			}
 
 			HTMLInputElement.prototype.inputDateCalendar = function(date, onChangeCallback){
 				this.savedDate = date;
