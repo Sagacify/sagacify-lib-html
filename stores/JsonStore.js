@@ -41,6 +41,7 @@ define([
 						queryString += "&";
 					queryString += queryKey+"="+query[queryKey];
 				}
+				target +=queryString
 			}
 			if (typeof query == "string") {
 				return target+query;
