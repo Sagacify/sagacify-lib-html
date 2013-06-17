@@ -8,6 +8,10 @@ define([
 		
 		Prototyping.setup = function(){
 
+			Array.prototype.last = function(){
+				return this[this.length-1];
+			};
+
 			Array.prototype.contains = function(item) {
 				return this.indexOf(item) != -1;
 			};
@@ -45,6 +49,13 @@ define([
 			
 			String.prototype.endsWith = function(str){
 				return this.slice(this.length-str.length, this.length) == str
+			};
+
+			Number.prototype.max2DigitsAfterDecimal = function(){
+				if(this % 1 != 0)
+					return this.toFixed(2);
+				else
+					return this;
 			};
 
 			Date.prototype.getWeekDayName = function(){
