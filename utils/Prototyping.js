@@ -1,12 +1,126 @@
 define([
-	'dojo/_base/declare'
+	'dojo/_base/declare',
+	'saga/utils/AvatarGeneration',
+	'dojo/dom-style', 
+	'dojo/date/locale',
+	'dojo/on'	
 	],
-	function(declare){
+	function(declare, AvatarGeneration, domStyle, locale, on){
 		declare("Prototyping", null, {
 
 		});
 		
 		Prototyping.setup = function(){
+			History.openInTab = function(url){
+			  var win=window.open(url, '_blank');
+			  win.focus();				
+			}
+
+			HTMLInputElement.prototype.inputDateCalendar = function(date, onChangeCallback){
+				this.savedDate = date;
+
+				this.isADateInput = true;
+				
+				this.dateFormatingPicker = 'dd/mm/yyyy';
+				this.dateFormatingDojo = 'dd/MM/yyyy';
+				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
+
+				var me = this;
+			    me.pickDate = $(this).pickadate({
+					weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+					format:this.dateFormatingPicker,
+					formatSubmit: this.dateFormatingPicker,
+					// Buttons
+					today: 'Today',
+					clear: 'Clear',
+					showMonthsShort: true, 
+					onSet: function(){
+						if (onChangeCallback) {
+							onChangeCallback();	
+						};
+					}
+                });
+			}
+
+			HTMLInputElement.prototype.inputTimeCalendar = function(date, onChangeCallback){
+				this.savedDate = date;
+				this.dateFormatingPicker = 'HH:i';
+				this.dateFormatingDojo = "HH:m";
+
+				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
+				this.value = timeStr
+				var me = this;
+			    this.picker = $(this).pickatime({
+					// formatSubmit: formatPicker,
+					format:this.dateFormatingPicker,
+					onSet: function(){
+						if (onChangeCallback) {
+							onChangeCallback()	
+						};
+						
+					}					
+                });
+			}
+
+			HTMLInputElement.prototype.getDate = function(){
+				 var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
+				 if (!result) {
+				 	return new Date();
+				 };
+				 return result;
+			}
+
+
+			HTMLImageElement.prototype.loadPicture= function(picture){
+				if (!picture) {
+					return
+				};
+
+                this.src = picture.path;
+                // (new AvatarPicture()).generateImg(this, this.data.author.name, this.data.author.name);    
+			};
+
+			HTMLImageElement.prototype.loadUser = function(user){
+				if (!user) {
+					return;
+				};
+				if (user.profilePicture) {
+					this.loadPicture(user.profilePicture);
+				} else {
+					this.loadAvatar(user.name);
+				}
+			};
+
+			HTMLImageElement.prototype.loadGroup = function(group){
+				if (!group) {
+					return;
+				};
+				if (group.logo) {
+					this.loadPicture(group.logo);
+				} else {
+					this.loadAvatar(group.name);
+				}
+			};
+
+			HTMLImageElement.prototype.loadAvatar = function(name){
+                //No picture available
+                var width = domStyle.get(this, "width");
+                var height = domStyle.get(this, "height");
+                
+                canvasArray = (new AvatarGeneration()).createAvatar(this.parentNode, "100", "100", "Calibri", name);
+                
+                var data = canvasArray[0].toDataURL();
+                // domAttr.set(this, "src", data);
+                this.src = data;
+                this.style.background = canvasArray[1];
+			};
+
+			Array.prototype.popFirst= function(){
+				this.reverse();
+				this.pop();
+				this.reverse();
+			};
+
 
 			Array.prototype.last = function(){
 				return this[this.length-1];
@@ -35,6 +149,10 @@ define([
 				}
 			};
 			
+			String.prototype.capitalize = function() {
+			    return this.charAt(0).toUpperCase() + this.slice(1);
+			}
+			
 			String.prototype.inject = function(occurences){
 				var strToReturn = this;
 				occurences.forEach(function(occurence){
@@ -56,6 +174,11 @@ define([
 					return this.toFixed(2);
 				else
 					return this;
+			};
+
+			String.prototype.isEmail = function(str){
+				var re = /\S+@\S+\.\S+/;
+				return re.test(this);
 			};
 
 			Date.prototype.getWeekDayName = function(){
@@ -144,8 +267,6 @@ define([
 				} else {
 					return verboseWithFutureDate(now);
 				}
-
-
 			};
 		};
 		

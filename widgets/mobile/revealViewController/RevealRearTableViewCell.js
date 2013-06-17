@@ -17,21 +17,28 @@ define([
 		
 		postCreate: function() {
 			this.inherited(arguments);
-			if(this.notification) {
-				if (this.newItemsNode) {
-					this.newItemsNode.innerHTML = this.notification;	
-				};				
-			} else {
-				if (this.newItemsNode) {
-					this.newItemsNode.style.display = "none";	
-				};
-			}
+
+			this.updateNotification(this.notification);
+
 			if(this.imgNode) {
 				this.imgNode.src = this.imgSrc;
 			} else {
 				// this.imgNode.style.display = "none";
 			}
+		}, 
+
+		updateNotification: function(notif){
+			if(notif) {
+				if (this.newItemsNode) {
+					this.newItemsNode.style.display = "";
+					this.newItemsNode.innerHTML = notif;	
+				};				
+			} else {
+				if (this.newItemsNode) {
+					this.newItemsNode.style.display = "none";	
+					this.newItemsNode.innerHTML = "";
+				};
+			}
 		}
-		
 	});
 });

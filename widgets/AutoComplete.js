@@ -66,20 +66,21 @@ define([
 
                         };
                     };
-
                 });
           	},
             addSelecteditem: function(item){
             	if(this.selectedItems.containsObject(item._id))
             		return;
                 var li = this.generateSelectedNode(item);
-                dojo.place(li, this.selectedListNode);
+                this.placeSelectedItem(li);
 
                 var me = this;
                 this.selectedItems.push(item);
-
             },
 
+            placeSelectedItem: function(cell){
+                dojo.place(cell, this.selectedListNode);
+            },
 
             addSuggestedItem: function(item){
             	if(this.selectedItems.containsObject(item._id))
