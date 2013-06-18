@@ -29,6 +29,7 @@ define([
 
 			on(this.backButton, selectEvent, function(evt){
 				evt.preventDefault();
+				evt.stopPropagation();
 			});
 			
 			/*on(this.addButton, "click", function(evt){

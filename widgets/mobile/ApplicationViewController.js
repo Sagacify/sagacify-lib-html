@@ -7,9 +7,10 @@ define([
 	'dojo/on',
 	'saga/widgets/mobile/LoadingBar',
 	'dojo/_base/fx',
-	'saga/utils/Utils'], 
+	'saga/utils/Utils',
+	'dojo/has'], 
 	
-	function(declare, ViewController, Alert, NumPad, domConstruct, on, LoadingBar, fx, Utils) {
+	function(declare, ViewController, Alert, NumPad, domConstruct, on, LoadingBar, fx, Utils, has) {
 	
 	return declare('saga.ApplicationViewController', [ViewController], {
 		
@@ -21,7 +22,7 @@ define([
 		
 		constructor: function(args) {
 			Window = this;
-			selectEvent = Utils.detectWebOrNative()=="Web"?"click":"tap";
+			selectEvent = Utils.detectWebOrNative()=="Web"&&(!has("android")||has("android")<4)?"click":"tap";
 			downEvent = Utils.detectWebOrNative()=="Web"?"mousedown":"touchstart";
 			upEvent = Utils.detectWebOrNative()=="Web"?"mouseup":"touchend";
 		},	
