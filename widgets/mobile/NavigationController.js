@@ -188,7 +188,7 @@ define([
 
 				if(viewControllerToAppear.title)
 					this.navigationBar.setTitle(viewControllerToAppear.title);	
-
+				return this._viewControllers[this._viewControllers.length - 1];
 			} 
 		}
 			
