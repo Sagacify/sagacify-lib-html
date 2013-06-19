@@ -15,15 +15,11 @@ define([
 			  var win=window.open(url, '_blank');
 			  win.focus();				
 			}
+			HTMLInputElement.prototype.inputDateCalendarOnChange = function(onChangeCallback){
 
-			HTMLInputElement.prototype.inputDateCalendar = function(date, onChangeCallback){
-				this.savedDate = date;
-
-				this.isADateInput = true;
-				
+				// this.inputDateCalendarSetDate(date);
 				this.dateFormatingPicker = 'dd/mm/yyyy';
 				this.dateFormatingDojo = 'dd/MM/yyyy';
-				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
 
 				var me = this;
 			    me.pickDate = $(this).pickadate({
@@ -42,16 +38,23 @@ define([
                 });
 			}
 
-			HTMLInputElement.prototype.inputTimeCalendar = function(date, onChangeCallback){
+			HTMLInputElement.prototype.inputDateCalendarSetDate = function(date){
 				this.savedDate = date;
+				this.isADateInput = true;
+				this.dateFormatingPicker = 'dd/mm/yyyy';
+				this.dateFormatingDojo = 'dd/MM/yyyy';
+				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
+			}
+
+
+			HTMLInputElement.prototype.inputTimeCalendarOnChange = function(onChangeCallback){
+
+				// this.inputTimeCalendarSetTime(date);
 				this.dateFormatingPicker = 'HH:i';
 				this.dateFormatingDojo = "HH:m";
-
-				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
-				this.value = timeStr
+				
 				var me = this;
 			    this.picker = $(this).pickatime({
-					// formatSubmit: formatPicker,
 					format:this.dateFormatingPicker,
 					onSet: function(){
 						if (onChangeCallback) {
@@ -60,6 +63,14 @@ define([
 						
 					}					
                 });
+			}
+
+			HTMLInputElement.prototype.inputTimeCalendarSetTime= function(date){
+				this.savedDate = date;
+				this.dateFormatingPicker = 'HH:i';
+				this.dateFormatingDojo = "HH:m";
+				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
+				this.value = timeStr				
 			}
 
 			HTMLInputElement.prototype.getDate = function(){
