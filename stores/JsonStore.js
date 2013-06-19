@@ -55,7 +55,8 @@ define([
 				request.url = query;
 				request.handleAs = "json";
 				request.preventCache = true;
-				request.postData=json.toJson((data || {}));
+				if(data)
+					request.postData=json.toJson(data);
 				request.load= this.onLoadFunction(deferred);
 			return request;
 		},

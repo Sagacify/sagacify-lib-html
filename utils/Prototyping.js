@@ -11,9 +11,11 @@ define([
 		});
 		
 		Prototyping.setup = function(){
-			History.openInTab = function(url){
-			  var win=window.open(url, '_blank');
-			  win.focus();				
+			if(History){
+				History.openInTab = function(url){
+				  var win=window.open(url, '_blank');
+				  win.focus();				
+				}
 			}
 			HTMLInputElement.prototype.inputDateCalendarOnChange = function(onChangeCallback){
 
@@ -133,6 +135,10 @@ define([
 			};
 
 
+			Array.prototype.last = function(){
+				return this[this.length-1];
+			};
+
 			Array.prototype.contains = function(item) {
 				return this.indexOf(item) != -1;
 			};
@@ -176,6 +182,12 @@ define([
 				return this.slice(this.length-str.length, this.length) == str
 			};
 
+			Number.prototype.max2DigitsAfterDecimal = function(){
+				if(this % 1 != 0)
+					return this.toFixed(2);
+				else
+					return this;
+			};
 
 			String.prototype.isEmail = function(str){
 				var re = /\S+@\S+\.\S+/;

@@ -38,7 +38,7 @@ define([
 		
 		_pullDownDiv: null,
 		
-		_cellsContainer: null,
+		_cellsContainersBySection: null,
 		
 		_transparentBg: false,
 		
@@ -84,6 +84,7 @@ define([
 		
 		reload: function(keepFirstSection) {
 			this.inherited(arguments);
+			this._cellsContainersBySection = [];
 			dojo.forEach(this._headers, function(header, i){
 				if(header){
 					if(header.destroyRecursive)
@@ -137,7 +138,8 @@ define([
 					
 				var cells = [];
 
-				cellsContainer = domConstruct.create("ul", {"class":this.classForSection(i)});	
+				var cellsContainer = domConstruct.create("ul", {"class":this.classForSection(i)});	
+				this._cellsContainersBySection.push(cellsContainer);
 				
 				var numberOfRowsInSection = this.numberOfRowsInSection(i);
 				for (var j = 0; j < numberOfRowsInSection; j++) {
@@ -173,6 +175,7 @@ define([
 			var me = this;
 			dojo.forEach(this._cellsBySection, function(cells, i){
 				dojo.forEach(cells, function(cell, j){
+					if(cell){
 					var node = cell.domNode?cell.domNode:cell;
 					on(node, selectEvent, function(evt){
 						var revealViewController = me.revealViewController;
@@ -200,12 +203,7 @@ define([
 								});
 							}
 						}
-						//if(!cell.cancelClick){
-							me.didSelectRowAtIndexPath({section:i, row:j});	
-						/*}
-						else{
-							cell.disableCancelClick();
-						}*/
+						me.didSelectRowAtIndexPath({section:i, row:j});	
 					});
 					
 					/*if(has("android") >=3 && !(keepFirstSection && i==0)){
@@ -230,7 +228,7 @@ define([
 							node.clickEvent = false;
 						});
 					}*/
-					
+					}
 				});
 			});
 		},
