@@ -202,7 +202,12 @@ define([
 				return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 			};
 
-			Date.prototype.verbose = function(){
+			Date.prototype.verbose = function(full){
+
+				if (full) {
+					return this.toLocaleDateString();
+				};
+
 				var me = this;
 				function verboseWithFutureDate(aLastDate)
 				{
