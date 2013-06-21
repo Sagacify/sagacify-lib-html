@@ -22,33 +22,19 @@ define([
 				this.defaultPushState = History.pushState;
 				History.pushState = function(){
 					/* HistoryLock class (Yvan)*/
+					me.endProcess = me.callDefault;
 					me.defaultPushStateArgs = arguments;
 					me.reprocessingPushState();
 				}
 
-				// this.defaultBack = History.back;
-				// // History.back = function(){
-				// // 	debugger
-				// // 	/* HistoryLock class (Yvan)*/
-				// // 	// me.defaultBackArgs = arguments;
-				// // 	// me.reprocessingPushState();
-				// // }
-
-				// // history.forward = function(){
-				// // 	debugger
-				// // }
-
-				// // History.Adapter.bind(window,'statechange',function(){
-				// // 	// debugger
-				// // 	console.log("Change state!");
-				// //     // if (!window.stateChangeIsLocal) {
-				// //     //     someAjaxLoadFunction(History.getState().url);
-				// //     // }
-				// //     // else {
-				// //     //     window.stateChangeIsLocal = false;
-				// //     // }
-				// // });				
-
+				this.defaultBack = History.back;
+				History.back = function(){
+					
+					me.endProcess = me.callDefaultBack;
+					/* HistoryLock class (Yvan)*/
+					me.defaultBackArgs = arguments;
+					me.reprocessingBack();
+				}			
 			},
 
 			lock : function(handlingPush){
@@ -65,7 +51,7 @@ define([
 
 				} else {
 					this.locked = false;
-					this.callDefault();
+					this.endProcess();
 				}
 			},
 
@@ -77,6 +63,14 @@ define([
 				}
 			},
 
+			reprocessingBack: function(){
+				if (this.locked) {
+					this.handlingPush();
+				} else {
+					this.callDefaultBack();	
+				}
+			},
+
 			callDefault: function(){
 				if (!this.defaultPushStateArgs) {
 					return;
@@ -85,9 +79,18 @@ define([
 				this.defaultPushStateArgs = null;
 			}, 
 
+			callDefaultBack: function(){
+				if (!this.defaultBackArgs) {
+					return;
+				};
+				this.defaultBack.apply(History.back, this.defaultBackArgs);
+				this.defaultBackArgs = null;				
+			},
+
 			reset: function(){
 				this.locked = false;
 				this.defaultPushStateArgs = null;
+				this.defaultBackArgs = null;
 			}
 		});
 		
