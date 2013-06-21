@@ -17,6 +17,12 @@ define([
 				  win.focus();				
 				}
 			}
+
+
+			HTMLElement.prototype.empty = function(){
+				$(this).empty();
+			}
+
 			HTMLInputElement.prototype.inputDateCalendarOnChange = function(onChangeCallback){
 
 				// this.inputDateCalendarSetDate(date);
