@@ -38,6 +38,18 @@ function(_Widget, _TemplatedMixin, _WidgetsInTemplateMixin, domConstruct) {
             	widget.destroyRecursive();
         	});*/
 			this.inherited(arguments);
+		}, 
+
+		hide: function(){
+			if (this.domNode) {
+				this.domNode.style.display = "none";
+			};
+		}, 
+
+		show: function(){
+			if (this.domNode) {
+				this.domNode.style.display = "";
+			};
 		}
 		
 	});

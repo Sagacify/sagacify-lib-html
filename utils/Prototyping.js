@@ -11,19 +11,23 @@ define([
 		});
 		
 		Prototyping.setup = function(){
-			History.openInTab = function(url){
-			  var win=window.open(url, '_blank');
-			  win.focus();				
+			if(History){
+				History.openInTab = function(url){
+				  var win=window.open(url, '_blank');
+				  win.focus();				
+				}
 			}
 
-			HTMLInputElement.prototype.inputDateCalendar = function(date, onChangeCallback){
-				this.savedDate = date;
 
-				this.isADateInput = true;
-				
+			HTMLElement.prototype.empty = function(){
+				$(this).empty();
+			}
+
+			HTMLInputElement.prototype.inputDateCalendarOnChange = function(onChangeCallback){
+
+				// this.inputDateCalendarSetDate(date);
 				this.dateFormatingPicker = 'dd/mm/yyyy';
 				this.dateFormatingDojo = 'dd/MM/yyyy';
-				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
 
 				var me = this;
 			    me.pickDate = $(this).pickadate({
@@ -42,16 +46,23 @@ define([
                 });
 			}
 
-			HTMLInputElement.prototype.inputTimeCalendar = function(date, onChangeCallback){
+			HTMLInputElement.prototype.inputDateCalendarSetDate = function(date){
 				this.savedDate = date;
+				this.isADateInput = true;
+				this.dateFormatingPicker = 'dd/mm/yyyy';
+				this.dateFormatingDojo = 'dd/MM/yyyy';
+				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
+			}
+
+
+			HTMLInputElement.prototype.inputTimeCalendarOnChange = function(onChangeCallback){
+
+				// this.inputTimeCalendarSetTime(date);
 				this.dateFormatingPicker = 'HH:i';
 				this.dateFormatingDojo = "HH:m";
-
-				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
-				this.value = timeStr
+				
 				var me = this;
 			    this.picker = $(this).pickatime({
-					// formatSubmit: formatPicker,
 					format:this.dateFormatingPicker,
 					onSet: function(){
 						if (onChangeCallback) {
@@ -60,6 +71,14 @@ define([
 						
 					}					
                 });
+			}
+
+			HTMLInputElement.prototype.inputTimeCalendarSetTime= function(date){
+				this.savedDate = date;
+				this.dateFormatingPicker = 'HH:i';
+				this.dateFormatingDojo = "HH:m";
+				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
+				this.value = timeStr				
 			}
 
 			HTMLInputElement.prototype.getDate = function(){
@@ -122,6 +141,10 @@ define([
 			};
 
 
+			Array.prototype.last = function(){
+				return this[this.length-1];
+			};
+
 			Array.prototype.contains = function(item) {
 				return this.indexOf(item) != -1;
 			};
@@ -165,6 +188,12 @@ define([
 				return this.slice(this.length-str.length, this.length) == str
 			};
 
+			Number.prototype.max2DigitsAfterDecimal = function(){
+				if(this % 1 != 0)
+					return this.toFixed(2);
+				else
+					return this;
+			};
 
 			String.prototype.isEmail = function(str){
 				var re = /\S+@\S+\.\S+/;
@@ -179,7 +208,12 @@ define([
 				return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 			};
 
-			Date.prototype.verbose = function(){
+			Date.prototype.verbose = function(full){
+
+				if (full) {
+					return this.toLocaleDateString();
+				};
+
 				var me = this;
 				function verboseWithFutureDate(aLastDate)
 				{

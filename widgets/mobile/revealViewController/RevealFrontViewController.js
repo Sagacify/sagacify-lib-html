@@ -34,7 +34,7 @@ define([
 				if(this._viewControllers.length == 1){
 					this.navigationBar.revealButton.style.display = "";
 					var me = this;
-					on(this.navigationBar.revealButton, "click", function(args){
+					on(this.navigationBar.revealButton, selectEvent, function(args){
 						args.preventDefault();
 						me.emit("revealButtonPressed", {});
 					});
@@ -49,7 +49,7 @@ define([
 				this._revealButton = new ToolBarButton({label:"Reveal"});
 				this._revealButton.placeAt(this.navigationBar.domNode);
 				var me = this;
-				this._revealButton.on("click", function(args){
+				this._revealButton.on(selectEvent, function(args){
 					args.preventDefault();
 					me.emit("revealButtonPressed", {});
 				});	

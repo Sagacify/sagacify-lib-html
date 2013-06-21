@@ -17,8 +17,8 @@ define([
 				query += options.sort[0].attribute;
 			}
 
-			if (this.searchText) {
-				query +="&filter="+this.searchText;
+			if (this.searchFilter) {
+				query +="&*="+this.searchFilter;
 			};
 			
 			if(this.fullSearch)
