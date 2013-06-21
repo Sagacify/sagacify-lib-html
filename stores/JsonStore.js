@@ -11,9 +11,11 @@ define([
 		accepts: "application/javascript, application/json", 
 		
 		bearerString: function(){
-			return "bearer "+localStorage.access_token;
+			return (localStorage.access_token.indexOf('-') !== -1) ? 
+				'bearer ' + localStorage.access_token :
+				'bearer ' + localStorage.username + '|' + localStorage.access_token;
+			//return "bearer "+localStorage.access_token;
 		},
-		
 		
 		configureHeader: function(options, removeAuth){
 			var headers = options || {};
