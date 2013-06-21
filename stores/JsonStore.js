@@ -84,9 +84,10 @@ define([
 			var me = this;
 			return function(error){
 					if(error.response.status == 401){
-						me.login(afterRelog, function(error){
-							me.loginFail();
-						});
+						me.loginFail();
+						//me.login(afterRelog, function(error){
+						//	me.loginFail();
+						//});
 					} else {
 						me.onError(deferred)(error);
 					};
