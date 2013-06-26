@@ -67,7 +67,7 @@ define([
 		onLoadFunction: function(deferred){
 			return function(data){
 				// if (DebugMode) {
-					console.log(data);
+					// console.log(data);
 				// }
 				deferred.resolve(data);
 			}
@@ -113,6 +113,11 @@ define([
 			var deferred = new Deferred();
 
 			var query = this.configureUrlWithDict(target, queryDict);
+			if (DebugMode) {
+				// console.log(httpMethod + " - " + target);
+				// console.log(queryDict);
+				// console.log(data);
+			};
 
 			var headers = this.configureHeader(headersOptions, removeAuth);
 			var request = this.configureRequestContent(query, headers, deferred, data);
