@@ -90,13 +90,12 @@ define([
 			}
 
 			HTMLInputElement.prototype.getDate = function(){
-				 var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
-				 if (!result) {
-				 	return new Date();
-				 };
-				 return result;
+				var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
+				if (!result) {
+					return new Date();
+				}
+				return result;
 			}
-
 
 			HTMLImageElement.prototype.loadPicture= function(picture){
 				if (!picture) {
