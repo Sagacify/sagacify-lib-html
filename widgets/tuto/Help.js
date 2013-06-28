@@ -13,7 +13,7 @@ define([
 			if(this.linkedTutorials && Object.keys(this.linkedTutorials).length) {
 				var me = this;
 				this.getTutorials(function(item) {
-					NotificationCenterHelp.register(me, tutorialName);
+					//NotificationCenterHelp.register(me, tutorialName);
 				});
 			}
 			//NotificationCenterHelp.register(this, 'createNode');

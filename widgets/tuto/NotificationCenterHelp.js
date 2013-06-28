@@ -2,7 +2,7 @@ define([
 	'dojo/_base/declare'
 ], function(declare) {
 	return declare('saga.NotificationCenterHelp', null, {
-	
+
 		tutorials: null,
 
 		constructor: function(args) {
@@ -20,10 +20,9 @@ define([
 				this.tutorials[tutorialName] = [];
 			}
 			this.tutorials[tutorialName].push(widget);
-		}, 
+		},
 
 		getTutorialWidgets: function(tutorialName) {
-			alert('+1');
 			if(!this.tutorials[tutorialName]) {
 				this.tutorials[tutorialName] = [];
 			}

@@ -16,8 +16,16 @@ define([
 				  var win=window.open(url, '_blank');
 				  win.focus();				
 				}
-			}
 
+				//var version = getInternetExplorerVersion();
+				if(navigator.appName === 'Microsoft Internet Explorer') {
+					var oldPushState = History.pushState;
+					History.pushState = function(a, b, url, d) {
+						url = url.replace('/i4', '');
+						oldPushState.apply(History, arguments);
+					}
+				}
+			}
 
 			HTMLElement.prototype.empty = function(){
 				$(this).empty();
@@ -100,13 +108,15 @@ define([
 			};
 
 			HTMLImageElement.prototype.loadUser = function(user){
-				if (!user) {
-					return;
-				};
-				if (user.profilePicture) {
-					this.loadPicture(user.profilePicture);
-				} else {
-					this.loadAvatar(user.name);
+				if(user) {
+					if(user.profilePicture) {
+						console.log('PROFILE PICTURE');
+						console.log(user.profilePicture);
+						this.loadPicture(user.profilePicture);
+					}
+					else {
+						this.loadAvatar(user.name);
+					}
 				}
 			};
 
