@@ -98,6 +98,10 @@ define([
 				// console.log(data);
 			};
 
+			if (httpMethod == "POST") {
+				console.log(data);
+			};
+
 			var me = this;
 			var deferred = new Deferred();
 
