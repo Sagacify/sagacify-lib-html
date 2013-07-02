@@ -11,7 +11,7 @@ define([
 		accepts: "application/javascript, application/json", 
 		
 		bearerString: function(){
-			return (localStorage.access_token.indexOf('-') !== -1) ? 
+			return (localStorage.access_token && localStorage.access_token.indexOf('-') !== -1) ? 
 				'bearer ' + localStorage.access_token :
 				'bearer ' + localStorage.username + '|' + localStorage.access_token;
 			//return "bearer "+localStorage.access_token;

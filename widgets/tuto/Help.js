@@ -13,14 +13,25 @@ define([
 			}
 		},
 
-		activate: function() {
+		activate: function(offset) {
 			var widget;
-			var i = 0;
+			var i = offset?1+offset:1;
 			for(var step in this.tutorialDescriptions) {
 				widget = $('[data-dojo-attach-point="' + step + '"]')[0];
-				domAttr.set(widget, 'data-intro', this.tutorialDescriptions[step]);
-				domAttr.set(widget, 'data-step', i);
-				i++;
+				if(widget){
+					domAttr.set(widget, 'data-intro', this.tutorialDescriptions[step]);
+					domAttr.set(widget, 'data-step', i);
+					i++;
+				}
+			}
+		},
+
+		desactivate: function(){
+			var widget;
+			for(var step in this.tutorialDescriptions) {
+				widget = $('[data-dojo-attach-point="' + step + '"]')[0];
+				domAttr.remove(widget, 'data-intro');
+				domAttr.remove(widget, 'data-step');
 			}
 		}
 
