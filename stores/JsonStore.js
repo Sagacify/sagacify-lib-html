@@ -126,8 +126,8 @@ define([
 			return deferred;
 		},
 
-		get: function(target, options, queryDict, removeAuth){
-			return this.executeRequest("GET", target, options, queryDict, null, removeAuth);
+		get: function(target, options, queryDict, removeAuth, rawData){
+			return this.executeRequest("GET", target, options, queryDict, rawData, removeAuth);
 		},
 		
 		post: function(target, object, options, removeAuth, disableRelog){
