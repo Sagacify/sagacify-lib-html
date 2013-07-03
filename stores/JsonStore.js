@@ -11,9 +11,11 @@ define([
 		accepts: "application/javascript, application/json", 
 		
 		bearerString: function(){
-			return "bearer "+localStorage.access_token;
+			return (localStorage.access_token && localStorage.access_token.indexOf('-') !== -1) ? 
+				'bearer ' + localStorage.access_token :
+				'bearer ' + localStorage.username + '|' + localStorage.access_token;
+			//return "bearer "+localStorage.access_token;
 		},
-		
 		
 		configureHeader: function(options, removeAuth){
 			var headers = options || {};
@@ -51,13 +53,14 @@ define([
 
 		configureRequestContent: function(query, headers, deferred, data){
 			var request = {};
-				request.headers = headers;
-				request.url = query;
-				request.handleAs = "json";
-				request.preventCache = true;
-				if(data)
-					request.postData=json.toJson(data);
-				request.load= this.onLoadFunction(deferred);
+			request.url = query;
+			request.handleAs = "json";
+			request.preventCache = true;
+			request.headers = headers;
+			if(data) {
+				request.postData = json.toJson(data);
+			}
+			request.load = this.onLoadFunction(deferred);
 			return request;
 		},
 
@@ -81,26 +84,77 @@ define([
 			var me = this;
 			return function(error){
 					if(error.response.status == 401){
-						me.login(afterRelog, function(error){
-							me.loginFail();
-						});
+						me.loginFail();
+						//me.login(afterRelog, function(error){
+						//	me.loginFail();
+						//});
 					} else {
 						me.onError(deferred)(error);
 					};
 				};
 		},
 
-		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
+		/*configureJqueryRequest: function(request) {
+			var jQueryRequest = {
+				type 	: request.method, 
+				url 	: request.url,
+				dataType: request.handleAs,
+				cache 	: request.preventCache,
+				headers : request.headers
+			};
+			if(request.postData) {
+				jQueryRequest.data = request.postData;
+			}
+			return jQueryRequest;
+		},
 
+		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
+			var me = this;
+			var deferred = new Deferred();
+
+			var query = this.configureUrlWithDict(target, queryDict);
 			if (DebugMode) {
 				// console.log(httpMethod + " - " + target);
 				// console.log(queryDict);
 				// console.log(data);
 			};
 
+
+			var headers = this.configureHeader(headersOptions, removeAuth);
+			var request = this.configureRequestContent(query, headers, deferred, data);
+
+			var jQueryRequest = this.configureJqueryRequest(request);
+
+			$.ajax(jQueryRequest).done(function(data) {
+				me.onLoadFunction(deferred)(data);
+			}).fail(function(jqXHR, error) {
+				if(disableRelog) {
+					me.onError(deferred)(error);
+				}
+				else {
+					this.handlingRelog(deferred, function() {
+						var headers = me.configureHeader(headersOptions, removeAuth);
+						var request = me.configureRequestContent(query, headers, deferred);
+
+						var jQueryRequest = this.configureJqueryRequest(request);
+						$.ajax(jQueryRequest).done(function(data) {
+							me.onLoadFunction(deferred)(data);
+						}).fail(function(jqXHR, error) {
+							me.onError(deferred)(error);
+						});
+					});
+				}
+			});
+
+			return deferred;
+		},*/
+
+		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
+
 			if (httpMethod == "POST") {
 				console.log(data);
 			};
+
 
 			var me = this;
 			var deferred = new Deferred();
@@ -120,8 +174,7 @@ define([
 				});
 			}
 
-			var xhrDeferred =  xhr(httpMethod, request);
-			deferred.ioArgs = xhrDeferred.ioArgs;
+			xhr(httpMethod, request);
 
 			return deferred;
 		},

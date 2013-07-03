@@ -1,12 +1,12 @@
 define(['dojox', 'dojo/_base/declare', 'dojo/store/util/SimpleQueryEngine',
 	'dojo/store/Observable','dojo/store/util/QueryResults',
 	'dojox/storage','dojox/storage/LocalStorageProvider'], function(dojox, declare, sqe, observable){
-/*
+/**
  * Definition of a general local offline _store using LocalStorage.
  * It relies on dojox.storage wrapper and is compliant with Dojo _store API.
  * @param:
  * - namespace: String used by dojox.storage to know where to _store the objects 
- */
+ **/
 return declare('bizcomp.store.LocalStore', null, {
 	
 	namespace: "",
@@ -58,9 +58,11 @@ return declare('bizcomp.store.LocalStore', null, {
 		  	dojox.storage.put(id, object, function(status, key, message){
 		  		if(status == dojox.storage.FAILED){
 			      	//handle failed
+			      	console.log('FAILED');
 			    }
 			    else if(status == dojox.storage.SUCCESS){
 			     	 //handle success
+			     	 console.log('SUCCESS');
 			    }
 		  	}, namespace);
 	
