@@ -9,6 +9,9 @@ define([
 		postCreate: function() {
 			this.inherited(arguments);
 			if(this.tutorialDescriptions && Object.keys(this.tutorialDescriptions).length) {
+				if (NotificationCenterHelp.parentWidget.desactivate){
+					NotificationCenterHelp.parentWidget.desactivate();
+				}
 				NotificationCenterHelp.register(this);
 			}
 		},
