@@ -119,6 +119,7 @@ define([
 				// console.log(data);
 			};
 
+
 			var headers = this.configureHeader(headersOptions, removeAuth);
 			var request = this.configureRequestContent(query, headers, deferred, data);
 
@@ -149,6 +150,12 @@ define([
 		},*/
 
 		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
+
+			if (httpMethod == "POST") {
+				console.log(data);
+			};
+
+
 			var me = this;
 			var deferred = new Deferred();
 
@@ -172,8 +179,8 @@ define([
 			return deferred;
 		},
 
-		get: function(target, options, queryDict, removeAuth){
-			return this.executeRequest("GET", target, options, queryDict, null, removeAuth);
+		get: function(target, options, queryDict, removeAuth, rawData){
+			return this.executeRequest("GET", target, options, queryDict, rawData, removeAuth);
 		},
 		
 		post: function(target, object, options, removeAuth, disableRelog){

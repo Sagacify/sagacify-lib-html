@@ -67,7 +67,7 @@ define([
 
 				// this.inputTimeCalendarSetTime(date);
 				this.dateFormatingPicker = 'HH:i';
-				this.dateFormatingDojo = "HH:m";
+				this.dateFormatingDojo = "HH:mm";
 				
 				var me = this;
 			    this.picker = $(this).pickatime({
@@ -84,7 +84,7 @@ define([
 			HTMLInputElement.prototype.inputTimeCalendarSetTime= function(date){
 				this.savedDate = date;
 				this.dateFormatingPicker = 'HH:i';
-				this.dateFormatingDojo = "HH:m";
+				this.dateFormatingDojo = "HH:mm";
 				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
 				this.value = timeStr				
 			}
