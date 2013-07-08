@@ -253,7 +253,7 @@ define([
 					if (difference < 60) {
 						var t = Math.floor(difference);
 						if (t <= 1) {
-							return "About a minute ago";
+							return "Just now";
 						} else {
 							return t + " seconds ago";
 						}
