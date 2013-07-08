@@ -174,7 +174,8 @@ define([
 				});
 			}
 
-			xhr(httpMethod, request);
+			var xhrDeferred = xhr(httpMethod, request);
+			deferred.ioArgs = xhrDeferred.ioArgs;
 
 			return deferred;
 		},
