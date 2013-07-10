@@ -9,7 +9,7 @@ define([
 		postCreate: function() {
 			this.inherited(arguments);
 			if(this.tutorialDescriptions && Object.keys(this.tutorialDescriptions).length) {
-				if (NotificationCenterHelp.parentWidget.desactivate){
+				if (NotificationCenterHelp.parentWidget && NotificationCenterHelp.parentWidget.desactivate){
 					NotificationCenterHelp.parentWidget.desactivate();
 				}
 				NotificationCenterHelp.register(this);
@@ -33,8 +33,10 @@ define([
 			var widget;
 			for(var step in this.tutorialDescriptions) {
 				widget = $('[data-dojo-attach-point="' + step + '"]')[0];
-				domAttr.remove(widget, 'data-intro');
-				domAttr.remove(widget, 'data-step');
+				if(widget){
+					domAttr.remove(widget, 'data-intro');
+					domAttr.remove(widget, 'data-step');
+				}
 			}
 		}
 
