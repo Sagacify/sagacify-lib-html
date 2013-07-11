@@ -8,7 +8,7 @@ define([
 			//create all canvas
 		createAvatar : function (theCanvas, widthCanvas, heightCanvas, fontFamily, fullName){
 			// Script by Julien Henrotte
-			//Get the canvas, width + height
+			//Get the canvas, width + height)
 			var canvas = domConstruct.create('canvas');
 			console.log('FULLNAME -> ' + fullName);
 			var getName = fullName;
