@@ -16,8 +16,16 @@ define([
 				  var win=window.open(url, '_blank');
 				  win.focus();				
 				}
-			}
 
+				//var version = getInternetExplorerVersion();
+				if(navigator.appName === 'Microsoft Internet Explorer') {
+					var oldPushState = History.pushState;
+					History.pushState = function(a, b, url, d) {
+						url = url.replace('/i4', '');
+						oldPushState.apply(History, arguments);
+					}
+				}
+			}
 
 			HTMLElement.prototype.empty = function(){
 				$(this).empty();
@@ -59,7 +67,7 @@ define([
 
 				// this.inputTimeCalendarSetTime(date);
 				this.dateFormatingPicker = 'HH:i';
-				this.dateFormatingDojo = "HH:m";
+				this.dateFormatingDojo = "HH:mm";
 				
 				var me = this;
 			    this.picker = $(this).pickatime({
@@ -76,19 +84,18 @@ define([
 			HTMLInputElement.prototype.inputTimeCalendarSetTime= function(date){
 				this.savedDate = date;
 				this.dateFormatingPicker = 'HH:i';
-				this.dateFormatingDojo = "HH:m";
+				this.dateFormatingDojo = "HH:mm";
 				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
 				this.value = timeStr				
 			}
 
 			HTMLInputElement.prototype.getDate = function(){
-				 var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
-				 if (!result) {
-				 	return new Date();
-				 };
-				 return result;
+				var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
+				if (!result) {
+					return new Date();
+				}
+				return result;
 			}
-
 
 			HTMLImageElement.prototype.loadPicture= function(picture){
 				if (!picture) {
@@ -100,13 +107,15 @@ define([
 			};
 
 			HTMLImageElement.prototype.loadUser = function(user){
-				if (!user) {
-					return;
-				};
-				if (user.profilePicture) {
-					this.loadPicture(user.profilePicture);
-				} else {
-					this.loadAvatar(user.name);
+				if(user) {
+					if(user.profilePicture) {
+						console.log('PROFILE PICTURE');
+						console.log(user.profilePicture);
+						this.loadPicture(user.profilePicture);
+					}
+					else {
+						this.loadAvatar(user.name);
+					}
 				}
 			};
 
@@ -244,7 +253,7 @@ define([
 					if (difference < 60) {
 						var t = Math.floor(difference);
 						if (t <= 1) {
-							return "About a minute ago";
+							return "Just now";
 						} else {
 							return t + " seconds ago";
 						}

@@ -7,9 +7,9 @@ define(['dojo/_base/declare', 'saga/widgets/_Widget', 'dojo/Evented', 'dojo/dom-
 		_items: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"],
 				
 		consructor: function(args) {
-			if(args) {
+			//if(args) {
 				
-			}
+			//}
 		},
 		
 		postCreate: function() {
