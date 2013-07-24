@@ -30,6 +30,23 @@ define([
 		postCreate: function() {
 			this.inherited(arguments);
 		},
+
+		stopAlert: function(){
+			if(this.saFx1){
+				this.saFx1.stop();
+			}
+			if(this.saFx2){
+				this.saFx2.stop();
+			}
+			if(this.daFx1){
+				this.daFx1.stop({goToEnd:true});
+				this.daFx1.onEnd();
+			}
+			if(this.daFx2){
+				this.daFx2.stop({goToEnd:true});
+				this.daFx2.onEnd();
+			}
+		},
 		
 		showAlert: function(title, message){
 			this.mask.style.display = "";
@@ -37,23 +54,23 @@ define([
 			this.alert.domNode.style.marginTop = (-this.alert.domNode.clientHeight/2)+"px";
 			this.alert.titleNode.innerHTML = title?title:"";
 			this.alert.messageNode.innerHTML = message?message:"";
-			fx.fadeIn({
+			this.saFx1 = fx.fadeIn({
 				node:this.mask
 			}).play();
-			fx.fadeIn({
+			this.saFx2 = fx.fadeIn({
 				node:this.alert.domNode
 			}).play();
 		},
 		
 		dismissAlert: function(callback){
 			var me = this;
-			fx.fadeOut({
+			this.daFx1 = fx.fadeOut({
 				node:me.mask,
 				onEnd:function(){
 					me.mask.style.display = "none";
 				}
 			}).play();
-			fx.fadeOut({
+			this.daFx2 = fx.fadeOut({
 				node:me.alert.domNode,
 				onEnd:function(){
 					me.alert.domNode.style.display = "none";
@@ -62,6 +79,7 @@ define([
 						callback();
 				}
 			}).play();
+			this.currentFx = fx;
 			this.onDismissAlert.apply(this, []);
 		},
 		
