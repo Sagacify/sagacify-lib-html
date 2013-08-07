@@ -65,16 +65,20 @@ define([
 				}
 			});
 
-			on(this.cropButtonNode, "click", function(evt){
-				evt.preventDefault();
-				me.generateImage($(me.imgNode), 100, 100);
-			});
+			if(this.cropButtonNode){
+				on(this.cropButtonNode, "click", function(evt){
+					evt.preventDefault();
+					me.generateImage($(me.imgNode), 100, 100);
+				});
+			}
 
-			on(this.cancelButtonNode, "click", function(evt){
-				evt.preventDefault();
-				me.reinit();
-				me.imgNode.src = me.prevSource;	
-			});
+			if(this.cancelButtonNode){
+				on(this.cancelButtonNode, "click", function(evt){
+					evt.preventDefault();
+					me.reinit();
+					me.imgNode.src = me.prevSource;	
+				});
+			}
 		},
 
 		generateImage: function(actualImage, dataWidth, dataHeight){

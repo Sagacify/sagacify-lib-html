@@ -94,7 +94,7 @@ define([
 
 			for(var i = 0; i < 27; i++)
 				this._classifiedItems.push([]);
-			
+
 			dojo.forEach(sortedItems, function(item, i){
 				var firstChar = item[me.dataItemSortKey].charAt(0);
 				var correspondingIndex = 26+offsetStar;

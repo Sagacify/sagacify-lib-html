@@ -87,7 +87,7 @@ define([
 				this.dateFormatingDojo = "HH:mm";
 				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
 				this.value = timeStr				
-			}
+			};
 
 			HTMLInputElement.prototype.getDate = function(){
 				var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
@@ -95,7 +95,24 @@ define([
 					return new Date();
 				}
 				return result;
-			}
+			};
+
+			HTMLTextAreaElement.prototype.fitSizeToText = function(minHeight){
+				minHeight = minHeight||0;
+                if(this.scrollHeight > minHeight)
+                    this.style.height = (this.scrollHeight+2) + 'px';
+            };
+
+            HTMLTextAreaElement.prototype.setAutoFitSizeToText = function(minHeight){
+            	var me = this;
+            	this.addEventListener && this.addEventListener('input', function(evt){
+                    me.fitSizeToText(minHeight);
+                });
+
+                this['attachEvent'] && this.attachEvent('onkeyup', function(evt){
+                	me.fitSizeToText(minHeight);
+                });
+            };
 
 			HTMLImageElement.prototype.loadPicture= function(picture){
 				if (!picture) {
@@ -175,6 +192,14 @@ define([
 						return;	
 					}
 				}
+			};
+
+			Array.prototype.equals = function(array){
+				for(var i = 0; i < this.length; i++){
+					if(this[i] != array[i])
+						return false;
+				}
+				return true;
 			};
 			
 			String.prototype.capitalize = function() {
