@@ -83,6 +83,10 @@ define([
 		handlingRelog: function(deferred, afterRelog){
 			var me = this;
 			return function(error){
+					if (!error || !error.response) {
+						me.onError(deferred)(null);
+						return;
+					};
 					if(error.response.status == 401){
 						me.loginFail();
 						//me.login(afterRelog, function(error){
