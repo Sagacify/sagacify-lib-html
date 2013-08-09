@@ -27,6 +27,17 @@ define([
 				}
 			}
 
+			var oldFct = dojo.fromJson();
+
+			dojo.fromJson = function(js){
+				try{
+					return oldFct(js);
+				} catch(e){
+					return JSON.parse(js);	
+				}
+			}
+
+
 			HTMLElement.prototype.empty = function(){
 				$(this).empty();
 			}

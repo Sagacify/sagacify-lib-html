@@ -84,9 +84,9 @@ define([
 			var me = this;
 			return function(error){
 					if (!error || !error.response) {
-						me.onError(deferred)(null);
+						debugger
 						return;
-					};
+					}
 					if(error.response.status == 401){
 						me.loginFail();
 						//me.login(afterRelog, function(error){
@@ -94,8 +94,8 @@ define([
 						//});
 					} else {
 						me.onError(deferred)(error);
-					};
-				};
+					}
+				}
 		},
 
 		/*configureJqueryRequest: function(request) {
@@ -215,8 +215,6 @@ define([
 			console.log(object);
 			return null;
 		}
-
-			
 	});
 	
 	saga.JsonStore.singleton = function() {
