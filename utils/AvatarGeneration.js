@@ -10,7 +10,6 @@ define([
 			// Script by Julien Henrotte
 			//Get the canvas, width + height)
 			var canvas = domConstruct.create('canvas');
-			console.log('FULLNAME -> ' + fullName);
 			var getName = fullName;
 			canvas.width = widthCanvas;
 			canvas.height = heightCanvas;
@@ -48,7 +47,6 @@ define([
 			//Construct canvas
 			context.fillText(initiales, x, y);
 
-			console.log(canvas);
 			//debugger;
 
 			//domConstruct.place(canvas, 'last', theCanvas);*/
