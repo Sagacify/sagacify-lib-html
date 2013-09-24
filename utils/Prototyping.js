@@ -171,6 +171,10 @@ define([
                 this.style.background = canvasArray[1];
 			};
 
+			Array.prototype.clone= function(){
+				return this.slice(0);
+			};
+
 			Array.prototype.popFirst= function(){
 				this.reverse();
 				this.pop();
