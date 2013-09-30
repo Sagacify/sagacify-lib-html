@@ -13,7 +13,7 @@ define([
 		bearerString: function(){
 			return (localStorage.access_token && localStorage.access_token.indexOf('-') !== -1) ? 
 				'bearer ' + localStorage.access_token :
-				'bearer ' + localStorage.username + '|' + localStorage.access_token;
+				'bearer ' + localStorage.userID + '|' + localStorage.access_token;
 			//return "bearer "+localStorage.access_token;
 		},
 		
@@ -185,7 +185,7 @@ define([
 		},
 		
 		post: function(target, object, options, removeAuth, disableRelog){
-			return 	this.executeRequest("POST", target, options, null, object, removeAuth, disableRelog);
+			return this.executeRequest("POST", target, options, null, object, removeAuth, disableRelog);
 		},
 		
 		put: function(target, object, options, removeAuth){
