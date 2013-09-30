@@ -3,7 +3,7 @@ define([
 	'dojo/dom-style',
 	'dojo/on'
 	],
-	function(declare, AvatarGeneration, domStyle, on){
+	function(declare, domStyle, on){
 		declare("saga.HistoryLock", null, {
 
 			locked :false,
@@ -15,6 +15,19 @@ define([
 				this.inherited(arguments);
 				this.setup();
 
+				// var me = this;
+				// on(document.body, 'keydown', function(evt){
+				// 	if (evt.keyCode == 91 || evt.keyCode == 93) {
+				// 		me.cmdKeyPressed = false;
+				// 	};
+				// });
+
+				// on(document.body, 'keyup', function(evt){
+				// 	if (evt.keyCode == 91 || evt.keyCode == 93) {
+				// 		me.cmdKeyPressed = true;
+				// 	};
+				// });
+
 			},
 
 			setup : function(){
@@ -24,12 +37,11 @@ define([
 					/* HistoryLock class (Yvan)*/
 					me.endProcess = me.callDefault;
 					me.defaultPushStateArgs = arguments;
-					me.reprocessingPushState();
+					me.reprocessingPushState();						
 				}
 
 				this.defaultBack = History.back;
 				History.back = function(){
-					
 					me.endProcess = me.callDefaultBack;
 					/* HistoryLock class (Yvan)*/
 					me.defaultBackArgs = arguments;
@@ -51,7 +63,9 @@ define([
 
 				} else {
 					this.locked = false;
-					this.endProcess();
+					if (this.endProcess) {
+						this.endProcess();	
+					};
 				}
 			},
 
