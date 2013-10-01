@@ -126,8 +126,8 @@ define([
 			HTMLImageElement.prototype.loadUser = function(user){
 				if(user) {
 					if(user.profilePicture) {
-						console.log('PROFILE PICTURE');
-						console.log(user.profilePicture);
+						//console.log('PROFILE PICTURE');
+						//console.log(user.profilePicture);
 						this.loadPicture(user.profilePicture);
 					}
 					else {
