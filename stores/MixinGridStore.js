@@ -7,8 +7,16 @@ define([
 	return declare("saga.MixinGridStore", null, {
 
 		query: function(query, options){
+
 			var query = "?offset=";
 			query += options.start + "&limit=" + options.count;
+
+			if (this.filtersToApply && this.filtersToApply.length) {
+				for (var i = 0; i < this.filtersToApply.length; i++) {
+					var fitlerObj = this.filtersToApply[i];
+					query +="&filter_"+fitlerObj.key+"="+fitlerObj.value;
+				};
+			};
 			
 			if(options.sort){
 				query += "&sort_by=";
@@ -17,9 +25,11 @@ define([
 				query += options.sort[0].attribute;
 			}
 
+			//Search
 			if (this.searchFilter) {
 				query +="&*="+this.searchFilter;
 			};
+
 			
 			if(this.fullSearch)
 				query += "&*="+this.fullSearch;
@@ -35,7 +45,7 @@ define([
 			results.total = results.then(function(){
 				var range = results.ioArgs.xhr.getResponseHeader("Content-Range");
 				me.range = range;
-				console.log(range);
+				console.log(range, arguments);
 				return range && (range = range.match(/\/(.*)/)) && +range[1];
 			});
 			

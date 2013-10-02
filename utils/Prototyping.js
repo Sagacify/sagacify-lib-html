@@ -27,6 +27,17 @@ define([
 				}
 			}
 
+			var oldFct = dojo.fromJson();
+
+			dojo.fromJson = function(js){
+				try{
+					return oldFct(js);
+				} catch(e){
+					return JSON.parse(js);	
+				}
+			}
+
+
 			HTMLElement.prototype.empty = function(){
 				$(this).empty();
 			}
@@ -158,6 +169,10 @@ define([
                 // domAttr.set(this, "src", data);
                 this.src = data;
                 this.style.background = canvasArray[1];
+			};
+
+			Array.prototype.clone= function(){
+				return this.slice(0);
 			};
 
 			Array.prototype.popFirst= function(){
