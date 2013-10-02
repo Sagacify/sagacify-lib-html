@@ -8,12 +8,11 @@ define([
 	declare("saga.JsonStore", null, {
 		
 		
-		accepts: "application/javascript, application/json", 
+		accepts: "application/javascript, application/json",
 		
 		bearerString: function(){
 			return (localStorage.access_token && localStorage.access_token.indexOf('-') !== -1) ? 
-				'bearer ' + localStorage.access_token :
-				'bearer ' + localStorage.userID + '|' + localStorage.access_token;
+				'bearer ' + localStorage.access_token : MySGStore.getBearer();
 			//return "bearer "+localStorage.access_token;
 		},
 		
