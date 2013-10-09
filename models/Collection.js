@@ -5,7 +5,8 @@ define(['backbone'], function(){
 				options = models;
 			}
 			if(options){
-				this.url = options.url;
+				if(options.url)
+					this.url = options.url;
 			}
 
 			this._views = {};
@@ -23,7 +24,7 @@ define(['backbone'], function(){
 				if(!this._views[id]){
 					if(this.schema.views[id] instanceof Array){
 						var model = App.models[this.schema.views[id][0].type+"Model"].extend({urlRoot:url+'/'+id});
-						this._views[id] = new App.collections[this.schema.views[id][0].type+"Collection"]({url:url+'/'+id, model:model});
+						this._views[id] = new App.collections[this.schema.views[id][0].type+"Collection"]([], {url:url+'/'+id, model:model});
 					}
 					else{
 						this._views[id] = new App.models[this.schema.views[id].type+"Model"]({}, {url:url+'/'+id});
@@ -82,6 +83,20 @@ define(['backbone'], function(){
 				properties[key] = {get: getAction(key)};
 			});
 
+			Object.defineProperties(this, properties);
+		},
+
+		addGetterProperty: function(id){
+			if(!id)
+				return;
+
+			var get = function(attr){
+				return function(){
+					return this.get(attr);
+				}
+			};
+			var properties = {};
+			properties["id_"+id] = {get: get(id)};
 			Object.defineProperties(this, properties);
 		}
 	});

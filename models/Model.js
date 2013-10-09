@@ -8,6 +8,8 @@ define(['backbone'], function(){
 			}
 			this.defineSchemaProperties();
 			Backbone.Model.prototype.constructor.apply(this, arguments);
+			if(this.collection)
+				this.collection.addGetterProperty(this.id);
 		},
 
 		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
@@ -36,10 +38,6 @@ define(['backbone'], function(){
 		// },
 
 		set: function(){
-			if(arguments[0].url){
-				console.log(arguments[0])
-				console.logStack()
-			}
 			var me = this;
 			var getset = function(attribute, raw){
 				var schemaElement = me.schema.tree[attribute] || me.schema.views[attribute];
@@ -70,8 +68,6 @@ define(['backbone'], function(){
 			}
 
 			var args = Array.apply(null, arguments);
-			if(arguments[0].url)
-			console.log("ha")
 
 			if(args[0] && args[0].isString()){
 				var value = getset(args[0], args[1]);
@@ -102,8 +98,6 @@ define(['backbone'], function(){
 				if(arguments[0].url)
 					console.log(2)
 			}
-			if(arguments[0].url)
-				console.log("args")
 
 			return Backbone.Model.prototype.set.apply(this, args);
 		},
