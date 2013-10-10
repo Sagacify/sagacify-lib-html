@@ -53,7 +53,10 @@ define([
 				if(this.files[0]){
 					me.prevSource = me.imgNode.src;
 					var imageIo = $(me.imgNode);
-					var cssAttr = {width:me.initWidth, height:me.initHeight};
+					var cssAttr = {
+						width: me.initWidth,
+						height:me.initHeight
+					};
 					if(imageIo.css("borderRadius")){
 						cssAttr.borderRadius = "0px";
 					}
