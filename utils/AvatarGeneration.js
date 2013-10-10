@@ -17,17 +17,29 @@ define([
 			//Get the fonsize, based on canvas width
 			var fontSize = canvas.width / 2 + 'px';
 
+			var firstNameInitiales;
+			var lastNameInitiales;
+			var initiales;
 			//Get the initials
-			var firstNameInitiales = getName.split(' ').slice(0, -1).join(' ').charAt(0);
-			var lastNameInitiales = getName.split(' ').slice(-1).join(' ').charAt(0);
-			var initiales = firstNameInitiales + lastNameInitiales;
+			if(getName){
+				firstNameInitiales = getName.split(' ').slice(0, -1).join(' ').charAt(0);
+				lastNameInitiales = getName.split(' ').slice(-1).join(' ').charAt(0);
+				initiales = firstNameInitiales + lastNameInitiales;
+			}
+			else{
+				initiales = "?";
+			}
 
+			var moduloResult;
 			//get color from initiales and apply color
 			if(firstNameInitiales){
-				var moduloResult = (firstNameInitiales.charCodeAt(0) + lastNameInitiales.charCodeAt(0)) % 10;
+				moduloResult = (firstNameInitiales.charCodeAt(0) + lastNameInitiales.charCodeAt(0)) % 10;
 			}
-			else {
-				var moduloResult = lastNameInitiales.charCodeAt(0) % 10;
+			else if(lastNameInitiales){
+				moduloResult = lastNameInitiales.charCodeAt(0) % 10;
+			}
+			else{
+				moduloResult = 0;
 			}
 			var colorMod = ["#FFD213","#cc3333","#4DBA61","#8B2786","#A85B34","#ff6600","#0099cc","#3A4769","#433225","#35384D"];
 
