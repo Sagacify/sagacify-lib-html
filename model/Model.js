@@ -83,20 +83,19 @@ define(['backbone'], function(){
 					this.set("_id", args[0]._id);
 					delete args[0]._id;
 				}
-
-				if(arguments[0].url)
-					console.log(2)
+				console.log('ARGS 1');
+				console.log(args[0]);
 				args[0].keys().forEach(function(key){
 					var value = getset(key, args[0][key]);
-					if(!value){
+					if(value == null){
 						delete args[0][key];	
 					}
 					else{
 						args[0][key] = value;
 					}
 				});
-				if(arguments[0].url)
-					console.log(2)
+				console.log('ARGS 2');
+				console.log(args[0]);
 			}
 
 			return Backbone.Model.prototype.set.apply(this, args);
