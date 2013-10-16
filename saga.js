@@ -22,10 +22,10 @@ define(['./models/Model', './models/Collection','./prototypes/prototypes'], func
 					App[collectionName] = new Collection();
 				}
 				deferred.resolve(App);
-				// App.users.views.fetch().done(function(data){
+				// App.users.views.fetch().done(function (data) {
 				// 	debugger
 				// });
-				// App.users.get('new').save().done(function(data){
+				// App.users.get('new').save().done(function (data) {
 				// 	debugger
 				// });
 			});
