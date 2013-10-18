@@ -1,25 +1,41 @@
-define([
-	'backbone'
-], function () {
-	return Backbone.Router.extend({
+define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
+	return Marionette.AppRouter.extend({
 
-		//Root path for all routes defined by this router. Override this in a deriving
-		//class for keeping route table DRY.
-		urlRoot: undefined,
+		constructor: function(options){
+			Marionette.AppRouter.prototype.constructor.apply(this, arguments);
+			if(this.sagaRoutes){
+				this.handleSagaRoutes();
+			}
+		},
 
-		//override the route method to prefix the route URL
-		route: function (route, name, callback) {
+		handleSagaRoutes: function(){
+			for(var route in this.sagaRoutes){
+				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes[route]));
+			}
+		},
 
-			if(this.urlRoot) {
-				route = (route === '' ? this.urlRoot : this.urlRoot + '/' + route);
+		handleSagaRoute: function(route, funs){
+			if(!(funs instanceof Array)){
+				funs = [funs];
 			}
 
-			//define route
-			Backbone.Router.prototype.route.call(this, route, name, callback);
+			return function(args){
+				args = args||[];
+				var routeLayout = function(layout, fun){
+					if(layout && typeof layout[fun] == "function"){
+						var numberParams = layout[fun].getParamNames().length;
+						return layout[fun].apply(layout, args.splice(0, numberParams));
+					}
+					else{
+						throw new Error("Route " + route + " not followable.");
+					}
+				}
 
-			//also support URLs with trailing slashes
-			Backbone.Router.prototype.route.call(this, route + '/', name, callback);
-
+				var layout = App.view;
+				funs.forEach(function(fun){
+					layout = routeLayout(layout, fun);
+				});
+			}
 		}
 	});
 });
