@@ -20,7 +20,7 @@ define([
 
 		disappear: function (node) {
 			$(node).hide();
-		},
+		}
 
 	});
 
