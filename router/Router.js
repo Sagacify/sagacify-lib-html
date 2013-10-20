@@ -19,8 +19,8 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 				funs = [funs];
 			}
 
-			return function(args){
-				args = args||[];
+			return function(){
+				var args = Array.apply(null, arguments);;
 				var routeLayout = function(layout, fun){
 					if(layout && typeof layout[fun] == "function"){
 						var numberParams = layout[fun].getParamNames().length;
