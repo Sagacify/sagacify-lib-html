@@ -3,7 +3,7 @@ define([
 ], function (Marionette) {
 
 	// prototype of the base Marionette Layout
-	var SGLayout = Marionette.Layout.extend({
+	var Layout = Marionette.Layout.extend({
 
 		bindEvent: function (widget, eventName, callback) {
 			_.extend(widget, Backbone.Events);
@@ -24,5 +24,5 @@ define([
 
 	});
 
-	return SGLayout;
+	return Layout;
 });

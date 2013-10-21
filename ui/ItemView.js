@@ -3,7 +3,7 @@ define([
 ], function (Marionette) {
 
 	// prototype the base Marionette ItemView
-	var SGItemView = Marionette.ItemView.extend({
+	var ItemView = Marionette.ItemView.extend({
 
 		get_Template: function (data, settings) {
 			return this._template ? _.template(this._template, data, settings) : this.template;
@@ -11,5 +11,5 @@ define([
 
 	});
 
-	return SGItemView;
+	return ItemView;
 });
