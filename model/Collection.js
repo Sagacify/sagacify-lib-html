@@ -18,7 +18,6 @@ define(['backbone'], function(){
 			if(id instanceof this.model){
 				return Backbone.Collection.prototype.get.apply(this, arguments);
 			}
-
 			var url = this.url instanceof Function?this.url():this.url;
 			if(this.schema.views[id]){
 				if(!this._views[id]){
@@ -99,5 +98,6 @@ define(['backbone'], function(){
 			properties["id_"+id] = {get: get(id)};
 			Object.defineProperties(this, properties);
 		}
+
 	});
 });

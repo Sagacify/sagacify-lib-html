@@ -6,6 +6,7 @@ define(['backbone'], function(){
 				if(options.url)
 					this.url = options.url;
 			}
+			this._originalAttributes = {};
 			this.defineSchemaProperties();
 			Backbone.Model.prototype.constructor.apply(this, arguments);
 			if(this.collection)
@@ -59,6 +60,10 @@ define(['backbone'], function(){
 						}
 					}
 					else{
+						// take trace of initial attributes for revert
+						if(me.schema.tree[attribute] && !(attribute in me._originalAttributes)){
+							me._originalAttributes[attribute] = raw;
+						}
 						return raw;
 					}
 				}
@@ -83,8 +88,6 @@ define(['backbone'], function(){
 					this.set("_id", args[0]._id);
 					delete args[0]._id;
 				}
-				console.log('ARGS 1');
-				console.log(args[0]);
 				args[0].keys().forEach(function(key){
 					var value = getset(key, args[0][key]);
 					if(value == null){
@@ -94,8 +97,6 @@ define(['backbone'], function(){
 						args[0][key] = value;
 					}
 				});
-				console.log('ARGS 2');
-				console.log(args[0]);
 			}
 
 			return Backbone.Model.prototype.set.apply(this, args);
@@ -155,6 +156,12 @@ define(['backbone'], function(){
 			});
 
 			Object.defineProperties(this, properties);
+		},
+
+		revert: function(){
+			for(var key in this._originalAttributes){
+				this.set(key, this._originalAttributes[key]);
+			}
 		}
 
 	});

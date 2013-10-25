@@ -39,7 +39,7 @@ define([
 					});
 					App[collectionName] = new Collection();
 				}
-				deferred.resolve(App);
+				deferred.resolve(App); 
 			});
 			return deferred.promise();
 		}
