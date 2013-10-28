@@ -2,7 +2,7 @@ define([
 
 ], function () {
 
-	return function GoogleMap (mapNode, lat, lng, center) {
+	return function GoogleMap (mapNode, lat, lng) {
 
 		this.lat = lat;
 
@@ -10,49 +10,50 @@ define([
 
 		this.zoom = 10;
 
-		this.radius = 20 * 1000; // 20 Km
+		this.center = function () {
+			return new google.maps.LatLng(this.lat, this.lng);
+		};
 
-		this.soutwestBound = this.lat + this.radius; // check how to calculate new lat / lng with radius
-
-		this.northeastBound = this.lng + this.radius; // check how to calculate new lat / lng with radius
-
-		this.bounds = new google.maps.LatLngBounds(this.soutwestBound, this.northeastBound);
-
-		this.center = new google.maps.LatLng(lat, lng);
+		this.results = [];
 
 		this.markers = [];
 
-		this.geocoder = new google.maps.Geocoder();
-
-		this.set_Marker = function set_Marker () {
-			var marker;
-			for(var i = 0, len = this.results.length; i < len; i++) {
-				marker = new google.maps.Marker({
-					map: this.map,
-					bounds: this.bounds,
-					position: this.results[0].geometry.location
-				});
-				this.markers.push(marker);
-			}
+		this.set_Marker = function () {
+			this.markers.push({
+				map: this.map,
+				position: this.center()
+			});		
+			// for(var i = 0, len = this.results.length; i < len; i++) {
+			// 	this.markers.push({
+			// 		map: this.map,
+			// 		position: this.results[0].geometry.location
+			// 	});
+			// }
 		};
 
-		this.search_Address	= function search_Address (address, callback) {
-			this.geocoder.geocode({
-				address: address
-			}, function (results, status) {
-				if(status === google.maps.GeocoderStatus.OK) {
-					callback(results);
-				}
-				else {
-					callback(true);
-				}
-			});
+		this.set_latlng = function (lat, lng) {
+			this.lat = lat;
+			this.lng = lng;
+			this.set_Marker(); // FOR TESTING ONLY
+		};
+
+		this.set_latlng_to_Location = function (location) {
+			var lat = location.geometry.location.lat;
+			var lng = location.geometry.location.lng;
+			this.set_latlng(lat, lng); // FOR TESTING ONLY
 		};
 
 		this.map = new google.maps.Map(mapNode, {
-			zoom: this.zoom,
-			center: this.center,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
+			zoom				:	this.zoom,
+			center				:	this.center(),
+			mapTypeId			:	google.maps.MapTypeId.ROADMAP,
+			scrollwheel			:	false,
+			zoomControl			:	true,
+			scaleControl		:	false,
+			mapTypeControl		:	true,
+			zoomControlOptions	:	{
+				style			:	google.maps.ZoomControlStyle.SMALL
+			}
 		});
 
 	};
