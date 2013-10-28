@@ -1,9 +1,19 @@
-Date.prototype.getWeekDayName = function(){
+Date.prototype.getWeekDayName = function () {
 	return this.weekDayName()[this.getDay()];
 };
 
-Date.prototype.weekDayName = function(){
+Date.prototype.weekDayName = function () {
 	return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+};
+
+Date.prototype.isToday = function () {
+	var now = new Date();
+	return this.setHours(0, 0, 0, 0) === now.setHours(0, 0, 0, 0);
+};
+
+Date.prototype.getDistance = function () {
+	var now = new Date();
+	return now.setHours(0, 0, 0, 0) - this.setHours(0, 0, 0, 0);
 };
 
 Date.prototype.incrementDays = function (number) {

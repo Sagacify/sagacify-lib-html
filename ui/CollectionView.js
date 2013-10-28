@@ -2,10 +2,14 @@ define([
 	'backbone.marionette',
 ], function (Marionette) {
 
+	// prototype the base Marionette CollectionView
 	var CollectionView = Marionette.CollectionView.extend({
-		// prototype the base Marionette CollectionView
 
 		collectionBind: false,
+
+		get_Template: function (data, settings) {
+			return this._template ? _.template(this._template, data, settings) : this.template;
+		},
 
 		render: function(){
 			Marionette.CollectionView.prototype.render.apply(this, arguments);

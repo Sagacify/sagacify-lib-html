@@ -5,6 +5,10 @@ define([
 	// prototype of the base Marionette Layout
 	var Layout = Marionette.Layout.extend({
 
+		get_Template: function (data, settings) {
+			return this._template ? _.template(this._template, data, settings) : this.template;
+		},
+
 		bindEvent: function (widget, eventName, callback) {
 			_.extend(widget, Backbone.Events);
 
