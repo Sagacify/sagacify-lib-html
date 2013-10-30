@@ -2,7 +2,7 @@ define([
 
 ], function () {
 
-	return function GoogleMap (mapNode, lat, lng) {
+	return function GoogleMap (mapNode, lat, lng, ProfessionalMarkerTemplate, SearchMarkerTemplate) {
 
 		this.lat = lat;
 
@@ -18,29 +18,43 @@ define([
 
 		this.markers = [];
 
+		this.infoboxes = [];
+
+		this.searchMarkerTemplate = ProfessionalMarkerTemplate;
+
+		this.proMarkerTemplate = SearchMarkerTemplate;
+
+		this.set_Infobox = function (marker, type) {
+			var template = (type === 'search') ? this.searchMarkerTemplate : this.proMarkerTemplate;
+			var infobox = new google.maps.InfoWindow({
+				content: template
+			});
+			this.infoboxes.push(infobox);
+			infobox.open(this.map, marker);
+			marker.setVisible(false);
+		};
+
 		this.set_Marker = function () {
-			this.markers.push({
+			var marker = new google.maps.Marker({
 				map: this.map,
-				position: this.center()
-			});		
-			// for(var i = 0, len = this.results.length; i < len; i++) {
-			// 	this.markers.push({
-			// 		map: this.map,
-			// 		position: this.results[0].geometry.location
-			// 	});
-			// }
+				position: this.center(),
+				title: 'Your search'
+			});
+			this.markers.push(marker);
+			this.set_Infobox(marker, 'search');
 		};
 
 		this.set_latlng = function (lat, lng) {
 			this.lat = lat;
 			this.lng = lng;
-			this.set_Marker(); // FOR TESTING ONLY
+			this.map.setCenter(this.center());
+			this.set_Marker();
 		};
 
 		this.set_latlng_to_Location = function (location) {
-			var lat = location.geometry.location.lat;
-			var lng = location.geometry.location.lng;
-			this.set_latlng(lat, lng); // FOR TESTING ONLY
+			var lat = location.geometry.location.lat();
+			var lng = location.geometry.location.lng();
+			this.set_latlng(lat, lng);
 		};
 
 		this.map = new google.maps.Map(mapNode, {
