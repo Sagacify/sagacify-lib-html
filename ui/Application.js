@@ -15,6 +15,12 @@ define([
 					me.triggerMethod('models:fetched');
 				});
 			}
+			var me = this;
+			$(window).scroll(function(evt){
+				if(me.isBottomReached()){
+					me.trigger("bottomReached");
+				}
+			});
 		},
 
 		fetchModels: function(){
@@ -25,23 +31,27 @@ define([
 				App.collections = {};
 				console.log('Models structure : ');
 				console.log(structure);
-				for(var key in structure.schemas){
-					var collectionName = structure.schemas[key].collection.name;
-					var Model = App.models[key + 'Model'] = SagaModel.extend({
-						urlRoot:'/api/' + collectionName + '/',
-						schema: structure.schemas[key].doc,
-						idAttribute: '_id',
+				for(var schemaName in structure){
+					var collectionName = structure[schemaName].collection.name;
+					var Model = App.models[key+'Model'] = SagaModel.extend({
+						urlRoot:'/api/'+collectionName+'/',
+						schema: structure[schemaName].doc,
+						idAttribute: "_id",
 					});
 					var Collection = App.collections[key + 'Collection'] = SagaCollection.extend({
 						model: Model,
-						url: '/api/' + collectionName,
-						schema: structure.schemas[key].collection
+						url: '/api/'+collectionName,
+						schema: structure[schemaName].collection
 					});
 					App[collectionName] = new Collection();
 				}
 				deferred.resolve(App);
 			});
 			return deferred.promise();
+		},
+
+		isBottomReached: function(){
+			return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
 		}
 	});
 
