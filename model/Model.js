@@ -9,8 +9,8 @@ define(['backbone'], function(){
 			this._originalAttributes = {};
 			this.defineSchemaProperties();
 			Backbone.Model.prototype.constructor.apply(this, arguments);
-			if(this.collection)
-				this.collection.addGetterProperty(this.id);
+			// if(this.collection)
+			// 	this.collection.addGetterProperty(this.id);
 		},
 
 		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
@@ -41,7 +41,7 @@ define(['backbone'], function(){
 		set: function(){
 			var me = this;
 			var getset = function(attribute, raw){
-				var schemaElement = me.schema.tree[attribute] || me.schema.views[attribute];
+				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
 				if(schemaElement){
 					var type = schemaElement instanceof Array?schemaElement[0].type:schemaElement.type;
 					if(!me.primitiveTypes.contains(type)){
@@ -147,7 +147,7 @@ define(['backbone'], function(){
 				properties[key] = {get: get(key), set:set(key)};
 			});
 
-			this.schema.views.keys().forEach(function(key){
+			this.schema.virtuals.keys().forEach(function(key){
 				properties[key] = {get: get(key)};
 			});
 

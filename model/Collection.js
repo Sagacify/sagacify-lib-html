@@ -1,5 +1,23 @@
 define(['backbone'], function(){
 	return Backbone.Collection.extend({
+
+		_isLoading: false,
+
+		_sort: {
+			//field: asc|desc
+		},
+
+		_filters: {
+
+		},
+
+		_paginate: {
+		    currentPage: 0, // which page should pagination start from
+		    perPage: 0, // how many items per page should be shown (0 is no limit)
+		    maxPages: 0, // max pages (0 is not limit) 
+		    _maxPagesReached: false
+		},
+
 		constructor: function(models, options){
 			if(models && !(models instanceof Array)){
 				options = models;
@@ -9,7 +27,7 @@ define(['backbone'], function(){
 					this.url = options.url;
 			}
 
-			this._views = {};
+			this._virtuals = {};
 			this.defineSchemaProperties();
 			Backbone.Collection.prototype.constructor.apply(this, arguments);
 		},
@@ -19,17 +37,17 @@ define(['backbone'], function(){
 				return Backbone.Collection.prototype.get.apply(this, arguments);
 			}
 			var url = this.url instanceof Function?this.url():this.url;
-			if(this.schema.views[id]){
-				if(!this._views[id]){
-					if(this.schema.views[id] instanceof Array){
-						var model = App.models[this.schema.views[id][0].type+"Model"].extend({urlRoot:url+'/'+id});
-						this._views[id] = new App.collections[this.schema.views[id][0].type+"Collection"]([], {url:url+'/'+id, model:model});
+			if(this.schema.virtuals[id]){
+				if(!this._virtuals[id]){
+					if(this.schema.virtuals[id] instanceof Array){
+						var model = App.models[this.schema.virtuals[id][0].type+"Model"].extend({urlRoot:url+'/'+id});
+						this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].type+"Collection"]([], {url:url+'/'+id, model:model});
 					}
 					else{
-						this._views[id] = new App.models[this.schema.views[id].type+"Model"]({}, {url:url+'/'+id});
+						this._virtuals[id] = new App.models[this.schema.virtuals[id].type+"Model"]({}, {url:url+'/'+id});
 					}
 				}
-				return this._views[id];
+				return this._virtuals[id];
 			}
 			else if(!id || id == "new"){
 				return new this.model({}, {urlRoot: url});
@@ -37,6 +55,12 @@ define(['backbone'], function(){
 			else{
 				return Backbone.Collection.prototype.get.apply(this, arguments) || new this.model({_id:id}, {urlRoot: url});
 			}
+		},
+
+		set: function(){
+			Backbone.Collection.prototype.set.apply(this, arguments);
+			console.log('set')
+			//this.trigger('set');
 		},
 
 		do: function(action, args){
@@ -52,6 +76,86 @@ define(['backbone'], function(){
 			}
 			return $.post(url+'/'+action, args||{});
 		},
+
+		clientSort: function(){
+			return Backbone.Collection.prototype.sort.apply(this, arguments);
+		},
+
+		sort: function(sort){
+			this._sort = sort;
+			return this;
+		},
+
+		filter: function(filters){
+			this._filters = filters;
+			return this;
+		},
+
+		paginate: function(paginate){
+			_.extend(this._paginate, paginate);
+			return this;
+		},
+
+		fetch: function(options){
+			if(!options)
+				options = {data:{}};
+			if(!options.data)
+				options.data = {};
+			if(this._sort){
+				if(typeof this._sort == "string"){
+					options.data.sort_by = this._sort;
+				}
+				else{
+					options.data.sort_by = this._sort.keys()[0];
+					options.data.sort_how = this._sort[options.data.sort_by];
+				}
+			}
+			for(var key in this._filters){
+				options.data[key] = this._filters[key];
+			}
+
+			this._isLoading = true;
+			var fetch = Backbone.Collection.prototype.fetch.apply(this, [options]);
+			var me = this;
+			fetch.always(function(data){
+				me._isLoading = false;
+			});
+			return fetch;
+		},
+
+		nextPage: function(options){
+			if(!options)
+				options = {data:{}};
+			options.remove = false;
+			if(!options.data)
+				options.data = {};
+			if(this._paginate.perPage){
+				options.data.offset = this._paginate.currentPage*this._paginate.perPage;
+				options.data.limit = this._paginate.perPage;
+			}
+			var nextFetch = this.fetch(options);
+			var me = this;
+			nextFetch.done(function(data){
+				me._paginate.currentPage++;
+				me._paginate._maxPagesReached = me._paginate.currentPage==me._paginate.maxPages||data.length<me._paginate.perPage;
+			});
+			return nextFetch;
+		},
+
+		isMaxReached: function(){
+			return this._paginate._maxPagesReached;
+		},
+
+		isLoading: function(){
+			return this._isLoading;
+		},
+
+		clone: function(options) {
+			if(!options)
+				options = {};
+			var models = options.models?this.models:null;
+      		return new this.constructor(models, {url:this.url});
+    	},
 
 		defineSchemaProperties: function(){
 			if(!this.schema)
@@ -74,7 +178,7 @@ define(['backbone'], function(){
 				};
 			};
 
-			this.schema.views.keys().forEach(function(key){
+			this.schema.virtuals.keys().forEach(function(key){
 				properties[key] = {get: get(key)};
 			});
 
