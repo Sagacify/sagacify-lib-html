@@ -3,7 +3,7 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 
 		constructor: function(attributes, options){
 			if(options){
-				if(options.url)
+				if("url" in options)
 					this.url = options.url;
 			}
 			this._originalAttributes = {};
@@ -11,7 +11,18 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 			Backbone.Model.prototype.constructor.apply(this, arguments);
 		},
 
-		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
+		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectID"],
+
+		get: function(attribute){
+			var value = Backbone.Model.prototype.get.apply(this, arguments);
+			if(!value){
+				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
+				if(schemaElement && schemaElement.type && !this.primitiveTypes.contains(schemaElement.type)){
+					value = this.set(attribute, {});
+				}
+			}
+			return value;
+		},
 
 		set: function(){
 			var me = this;
@@ -20,7 +31,7 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 				if(schemaElement){
 					var type = schemaElement instanceof Array?schemaElement[0].type:schemaElement.type;
 					if(!me.primitiveTypes.contains(type)){
-						var docColl = me.get(attribute);
+						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl){
 							docColl.set(raw);
 							return null;
@@ -28,10 +39,10 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 
 						var url = me.url instanceof Function?me.url():me.url;
 						if(schemaElement instanceof Array){
-							return new App.collections[type+"Collection"](raw||[], {url:url+'/'+attribute});
+							return new App.collections[type+"Collection"](raw||[], {url:me.isNew()?"":(url+'/'+attribute)});
 						}
 						else{
-							return new App.models[type+"Model"](raw||{}, {url:url+'/'+attribute});
+							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute)});
 						}
 					}
 					else{
@@ -140,9 +151,9 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 		},
 
 		validate: function(attr){
-			var url = this.url();
-			if(this.schema.tree[attr])
-				return ValidateFormat.validate(this.schema.tree[attr].validation, this[attr]);
+			var url = me.url instanceof Function?me.url():me.url;
+			if(url && App.server_routes[url] && App.server_routes[url].validation)
+				return ValidateFormat.validate(App.server_routes[url].validation, this[attr]);
 			return {success:true};
 		}
 

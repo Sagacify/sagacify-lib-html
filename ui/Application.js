@@ -27,6 +27,7 @@ define([
 			var deferred = $.Deferred();
 			$.get('/api/app_models', function(structure){
 				var App = {};
+				App.server_routes = structure.routes;
 				App.models = {};
 				App.collections = {};
 				console.log('Models structure : ');
@@ -37,7 +38,7 @@ define([
 					var Model = App.models[schemaName+'Model'] = SagaModel.extend({
 						urlRoot:'/api/'+collectionName+'/',
 						schema: schemas[schemaName].doc,
-						idAttribute: "_id",
+						idAttribute: "_id"
 					});
 					var Collection = App.collections[schemaName + 'Collection'] = SagaCollection.extend({
 						model: Model,
