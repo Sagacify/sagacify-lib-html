@@ -1,12 +1,16 @@
 define([
 	'backbone.marionette',
-], function (Marionette) {
+	'./Mixin',
+	'./ModelBindMixin'
+], function (Marionette, Mixin, ModelBindMixin) {
 
 	// prototype of the base Marionette Layout
 	var Layout = Marionette.Layout.extend({
 
-		get_Template: function (data, settings) {
-			return this._template ? _.template(this._template, data, settings) : this.template;
+		constructor: function(){
+			this._handleFirstRender();
+			this.model = this.getModel();
+			Marionette.Layout.prototype.constructor.apply(this, arguments);
 		},
 
 		bindEvent: function (widget, eventName, callback) {
@@ -18,6 +22,12 @@ define([
 			});
 		},
 
+		render: function(){
+			this.template = this.get_Template(this.model);
+			Marionette.Layout.prototype.render.apply(this, arguments);
+			this.bindToModel();
+		},
+
 		appear: function (node) {
 			$(node).show();
 		},
@@ -26,11 +36,17 @@ define([
 			$(node).hide();
 		},
 
-		toggle: function (node) {
-			$(node).toggle();
+		// toggle: function (node) {
+		// 	$(node).toggle();
+		// }
+
+		getModel: function(){
+			return null;
 		}
 
 	});
+
+	_.extend(Layout.prototype, Mixin, ModelBindMixin);
 
 	return Layout;
 });

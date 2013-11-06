@@ -1,11 +1,10 @@
 define([
 	'backbone.marionette',
-], function (Marionette) {
+	'./Mixin'
+], function (Marionette, Mixin) {
 
 	// prototype the base Marionette CollectionView
 	var CollectionView = Marionette.CollectionView.extend({
-
-		//collectionBind: false,
 
 		onBottomReached: null,
 
@@ -27,26 +26,13 @@ define([
 		constructor: function(){
 			this._prepareCollection();
 			this._handleBottomReached();
+			this._handleFirstRender();
 			Marionette.CollectionView.prototype.constructor.apply(this, arguments);
-		},
-
-		get_Template: function (data, settings) {
-			return this._template ? _.template(this._template, data, settings) : this.template;
 		},
 
 		render: function(){
 			Marionette.CollectionView.prototype.render.apply(this, arguments);
 		},
-
-		// bindToCollection: function(){
-		// 	if(this.collectionBind && this.collection){
-		// 		var me = this;
-		// 		this.collection.on('set', function(args){
-		// 			console.log('onset')
-		// 			me.render();
-		// 		});
-		// 	}
-		// },
 
 		getCollection: function(){
 			return null;
@@ -54,11 +40,35 @@ define([
 
 		nextPage: function(){
 			if(this.collection && !this.collection.isMaxReached() && !this.collection.isLoading()){
-				this.collection.nextPage();
-			}
+				this.showLoadingView();
+				var me = this;
+				this.collection.nextPage().always(function(){
+					me.closeLoadingView();
+				});
+			}	
+		},
+
+		showLoadingView: function(){
+			this.closeEmptyView();
+		    var LoadingView = Marionette.getOption(this, "loadingView");
+
+		    if(LoadingView && !this._loadingView){
+				var model = new Backbone.Model();
+		    	this.addItemView(model, LoadingView);
+		    	this._loadingView = this.children.last();
+		    }
+		},
+
+		closeLoadingView: function(){
+		    if (this._loadingView){
+		    	this.removeChildView(this._loadingView);
+		    	delete this._loadingView;
+		    }
 		}
 
 	});
+
+	_.extend(CollectionView.prototype, Mixin);
 
 	return CollectionView;
 });

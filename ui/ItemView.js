@@ -1,14 +1,14 @@
 define([
 	'backbone.marionette',
-], function (Marionette) {
+	'./Mixin',
+	'./ModelBindMixin'
+], function (Marionette, Mixin, ModelBindMixin) {
 
-	// prototype the base Marionette ItemView
 	var ItemView = Marionette.ItemView.extend({
 
-		modelBind: false,
-
-		get_Template: function (data, settings) {
-			return this._template ? _.template(this._template, data, settings) : this.template;
+		constructor: function(){
+			this.model = this.getModel();
+			Marionette.ItemView.prototype.constructor.apply(this, arguments);
 		},
 
 		render: function(){
@@ -16,20 +16,13 @@ define([
 			this.bindToModel();
 		},
 
-		bindToModel: function(){
-			if(this.modelBind && this.model){
-				this._modelBinder = new Backbone.ModelBinder();
-				//custom spec
-				if(this.modelBind.isObject()){
-					this._modelBinder.bind(this.model, this.el, this.modelBind);
-				}
-				else{
-					this._modelBinder.bind(this.model, this.el);
-				}
-			}
+		getModel: function(){
+			return null;
 		}
 
 	});
+
+	_.extend(ItemView.prototype, Mixin, ModelBindMixin);
 
 	return ItemView;
 });

@@ -53,14 +53,8 @@ define(['backbone'], function(){
 				return new this.model({}, {urlRoot: url});
 			}
 			else{
-				return Backbone.Collection.prototype.get.apply(this, arguments) || new this.model({_id:id}, {urlRoot: url});
+				return Backbone.Collection.prototype.get.apply(this, arguments) || this.add(new this.model({_id:id}, {urlRoot: url})).last();
 			}
-		},
-
-		set: function(){
-			Backbone.Collection.prototype.set.apply(this, arguments);
-			console.log('set')
-			//this.trigger('set');
 		},
 
 		do: function(action, args){
@@ -111,7 +105,7 @@ define(['backbone'], function(){
 				}
 			}
 			for(var key in this._filters){
-				options.data[key] = this._filters[key];
+				options.data[key] = JSON.stringify(this._filters[key]);
 			}
 
 			this._isLoading = true;
