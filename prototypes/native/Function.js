@@ -1,6 +1,8 @@
 var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 
-Function.prototype.getParamNames = function(){
+var fun_proto = {};
+
+fun_proto.getParamNames = function(){
   var fnStr = this.toString().replace(STRIP_COMMENTS, '');
   var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(/([^\s,]+)/g);
   if(result === null)
@@ -8,12 +10,12 @@ Function.prototype.getParamNames = function(){
   return result;
 };
 
-Function.prototype.hasCallback = function(){
+fun_proto.hasCallback = function(){
 	var paramNames = this.getParamNames();
 	return paramNames.last() == 'callback';
 };
 
-Function.prototype._apply = function(thisArg, argsObject, callback){
+fun_proto._apply = function(thisArg, argsObject, callback){
 	var argsArray = [];
 	var hasCallback = false;
 	this.getParamNames().forEach(function(paramName){
@@ -34,3 +36,7 @@ Function.prototype._apply = function(thisArg, argsObject, callback){
 		return ret;
 	}
 };
+
+for(var key in fun_proto){
+	Object.defineProperty(Function.prototype, key, {value: fun_proto[key]});
+}

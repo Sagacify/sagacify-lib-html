@@ -9,34 +9,9 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 			this._originalAttributes = {};
 			this.defineSchemaProperties();
 			Backbone.Model.prototype.constructor.apply(this, arguments);
-			// if(this.collection)
-			// 	this.collection.addGetterProperty(this.id);
 		},
 
 		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
-
-		// get: function(attribute){
-		// 	var schemaElement = this.schema.tree[attribute] || this.schema.views[attribute];
-		// 	if(schemaElement){
-		// 		var type = schemaElement instanceof Array?schemaElement[0].type:schemaElement.type;
-		// 		var value = Backbone.Model.prototype.get.apply(this, arguments);
-		// 		if(!this.primitiveTypes.contains(type)){
-		// 			var url = this.url instanceof Function?this.url():this.url;
-		// 			if(schemaElement instanceof Array){
-		// 				return new App.collections[type+"Collection"](value||[], {url:url+'/'+attribute});
-		// 			}
-		// 			else{
-		// 				return new App.models[type+"Model"](value||{}, {url:url+'/'+attribute});
-		// 			}
-		// 		}
-		// 		else{
-		// 			return value;
-		// 		}
-		// 	}
-		// 	else{
-		// 		return null;
-		// 	}
-		// },
 
 		set: function(){
 			var me = this;
@@ -165,6 +140,7 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 		},
 
 		validate: function(attr){
+			var url = this.url();
 			if(this.schema.tree[attr])
 				return ValidateFormat.validate(this.schema.tree[attr].validation, this[attr]);
 			return {success:true};

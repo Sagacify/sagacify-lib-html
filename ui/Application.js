@@ -31,17 +31,18 @@ define([
 				App.collections = {};
 				console.log('Models structure : ');
 				console.log(structure);
-				for(var schemaName in structure){
-					var collectionName = structure[schemaName].collection.name;
-					var Model = App.models[key+'Model'] = SagaModel.extend({
+				var schemas = structure.schemas;
+				for(var schemaName in schemas){
+					var collectionName = schemas[schemaName].collection.name;
+					var Model = App.models[schemaName+'Model'] = SagaModel.extend({
 						urlRoot:'/api/'+collectionName+'/',
-						schema: structure[schemaName].doc,
+						schema: schemas[schemaName].doc,
 						idAttribute: "_id",
 					});
-					var Collection = App.collections[key + 'Collection'] = SagaCollection.extend({
+					var Collection = App.collections[schemaName + 'Collection'] = SagaCollection.extend({
 						model: Model,
 						url: '/api/'+collectionName,
-						schema: structure[schemaName].collection
+						schema: schemas[schemaName].collection
 					});
 					App[collectionName] = new Collection();
 				}
