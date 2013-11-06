@@ -36,6 +36,10 @@ define([
 			$(node).hide();
 		},
 
+		// toggle: function (node) {
+		// 	$(node).toggle();
+		// }
+
 		getModel: function(){
 			return null;
 		}
