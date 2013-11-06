@@ -1,5 +1,5 @@
 define([
-	'../types/validatType'
+	'../types/validateType'
 ], function (is) {
 	return {
 

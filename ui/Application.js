@@ -30,7 +30,7 @@ define([
 				App.collections = {};
 				console.log('Models structure : ');
 				console.log(structure);
-				for(var schemaName in structure){
+				for(var schemaName in structure) {
 					var collectionName = structure[schemaName].collection.name;
 					var Model = App.models[key+'Model'] = SagaModel.extend({
 						urlRoot:'/api/'+collectionName+'/',

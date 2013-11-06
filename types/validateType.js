@@ -1,6 +1,4 @@
-define([
-	'../types/validatType'
-], function (is) {
+define([], function (is) {
 
 	return {
 
@@ -36,6 +34,6 @@ define([
 			return obj == null;
 		}
 
-	}
+	};
 
 });
