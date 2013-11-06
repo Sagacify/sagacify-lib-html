@@ -1,4 +1,4 @@
-define(['backbone'], function(){
+define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, ValidateFormat){
 	return Backbone.Model.extend({
 
 		constructor: function(attributes, options){
@@ -162,6 +162,12 @@ define(['backbone'], function(){
 			for(var key in this._originalAttributes){
 				this.set(key, this._originalAttributes[key]);
 			}
+		},
+
+		validate: function(attr){
+			if(this.schema.tree[attr])
+				return ValidateFormat.validate(this.schema.tree[attr].validation, this[attr]);
+			return {success:true};
 		}
 
 	});

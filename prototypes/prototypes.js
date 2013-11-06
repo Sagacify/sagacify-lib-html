@@ -1,3 +1,3 @@
-define(['./Array', './Date', './Function', './String', './Object', './Console'], function(){
+define(['./native/native', './marionette/marionette'], function(){
 
 });
