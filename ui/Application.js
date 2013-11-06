@@ -7,15 +7,14 @@ define([
 	return Marionette.Application.extend({
 
 		constructor: function(options){
+			var me = this;
 			Marionette.Application.prototype.constructor.apply(this, arguments);
 			if(options && options.models){
-				var me = this;
 				this.fetchModels().done(function(data){
 					me.merge(data);
 					me.triggerMethod('models:fetched');
 				});
 			}
-			var me = this;
 			$(window).scroll(function(evt){
 				if(me.isBottomReached()){
 					me.trigger("bottomReached");
@@ -36,7 +35,7 @@ define([
 					var Model = App.models[key+'Model'] = SagaModel.extend({
 						urlRoot:'/api/'+collectionName+'/',
 						schema: structure[schemaName].doc,
-						idAttribute: "_id",
+						idAttribute: '_id',
 					});
 					var Collection = App.collections[key + 'Collection'] = SagaCollection.extend({
 						model: Model,

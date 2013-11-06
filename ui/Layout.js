@@ -24,6 +24,10 @@ define([
 
 		disappear: function (node) {
 			$(node).hide();
+		},
+
+		toggle: function (node) {
+			$(node).toggle();
 		}
 
 	});
