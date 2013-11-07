@@ -38,7 +38,7 @@ define([], function () {
 		// downloadProgressHandler: function () {
 		// 	debugger;
 		// },
-		methodWrapper: function (type, url, data, cbError, cbSuccess) {
+		methodWrapper: function (type, url, headers, data, cbError, cbSuccess) {
 			var me = this;
 			return $.ajax({
 				// uploadProgress: function () {
@@ -55,6 +55,7 @@ define([], function () {
 				},
 				success: cbSuccess,
 				error: cbError,
+				headers: headers,
 				data: data,
 				type: type,
 				url: url
@@ -62,7 +63,7 @@ define([], function () {
 		},
 		authorization: function () {
 			return {
-				Authorization: SGStore.getBearer()
+				Authorization: App.store.getBearer()
 			};
 		},
 		ajax: function (options) {
@@ -105,16 +106,16 @@ define([], function () {
 			};
 		},
 		delete: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('DELETE', url, data, cbError, cbSuccess);
+			return this.methodWrapper('DELETE', url, headers, data, cbError, cbSuccess);
 		},
 		post: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('POST', url, data, cbError, cbSuccess);
+			return this.methodWrapper('POST', url, headers, data, cbError, cbSuccess);
 		},
 		put: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('PUT', url, data, cbError, cbSuccess);
+			return this.methodWrapper('PUT', url, headers, data, cbError, cbSuccess);
 		},
 		get: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('GET', url, data, cbError, cbSuccess);
+			return this.methodWrapper('GET', url, headers, data, cbError, cbSuccess);
 		}
 	};
 
