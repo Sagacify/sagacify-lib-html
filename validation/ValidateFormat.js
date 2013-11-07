@@ -7,18 +7,25 @@ define([
 			var isOptional = false;
 			if(ele_config.length) {
 				isOptional = this.hasOptionalFlag(ele_config);
-				ele_config = ele_config.splice(isOptional, ele_config.length);
+				ele_config = ele_config.clone().splice(isOptional, ele_config.length);
 			}
 			if(isOptional && (ele == null)) {
 				return true;
 			}
 			else if(ele_config.length && (ele != null)) {
-				var expected_Type = ele_config[0];
-				var expected_methods = ele_config.splice(1);
-				if(is.String(expected_Type) && is.Array(expected_methods)) {
+				var expected_methods = ele_config;
+				var expected_Type;
+				var has_ValidType = true;
+				if(ele_config[0] in is){
+					var expected_Type = expected_methods.splice(1)[0];
 					var has_ValidType = this.validate_Type(ele, expected_Type);
+				}
+				if(is.Array(expected_methods)) {
 					var has_ValidFormat = this.validate_Format(ele, expected_methods);
 					return !!(has_ValidType && has_ValidFormat);
+				}
+				else{
+					return false;
 				}
 			}
 			else {

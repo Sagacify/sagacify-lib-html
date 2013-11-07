@@ -40,7 +40,7 @@ define([
 						schema: schemas[schemaName].doc,
 						idAttribute: "_id"
 					});
-					var Collection = App.collections[schemaName + 'Collection'] = SagaCollection.extend({
+					var Collection = App.collections[schemaName+'Collection'] = SagaCollection.extend({
 						model: Model,
 						url: '/api/'+collectionName,
 						schema: schemas[schemaName].collection

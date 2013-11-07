@@ -1,5 +1,5 @@
-define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, ValidateFormat){
-	return Backbone.Model.extend({
+define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(Backbone, ValidateFormat, SagaCollection){
+	var SagaModel = Backbone.Model.extend({
 
 		constructor: function(attributes, options){
 			if(options){
@@ -39,9 +39,27 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 
 						var url = me.url instanceof Function?me.url():me.url;
 						if(schemaElement instanceof Array){
-							return new App.collections[type+"Collection"](raw||[], {url:me.isNew()?"":(url+'/'+attribute)});
+							var collectionUrl = me.isNew()?"":(url+'/'+attribute);
+							if(type){
+								return new App.collections[type+"Collection"](raw||[], {url:collectionUrl});
+							}
+							//embedded
+							else{
+								var Model = SagaModel.extend({
+									urlRoot: collectionUrl+'/',
+									schema: schemaElement.doc,
+									idAttribute: "_id"
+								});
+								var Collection = SagaCollection.extend({
+									model: Model,
+									url: collectionUrl,
+									schema: schemaElement.collection
+								});
+								return new Collection(raw||[]);
+							}
 						}
 						else{
+							console.log(schemaElement)
 							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute)});
 						}
 					}
@@ -151,11 +169,20 @@ define(['backbone', 'saga/validation/ValidateFormat'], function(Backbone, Valida
 		},
 
 		validate: function(attr){
-			var url = me.url instanceof Function?me.url():me.url;
-			if(url && App.server_routes[url] && App.server_routes[url].validation)
-				return ValidateFormat.validate(App.server_routes[url].validation, this[attr]);
+			var url = this.url instanceof Function?this.url():this.url;
+			var method;
+			if(this.isNew())
+				method = "post";
+			else
+				method = "put";
+			if(url.endsWith('/'))
+				url = url.substring(0, url.length-1);
+			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[attr])
+				return {success:ValidateFormat.validate(this[attr], App.server_routes[method][url].validation[attr]||[])};
 			return {success:true};
 		}
 
 	});
+
+	return SagaModel;
 });
