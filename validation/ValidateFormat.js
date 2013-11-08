@@ -17,7 +17,7 @@ define([
 				var expected_Type;
 				var has_ValidType = true;
 				if(ele_config[0] in is){
-					var expected_Type = expected_methods.splice(1)[0];
+					var expected_Type = expected_methods.splice(0, 1);
 					var has_ValidType = this.validate_Type(ele, expected_Type);
 				}
 				if(is.Array(expected_methods)) {
