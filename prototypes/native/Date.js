@@ -25,6 +25,16 @@ Date.prototype.getShortWeekday = function () {
 	return this.toLocaleDateString('en-US', { weekday: 'short'});
 };
 
+Date.prototype.inputFormat = function(){
+	var day = ("0" + this.getDate()).slice(-2);
+    var month = ("0" + (this.getMonth() + 1)).slice(-2);
+    return this.getFullYear()+"-"+(month)+"-"+(day) ;
+};
+
+Date.create = function(date){
+	return new Date(date);
+};
+
 sec = 1000;
 min = 60*sec;
 hour = 60*min;

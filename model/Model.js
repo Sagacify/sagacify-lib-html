@@ -6,12 +6,14 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 				if("url" in options)
 					this.url = options.url;
 			}
+
 			this._originalAttributes = {};
 			this.defineSchemaProperties();
+			this.handleMattributes();
 			Backbone.Model.prototype.constructor.apply(this, arguments);
 		},
 
-		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectID"],
+		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
 
 		get: function(attribute){
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
@@ -22,6 +24,10 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 				}
 			}
 			return value;
+		},
+
+		mget: function(attr){
+			retu
 		},
 
 		set: function(){
@@ -59,11 +65,14 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 							}
 						}
 						else{
-							console.log(schemaElement)
+							console.log(type)
 							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute)});
 						}
 					}
 					else{
+						if(schemaElement.type == "Date"){
+							raw = Date.create(raw);
+						}
 						// take trace of initial attributes for revert
 						if(me.schema.tree[attribute] && !(attribute in me._originalAttributes)){
 							me._originalAttributes[attribute] = raw;
@@ -130,6 +139,12 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 				};
 			};
 
+			var mget = function(attr){
+				return function(){
+					return this._mattributes[attr];
+				};
+			}
+
 			var set = function(attr){
 				return function(value){
 					return this.set(attr, value);
@@ -149,6 +164,10 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 
 			this.schema.tree.keys().forEach(function(key){
 				properties[key] = {get: get(key), set:set(key)};
+				if(key.contains(".")){
+					var attr = key.split(".")[0];
+					properties[attr] = {get: mget(attr)};
+				}
 			});
 
 			this.schema.virtuals.keys().forEach(function(key){
@@ -162,10 +181,38 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 			Object.defineProperties(this, properties);
 		},
 
+		handleMattributes: function(){
+			this._mattributes = {};
+			var me = this;
+			var handleMattribute = function(attr){
+				me.on("change:"+attr, function(model, value, options){
+					me._mattributes._set(attr, value);
+				});
+			}
+
+			for(var attr in this.schema.tree){
+				handleMattribute(attr);
+			}
+			for(var attr in this.schema.virtuals){
+				handleMattribute(attr);
+			}
+		},
+
+		toJSON: function(mpath){
+			if(mpath)
+				return Backbone.Model.prototype.toJSON.apply(this, arguments);
+			else
+				return _.clone(this._mattributes);
+		},
+
 		revert: function(){
 			for(var key in this._originalAttributes){
 				this.set(key, this._originalAttributes[key]);
 			}
+		},
+
+		treeVirtuals: function(){
+			return this.schema.virtuals.clone().merge(this.schema.tree);
 		},
 
 		validate: function(attr){

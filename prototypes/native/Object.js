@@ -29,7 +29,7 @@ obj_proto.keys = function keys(){
 	return Object.keys(this);
 };
 
-obj_proto._get = function(field){
+obj_proto.mget = obj_proto._get = function(field){
 	var splitField = field.split('.');
 	var toReturn = this;
 	splitField.forEach(function(fieldPart){
@@ -39,7 +39,7 @@ obj_proto._get = function(field){
 	return toReturn;
 };
 
-obj_proto._set = function(field, value){
+obj_proto.mset = obj_proto._set = function(field, value){
 	var splitField = field.split('.');
 	var objToSet = this;
 	for(var i = 0; i < splitField.length-1; i++){

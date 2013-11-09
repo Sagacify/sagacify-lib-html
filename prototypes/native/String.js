@@ -6,6 +6,10 @@ String.prototype.endsWith = function(str){
 	return this.slice(this.length - str.length, this.length) === str;
 };
 
+String.prototype.contains = function(str){
+	return this.indexOf(str) != -1;
+};
+
 String.prototype.base64Sanitize = function(base64) {
 	return base64.replace(/\//g, '-').replace(/\+/g, '_');
 };

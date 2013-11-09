@@ -45,7 +45,7 @@ define([
 			for(var i = 0, len = method_list.length; i < len; i++) {
 				method = method_list[i];
 				if(is.String(method)) {
-					valid = this[method](obj);
+					valid = !this[method]||this[method](obj);
 				}
 				else if(is.Object(method)) {
 					validation_method = Object.keys(method)[0];
