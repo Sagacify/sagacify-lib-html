@@ -38,7 +38,7 @@ define([], function () {
 		// downloadProgressHandler: function () {
 		// 	debugger;
 		// },
-		methodWrapper: function (type, url, data, cbError, cbSuccess) {
+		methodWrapper: function (type, url, headers, contentType, data, cbError, cbSuccess) {
 			var me = this;
 			return $.ajax({
 				// uploadProgress: function () {
@@ -53,16 +53,19 @@ define([], function () {
 				complete: function () {
 					me.completionHandler.apply(me, arguments);
 				},
+				contentType: contentType || 'application/json; charset=utf-8',
+				dataType: 'json',
 				success: cbSuccess,
 				error: cbError,
-				data: data,
+				headers: headers,
+				data: (typeof data === 'object') ? JSON.stringify(data) : data,
 				type: type,
 				url: url
 			});
 		},
 		authorization: function () {
 			return {
-				Authorization: SGStore.getBearer()
+				Authorization: App.store.getBearer()
 			};
 		},
 		ajax: function (options) {
@@ -70,12 +73,13 @@ define([], function () {
 			var data = options.data;
 			var method = options.type.toLowerCase();
 			var headers = options.auth ? this.authorization() : {};
+			var contentType = options.contentType;
 			if(options.dataType != null) {
 				headers.dataType = options.dataType;
 			}
 			var cbError = options.error;
 			var cbSuccess = options.success;
-			return this[method](url, headers, data, cbError, cbSuccess) || cbError();
+			return this[method](url, headers, contentType, data, cbError, cbSuccess) || cbError();
 		},
 		constructor: function (options) {
 			$.extend(this, options);
@@ -104,17 +108,17 @@ define([], function () {
 				me.ajax.apply(me, arguments);
 			};
 		},
-		delete: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('DELETE', url, data, cbError, cbSuccess);
+		delete: function (url, headers, contentType, data, cbError, cbSuccess) {
+			return this.methodWrapper('DELETE', url, headers, contentType, data, cbError, cbSuccess);
 		},
-		post: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('POST', url, data, cbError, cbSuccess);
+		post: function (url, headers, contentType, data, cbError, cbSuccess) {
+			return this.methodWrapper('POST', url, headers, contentType, data, cbError, cbSuccess);
 		},
-		put: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('PUT', url, data, cbError, cbSuccess);
+		put: function (url, headers, contentType, data, cbError, cbSuccess) {
+			return this.methodWrapper('PUT', url, headers, contentType, data, cbError, cbSuccess);
 		},
-		get: function (url, headers, data, cbError, cbSuccess) {
-			return this.methodWrapper('GET', url, data, cbError, cbSuccess);
+		get: function (url, headers, contentType, data, cbError, cbSuccess) {
+			return this.methodWrapper('GET', url, headers, contentType, data, cbError, cbSuccess);
 		}
 	};
 

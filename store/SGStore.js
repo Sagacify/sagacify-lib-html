@@ -30,6 +30,10 @@ define([], function () {
 
 		clear: function () {
 			return this.getStore().clear();
+		},
+
+		getBearer: function () {
+			return 'bearer ' + this.get('id') + '|' + this.get('token');
 		}
 
 	};
