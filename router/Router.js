@@ -51,6 +51,18 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 					layout = routeLayout(layout, fun);
 				});
 			}
+		},
+
+		navigate: function(){
+			var args = Array.apply(null, arguments);
+			args[0] = App.uris[args[0]]||args[0];
+			if(!args[1])
+				args[1] = {};
+			if(!("trigger" in args[1]))
+				args[1].trigger = true;
+
+			Marionette.AppRouter.prototype.navigate.apply(this, args);
 		}
+		
 	});
 });

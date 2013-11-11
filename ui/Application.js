@@ -55,6 +55,7 @@ define([
 		isBottomReached: function(){
 			return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
 		}
+		
 	});
 
 });

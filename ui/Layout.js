@@ -42,6 +42,19 @@ define([
 
 		getModel: function(){
 			return null;
+		},
+
+		showChildOnRender: function(region, childClass, childArgs, childName){
+			childName == undefined?'childView':childName;
+			if(!childName || !(this[childName] instanceof childClass)){
+				var view = new childClass(childArgs);
+				if(childName){
+					this[childName] = view;
+				}
+				region.showOnRender(this, new childClass(childArgs||{}));
+				return view;
+			}
+			return this[childName];
 		}
 
 	});
