@@ -46,7 +46,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 					}
 				}
 
-				var layout = App.view;
+				var layout = App.layout;
 				funs.forEach(function(fun){
 					layout = routeLayout(layout, fun);
 				});
