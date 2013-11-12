@@ -76,11 +76,12 @@ define([], function(){
 			if(!inputDates.length)
 				return;
 			var me = this;
-			inputDates.on('change', function(){
+			inputDates.on('blur', function(evt){
 				me.model[attr] = new Date(this.value);
 			});
 			this.model.on('change:'+attr, function(){
-				inputDates.val(this[attr].inputFormat());
+				if(this[attr].getTime())
+					inputDates.val(this[attr].inputFormat());
 			});
 		},
 

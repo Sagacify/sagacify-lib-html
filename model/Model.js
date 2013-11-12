@@ -1,4 +1,4 @@
-define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(Backbone, ValidateFormat, SagaCollection){
+define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/validateType'], function(Backbone, ValidateFormat, SagaCollection, is){
 	var SagaModel = Backbone.Model.extend({
 
 		constructor: function(attributes, options){
@@ -20,7 +20,12 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
 				if(schemaElement && schemaElement.type && !this.primitiveTypes.contains(schemaElement.type)){
-					value = this.set(attribute, {});
+					this.set(attribute, {});
+					value = Backbone.Model.prototype.get.apply(this, arguments);
+				}
+				if(schemaElement instanceof Array && is.Object(schemaElement[0])){
+					this.set(attribute, []);
+					value = Backbone.Model.prototype.get.apply(this, arguments);
 				}
 			}
 			return value;
