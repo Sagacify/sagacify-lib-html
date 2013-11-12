@@ -58,13 +58,13 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 							else{
 								var Model = SagaModel.extend({
 									urlRoot: collectionUrl+'/',
-									schema: schemaElement.doc,
+									schema: schemaElement[0].doc,
 									idAttribute: "_id"
 								});
 								var Collection = SagaCollection.extend({
 									model: Model,
 									url: collectionUrl,
-									schema: schemaElement.collection
+									schema: schemaElement[0].collection
 								});
 								return new Collection(raw||[]);
 							}
