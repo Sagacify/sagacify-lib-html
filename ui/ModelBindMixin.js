@@ -115,8 +115,8 @@ define([], function(){
 		bindValidation: function(els, attr){
 			var me = this;
 			this.model.on('change:'+attr, function(model){
-				var validClass = typeof me.validClass == "function"?me.validClass(attr):me.validClass;
-				var errorClass = typeof me.errorClass == "function"?me.errorClass(attr):me.errorClass;
+				var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
+				var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
 				if(this.validate(attr).success){
 					els.removeClass(errorClass);
 					els.addClass(validClass);

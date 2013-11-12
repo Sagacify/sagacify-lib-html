@@ -218,14 +218,23 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection'], function(
 		validate: function(attr){
 			var url = this.url instanceof Function?this.url():this.url;
 			var method;
-			if(this.isNew())
+			if(this.isNew()) {
 				method = "post";
-			else
+			}
+			else {
 				method = "put";
-			if(url.endsWith('/'))
+			}
+			if(url.endsWith('/')) {
 				url = url.substring(0, url.length-1);
-			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[attr])
-				return {success:ValidateFormat.validate(this[attr], App.server_routes[method][url].validation[attr]||[])};
+			}
+			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[attr]) {
+				return {
+					success: ValidateFormat.validate(
+								this[attr],
+								App.server_routes[method][url].validation[attr] || []
+							)
+				};
+			}
 			return {success:true};
 		}
 

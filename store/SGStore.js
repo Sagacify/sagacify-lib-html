@@ -4,7 +4,7 @@ define([], function () {
 
 		loggedIn: false,
 
-		rememberMe: false,
+		rememberMe: true, // should be false but true is more convenient in dev.
 
 		getStore: function () {
 			return this.rememberMe ? localStorage : sessionStorage;
