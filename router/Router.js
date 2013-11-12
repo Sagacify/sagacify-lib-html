@@ -19,8 +19,8 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 				funs = [funs];
 			}
 
-			return function(){
-				var args = Array.apply(null, arguments);;
+			return function () {
+				var args = Array.apply(null, arguments);
 				var routeLayout = function(layout, fun){
 					var fun_name;
 					var fun_staticArgs;
@@ -44,24 +44,24 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 					else{
 						throw new Error("Route " + route + " not followable.");
 					}
-				}
+				};
 
 				var layout = App.layout;
 				funs.forEach(function(fun){
 					layout = routeLayout(layout, fun);
 				});
-			}
+			};
 		},
 
 		navigate: function(){
 			var args = Array.apply(null, arguments);
-			args[0] = App.uris[args[0]]||args[0];
-			debugger
-			if(!args[1])
+			args[0] = App.uris[args[0]] || args[0];
+			if(!args[1]) {
 				args[1] = {};
-			if(!("trigger" in args[1]))
+			}
+			if(!('trigger' in args[1])) {
 				args[1].trigger = true;
-
+			}
 			Marionette.AppRouter.prototype.navigate.apply(this, args);
 		}
 		

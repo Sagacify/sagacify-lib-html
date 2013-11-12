@@ -54,7 +54,7 @@ define([], function () {
 					me.completionHandler.apply(me, arguments);
 				},
 				contentType: contentType || 'application/json; charset=utf-8',
-				dataType: 'json',
+				//dataType: 'json',
 				success: cbSuccess,
 				error: cbError,
 				headers: headers,
