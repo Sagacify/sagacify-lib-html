@@ -27,6 +27,8 @@ define([], function(){
 
 		bindToModel: function(){
 			if(this.modelBind && this.model && !this._modelBound){
+				console.log(this.model.schema.tree)
+				console.log(this.el)
 				var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
 				var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;
 				var treeVirtuals = this.model.treeVirtuals();
@@ -42,12 +44,14 @@ define([], function(){
 				}
 				for(var attr in treeVirtuals){
 					var selector = getSelector(attr);
+					console.log(selector)
 					var els = $(selector, this.el);
+					console.log(els)
 					this.model.bindToEls(els, attr);
 					this.model.bindValidationToEls(els, attr, validClass, errorClass);
 
 					//single embedded doc binding
-					if(this.model.schema.tree[attr] instanceof Array && this.model.schema.tree[attr][0].single){
+					if(this.model.schema.tree[attr] instanceof Array && this.model.schema.tree[attr][0].single && this.model[attr].models[0]){
 						var embeddedTreeVirtuals = this.model[attr].models[0].treeVirtuals();
 						for(var embeddedAttr in embeddedTreeVirtuals){
 							var selector = getSelector(attr+"."+embeddedAttr);

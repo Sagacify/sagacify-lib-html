@@ -275,7 +275,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			if(url.endsWith('/')) {
 				url = url.substring(0, url.length-1);
 			}
-
+			
 			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[attr]) {
 				return {
 					success: ValidateFormat.validate(
