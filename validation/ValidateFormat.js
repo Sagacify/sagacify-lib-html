@@ -17,9 +17,10 @@ define([
 				var expected_Type;
 				var has_ValidType = true;
 				if(ele_config[0] in is){
-					var expected_Type = expected_methods.splice(0, 1);
+					var expected_Type = expected_methods.splice(0, 1)[0];
 					var has_ValidType = this.validate_Type(ele, expected_Type);
 				}
+
 				if(is.Array(expected_methods)) {
 					var has_ValidFormat = this.validate_Format(ele, expected_methods);
 					return !!(has_ValidType && has_ValidFormat);
@@ -45,7 +46,7 @@ define([
 			for(var i = 0, len = method_list.length; i < len; i++) {
 				method = method_list[i];
 				if(is.String(method)) {
-					valid = !this[method]||this[method](obj);
+					valid = !this[method] || this[method](obj);
 				}
 				else if(is.Object(method)) {
 					validation_method = Object.keys(method)[0];
