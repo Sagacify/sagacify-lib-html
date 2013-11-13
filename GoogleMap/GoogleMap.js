@@ -31,7 +31,10 @@ define([
 			});
 			this.infoboxes.push(infobox);
 			infobox.open(this.map, marker);
-			marker.setVisible(false);
+			//marker.setVisible(false);
+
+			//ICI REMOVE SIBLIG ELEMENT
+			//$('.gm-style-iw').siblings('div').remove();
 		};
 
 		this.set_Marker = function () {

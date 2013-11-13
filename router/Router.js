@@ -56,7 +56,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 		navigate: function(){
 			var args = Array.apply(null, arguments);
 			args[0] = App.uris[args[0]]||args[0];
-			debugger
+			// debugger
 			if(!args[1])
 				args[1] = {};
 			if(!("trigger" in args[1]))
