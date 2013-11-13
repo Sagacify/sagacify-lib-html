@@ -17,6 +17,7 @@ define(['backbone.marionette'], function(){
 				var sel = key.split(" ")[1];
 				$(sel, this.$el).filter("a").attr("href", App.uris[this.goTo[key]]||this.goTo[key]);
 			}
+			$(this.el).i18n();
 		},
 
 		_handleGoTo: function(){

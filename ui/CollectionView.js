@@ -8,6 +8,15 @@ define([
 
 		onBottomReached: null,
 
+		bindEvent: function (widget, eventName, callback) {
+			_.extend(widget, Backbone.Events);
+
+			var me = this;
+			widget.on(eventName, function () {
+				callback.apply(me, arguments);
+			});
+		},
+
 		_prepareCollection: function(){
 			this.collection = this.getCollection();
 			if(this.collection)
