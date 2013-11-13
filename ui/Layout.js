@@ -45,13 +45,13 @@ define([
 		},
 
 		showChildOnRender: function(region, childClass, childArgs, childName){
-			childName == undefined?'childView':childName;
+			childName = childName === undefined?'childView':childName;
 			if(!childName || !(this[childName] instanceof childClass)){
-				var view = new childClass(childArgs);
+				var view = new childClass(childArgs||{});
 				if(childName){
 					this[childName] = view;
 				}
-				region.showOnRender(this, new childClass(childArgs||{}));
+				region.showOnRender(this, view);
 				return view;
 			}
 			return this[childName];
