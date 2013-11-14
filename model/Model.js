@@ -1,10 +1,20 @@
 define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/validateType'], function(Backbone, ValidateFormat, SagaCollection, is){
 	var SagaModel = Backbone.Model.extend({
 
+		parent: {
+			instance: null,
+			path: null
+		},
+
+		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
+
 		constructor: function(attributes, options){
 			if(options){
 				if("url" in options)
 					this.url = options.url;
+				if(options.parent)
+					this.parent = options.parent;
+				this.isValidationRef = options.isValidationRef;
 			}
 
 			this._originalAttributes = {};
@@ -12,8 +22,6 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			this.handleMattributes();
 			Backbone.Model.prototype.constructor.apply(this, arguments);
 		},
-
-		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
 
 		get: function(attribute){
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
@@ -48,7 +56,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 						if(schemaElement instanceof Array){
 							var collectionUrl = me.isNew()?"":(url+'/'+attribute);
 							if(type){
-								return new App.collections[type+"Collection"](raw||[], {url:collectionUrl});
+								return new App.collections[type+"Collection"](raw||[], {url:collectionUrl, parent:{instance:me, path:attribute}});
 							}
 							//embedded
 							else{
@@ -62,12 +70,11 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 									url: collectionUrl,
 									schema: schemaElement[0].collection
 								});
-								return new Collection(raw||[]);
+								return new Collection(raw||[], {parent:{instance:me, path:attribute}});
 							}
 						}
 						else{
-							console.log(type)
-							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute)});
+							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
 					}
 					else{
@@ -186,6 +193,17 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			Object.defineProperties(this, properties);
 		},
 
+		root: function(){
+			var instance = this;
+			var path = "";
+			while(instance.parent.instance){
+				var parent = instance.parent;
+				instance = parent.instance;
+				path += parent.path;
+			}
+			return {instance:instance, path:path};
+		},
+
 		// defineAttrProperty: function(attr){
 		// 	var get = function(attr){
 		// 		return function(){
@@ -263,10 +281,44 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			return this.schema.virtuals.clone().merge(this.schema.tree);
 		},
 
+		isValidationRef: false,
+
+		validationRef: function(){
+			var instance = this;
+			var path = "";
+			while(instance){
+				if(instance.isValidationRef){
+					break;
+				}
+				var parent = instance.parent;
+				instance = parent.instance;
+				if(!instance){
+					instance = this;
+					path = "";
+					break;
+				}
+				path += parent.path;
+			}
+			return {instance:instance, path:path};
+		},
+
 		sgValidate: function(attr){
-			var url = this.url instanceof Function?this.url():this.url;
+			if(!attr){
+				for(var attr in this.treeVirtuals()){
+					var val = this.sgValidate(attr);
+					if(!val.success)
+						return val;
+				}
+				return {success:true};
+			}
+
+			var validationRef = this.validationRef();
+			var model = validationRef.instance;
+			var path = validationRef.path;
+			var pathAttr = path?path+"."+attr:attr;
+			var url = model.url instanceof Function?model.url():model.url;
 			var method;
-			if(this.isNew()) {
+			if(model.isNew()) {
 				method = "post";
 			}
 			else {
@@ -276,11 +328,11 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 				url = url.substring(0, url.length-1);
 			}
 			
-			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[attr]) {
+			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[pathAttr]) {
 				return {
 					success: ValidateFormat.validate(
 								this[attr],
-								App.server_routes[method][url].validation[attr] || []
+								App.server_routes[method][url].validation[pathAttr] || []
 							)
 				};
 			}

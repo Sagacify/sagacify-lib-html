@@ -27,8 +27,6 @@ define([], function(){
 
 		bindToModel: function(){
 			if(this.modelBind && this.model && !this._modelBound){
-				console.log(this.model.schema.tree)
-				console.log(this.el)
 				var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
 				var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;
 				var treeVirtuals = this.model.treeVirtuals();
@@ -40,13 +38,14 @@ define([], function(){
 					else if(me.modelBind[attr]){
 						selector += ", "+me.modelBind[attr];
 					}
+					if(me.modelBind._container)
+						selector = me.modelBind._container+" "+selector;
 					return selector;
 				}
 				for(var attr in treeVirtuals){
 					var selector = getSelector(attr);
-					console.log(selector)
+
 					var els = $(selector, this.el);
-					console.log(els)
 					this.model.bindToEls(els, attr);
 					this.model.bindValidationToEls(els, attr, validClass, errorClass);
 
