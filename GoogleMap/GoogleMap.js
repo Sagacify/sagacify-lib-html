@@ -30,11 +30,20 @@ define([
 				content: template
 			});
 			this.infoboxes.push(infobox);
-			infobox.open(this.map, marker);
-			//marker.setVisible(false);
 
-			//ICI REMOVE SIBLIG ELEMENT
-			//$('.gm-style-iw').siblings('div').remove();
+			var me = this;
+			google.maps.event.addListener(infobox, 'domready', function () {
+				$('.gm-style-iw').siblings('div').remove();
+			});
+			// google.maps.event.addListener(marker, 'click', function () {
+			// 	infobox.open(this.map, marker);
+			// });
+			google.maps.event.addListener(marker, 'mouseover', function () {
+				infobox.open(me.map, marker);
+			});
+			google.maps.event.addListener(marker, 'mouseout', function () {
+				infobox.close();
+			});
 		};
 
 		this.set_Marker = function () {
