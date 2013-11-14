@@ -105,7 +105,8 @@ define(['backbone'], function(){
 				}
 			}
 			for(var key in this._filters){
-				options.data[key] = JSON.stringify(this._filters[key]);
+				//options.data[key] = JSON.stringify(this._filters[key]);
+				options.data[key] = this._filters[key];
 			}
 
 			this._isLoading = true;

@@ -22,8 +22,8 @@ define([
 			});
 		},
 
-		render: function(){
-			this.template = this.get_Template(this.model);
+		render: function (options) {
+			this.template = this.get_Template((options != null) ? options : this.model);
 			Marionette.Layout.prototype.render.apply(this, arguments);
 			this.bindToModel();
 		},
