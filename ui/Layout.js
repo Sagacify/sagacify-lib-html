@@ -23,7 +23,7 @@ define([
 		},
 
 		render: function(){
-			this.template = this.get_Template(this.model);
+			this.template = this.get_Template(this.model||this.data);
 			Marionette.Layout.prototype.render.apply(this, arguments);
 			this.bindToModel();
 		},
