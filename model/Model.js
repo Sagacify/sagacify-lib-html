@@ -1,10 +1,20 @@
 define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/validateType'], function(Backbone, ValidateFormat, SagaCollection, is){
 	var SagaModel = Backbone.Model.extend({
 
+		parent: {
+			instance: null,
+			path: null
+		},
+
+		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
+
 		constructor: function(attributes, options){
 			if(options){
 				if("url" in options)
 					this.url = options.url;
+				if(options.parent)
+					this.parent = options.parent;
+				this.isValidationRef = options.isValidationRef;
 			}
 
 			this._originalAttributes = {};
@@ -12,8 +22,6 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			this.handleMattributes();
 			Backbone.Model.prototype.constructor.apply(this, arguments);
 		},
-
-		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
 
 		get: function(attribute){
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
@@ -29,10 +37,6 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 				}
 			}
 			return value;
-		},
-
-		mget: function(attr){
-			retu
 		},
 
 		set: function(){
@@ -52,7 +56,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 						if(schemaElement instanceof Array){
 							var collectionUrl = me.isNew()?"":(url+'/'+attribute);
 							if(type){
-								return new App.collections[type+"Collection"](raw||[], {url:collectionUrl});
+								return new App.collections[type+"Collection"](raw||[], {url:collectionUrl, parent:{instance:me, path:attribute}});
 							}
 							//embedded
 							else{
@@ -66,12 +70,11 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 									url: collectionUrl,
 									schema: schemaElement[0].collection
 								});
-								return new Collection(raw||[]);
+								return new Collection(raw||[], {parent:{instance:me, path:attribute}});
 							}
 						}
 						else{
-							console.log(type)
-							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute)});
+							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
 					}
 					else{
@@ -176,7 +179,11 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			});
 
 			this.schema.virtuals.keys().forEach(function(key){
-				properties[key] = {get: get(key)};
+				properties[key] = {get: get(key), set:set(key)};
+				if(key.contains(".")){
+					var attr = key.split(".")[0];
+					properties[attr] = {get: mget(attr)};
+				}
 			});
 
 			this.schema.actions.keys().forEach(function(key){
@@ -185,6 +192,46 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 
 			Object.defineProperties(this, properties);
 		},
+
+		root: function(){
+			var instance = this;
+			var path = "";
+			while(instance.parent.instance){
+				var parent = instance.parent;
+				instance = parent.instance;
+				path += parent.path;
+			}
+			return {instance:instance, path:path};
+		},
+
+		// defineAttrProperty: function(attr){
+		// 	var get = function(attr){
+		// 		return function(){
+		// 			return this.get(attr);
+		// 		};
+		// 	};
+
+		// 	var mget = function(attr){
+		// 		return function(){
+		// 			return this._mattributes[attr];
+		// 		};
+		// 	}
+
+		// 	var set = function(attr){
+		// 		return function(value){
+		// 			return this.set(attr, value);
+		// 		};
+		// 	};
+
+		// 	var properties = {};
+		// 	properties[attr] = {get: get(attr), set:set(attr)};
+		// 	if(attr.contains(".")){
+		// 		var splitAttr = attr.split(".")[0];
+		// 		properties[splitAttr] = {get: mget(splitAttr)};
+		// 	}
+
+		// 	Object.defineProperties(this, properties);
+		// },
 
 		handleMattributes: function(){
 			this._mattributes = {};
@@ -204,10 +251,24 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 		},
 
 		toJSON: function(mpath){
+			var json;
 			if(mpath)
-				return Backbone.Model.prototype.toJSON.apply(this, arguments);
+				json = Backbone.Model.prototype.toJSON.apply(this, arguments);
 			else
-				return _.clone(this._mattributes);
+				json = _.clone(this._mattributes);
+
+			childToJSON = function(parent){
+				for(var attr in parent){
+					if(parent[attr] && typeof parent[attr].toJSON == "function"){
+						parent[attr] = parent[attr].toJSON(mpath);
+					}
+					else if(is.Object(parent[attr])||is.Array(parent[attr])){
+						childToJSON(parent[attr]);
+					}
+				}
+			}
+			childToJSON(json);
+			return json;
 		},
 
 		revert: function(){
@@ -220,10 +281,44 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			return this.schema.virtuals.clone().merge(this.schema.tree);
 		},
 
-		validate: function(attr){
-			var url = this.url instanceof Function?this.url():this.url;
+		isValidationRef: false,
+
+		validationRef: function(){
+			var instance = this;
+			var path = "";
+			while(instance){
+				if(instance.isValidationRef){
+					break;
+				}
+				var parent = instance.parent;
+				instance = parent.instance;
+				if(!instance){
+					instance = this;
+					path = "";
+					break;
+				}
+				path += parent.path;
+			}
+			return {instance:instance, path:path};
+		},
+
+		sgValidate: function(attr){
+			if(!attr){
+				for(var attr in this.treeVirtuals()){
+					var val = this.sgValidate(attr);
+					if(!val.success)
+						return val;
+				}
+				return {success:true};
+			}
+
+			var validationRef = this.validationRef();
+			var model = validationRef.instance;
+			var path = validationRef.path;
+			var pathAttr = path?path+"."+attr:attr;
+			var url = model.url instanceof Function?model.url():model.url;
 			var method;
-			if(this.isNew()) {
+			if(model.isNew()) {
 				method = "post";
 			}
 			else {
@@ -232,16 +327,91 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			if(url.endsWith('/')) {
 				url = url.substring(0, url.length-1);
 			}
-
-			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[attr]) {
+			
+			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[pathAttr]) {
 				return {
 					success: ValidateFormat.validate(
 								this[attr],
-								App.server_routes[method][url].validation[attr] || []
+								App.server_routes[method][url].validation[pathAttr] || []
 							)
 				};
 			}
 			return {success:true};
+		},
+
+		//bind this to els
+		bindToEls: function(els, attr){
+			this.bindToImages(els.filter(':image'), attr);
+			this.bindToInputDates(els.filter(':input[type=date]'), attr);
+			this.bindToSelects(els.filter('select'), attr);
+			this.bindToInputs(els.filter(':input').not(':input[type=date], select'), attr);
+			this.bindToDefaultsEls(els.not(':image, :input'), attr);
+		},
+
+		bindToImages: function(imgs, attr){
+			if(!imgs.length)
+				return;
+			this.on('change:'+attr, function(model){
+				imgs.attr('src', this[attr]);
+			});
+		},
+
+		bindToInputs: function(inputs, attr){
+			if(!inputs.length)
+				return;
+			var me = this;
+			inputs.on('change', function(){
+				me[attr] = this.value;
+			});
+			this.on('change:'+attr, function(){
+				inputs.val(this[attr]);
+			});
+		},
+
+		bindToInputDates: function(inputDates, attr){
+			if(!inputDates.length)
+				return;
+			var me = this;
+			inputDates.on('blur', function(evt){
+				me[attr] = new Date(this.value);
+			});
+			this.on('change:'+attr, function(){
+				if(this[attr].getTime())
+					inputDates.val(this[attr].inputFormat());
+			});
+		},
+
+		bindToSelects: function(selects, attr){
+			if(!selects.length)
+				return;
+			var me = this;
+			selects.on('change', function(){
+				me[attr] = this.options[this.selectedIndex].innerHTML;
+			});
+			this.on('change:'+attr, function(){
+				$('[value='+this[attr]+']', selects).prop('selected', true);
+			});
+		},
+
+		bindToDefaultsEls: function(els, attr){
+			if(!els.length)
+				return;
+			this.on('change:'+attr, function(){
+				els.html(this[attr]);
+			});
+		},
+
+		bindValidationToEls: function(els, attr, validClass, errorClass){
+			this.on('change:'+attr, function(model){
+				if(this.sgValidate(attr).success){
+					els.removeClass(errorClass);
+					els.addClass(validClass);
+				}
+				else{
+					els.removeClass(validClass);
+					els.addClass(errorClass);
+				}
+			});
 		}
 
 	});

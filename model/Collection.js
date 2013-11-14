@@ -18,6 +18,11 @@ define(['backbone'], function(){
 		    _maxPagesReached: false
 		},
 
+		parent: {
+			instance: null,
+			path: null
+		},
+
 		constructor: function(models, options){
 			if(models && !(models instanceof Array)){
 				options = models;
@@ -25,6 +30,8 @@ define(['backbone'], function(){
 			if(options){
 				if(options.url)
 					this.url = options.url;
+				if(options.parent)
+					this.parent = options.parent;
 			}
 
 			this._virtuals = {};
@@ -41,20 +48,28 @@ define(['backbone'], function(){
 				if(!this._virtuals[id]){
 					if(this.schema.virtuals[id] instanceof Array){
 						var model = App.models[this.schema.virtuals[id][0].type+"Model"].extend({urlRoot:url+'/'+id});
-						this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].type+"Collection"]([], {url:url+'/'+id, model:model});
+						this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].type+"Collection"]([], {url:url+'/'+id, model:model, parent:{instance:this, path:""}});
 					}
 					else{
-						this._virtuals[id] = new App.models[this.schema.virtuals[id].type+"Model"]({}, {url:url+'/'+id});
+						this._virtuals[id] = new App.models[this.schema.virtuals[id].type+"Model"]({}, {url:url+'/'+id, parent:{instance:this, path:""}});
 					}
 				}
 				return this._virtuals[id];
 			}
 			else if(!id || id == "new"){
-				return new this.model({}, {urlRoot: url});
+				return new this.model({}, {urlRoot: url, parent:{instance:this, path:""}});
 			}
 			else{
-				return Backbone.Collection.prototype.get.apply(this, arguments) || this.add(new this.model({_id:id}, {urlRoot: url})).last();
+				return Backbone.Collection.prototype.get.apply(this, arguments) || this.add(new this.model({_id:id}, {urlRoot: url, parent:{instance:this, paht:""}})).last();
 			}
+		},
+
+		add: function(){
+			var ret = Backbone.Collection.prototype.add.apply(this, arguments);
+			var added = this.last();
+			if(added)
+				added.parent = {instance:this, path:""};
+			return ret;
 		},
 
 		do: function(action, args){
@@ -143,6 +158,17 @@ define(['backbone'], function(){
 
 		isLoading: function(){
 			return this._isLoading;
+		},
+
+		root: function(){
+			var instance = this;
+			var path = "";
+			while(instance.parent.instance){
+				var parent = instance.parent;
+				instance = parent.instance;
+				path += parent.path;
+			}
+			return {instance:instance, path:path};
 		},
 
 		clone: function(options) {

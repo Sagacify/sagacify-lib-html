@@ -27,83 +27,104 @@ define([], function(){
 
 		bindToModel: function(){
 			if(this.modelBind && this.model && !this._modelBound){
+				var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
+				var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;
 				var treeVirtuals = this.model.treeVirtuals();
-				for(var attr in treeVirtuals){
+				var me = this;
+				var getSelector = function(attr){
 					var selector = "[bind='"+attr+"']";
-					if(this.modelBind[attr]&&this.modelBind[attr].selector)
-						selector += ", "+this.modelBind[attr].selector;
-					else if(this.modelBind[attr]){
-						selector += ", "+this.modelBind[attr];
+					if(me.modelBind[attr]&&me.modelBind[attr].selector)
+						selector += ", "+me.modelBind[attr].selector;
+					else if(me.modelBind[attr]){
+						selector += ", "+me.modelBind[attr];
 					}
+					if(me.modelBind._container)
+						selector = me.modelBind._container+" "+selector;
+					return selector;
+				}
+				for(var attr in treeVirtuals){
+					var selector = getSelector(attr);
+
 					var els = $(selector, this.el);
-					this.bindEls(els, attr);
-					this.bindValidation(els, attr);
+					this.model.bindToEls(els, attr);
+					this.model.bindValidationToEls(els, attr, validClass, errorClass);
+
+					//single embedded doc binding
+					if(this.model.schema.tree[attr] instanceof Array && this.model.schema.tree[attr][0].single && this.model[attr].models[0]){
+						var embeddedTreeVirtuals = this.model[attr].models[0].treeVirtuals();
+						for(var embeddedAttr in embeddedTreeVirtuals){
+							var selector = getSelector(attr+"."+embeddedAttr);
+							var embeddedEls = $(selector, this.el);
+							this.model[attr].models[0].bindToEls(embeddedEls, embeddedAttr);
+							this.model[attr].models[0].bindValidationToEls(embeddedEls, embeddedAttr, validClass, errorClass);
+						}
+					}
 				}
 
 				this._modelBound = true;
 			}
 		},
 
-		bindEls: function(els, attr){
-			this.bindImages(els.filter(':image'), attr);
-			this.bindInputDates(els.filter(':input[type=date]'), attr);
-			this.bindSelects(els.filter('select'), attr);
-			this.bindInputs(els.filter(':input').not(':input[type=date], select'), attr);
-			this.bindDefaults(els.not(':image, :input'), attr);
-		},
+		// bindEls: function(els, attr){
+		// 	this.bindImages(els.filter(':image'), attr);
+		// 	this.bindInputDates(els.filter(':input[type=date]'), attr);
+		// 	this.bindSelects(els.filter('select'), attr);
+		// 	this.bindInputs(els.filter(':input').not(':input[type=date], select'), attr);
+		// 	this.bindDefaults(els.not(':image, :input'), attr);
+		// },
 
-		bindImages: function(imgs, attr){
-			if(!imgs.length)
-				return;
-			this.model.on('change:'+attr, function(model){
-				imgs.attr('src', this[attr]);
-			});
-		},
+		// bindImages: function(imgs, attr){
+		// 	if(!imgs.length)
+		// 		return;
+		// 	this.model.on('change:'+attr, function(model){
+		// 		imgs.attr('src', this[attr]);
+		// 	});
+		// },
 
-		bindInputs: function(inputs, attr){
-			if(!inputs.length)
-				return;
-			var me = this;
-			inputs.on('change', function(){
-				me.model[attr] = this.value;
-			});
-			this.model.on('change:'+attr, function(){
-				inputs.val(this[attr]);
-			});
-		},
+		// bindInputs: function(inputs, attr){
+		// 	if(!inputs.length)
+		// 		return;
+		// 	var me = this;
+		// 	inputs.on('change', function(){
+		// 		me.model[attr] = this.value;
+		// 	});
+		// 	this.model.on('change:'+attr, function(){
+		// 		inputs.val(this[attr]);
+		// 	});
+		// },
 
-		bindInputDates: function(inputDates, attr){
-			if(!inputDates.length)
-				return;
-			var me = this;
-			inputDates.on('blur', function(evt){
-				me.model[attr] = new Date(this.value);
-			});
-			this.model.on('change:'+attr, function(){
-				if(this[attr].getTime())
-					inputDates.val(this[attr].inputFormat());
-			});
-		},
+		// bindInputDates: function(inputDates, attr){
+		// 	if(!inputDates.length)
+		// 		return;
+		// 	var me = this;
+		// 	inputDates.on('blur', function(evt){
+		// 		me.model[attr] = new Date(this.value);
+		// 	});
+		// 	this.model.on('change:'+attr, function(){
+		// 		if(this[attr].getTime())
+		// 			inputDates.val(this[attr].inputFormat());
+		// 	});
+		// },
 
-		bindSelects: function(selects, attr){
-			if(!selects.length)
-				return;
-			var me = this;
-			selects.on('change', function(){
-				me.model[attr] = this.options[this.selectedIndex].innerHTML;
-			});
-			this.model.on('change:'+attr, function(){
-				$('[value='+this[attr]+']', selects).prop('selected', true);
-			});
-		},
+		// bindSelects: function(selects, attr){
+		// 	if(!selects.length)
+		// 		return;
+		// 	var me = this;
+		// 	selects.on('change', function(){
+		// 		me.model[attr] = this.options[this.selectedIndex].innerHTML;
+		// 	});
+		// 	this.model.on('change:'+attr, function(){
+		// 		$('[value='+this[attr]+']', selects).prop('selected', true);
+		// 	});
+		// },
 
-		bindDefaults: function(els, attr){
-			if(!els.length)
-				return;
-			this.model.on('change:'+attr, function(){
-				els.html(this[attr]);
-			});
-		},
+		// bindDefaults: function(els, attr){
+		// 	if(!els.length)
+		// 		return;
+		// 	this.model.on('change:'+attr, function(){
+		// 		els.html(this[attr]);
+		// 	});
+		// },
 
 		validClass: function(attr){
 			return 'valid';
@@ -111,23 +132,23 @@ define([], function(){
 
 		errorClass: function(attr){
 			return 'error';
-		},
-
-		bindValidation: function(els, attr){
-			var me = this;
-			this.model.on('change:'+attr, function(model){
-				var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
-				var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
-				if(this.validate(attr).success){
-					els.removeClass(errorClass);
-					els.addClass(validClass);
-				}
-				else{
-					els.removeClass(validClass);
-					els.addClass(errorClass);
-				}
-			});
 		}
+
+		// bindValidation: function(els, attr){
+		// 	var me = this;
+		// 	this.model.on('change:'+attr, function(model){
+		// 		var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
+		// 		var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
+		// 		if(this.sgValidate(attr).success){
+		// 			els.removeClass(errorClass);
+		// 			els.addClass(validClass);
+		// 		}
+		// 		else{
+		// 			els.removeClass(validClass);
+		// 			els.addClass(errorClass);
+		// 		}
+		// 	});
+		// }
 	}
 
 });

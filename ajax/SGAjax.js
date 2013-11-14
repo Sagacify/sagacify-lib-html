@@ -105,7 +105,7 @@ define([], function () {
 			});
 			var me = this;
 			Backbone.ajax = function () {
-				me.ajax.apply(me, arguments);
+				return me.ajax.apply(me, arguments);
 			};
 		},
 		delete: function (url, headers, contentType, data, cbError, cbSuccess) {
