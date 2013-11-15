@@ -9,17 +9,28 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 		},
 
 		handleSagaRoutes: function(){
-			for(var route in this.sagaRoutes){
-				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes[route]));
+			for(var route in this.sagaRoutes.public){
+				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.public[route]));
+			}
+			for(var route in this.sagaRoutes.auth){
+				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.auth[route], true));
 			}
 		},
 
-		handleSagaRoute: function(route, funs){
+		handleSagaRoute: function(route, funs, auth){
 			if(!(funs instanceof Array)){
 				funs = [funs];
 			}
 
+			var me = this;
 			return function () {
+				if(auth){
+					if(!me.isAuth()){
+						me.authFailed();
+						return;
+					}
+				}
+
 				var args = Array.apply(null, arguments);
 				var routeLayout = function(layout, fun){
 					var fun_name;
@@ -63,6 +74,14 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 				args[1].trigger = true;
 			}
 			Marionette.AppRouter.prototype.navigate.apply(this, args);
+		},
+
+		isAuth: function(){
+			return true;
+		},
+
+		authFailed: function(){
+
 		}
 		
 	});
