@@ -74,7 +74,7 @@ define([], function () {
 			var method = options.type.toLowerCase();
 			//var headers = options.auth ? this.authorization() : {};
 			var headers = this.authorization();
-			Object.keys(headers).length && (headers = {});
+			(headers['Authorization'] != null) && (headers = {});
 			var contentType = options.contentType;
 			if(options.dataType != null) {
 				headers.dataType = options.dataType;
