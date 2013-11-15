@@ -72,7 +72,9 @@ define([], function () {
 			var url = options.url;
 			var data = options.data;
 			var method = options.type.toLowerCase();
-			var headers = options.auth ? this.authorization() : {};
+			//var headers = options.auth ? this.authorization() : {};
+			var headers = this.authorization();
+			Object.keys(headers).length && (headers = {});
 			var contentType = options.contentType;
 			if(options.dataType != null) {
 				headers.dataType = options.dataType;
