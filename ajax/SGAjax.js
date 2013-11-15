@@ -58,7 +58,7 @@ define([], function () {
 				success: cbSuccess,
 				error: cbError,
 				headers: headers,
-				data: (typeof data === 'object') ? JSON.stringify(data) : data,
+				data: (typeof data === 'object') && (type !== 'GET') ? JSON.stringify(data) : data,
 				type: type,
 				url: url
 			});
