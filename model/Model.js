@@ -24,16 +24,24 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 		},
 
 		get: function(attribute){
+			var getterName = "get";
+			for(attrPart in attribute.split(".")){
+				getterName+=attrPart.capitalize();
+			}
+			if(is.Function(this[getterName]) && this[getterName]!=arguments.callee.caller)
+				return this[getterName]();
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
-				if(schemaElement && schemaElement.type && !this.primitiveTypes.contains(schemaElement.type)){
+				if(schemaElement && schemaElement.ref){
 					this.set(attribute, {});
 					value = Backbone.Model.prototype.get.apply(this, arguments);
 				}
 				if(schemaElement instanceof Array && is.Object(schemaElement[0])){
 					this.set(attribute, []);
 					value = Backbone.Model.prototype.get.apply(this, arguments);
+					if(schemaElement[0].single)
+						value.add({});
 				}
 			}
 			return value;
@@ -45,9 +53,10 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
 				if(schemaElement){
 					var type = schemaElement instanceof Array?schemaElement[0].type:schemaElement.type;
-					if(!me.primitiveTypes.contains(type)){
+					var ref = schemaElement instanceof Array?schemaElement[0].ref:schemaElement.ref;
+					if(ref && is.Object(raw) || is.Array(raw)){
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
-						if(docColl){
+						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
 							return null;
 						}
@@ -56,7 +65,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 						if(schemaElement instanceof Array){
 							var collectionUrl = me.isNew()?"":(url+'/'+attribute);
 							if(type){
-								return new App.collections[type+"Collection"](raw||[], {url:collectionUrl, parent:{instance:me, path:attribute}});
+								return new App.collections[ref+"Collection"](raw||[], {url:collectionUrl, parent:{instance:me, path:attribute}});
 							}
 							//embedded
 							else{
@@ -74,7 +83,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 							}
 						}
 						else{
-							return new App.models[type+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
+							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
 					}
 					else{
@@ -96,6 +105,13 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			var args = Array.apply(null, arguments);
 
 			if(args[0] && args[0].isString()){
+				var setterName = "set";
+				for(attrPart in args[0].split(".")){
+					setterName+=attrPart.capitalize();
+				}
+				if(is.Function(this[setterName]) && this[setterName]!=arguments.callee.caller){
+					return this[setterName](args[0], args[1]);
+				}
 				var value = getset(args[0], args[1]);
 				if(!value){
 					return;
@@ -252,7 +268,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 
 		toJSON: function(mpath){
 			var json;
-			if(mpath)
+			if(!mpath)
 				json = Backbone.Model.prototype.toJSON.apply(this, arguments);
 			else
 				json = _.clone(this._mattributes);
@@ -351,6 +367,9 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 		bindToImages: function(imgs, attr){
 			if(!imgs.length)
 				return;
+			if(this[attr] != null){
+				imgs.attr('src', this[attr]);
+			}
 			this.on('change:'+attr, function(model){
 				imgs.attr('src', this[attr]);
 			});
@@ -363,6 +382,10 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			inputs.on('change', function(){
 				me[attr] = this.value;
 			});
+
+			if(this[attr] != null){
+				inputs.val(this[attr]);
+			}
 			this.on('change:'+attr, function(){
 				inputs.val(this[attr]);
 			});
@@ -375,6 +398,10 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			inputDates.on('blur', function(evt){
 				me[attr] = new Date(this.value);
 			});
+
+			if(this[attr] && this[attr].getTime()){
+				inputDates.val(this[attr].inputFormat());
+			}
 			this.on('change:'+attr, function(){
 				if(this[attr].getTime())
 					inputDates.val(this[attr].inputFormat());
@@ -388,6 +415,10 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			selects.on('change', function(){
 				me[attr] = this.options[this.selectedIndex].innerHTML;
 			});
+
+			if(this[attr] != null){
+				$('[value='+this[attr]+']', selects).prop('selected', true);
+			}
 			this.on('change:'+attr, function(){
 				$('[value='+this[attr]+']', selects).prop('selected', true);
 			});
@@ -396,6 +427,9 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 		bindToDefaultsEls: function(els, attr){
 			if(!els.length)
 				return;
+			if(this[attr] != null){
+				els.html(this[attr]);
+			}
 			this.on('change:'+attr, function(){
 				els.html(this[attr]);
 			});

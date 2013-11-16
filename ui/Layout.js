@@ -13,15 +13,6 @@ define([
 			Marionette.Layout.prototype.constructor.apply(this, arguments);
 		},
 
-		bindEvent: function (widget, eventName, callback) {
-			_.extend(widget, Backbone.Events);
-
-			var me = this;
-			widget.on(eventName, function () {
-				callback.apply(me, arguments);
-			});
-		},
-
 		render: function (options) {
 			this.template = this.get_Template(options||this.model||this.data);
 			Marionette.Layout.prototype.render.apply(this, arguments);

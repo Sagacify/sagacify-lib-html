@@ -8,25 +8,16 @@ define([
 
 		onBottomReached: null,
 
-		bindEvent: function (widget, eventName, callback) {
-			_.extend(widget, Backbone.Events);
-
-			var me = this;
-			widget.on(eventName, function () {
-				callback.apply(me, arguments);
-			});
-		},
-
 		_prepareCollection: function(){
 			this.collection = this.getCollection();
 			if(this.collection)
-				this.collection.sort(this.sort).filter(this.filters).paginate(this.paginate);
+				this.collection.sgSort(this.sort).sgFilter(this.filters).sgPaginate(this.paginate);
 		},
 
 		_handleBottomReached: function(){
 			if(this.onBottomReached){
 				var me = this;
-				App.on('bottomReached', function(){
+				this.listenTo(App, 'bottomReached', function(){
 					me.onBottomReached();
 				});
 			}
@@ -73,6 +64,10 @@ define([
 		    	this.removeChildView(this._loadingView);
 		    	delete this._loadingView;
 		    }
+		},
+
+		close: function(){
+			Marionette.CollectionView.prototype.close.apply(this, arguments);
 		}
 
 	});

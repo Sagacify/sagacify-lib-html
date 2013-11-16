@@ -1,4 +1,4 @@
-define([], function(){
+define(["../model/Model"], function(Model){
 	
 	return {
 
@@ -44,19 +44,21 @@ define([], function(){
 				}
 				for(var attr in treeVirtuals){
 					var selector = getSelector(attr);
-
 					var els = $(selector, this.el);
 					this.model.bindToEls(els, attr);
 					this.model.bindValidationToEls(els, attr, validClass, errorClass);
-
-					//single embedded doc binding
-					if(this.model.schema.tree[attr] instanceof Array && this.model.schema.tree[attr][0].single && this.model[attr].models[0]){
-						var embeddedTreeVirtuals = this.model[attr].models[0].treeVirtuals();
+					//single embedded doc binding || developed ref doc
+					var child = this.model[attr];
+					if(this.model.schema.tree[attr] instanceof Array && this.model.schema.tree[attr][0].single)
+						child = child.models[0];
+					
+					if(child instanceof Model){
+						var embeddedTreeVirtuals = child.treeVirtuals();
 						for(var embeddedAttr in embeddedTreeVirtuals){
 							var selector = getSelector(attr+"."+embeddedAttr);
 							var embeddedEls = $(selector, this.el);
-							this.model[attr].models[0].bindToEls(embeddedEls, embeddedAttr);
-							this.model[attr].models[0].bindValidationToEls(embeddedEls, embeddedAttr, validClass, errorClass);
+							child.bindToEls(embeddedEls, embeddedAttr);
+							child.bindValidationToEls(embeddedEls, embeddedAttr, validClass, errorClass);
 						}
 					}
 				}

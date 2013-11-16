@@ -90,17 +90,17 @@ define(['backbone'], function(){
 			return Backbone.Collection.prototype.sort.apply(this, arguments);
 		},
 
-		sort: function(sort){
+		sgSort: function(sort){
 			this._sort = sort;
 			return this;
 		},
 
-		filter: function(filters){
+		sgFilter: function(filters){
 			this._filters = filters;
 			return this;
 		},
 
-		paginate: function(paginate){
+		sgPaginate: function(paginate){
 			_.extend(this._paginate, paginate);
 			return this;
 		},
@@ -222,6 +222,30 @@ define(['backbone'], function(){
 			var properties = {};
 			properties["id_"+id] = {get: get(id)};
 			Object.defineProperties(this, properties);
+		},
+
+		where: function(attrs, first){
+			var fun_attrs = {};
+			for(var key in attrs){
+				if(typeof attrs[key] == "function"){
+					fun_attrs[key] = attrs[key];
+					delete attrs[key];
+				}
+			}
+			var toFilter = this;
+			if(attrs.keys().length){
+				where = Backbone.Collection.prototype.where.apply(this, arguments);
+			}
+			else{
+				where = this;
+			}
+			return where.filter(function(model){
+				for(var key in fun_attrs){
+					if(!fun_attrs[key](model[key]))
+						return false;
+				}
+				return true;
+			});
 		}
 
 	});
