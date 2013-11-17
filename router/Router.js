@@ -9,12 +9,12 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 		},
 
 		handleSagaRoutes: function(){
-			for(var route in this.sagaRoutes.public){
-				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.public[route]));
+			for(var route in this.sagaRoutes){
+				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes[route]));
 			}
-			for(var route in this.sagaRoutes.auth){
-				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.auth[route], true));
-			}
+			// for(var route in this.sagaRoutes.auth){
+			// 	this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.auth[route], true));
+			// }
 		},
 
 		handleSagaRoute: function(route, funs, auth){
@@ -59,6 +59,9 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 
 				var layout = App.layout;
 				funs.forEach(function(fun){
+					if(typeof layout.willShowChild == "function"){
+						layout.willShowChild();
+					}
 					layout = routeLayout(layout, fun);
 				});
 			};
