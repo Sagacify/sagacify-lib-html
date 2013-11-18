@@ -18,6 +18,8 @@ define([
 		pullToRefresh: false,
 		
 		tableViewController: null,
+
+		frame: null,
 		
 		constructor: function(args) {
 			//if(has("android") > 2 || has("chrome"))
@@ -26,6 +28,8 @@ define([
 		
 		postCreate: function(){
 			this.inherited(arguments);
+			if(this.domNode && this.frame)
+				this.domNode.height = this.frame.height;
 			if(!Utils.svgSupport()){
 				this.arrowImg.src = "saga/widgets/mobile/Assets/img/pullToRefresh.png";
 			}

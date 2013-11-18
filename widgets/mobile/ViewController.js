@@ -12,8 +12,9 @@ define([
 	'saga/widgets/mobile/NavigationBar',
 	'dojox/mobile/ToolBarButton',
 	'dojo/on',
-	'dojo/_base/fx'], 
-	function(declare, config, _Widget, template, View, ActionSheet, lang, domConstruct, domClass, SpinWheelDatePicker, NavigationBar, ToolBarButton, on, fx) {
+	'dojo/_base/fx',
+	'dojo/has'], 
+	function(declare, config, _Widget, template, View, ActionSheet, lang, domConstruct, domClass, SpinWheelDatePicker, NavigationBar, ToolBarButton, on, fx, has) {
 	
 	return declare('saga.ViewController', [_Widget, View], {
 	
@@ -121,19 +122,28 @@ define([
 			actionSheet.domNode.style.zIndex = "2";
 			actionSheet.placeAt(Window.domNode);
 			this.actionSheet = actionSheet;
-			actionSheet.performTransition(null, 1, "revealv", null);
 			
 			actionSheet.on("cancelButtonPressed", function(){
 				actionSheet.dismissActionSheet();
-				domConstruct.destroy(mask);
 			});
-			
-			actionSheet.on("afterTransitionOut", function(){
+
+			var afterTransitionOut = function(){
 				actionSheet.domNode.style.display = "";
-				actionSheet.domNode.style.top = Window.domNode.clientHeight-actionSheet.domNode.clientHeight+"px";
+				actionSheet.domNode.style.top = (Window.domNode.clientHeight-actionSheet.domNode.clientHeight)+"px";
 				actionSheet.domNode.style.left = "0px";
-			});
+			}
 			
+			if(has('android')){
+				afterTransitionOut();
+			}
+			else{
+				actionSheet.performTransition(null, 1, "revealv", null);
+				actionSheet.on("afterTransitionOut", function(){
+					if(actionSheet.domNode.style.display == "")
+						domConstruct.destroy(mask);
+					afterTransitionOut();
+				});
+			}
 			return actionSheet;
 		},
 		

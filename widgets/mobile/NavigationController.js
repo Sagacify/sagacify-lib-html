@@ -132,24 +132,33 @@ define([
 
 		},
 		
-		pushViewController: function(viewController) {
+		pushViewController: function(viewController, noAnimation) {
 			viewController.placeAt(this.domNode);
+			
 			if(typeof viewController.startup == "function")
 				viewController.startup();
-			viewController.domNode.style.height = (viewController.frame.height+44)+"px"; 
-			var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");
+			
 			viewController.domNode.style.position = "";
-			this._viewControllers[0].performTransition(viewController.id, 1, "slide", null);
-			var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
-			this._viewControllers[0].on("afterTransitionOut", function(){
-				if(typeof viewController.viewDidAppear == "function")
-					viewController.viewDidAppear();
-				if(viewController.domNode){
-					viewController.domNode.style.height = viewController.frame.height+"px"; 
-					domConstruct.destroy(fakediv);
-					domConstruct.destroy(eventsBlocker);
-				}
-			});
+			if(!noAnimation){
+				viewController.domNode.style.height = (viewController.frame.height+44)+"px"; 
+				var fakediv = domConstruct.create("div", {style:"width:"+viewController.frame.width+"px;height:44px"}, viewController.domNode, "first");
+				this._viewControllers[0].performTransition(viewController.id, 1, "slide", null);
+				var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
+				this._viewControllers[0].on("afterTransitionOut", function(){
+					if(typeof viewController.viewDidAppear == "function")
+						viewController.viewDidAppear();
+					if(viewController.domNode){
+						viewController.domNode.style.height = viewController.frame.height+"px"; 
+						domConstruct.destroy(fakediv);
+						domConstruct.destroy(eventsBlocker);
+					}
+				});
+			}
+			else{
+				this._viewControllers[0].domNode.style.display = "none";
+				viewController.domNode.style.display = "";
+			}
+
 			viewController.navigationController = this;
 			this._viewControllers.splice(0, 0, viewController);
 			

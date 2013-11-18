@@ -115,7 +115,6 @@ define([
 				this.currentPresentDismissBarAnimation = null;
 				return;
 			}
-			
 			this.loadingBar.domNode.style.display = "";
 			this.loadingBar.domNode.style.opacity = 1;
 			this.loadingBar.domNode.style.top = "-50px";
@@ -169,6 +168,7 @@ define([
 			this.numPad.domNode.style.left = "0px";
 			this.numPad.domNode.style.position = "absolute";
 			this.numPad.domNode.style.display = "none";
+			this.numPad.domNode.style.zIndex = "20000000";
 			this.numPad.placeAt(this.domNode);
 			this.numPadVisible = false;
 			var me = this;
@@ -213,9 +213,11 @@ define([
 			var me = this;
         	on(alert.closeNode, selectEvent, function(evt){
         		me.dismissAlert();
+        		evt.stopPropagation();
         	});
         	on(this.mask, selectEvent, function(evt){
         		me.dismissAlert();
+        		evt.stopPropagation();
         	});
 		},
 		

@@ -12,6 +12,10 @@ define([
 		_classifiedItems: null,
 		
 		_barCorrespondances: null,
+
+		starLabel: "Main",
+
+		directoryBar: true,
 				
 		constructor: function(args) {
 			
@@ -22,22 +26,24 @@ define([
 			if(this.searchBar)
 				this.searchBar.searchFieldNode.style.width = (this.frame.width-50)+"px";
 
-			var directoryBar = new DirectoryBar({height:this.frame.height-20, searchItem:!this.searchBarFixed, star:this.staredItems()!=undefined});
-			directoryBar.placeAt(this.domNode);
-			var me = this;
-			on(directoryBar, "letterSelected", function(letterIndex){
-				if(letterIndex == -1)
-					me.scrollableView.slideTo({y:0}, 0.5, "ease-out");
-				else
-					me.scrollToSection(me._barCorrespondances[letterIndex], me.searchBarFixed?0:43);
-			});
-			
-			on(this.searchBar.searchFieldNode, "keyup", function(evt){
-				if(me.searchBar.searchFieldNode.value)
-					directoryBar.domNode.style.display = "none";
-				else
-					directoryBar.domNode.style.display = "";
-			});
+			if(this.directoryBar){
+				var directoryBar = new DirectoryBar({height:this.frame.height-20, searchItem:!this.searchBarFixed, star:this.staredItems()!=undefined});
+				directoryBar.placeAt(this.domNode);
+				var me = this;
+				on(directoryBar, "letterSelected", function(letterIndex){
+					if(letterIndex == -1)
+						me.scrollableView.slideTo({y:0}, 0.5, "ease-out");
+					else
+						me.scrollToSection(me._barCorrespondances[letterIndex], me.searchBarFixed?0:43);
+				});
+
+				on(this.searchBar.searchFieldNode, "keyup", function(evt){
+					if(me.searchBar.searchFieldNode.value)
+						directoryBar.domNode.style.display = "none";
+					else
+						directoryBar.domNode.style.display = "";
+				});
+			}
 		},
 		
 		numberOfSections: function(){
@@ -79,7 +85,12 @@ define([
 			this._barCorrespondances = [];
 			
 			var sortedItems = data.sort(function(item1, item2){
-				return item1[me.dataItemSortKey] > item2[me.dataItemSortKey];
+				if(typeof item1[me.dataItemSortKey] == "string" && typeof item2[me.dataItemSortKey] == "string"){
+					return item1[me.dataItemSortKey].localeCompare(item2[me.dataItemSortKey]);
+				}
+				else{
+					return item1[me.dataItemSortKey] > item2[me.dataItemSortKey];
+				}
 			});	
 			
 			var staredItems = this.staredItems();
@@ -94,7 +105,6 @@ define([
 
 			for(var i = 0; i < 27; i++)
 				this._classifiedItems.push([]);
-
 			dojo.forEach(sortedItems, function(item, i){
 				var firstChar = item[me.dataItemSortKey].charAt(0);
 				var correspondingIndex = 26+offsetStar;
@@ -168,7 +178,7 @@ define([
 				if(itemGroup.length > 0) {
 					var letter = "#";
 					if(staredItems && i == 0){
-						letter = "Main";
+						letter = me.starLabel;
 					}	
 					if(i == 0+offsetStar)
 						letter = "A";

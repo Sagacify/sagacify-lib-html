@@ -53,10 +53,12 @@ define([
 		selectTab: function(tabIndex) {
 			if(this.selectedTabIndex == tabIndex)
 				return;
-			this.viewControllers[this.selectedTabIndex].domNode.style.display = "none";
+			if(this.selectedTabIndex != -1)
+				this.viewControllers[this.selectedTabIndex].domNode.style.display = "none";
 			this.viewControllers[tabIndex].domNode.style.display = "";
 			this.onTabSelected.apply(this, [tabIndex]);
 			this.selectedTabIndex = tabIndex;
+			this.tabBar.selectTab(tabIndex);
 		},
 		
 		startup: function() {
