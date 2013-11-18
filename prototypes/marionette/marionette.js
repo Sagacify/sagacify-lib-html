@@ -1,3 +1,7 @@
-define(['./ItemView', './Region'], function(){
+define([
+	'./ItemView',
+	'./Region',
+	'./View'
+], function (){
 
 });

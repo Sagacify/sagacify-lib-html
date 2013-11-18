@@ -14,7 +14,7 @@ define([
 		},
 
 		render: function (options) {
-			this.template = this.get_Template(options||this.model||this.data);
+			//this.template = this.get_Template(options||this.model||this.data);
 			Marionette.Layout.prototype.render.apply(this, arguments);
 			this.bindToModel();
 		},
@@ -36,8 +36,8 @@ define([
 		},
 
 		showChildOnRender: function(region, childClass, childArgs, childName){
-			childName = childName === undefined?'childView':childName;
-			if(!childName || !(this[childName] instanceof childClass)){
+			childName = (childName == null) ? 'childView' : childName;
+			if(!childName || !(this[childName] instanceof childClass)) {
 				var view = new childClass(childArgs||{});
 				if(childName){
 					this[childName] = view;

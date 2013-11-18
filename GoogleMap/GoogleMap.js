@@ -2,71 +2,89 @@ define([
 
 ], function () {
 
-	return function GoogleMap (mapNode, lat, lng, ProfessionalMarkerTemplate, SearchMarkerTemplate) {
-
-		this.lat = lat;
-
-		this.lng = lng;
+	return function GoogleMap (mapNode, base_lat, base_lng) {
 
 		this.zoom = 10;
 
-		this.center = function () {
-			return new google.maps.LatLng(this.lat, this.lng);
+		this.new_LatLng = function (lat, lng) {
+			return new google.maps.LatLng(lat, lng);
 		};
 
-		this.results = [];
+		this.center = function () {
+			return this.new_LatLng(this.lat || base_lat, this.lng || base_lng);
+		};
 
 		this.markers = [];
 
 		this.infoboxes = [];
 
-		this.searchMarkerTemplate = ProfessionalMarkerTemplate;
-
-		this.proMarkerTemplate = SearchMarkerTemplate;
-
-		this.set_Infobox = function (marker, type) {
-			var template = (type === 'search') ? this.searchMarkerTemplate : this.proMarkerTemplate;
-			var infobox = new google.maps.InfoWindow({
-				content: template
-			});
-			this.infoboxes.push(infobox);
-
+		this.set_MarkerEventHandlers = function (infobox, marker) {
 			var me = this;
 			google.maps.event.addListener(infobox, 'domready', function () {
 				$('.gm-style-iw').siblings('div').remove();
 			});
-			// google.maps.event.addListener(marker, 'click', function () {
-			// 	infobox.open(this.map, marker);
-			// });
+			google.maps.event.addListener(marker, 'click', function () {
+				infobox.close();
+			});
 			google.maps.event.addListener(marker, 'mouseover', function () {
 				infobox.open(me.map, marker);
 			});
-			google.maps.event.addListener(marker, 'mouseout', function () {
-				infobox.close();
-			});
 		};
 
-		this.set_Marker = function () {
+		this.set_Infobox = function (marker, template) {
+			var infobox = new google.maps.InfoWindow({
+				content: template
+			});
+			this.infoboxes.push(infobox);
+			this.set_MarkerEventHandlers(infobox, marker);
+		};
+
+		this.set_Marker = function (lat, lng, template) {
+			var position = (lat && lng) && this.new_LatLng(lat, lng) || this.center();
 			var marker = new google.maps.Marker({
 				map: this.map,
-				position: this.center(),
+				position: position,
 				title: 'Your search'
 			});
 			this.markers.push(marker);
-			this.set_Infobox(marker, 'search');
+			template && this.set_Infobox(marker, template);
 		};
 
-		this.set_latlng = function (lat, lng) {
-			this.lat = lat;
-			this.lng = lng;
-			this.map.setCenter(this.center());
-			this.set_Marker();
+		this.set_Center = function (lat, lng) {
+			var center = this.new_LatLng(lat, lng) || this.center();
+			this.map.setCenter(center);
 		};
 
-		this.set_latlng_to_Location = function (location) {
-			var lat = location.geometry.location.lat();
-			var lng = location.geometry.location.lng();
-			this.set_latlng(lat, lng);
+		this.get_Center = function () {
+			return this.map.getCenter();
+		};
+
+		this.get_Lat = function () {
+			return this.get_Center().lat();
+		};
+
+		this.get_Lng = function () {
+			return this.get_Center().lng();
+		};
+
+		this.get_LocationLatLng = function (loc) {
+			var lat = loc.geometry.location.lat();
+			var lng = loc.geometry.location.lng();
+			return [lat, lng];
+		};
+
+		this.get_LocationAddress = function (loc) {
+			return [
+				(loc.address_components[0] && loc.address_components[0].short_name || ''),
+				(loc.address_components[1] && loc.address_components[1].short_name || ''),
+				(loc.address_components[2] && loc.address_components[2].short_name || '')
+			].join(',');
+		};
+
+		this.get_PositionLatLng = function (pos) {
+			var lat = pos.coords.latitude;
+			var lng = pos.coords.longitude;
+			return [lat, lng];
 		};
 
 		this.map = new google.maps.Map(mapNode, {

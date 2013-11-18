@@ -6,26 +6,25 @@ define([
 	
 	return Marionette.Application.extend({
 
-		constructor: function(options){
+		constructor: function(options) {
+			var me = this;
 			Marionette.Application.prototype.constructor.apply(this, arguments);
-			if(options && options.models){
-				var me = this;
-				this.fetchModels().done(function(data){
+			if(options && options.models) {
+				this.fetchModels().done(function (data){
 					me.merge(data);
 					me.triggerMethod('models:fetched');
 				});
 			}
-			var me = this;
-			$(window).scroll(function(evt){
+			$(window).scroll(function (evt){
 				if(me.isBottomReached()){
 					me.trigger("bottomReached");
 				}
 			});
 		},
 
-		fetchModels: function(){
+		fetchModels: function (){
 			var deferred = $.Deferred();
-			$.get('/api/app_models', function(structure){
+			$.get('/api/app_models', function (structure){
 				var App = {};
 				App.server_routes = structure.routes;
 				App.models = {};
@@ -52,7 +51,7 @@ define([
 			return deferred.promise();
 		},
 
-		isBottomReached: function(){
+		isBottomReached: function () {
 			return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
 		}
 		

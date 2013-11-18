@@ -1,3 +1,5 @@
-define(['./prototypes/prototypes'], function(){
+define([
+	'./prototypes/prototypes'
+], function (){
 
 });

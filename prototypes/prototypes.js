@@ -1,3 +1,6 @@
-define(['./native/native', './marionette/marionette'], function(){
+define([
+	'./native/native',
+	'./marionette/marionette'
+], function (){
 
 });
