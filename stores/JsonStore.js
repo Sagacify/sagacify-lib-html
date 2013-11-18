@@ -8,12 +8,11 @@ define([
 	declare("saga.JsonStore", null, {
 		
 		
-		accepts: "application/javascript, application/json", 
+		accepts: "application/javascript, application/json",
 		
 		bearerString: function(){
 			return (localStorage.access_token && localStorage.access_token.indexOf('-') !== -1) ? 
-				'bearer ' + localStorage.access_token :
-				'bearer ' + localStorage.username + '|' + localStorage.access_token;
+				'bearer ' + localStorage.access_token : MySGStore.getBearer();
 			//return "bearer "+localStorage.access_token;
 		},
 		
@@ -83,6 +82,10 @@ define([
 		handlingRelog: function(deferred, afterRelog){
 			var me = this;
 			return function(error){
+					if (!error || !error.response) {
+						debugger
+						return;
+					}
 					if(error.response.status == 401){
 						me.loginFail();
 						//me.login(afterRelog, function(error){
@@ -90,8 +93,8 @@ define([
 						//});
 					} else {
 						me.onError(deferred)(error);
-					};
-				};
+					}
+				}
 		},
 
 		/*configureJqueryRequest: function(request) {
@@ -185,7 +188,7 @@ define([
 		},
 		
 		post: function(target, object, options, removeAuth, disableRelog){
-			return 	this.executeRequest("POST", target, options, null, object, removeAuth, disableRelog);
+			return this.executeRequest("POST", target, options, null, object, removeAuth, disableRelog);
 		},
 		
 		put: function(target, object, options, removeAuth){
@@ -211,8 +214,6 @@ define([
 			console.log(object);
 			return null;
 		}
-
-			
 	});
 	
 	saga.JsonStore.singleton = function() {

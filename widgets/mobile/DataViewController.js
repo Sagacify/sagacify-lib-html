@@ -34,9 +34,23 @@ define([
 			if(this.dataItemFilterKey){
 				this.addSearchBar(this.searchBarFixed);
 				var me = this;
-				on(this.searchBar.searchFieldNode, "keyup", function(evt){
-					me.filterData(me.searchBar.searchFieldNode.value);
-					me.reload();
+				// on(this.searchBar.searchFieldNode, "keyup", function(evt){
+				// 	me.filterData(me.searchBar.searchFieldNode.value);
+				// 	me.reload();
+				// });
+				var queryString = '';
+				var searchTimeout;
+				on(me.searchBar.searchFieldNode, 'keydown', function (evnt) {
+					on(me.searchBar.searchFieldNode, 'keyup', function (evt) {
+						if((queryString !== me.searchBar.searchFieldNode.value) && me.searchBar.searchFieldNode.value.length) {
+							queryString = me.searchBar.searchFieldNode.value;
+							clearTimeout(searchTimeout);
+							searchTimeout = setTimeout(function () {
+								me.filterData(queryString);
+								me.reload();
+							}, 300);
+						}
+					});
 				});
 			}
 			
