@@ -3,25 +3,28 @@ define([
 ], function () {
 
 	return function GooglePlaces (getter_Lat, getter_Lng) {
-		this.lat = getter_Lat;
+		if(getter_Lat && getter_Lng) {
+			this.lat = getter_Lat;
 
-		this.lng = getter_Lng;
+			this.lng = getter_Lng;
 
-		this.radius = 20 * 1000; // 20 Km
+			this.radius = 20 * 1000; // 20 Km
 
-		// check how to calculate new lat / lng with radius
-		this.soutwestBound = new google.maps.LatLng(this.lat() + this.radius, this.lng() - this.radius);
+			// check how to calculate new lat / lng with radius
+			this.soutwestBound = new google.maps.LatLng(this.lat() + this.radius, this.lng() - this.radius);
 
-		// check how to calculate new lat / lng with radius
-		this.northeastBound = new google.maps.LatLng(this.lat() - this.radius, this.lng() + this.radius);
+			// check how to calculate new lat / lng with radius
+			this.northeastBound = new google.maps.LatLng(this.lat() - this.radius, this.lng() + this.radius);
 
-		this.bounds = new google.maps.LatLngBounds(this.soutwestBound, this.northeastBound);
+			this.bounds = new google.maps.LatLngBounds(this.soutwestBound, this.northeastBound);
+		}
 
 		this.set_Autocomplete = function (selectField) {
-			this.autocomplete = new google.maps.places.Autocomplete(selectField, {
-				bounds: this.bounds,
+			var options = {
 				types: ['geocode']
-			});
+			};
+			this.bounds && (options.bounds = options.bounds);
+			this.autocomplete = new google.maps.places.Autocomplete(selectField, options);
 		};
 
 		this.selected_location = null;
