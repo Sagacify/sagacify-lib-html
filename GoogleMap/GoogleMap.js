@@ -1,5 +1,5 @@
 define([
-
+	'async!https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&key=AIzaSyBmesWBpbDz7zQHq9xK-jGdmgkZqbZQ3z8!callback'
 ], function () {
 
 	return function GoogleMap (mapNode, base_lat, base_lng) {
