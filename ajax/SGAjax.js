@@ -40,7 +40,7 @@ define([], function () {
 		// },
 		methodWrapper: function (type, url, headers, contentType, data, cbError, cbSuccess) {
 			var me = this;
-			return $.ajax({
+			var promise = $.ajax({
 				// uploadProgress: function () {
 				// 	me.downloadProgressHandler.apply(me, arguments);
 				// },
@@ -62,6 +62,19 @@ define([], function () {
 				type: type,
 				url: url
 			});
+
+			promise.preventDefaultError = function(){
+				promise._preventDefaultError = true;
+				return this;
+			};
+
+			promise.fail(function(err){
+				if(!promise._preventDefaultError && typeof App.onError == "function"){
+					App.onError(err);
+				}
+			});
+			
+			return promise;
 		},
 		authorization: function () {
 			return {
