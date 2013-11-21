@@ -64,8 +64,13 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 						var url = me.url instanceof Function?me.url():me.url;
 						if(schemaElement instanceof Array){
 							var collectionUrl = me.isNew()?"":(url+'/'+attribute);
-							if(type){
+							//collection of ref
+							if(ref){
 								return new App.collections[ref+"Collection"](raw||[], {url:collectionUrl, parent:{instance:me, path:attribute}});
+							}
+							//collection of primitives
+							else if(type){
+								return raw;
 							}
 							//embedded
 							else{
@@ -313,7 +318,9 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 					path = "";
 					break;
 				}
-				path += parent.path;
+				if(path&&parent.path)
+					path = "."+path;
+				path = parent.path+path;
 			}
 			return {instance:instance, path:path};
 		},
@@ -343,7 +350,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 			if(url.endsWith('/')) {
 				url = url.substring(0, url.length-1);
 			}
-			
+
 			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[pathAttr]) {
 				return {
 					success: ValidateFormat.validate(
