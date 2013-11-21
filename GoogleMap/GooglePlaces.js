@@ -8,22 +8,33 @@ define([
 
 			this.lng = getter_Lng;
 
-			this.radius = 20 * 1000; // 20 Km
+			this.earthRadius = 6371;
+
+			this.radius = (30 * 1000) / this.earthRadius; // 20 Km
 
 			// check how to calculate new lat / lng with radius
-			this.soutwestBound = new google.maps.LatLng(this.lat() + this.radius, this.lng() - this.radius);
+			this.lat_sw = this.lat() - (this.radius / 111);
+			this.lng_sw = this.lng() - (this.radius / Math.abs(Math.cos((this.lat() / (Math.PI / 180)))) * 111);
+			this.soutwestBound = new google.maps.LatLng(this.lat_sw, this.lng_sw);
+			//this.soutwestBound = new google.maps.LatLng(this.lat() + this.radius, this.lng() - this.radius);
 
 			// check how to calculate new lat / lng with radius
-			this.northeastBound = new google.maps.LatLng(this.lat() - this.radius, this.lng() + this.radius);
+			this.lat_ne = this.lat() + (this.radius / 111);
+			this.lng_ne = this.lng() + (this.radius / Math.abs(Math.cos((this.lat() / (Math.PI / 180)))) * 111);
+			this.northeastBound = new google.maps.LatLng(this.lat_ne, this.lng_ne);
+			//this.northeastBound = new google.maps.LatLng(this.lat() - this.radius, this.lng() + this.radius);
 
 			this.bounds = new google.maps.LatLngBounds(this.soutwestBound, this.northeastBound);
 		}
 
 		this.set_Autocomplete = function (selectField) {
 			var options = {
-				types: ['geocode']
+				types: ['geocode'],
+				componentRestrictions: {
+					country: ['be']
+				}
 			};
-			this.bounds && (options.bounds = options.bounds);
+			this.bounds && (options.bounds = this.bounds);
 			this.autocomplete = new google.maps.places.Autocomplete(selectField, options);
 		};
 
