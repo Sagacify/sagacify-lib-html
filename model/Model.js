@@ -50,6 +50,8 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 		set: function(){
 			var me = this;
 			var getset = function(attribute, raw){
+				console.log(attribute)
+				console.log(raw)
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
 				if(schemaElement){
 					var type = schemaElement instanceof Array?schemaElement[0].type:schemaElement.type;
@@ -103,6 +105,12 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 					}
 				}
 				else{
+					//if the attribute is the first part of a composed attribute and the server has send the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
+					if(is.Object(raw)){
+						for(var key in raw){
+							me.set(attribute+"."+key, raw[key]);
+						}
+					}
 					return null;
 				}
 			}

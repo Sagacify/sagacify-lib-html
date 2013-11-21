@@ -51,7 +51,6 @@ define(["../model/Model"], function(Model){
 					var child = this.model[attr];
 					if(this.model.schema.tree[attr] instanceof Array && this.model.schema.tree[attr][0].single)
 						child = child.models[0];
-					
 					if(child instanceof Model){
 						var embeddedTreeVirtuals = child.treeVirtuals();
 						for(var embeddedAttr in embeddedTreeVirtuals){
