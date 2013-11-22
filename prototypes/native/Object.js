@@ -83,6 +83,17 @@ obj_proto.isVirtualType = function(){
 	return this.constructor.name === "VirtualType";
 };
 
+obj_proto.pathsKeys = function() {
+	var me = this;
+	return this.isObject() ? this.keys().reduce(function (base, ele) {
+		var children = me[ele].paths();
+		return base.concat(children.map(function (child) {
+			return ele + (child ? '.' + child : '');
+		}));
+	}, []) : [''];
+};
+
+
 for(var key in obj_proto){
 	Object.defineProperty(Object.prototype, key, {value: obj_proto[key]});
 }

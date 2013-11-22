@@ -15,11 +15,14 @@ define([
 					me.triggerMethod('models:fetched');
 				});
 			}
+
 			$(window).scroll(function (evt){
 				if(me.isBottomReached()){
 					me.trigger("bottomReached");
 				}
 			});
+
+			Object.defineProperties(this, {user: {get:this.getUser, set:this.setUser}});
 		},
 
 		fetchModels: function (){
@@ -53,6 +56,17 @@ define([
 
 		isBottomReached: function () {
 			return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
+		},
+
+		getUser: function(){
+			if(!this._user){
+				this._user = new this.models.UserModel({}, {url:"/api/user"});
+			}
+			return this._user;
+		},
+
+		setUser: function(user){
+			this._user = user;
 		}
 		
 	});
