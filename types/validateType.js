@@ -22,6 +22,10 @@ define([], function (is) {
 			return Object.prototype.toString.call(obj) === '[object Function]';
 		},
 
+		Date: function (obj) {
+			return Object.prototype.toString.call(obj) === '[object Date]';
+		},
+
 		Number: function (obj) {
 			return Object.prototype.toString.call(obj) === '[object Number]';
 		},
