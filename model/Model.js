@@ -50,10 +50,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 		set: function(){
 			var me = this;
 			var getset = function(attribute, raw){
-				console.log(attribute)
-				console.log(raw)
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
-				console.log(schemaElement)
 				if(schemaElement){
 					var type = schemaElement instanceof Array?schemaElement[0].type:schemaElement.type;
 					var ref = schemaElement instanceof Array?schemaElement[0].ref:schemaElement.ref;
