@@ -59,12 +59,10 @@ define([
 			var me = this;
 			var getset = function(attribute, raw){
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
-				console.log(attribute)
-				console.log(raw)
 				if(schemaElement){
 					var type = is.Array(schemaElement)?schemaElement[0].type:schemaElement.type;
 					var ref = is.Array(schemaElement)?schemaElement[0].ref:schemaElement.ref;
-					if(is.Object(raw) && ref || is.Array(raw) && (is.Object(raw[0]) || !raw.length)){
+					if(is.Object(raw) && ref || is.Array(raw)){
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
@@ -113,6 +111,10 @@ define([
 					}
 				}
 				else{
+					if(window.go && attribute == "test"){
+						console.log(new Error().stack)
+						window.go = false;
+					}
 					console.log('barbecue')
 					//if the attribute is the first part of a composed attribute and the server has send the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
 					if(is.Object(raw)){

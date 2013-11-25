@@ -1,4 +1,4 @@
-define(['backbone'], function(){
+define(['backbone', '../types/validateType'], function(Backbone, is){
 	return Backbone.Collection.extend({
 
 		_isLoading: false,
@@ -61,6 +61,15 @@ define(['backbone'], function(){
 			}
 			else{
 				return Backbone.Collection.prototype.get.apply(this, arguments) || this.add(new this.model({_id:id}, {urlRoot: url, parent:{instance:this, paht:""}})).last();
+			}
+		},
+
+		set: function(models, options){
+			if(models.length && !is.Object(models[0])){
+				this.refs = models;
+			}
+			else{
+				Backbone.Collection.prototype.set.apply(this, arguments);
 			}
 		},
 
