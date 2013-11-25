@@ -401,7 +401,6 @@ define([
 				return;
 			var me = this;
 			inputs.on('change', function(){
-				debugger
 				me[attr] = this.value;
 			});
 
@@ -427,6 +426,22 @@ define([
 			this.on('change:'+attr, function(){
 				if(this[attr].getTime())
 					inputDates.val(this[attr].inputFormat());
+			});
+		},
+
+		bindToInputCheckboxs: function(inputs, attr){
+			if(!inputs.length)
+				return;
+			var me = this;
+			inputs.on('change', function(){
+				me[attr] = this.checked;
+			});
+
+			if(this[attr] != null){
+				inputs.prop('checked', this[attr]);
+			}
+			this.on('change:'+attr, function(){
+				inputs.prop('checked', this[attr]);
 			});
 		},
 
