@@ -6,8 +6,9 @@ define(['backbone.marionette'], function(){
 	}
 
 	_.extend(Backbone.Marionette.ItemView.prototype, {
-		constructor: function(){
+		constructor: function(options){
 			this._handleGoTo();
+			this.options = options;
 			return ItemViewCopy.constructor.apply(this, arguments);
 		},
 

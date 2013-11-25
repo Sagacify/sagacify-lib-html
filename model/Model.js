@@ -59,18 +59,20 @@ define([
 			var me = this;
 			var getset = function(attribute, raw){
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
+				console.log(attribute)
+				console.log(raw)
 				if(schemaElement){
-					var type = schemaElement instanceof Array?schemaElement[0].type:schemaElement.type;
-					var ref = schemaElement instanceof Array?schemaElement[0].ref:schemaElement.ref;
-					if(ref && is.Object(raw) || is.Array(raw)){
+					var type = is.Array(schemaElement)?schemaElement[0].type:schemaElement.type;
+					var ref = is.Array(schemaElement)?schemaElement[0].ref:schemaElement.ref;
+					if(is.Object(raw) && ref || is.Array(raw) && (is.Object(raw[0]) || !raw.length)){
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
 							return null;
 						}
 
-						var url = me.url instanceof Function?me.url():me.url;
-						if(schemaElement instanceof Array){
+						var url = is.Function(me.url)?me.url():me.url;
+						if(is.Array(schemaElement)){
 							var collectionUrl = me.isNew()?"":(url+'/'+attribute);
 							//collection of ref
 							if(ref){
@@ -111,6 +113,7 @@ define([
 					}
 				}
 				else{
+					console.log('barbecue')
 					//if the attribute is the first part of a composed attribute and the server has send the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
 					if(is.Object(raw)){
 						for(var key in raw){
@@ -132,7 +135,7 @@ define([
 					return this[setterName](args[0], args[1]);
 				}
 				var value = getset(args[0], args[1]);
-				if(!value){
+				if(value == null){
 					return;
 				}
 				else{
@@ -380,8 +383,9 @@ define([
 		bindToEls: function(els, attr){
 			this.bindToImages(els.filter(':image'), attr);
 			this.bindToInputDates(els.filter(':input[type=date]'), attr);
+			this.bindToInputCheckboxs(els.filter(':input[type=radio]'), attr);
 			this.bindToSelects(els.filter('select'), attr);
-			this.bindToInputs(els.filter(':input').not(':input[type=date], select'), attr);
+			this.bindToInputs(els.filter(':input').not(':input[type=date], :input[type=radio],select'), attr);
 			this.bindToDefaultsEls(els.not(':image, :input'), attr);
 		},
 
@@ -400,7 +404,7 @@ define([
 			if(!inputs.length)
 				return;
 			var me = this;
-			inputs.on('change', function(){
+			inputs.change(function(){
 				me[attr] = this.value;
 			});
 
@@ -416,7 +420,7 @@ define([
 			if(!inputDates.length)
 				return;
 			var me = this;
-			inputDates.on('blur', function(evt){
+			inputDates.on('change', function(evt){
 				me[attr] = new Date(this.value);
 			});
 
@@ -433,8 +437,8 @@ define([
 			if(!inputs.length)
 				return;
 			var me = this;
-			inputs.on('change', function(){
-				me[attr] = this.checked;
+			$('input[name="'+inputs.prop('name')+'"]', inputs.parentsUntil().last()).change(function(evt){
+				me[attr] = inputs.prop('checked');
 			});
 
 			if(this[attr] != null){
