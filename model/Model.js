@@ -1,4 +1,12 @@
-define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/validateType'], function(Backbone, ValidateFormat, SagaCollection, is){
+define([
+	'backbone', 
+	'saga/validation/ValidateFormat', 
+	'./Collection', 
+	'../types/validateType',
+	'../ajax/SGAjax'
+	
+	], function(Backbone, ValidateFormat, SagaCollection, is, SGAjax){
+	
 	var SagaModel = Backbone.Model.extend({
 
 		parent: {
@@ -393,6 +401,7 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 				return;
 			var me = this;
 			inputs.on('change', function(){
+				debugger
 				me[attr] = this.value;
 			});
 
@@ -459,6 +468,26 @@ define(['backbone', 'saga/validation/ValidateFormat', './Collection', '../types/
 					els.addClass(errorClass);
 				}
 			});
+		},
+
+		fetch: function(options, data){
+			if(is.String(options)){
+				var url = typeof this.url == "function"?this.url():this.url;
+				if(!url.endsWith('/')){
+					url += '/';
+				}
+				SGAjax.ajax({
+					url: url+options,
+					type: 'GET',
+					data: data
+				})
+				.done(function(data){
+					debugger
+				});
+			}
+			else{
+				return Backbone.Model.prototype.fetch.apply(this, arguments);
+			}
 		}
 
 	});

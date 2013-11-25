@@ -38,8 +38,18 @@ define(["../model/Model"], function(Model){
 					else if(me.modelBind[attr]){
 						selector += ", "+me.modelBind[attr];
 					}
-					if(me.modelBind._container)
-						selector = me.modelBind._container+" "+selector;
+					if(me.modelBind._container){
+						var splitContainer = me.modelBind._container.split(',');
+						var containedSelector = "";
+						splitContainer.forEach(function(container, i){
+							containedSelector += container+" "+selector;
+							if(i < splitContainer.length-1){
+								containedSelector += ",";
+							}
+						});
+						// selector = me.modelBind._container+" "+selector;
+						selector = containedSelector;
+					}
 					return selector;
 				}
 				for(var attr in treeVirtuals){

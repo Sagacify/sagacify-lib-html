@@ -45,6 +45,7 @@ define([
 				region.showOnRender(this, view);
 				return view;
 			}
+			region.showOnRender(this, this[childName]);
 			return this[childName];
 		}
 
