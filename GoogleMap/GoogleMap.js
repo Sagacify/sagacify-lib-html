@@ -67,20 +67,6 @@ define([
 			return this.get_Center().lng();
 		};
 
-		this.get_LocationLatLng = function (loc) {
-			var lat = loc.geometry.location.lat();
-			var lng = loc.geometry.location.lng();
-			return [lat, lng];
-		};
-
-		this.get_LocationAddress = function (loc) {
-			return [
-				(loc.address_components[0] && loc.address_components[0].short_name || ''),
-				(loc.address_components[1] && loc.address_components[1].short_name || ''),
-				(loc.address_components[2] && loc.address_components[2].short_name || '')
-			].join(',');
-		};
-
 		this.get_PositionLatLng = function (pos) {
 			var lat = pos.coords.latitude;
 			var lng = pos.coords.longitude;
