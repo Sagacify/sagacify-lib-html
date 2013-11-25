@@ -71,8 +71,8 @@ define([
 
 		this.get_LocationAddressComps = function (loc) {
 			return loc.address_components.reduce(function (base, addresComp) {
-				return base.concat(addresComp.short_name);
-			}, []);
+				return (base[addresComp.types[0]] = addresComp.short_name) && (base);
+			}, {});
 		};
 
 	};
