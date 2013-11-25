@@ -422,7 +422,7 @@ define([
 			if(!inputDates.length)
 				return;
 			var me = this;
-			inputDates.on('change', function(evt){
+			inputDates.on('blur', function(evt){
 				me[attr] = new Date(this.value);
 			});
 
