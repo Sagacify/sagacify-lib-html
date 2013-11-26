@@ -19,34 +19,45 @@ define([
 			this.bindToModel();
 		},
 
-		appear: function (node) {
-			$(node).show();
-		},
-
-		disappear: function (node) {
-			$(node).hide();
-		},
-
-		toggle: function (node) {
-			$(node).toggle();
-		},
-
 		getModel: function(){
 			return null;
 		},
 
-		showChildOnRender: function(region, childClass, childArgs, childName){
+		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
+			keepOnRegionClose = true
 			childName = (childName == null) ? 'childView' : childName;
+
+			// if(region.currentView && region.currentView._keepOnRegionClose){
+			// 	delete region.currentView;
+			// }
+
 			if(!childName || !(this[childName] instanceof childClass)) {
 				var view = new childClass(childArgs||{});
+				// if(keepOnRegionClose){
+				// 	view._keepOnRegionClose = true;
+				// 	delete region.currentView;
+				// }
+
 				if(childName){
 					this[childName] = view;
 				}
+
 				region.showOnRender(this, view);
+
 				return view;
 			}
-			region.showOnRender(this, this[childName]);
-			return this[childName];
+			else{
+				// if(this[childName]._keepOnRegionClose){
+				// 	var render = this[childName].render;
+				// 	this[childName].render = function(){};
+				// 	region.showOnRender(this, this[childName]);
+				// 	this[childName].render = render;
+				// }
+				// else{
+					region.showOnRender(this, this[childName]);
+				//}
+				return this[childName];
+			}
 		}
 
 	});

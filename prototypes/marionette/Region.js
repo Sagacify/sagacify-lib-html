@@ -1,4 +1,9 @@
 define(['backbone.marionette'], function(){
+
+	var RegionCopy = {
+		close: Backbone.Marionette.Region.prototype.close
+	}
+
 	_.extend(Backbone.Marionette.Region.prototype, {
 		showOnRender: function(parentLayout, view, doNotKeep){
 			if(parentLayout.isRendered()){
@@ -10,6 +15,30 @@ define(['backbone.marionette'], function(){
 					me.show(view);
 				});
 			}
+		},
+
+		showSafe: function(view){
+			this.ensureEl();
+
+    //var isViewClosed = view.isClosed || _.isUndefined(view.$el);
+
+    //var isDifferentView = view !== this.currentView;
+
+    //if (isDifferentView) {
+      //this.close();
+    //}
+
+    if(!view.isRendered())
+    view.render();
+
+    //if (isDifferentView || isViewClosed) {
+      this.open(view);
+    //}
+    
+    this.currentView = view;
+
+    //Backbone.Marionette.triggerMethod.call(this, "show", view);
+    //Backbone.Marionette.triggerMethod.call(view, "show");
 		}
 	});
 });
