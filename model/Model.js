@@ -1,12 +1,11 @@
 define([
-	'backbone', 
-	'saga/validation/ValidateFormat', 
-	'./Collection', 
+	'backbone',
+	'saga/validation/ValidateFormat',
+	'./Collection',
 	'../types/validateType',
 	'../ajax/SGAjax'
-	
-	], function(Backbone, ValidateFormat, SagaCollection, is, SGAjax){
-	
+], function (Backbone, ValidateFormat, SagaCollection, is, SGAjax) {
+
 	var SagaModel = Backbone.Model.extend({
 
 		parent: {
