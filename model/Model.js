@@ -492,13 +492,10 @@ define([
 				if(!url.endsWith('/')){
 					url += '/';
 				}
-				SGAjax.ajax({
+				return SGAjax.ajax({
 					url: url+options,
 					type: 'GET',
 					data: data
-				})
-				.done(function(data){
-					debugger
 				});
 			}
 			else{
