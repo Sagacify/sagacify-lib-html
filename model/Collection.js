@@ -60,7 +60,12 @@ define(['backbone', '../types/validateType'], function(Backbone, is){
 				return new this.model({}, {urlRoot: url, parent:{instance:this, path:""}});
 			}
 			else{
-				return Backbone.Collection.prototype.get.apply(this, arguments) || this.add(new this.model({_id:id}, {urlRoot: url, parent:{instance:this, paht:""}})).last();
+				var doc = Backbone.Collection.prototype.get.apply(this, arguments);
+				if(!doc){
+					this.add(new this.model({_id:id}, {urlRoot: url, parent:{instance:this, paht:""}}));
+					doc = this.last();
+				}
+				return doc;
 			}
 		},
 
