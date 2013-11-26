@@ -95,7 +95,8 @@ define([
 								return new Collection(raw||[], {parent:{instance:me, path:attribute}});
 							}
 						}
-						else{
+						else {
+							debugger;
 							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
 					}
