@@ -1,6 +1,10 @@
 define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 	return Marionette.AppRouter.extend({
 
+		aliases: {
+
+		},
+
 		constructor: function(options){
 			Marionette.AppRouter.prototype.constructor.apply(this, arguments);
 			if(this.sagaRoutes){
@@ -10,7 +14,15 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 
 		handleSagaRoutes: function(){
 			for(var route in this.sagaRoutes){
-				this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes[route]));
+				var specRoute = this.sagaRoutes[route];
+				if(route.contains(" \@ ")){
+					var splitRoute = route.split(" \@ ");
+					var alias = splitRoute[0];
+					route = splitRoute[1];
+					this.aliases[alias] = route;
+				}
+
+				this.route(route, "sagaRoute", this.handleSagaRoute(route, specRoute));
 			}
 			// for(var route in this.sagaRoutes.auth){
 			// 	this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.auth[route], true));
@@ -69,7 +81,8 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 
 		navigate: function(){
 			var args = Array.apply(null, arguments);
-			args[0] = App.uris[args[0]]||args[0];
+			//args[0] = App.uris[args[0]]||args[0];
+			args[0] = this.aliases[args[0]]||args[0];
 			if(!args[1]) {
 				args[1] = {};
 			}

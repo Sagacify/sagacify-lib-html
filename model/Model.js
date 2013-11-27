@@ -95,7 +95,6 @@ define([
 							}
 						}
 						else {
-							debugger;
 							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
 					}
