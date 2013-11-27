@@ -401,14 +401,26 @@ define([
 				return;
 			var me = this;
 			inputs.change(function(){
-				me[attr] = this.value;
+				if($(this).hasClass('picker__input') && this.value.length > 2 && this.value[2]==':'){
+					me[attr] = $(this).pickatime('picker').get('highlight', 'HH:i');
+				}
+				else{
+					me[attr] = this.value;
+				}
 			});
 
 			if(this[attr] != null){
 				inputs.val(this[attr]);
 			}
 			this.on('change:'+attr, function(){
-				inputs.val(this[attr]);
+				if(inputs.hasClass('picker__input')){
+					if(this[attr] instanceof Date){
+						inputs.val(this[attr].toLocaleString().split(" ")[0]);
+					}
+				}
+				else{
+					inputs.val(this[attr]);
+				}
 			});
 		},
 
@@ -416,6 +428,7 @@ define([
 			if(!inputDates.length)
 				return;
 			var me = this;
+
 			inputDates.on('blur', function(evt){
 				me[attr] = new Date(this.value);
 			});
