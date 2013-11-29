@@ -153,6 +153,11 @@ define(['backbone', '../types/validateType'], function(Backbone, is){
 			options.remove = false;
 			if(!options.data)
 				options.data = {};
+
+			if(options.first){
+				this._paginate.currentPage = 0;
+			}
+
 			if(this._paginate.perPage){
 				options.data.offset = this._paginate.currentPage*this._paginate.perPage;
 				options.data.limit = this._paginate.perPage;
