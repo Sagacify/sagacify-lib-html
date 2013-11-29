@@ -1,6 +1,7 @@
 define([
 	'./native/native',
-	'./marionette/marionette'
+	'./marionette/marionette',
+	'./jquery/jquery'
 ], function (){
 
 });

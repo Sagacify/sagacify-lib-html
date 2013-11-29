@@ -284,9 +284,9 @@ define([
 			}
 		},
 
-		toJSON: function(mpath){
+		toJSON: function(notmpath){
 			var json;
-			if(!mpath)
+			if(!notmpath)
 				json = Backbone.Model.prototype.toJSON.apply(this, arguments);
 			else
 				json = _.clone(this._mattributes);
@@ -294,7 +294,7 @@ define([
 			childToJSON = function(parent){
 				for(var attr in parent){
 					if(parent[attr] && typeof parent[attr].toJSON == "function"){
-						parent[attr] = parent[attr].toJSON(mpath);
+						parent[attr] = parent[attr].toJSON(notmpath);
 					}
 					else if(is.Object(parent[attr])||is.Array(parent[attr])){
 						childToJSON(parent[attr]);
@@ -512,6 +512,21 @@ define([
 			}
 			else{
 				return Backbone.Model.prototype.fetch.apply(this, arguments);
+			}
+		},
+
+		save: function(){
+			if(arguments[0] instanceof Array){
+				var fields = arguments[0];
+				var json = this.toJSON();
+				var partJson = {};
+				fields.forEach(function(field){
+					partJson[field] = json[field];
+				});
+				this.save(partJson, {patch:true});
+			}
+			else{
+				Backbone.Model.prototype.save.apply(this, arguments);
 			}
 		}
 

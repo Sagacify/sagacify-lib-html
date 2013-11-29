@@ -1,0 +1,6 @@
+define([
+	'./Image',
+	'./Input'
+], function (){
+
+});

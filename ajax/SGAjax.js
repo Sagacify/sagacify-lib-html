@@ -94,6 +94,8 @@ define([], function () {
 			}
 			var cbError = options.error;
 			var cbSuccess = options.success;
+			if(method=="patch")
+				method = "put";
 			return this[method](url, headers, contentType, data, cbError, cbSuccess) || cbError();
 		},
 		constructor: function (options) {
