@@ -65,7 +65,8 @@ define([
 				if(schemaElement){
 					var type = is.Array(schemaElement)?schemaElement[0].type:schemaElement.type;
 					var ref = is.Array(schemaElement)?schemaElement[0].ref:schemaElement.ref;
-					if(is.Object(raw) && ref || is.Array(raw)){
+					//handle as model or collection
+					if(is.Object(raw) && ref && attribute != "_id" || is.Array(raw)){
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
@@ -102,6 +103,7 @@ define([
 							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
 					}
+					//handle as primitive
 					else{
 						if(schemaElement.type == "Date"){
 							raw = Date.create(raw);
