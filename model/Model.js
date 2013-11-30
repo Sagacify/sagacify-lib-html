@@ -55,6 +55,10 @@ define([
 		},
 
 		set: function(){
+			if(arguments.callee.caller == Backbone.Model.prototype.save){
+				return true;
+			}
+
 			var me = this;
 			var getset = function(attribute, raw){
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
@@ -377,18 +381,23 @@ define([
 
 		//bind this to els
 		bindToEls: function(els, attr){
-			this.bindToImages(els.filter(':image'), attr);
+			this.bindToImages(els.filter('img'), attr);
 			this.bindToInputDates(els.filter(':input[type=date]'), attr);
 			this.bindToInputCheckboxs(els.filter(':input[type=radio]'), attr);
 			this.bindToSelects(els.filter('select'), attr);
 			this.bindToInputs(els.filter(':input').not(':input[type=date], :input[type=radio],select'), attr);
-			this.bindToDefaultsEls(els.not(':image, :input'), attr);
+			this.bindToDefaultsEls(els.not('img, :input'), attr);
 		},
 
 		bindToImages: function(imgs, attr){
 			if(!imgs.length)
 				return;
-			if(this[attr] != null){
+			var me = this;
+			imgs.on('load', function(){
+				me[attr] = $(this).attr('src');
+			});
+
+			if(typeof this[attr] == "string"){
 				imgs.attr('src', this[attr]);
 			}
 			this.on('change:'+attr, function(model){
