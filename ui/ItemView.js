@@ -12,7 +12,8 @@ define([
 		},
 
 		render: function(options){
-			this.template = this.get_Template(options||this.model||this.data);
+			if(!this.template)
+				this.template = this.get_Template(options||this.model||this.data);
 			Marionette.ItemView.prototype.render.apply(this, arguments);
 			this.bindToModel();
 		},
