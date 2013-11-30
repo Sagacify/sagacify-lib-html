@@ -418,9 +418,9 @@ define([
 				}
 			});
 
-			if(this[attr] != null){
-				inputs.val(this[attr]);
-			}
+			//if(this[attr] != null){
+				inputs.val(this[attr]||"");
+			//}
 			this.on('change:'+attr, function(){
 				if(inputs.hasClass('picker__input')){
 					if(this[attr] instanceof Date){
@@ -486,9 +486,9 @@ define([
 		bindToDefaultsEls: function(els, attr){
 			if(!els.length)
 				return;
-			if(this[attr] != null){
-				els.html(this[attr]);
-			}
+
+			els.html(this[attr]||"");
+
 			this.on('change:'+attr, function(){
 				els.html(this[attr]);
 			});
