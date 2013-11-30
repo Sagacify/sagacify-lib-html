@@ -72,6 +72,20 @@ define([
 			});
 		};
 
+		this.reverseGeocoding = function(lat, lng, callback){
+			var me = this;
+			//var latLng = [lat, lng];
+			var parameters = {
+				latLng : new google.maps.LatLng(lat, lng)
+			}
+
+			this.geocoder.geocode(parameters, function (results, status) {
+				console.log(results);
+				console.log(status);
+				me.handleResponse(results, status, callback);
+			});
+		};
+
 	};
 
 });

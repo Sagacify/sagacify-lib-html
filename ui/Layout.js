@@ -14,7 +14,7 @@ define([
 		},
 
 		render: function (options) {
-			this.template = this.get_Template(options||this.model||this.data);
+			this.template = this.get_Template(options||this.model||this.data||this.options);
 			Marionette.Layout.prototype.render.apply(this, arguments);
 			this.bindToModel();
 		},

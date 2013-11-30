@@ -44,6 +44,10 @@ define([
 			return (this.selected_location = this.autocomplete.getPlace());
 		};
 
+		this.set_Location = function(loc){
+			this.selected_location = loc;
+		}
+
 		this.bind_Event = function (googleEvent, callback) {
 			var me = this;
 			google.maps.event.addListener(this.autocomplete, googleEvent, function () {
