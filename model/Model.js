@@ -534,7 +534,7 @@ define([
 				fields.forEach(function(field){
 					partJson[field] = json[field];
 				});
-				this.save(partJson, {patch:true});
+				return this.save(partJson, {patch:true});
 			}
 			else{
 				return Backbone.Model.prototype.save.apply(this, arguments);
