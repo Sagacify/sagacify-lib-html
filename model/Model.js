@@ -537,7 +537,7 @@ define([
 				this.save(partJson, {patch:true});
 			}
 			else{
-				Backbone.Model.prototype.save.apply(this, arguments);
+				return Backbone.Model.prototype.save.apply(this, arguments);
 			}
 		}
 
