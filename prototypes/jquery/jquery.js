@@ -1,6 +1,7 @@
 define([
 	'./Image',
-	'./Input'
+	'./Input',
+	'./Link'
 ], function (){
 
 });

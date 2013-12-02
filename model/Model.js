@@ -509,17 +509,26 @@ define([
 			});
 		},
 
-		fetch: function(options, data){
-			if(is.String(options)){
+		fetch: function(attr, data, options){
+			if(is.String(attr)){
 				var url = typeof this.url == "function"?this.url():this.url;
 				if(!url.endsWith('/')){
 					url += '/';
 				}
-				return SGAjax.ajax({
-					url: url+options,
+				var promise = SGAjax.ajax({
+					url: url+attr,
 					type: 'GET',
 					data: data
 				});
+
+				if(options && options.merge){
+					var me = this;
+					promise.done(function(result){
+						me[attr] = result;
+					});
+				}
+
+				return promise;
 			}
 			else{
 				return Backbone.Model.prototype.fetch.apply(this, arguments);
