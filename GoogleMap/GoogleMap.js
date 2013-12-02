@@ -24,11 +24,11 @@ define([
 				$('.gm-style-iw').siblings('div').remove();
 			});
 			google.maps.event.addListener(marker, 'click', function () {
-				infobox.close();
+				infobox[infobox.getMap() ? 'close' : 'open'](me.map, marker);
 			});
-			google.maps.event.addListener(marker, 'mouseover', function () {
-				infobox.open(me.map, marker);
-			});
+			// google.maps.event.addListener(marker, 'mouseover', function () {
+			// 	infobox.open(me.map, marker);
+			// });
 		};
 
 		this.set_Infobox = function (marker, template) {
