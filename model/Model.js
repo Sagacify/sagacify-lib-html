@@ -454,35 +454,35 @@ define([
 		},
 
 		bindToInputCheckboxs: function(inputs, attr){
-			if(!inputs.length)
-				return;
-			var me = this;
-			$('input[name="'+inputs.prop('name')+'"]', inputs.parentsUntil().last()).change(function(evt){
-				me[attr] = inputs.prop('checked');
-			});
+			if(inputs.length) {
+				var me = this;
+				$('input[name="'+inputs.prop('name')+'"]', inputs.parentsUntil().last()).change(function(evt){
+					me[attr] = inputs.prop('checked');
+				});
 
-			if(this[attr] != null){
-				inputs.prop('checked', this[attr]);
+				if(this[attr] != null){
+					inputs.prop('checked', this[attr]);
+				}
+				this.on('change:'+attr, function(){
+					inputs.prop('checked', this[attr]);
+				});
 			}
-			this.on('change:'+attr, function(){
-				inputs.prop('checked', this[attr]);
-			});
 		},
 
 		bindToSelects: function(selects, attr){
-			if(!selects.length)
-				return;
-			var me = this;
-			selects.on('change', function(){
-				me[attr] = this.options[this.selectedIndex].innerHTML;
-			});
+			if(selects.length) {
+				var me = this;
+				selects.on('change', function(){
+					me[attr] = this.options[this.selectedIndex].innerHTML;
+				});
 
-			if(this[attr] != null){
-				$('[value='+this[attr]+']', selects).prop('selected', true);
+				if(this[attr] != null) {
+					$('[value="'+this[attr]+'"]', selects).prop('selected', true);
+				}
+				this.on('change:'+attr, function(){
+					$('[value="'+this[attr]+'"]', selects).prop('selected', true);
+				});
 			}
-			this.on('change:'+attr, function(){
-				$('[value='+this[attr]+']', selects).prop('selected', true);
-			});
 		},
 
 		bindToDefaultsEls: function(els, attr){
