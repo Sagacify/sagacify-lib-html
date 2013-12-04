@@ -402,6 +402,7 @@ define([
 			if(typeof this[attr] == "string"){
 				imgs.attr('src', this[attr]);
 			}
+			debugger
 			this.on('change:'+attr, function(model){
 				imgs.attr('src', this[attr]);
 			});
@@ -489,10 +490,12 @@ define([
 			if(!els.length)
 				return;
 
-			els.html(this[attr]||"");
+			if(this[attr] != null)
+				els.html(this[attr]||"");
 
 			this.on('change:'+attr, function(){
-				els.html(this[attr]);
+				if(this[attr] != null)
+					els.html(this[attr]);
 			});
 		},
 
