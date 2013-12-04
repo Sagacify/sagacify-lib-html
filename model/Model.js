@@ -402,7 +402,6 @@ define([
 			if(typeof this[attr] == "string"){
 				imgs.attr('src', this[attr]);
 			}
-			debugger
 			this.on('change:'+attr, function(model){
 				imgs.attr('src', this[attr]);
 			});
