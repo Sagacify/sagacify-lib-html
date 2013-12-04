@@ -81,8 +81,13 @@ define([
 			zoomControl			:	true,
 			scaleControl		:	false,
 			mapTypeControl		:	true,
+			panControl			: 	false,
 			zoomControlOptions	:	{
-				style			:	google.maps.ZoomControlStyle.SMALL
+				style			:	google.maps.ZoomControlStyle.SMALL,
+				position 		: 	google.maps.ControlPosition.LEFT_BOTTOM
+			},
+			mapTypeControlOptions: 	{
+				position 		: 	google.maps.ControlPosition.RIGHT_BOTTOM
 			}
 		});
 
