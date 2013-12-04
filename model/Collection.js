@@ -1,4 +1,7 @@
-define(['backbone', '../types/validateType'], function(Backbone, is){
+define([
+	'backbone',
+	'../types/validateType'
+], function (Backbone, is) {
 	return Backbone.Collection.extend({
 
 		_isLoading: false,
@@ -70,7 +73,7 @@ define(['backbone', '../types/validateType'], function(Backbone, is){
 		},
 
 		set: function(models, options){
-			if(models.length && !is.Object(models[0])){
+			if(is.Array(models) && models.length && !is.Object(models[0])){
 				this.refs = models;
 			}
 			else{

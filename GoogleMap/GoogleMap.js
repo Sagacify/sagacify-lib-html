@@ -18,6 +18,8 @@ define([
 
 		this.infoboxes = [];
 
+		this.displayed_infobox = null;
+
 		this.set_MarkerEventHandlers = function (infobox, marker) {
 			var me = this;
 			google.maps.event.addListener(infobox, 'domready', function () {
@@ -25,6 +27,10 @@ define([
 			});
 			google.maps.event.addListener(marker, 'click', function () {
 				infobox[infobox.getMap() ? 'close' : 'open'](me.map, marker);
+				if(me.displayed_infobox && (me.displayed_infobox !== infobox)) {
+					me.displayed_infobox.close();
+				}
+				me.displayed_infobox = infobox;
 			});
 			// google.maps.event.addListener(marker, 'mouseover', function () {
 			// 	infobox.open(me.map, marker);
