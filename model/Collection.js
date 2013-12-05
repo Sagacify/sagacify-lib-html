@@ -268,6 +268,13 @@ define([
 				}
 				return true;
 			});
+		},
+
+		clear: function() {
+			var len = this.models.length;
+			while(len--) {
+				this.remove(this.models[len]);
+			}
 		}
 
 	});

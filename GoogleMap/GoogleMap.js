@@ -14,11 +14,21 @@ define([
 			return this.new_LatLng(this.lat || base_lat, this.lng || base_lng);
 		};
 
+		this.points = [];
+
 		this.markers = [];
 
 		this.infoboxes = [];
 
 		this.displayed_infobox = null;
+
+		this.set_Bounds = function () {
+			var bounds = new google.maps.LatLngBounds();
+			for(var i = 0, len = this.points.length; i < len; i++) {
+				bounds.extend(this.points[i]);
+			}
+			this.map.fitBounds(bounds);
+		},
 
 		this.set_MarkerEventHandlers = function (infobox, marker) {
 			var me = this;
@@ -46,7 +56,15 @@ define([
 		};
 
 		this.set_Marker = function (lat, lng, template) {
-			var position = (lat && lng) && this.new_LatLng(lat, lng) || this.center();
+			var position;
+			if(lat && lng) {
+				position = this.new_LatLng(lat, lng);
+				this.points.push(position);
+				this.set_Bounds();
+			}
+			else {
+				position = this.center();
+			}
 			var marker = new google.maps.Marker({
 				map: this.map,
 				position: position,
@@ -79,6 +97,24 @@ define([
 			return [lat, lng];
 		};
 
+		this.clear_Markers = function () {
+			for(var i = 0, len = this.markers.length; i < len; i++) {
+				this.markers[i].setMap(null);
+			}
+			this.markers.length = 0;
+		};
+
+		this.clear = function () {
+			this.displayed_infobox = null;
+			this.infoboxes.length = 0;
+			this.clear_Markers();
+			this.points.length = 0;
+		};
+
+		this.resize = function () {
+			google.maps.event.trigger(this.map, 'resize');
+		};
+
 		this.map = new google.maps.Map(mapNode, {
 			zoom				:	this.zoom,
 			center				:	this.center(),
@@ -87,13 +123,13 @@ define([
 			zoomControl			:	true,
 			scaleControl		:	false,
 			mapTypeControl		:	true,
-			panControl			: 	false,
+			panControl			:	false,
 			zoomControlOptions	:	{
 				style			:	google.maps.ZoomControlStyle.SMALL,
-				position 		: 	google.maps.ControlPosition.LEFT_BOTTOM
+				position		:	google.maps.ControlPosition.LEFT_BOTTOM
 			},
-			mapTypeControlOptions: 	{
-				position 		: 	google.maps.ControlPosition.RIGHT_BOTTOM
+			mapTypeControlOptions:	{
+				position		:	google.maps.ControlPosition.RIGHT_BOTTOM
 			}
 		});
 

@@ -45,25 +45,25 @@ define([
 				this.collection.nextPage().always(function(){
 					me.closeLoadingView();
 				});
-			}	
+			}
 		},
 
 		showLoadingView: function(){
 			this.closeEmptyView();
-		    var LoadingView = Marionette.getOption(this, "loadingView");
+			var LoadingView = Marionette.getOption(this, "loadingView");
 
-		    if(LoadingView && !this._loadingView){
+			if(LoadingView && !this._loadingView){
 				var model = new Backbone.Model();
-		    	this.addItemView(model, LoadingView);
-		    	this._loadingView = this.children.last();
-		    }
+				this.addItemView(model, LoadingView);
+				this._loadingView = this.children.last();
+			}
 		},
 
 		closeLoadingView: function(){
-		    if (this._loadingView){
-		    	this.removeChildView(this._loadingView);
-		    	delete this._loadingView;
-		    }
+			if (this._loadingView){
+				this.removeChildView(this._loadingView);
+				delete this._loadingView;
+			}
 		},
 
 		close: function(){
