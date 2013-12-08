@@ -98,7 +98,7 @@ define(["../model/Model"], function(Model){
 			});
 
 			//if(this[attr] != null){
-				inputs.val(this.attrToEl(model[attr]||""));
+				inputs.val(this.attrToEl(fullAttr, model[attr]||"", inputs));
 			//}
 			this.listenTo(model, 'change:'+attr, function(){
 				if(inputs.hasClass('picker__input')){

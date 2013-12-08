@@ -8,7 +8,12 @@ define(['backbone.marionette'], function(){
 	_.extend(Backbone.Marionette.ItemView.prototype, {
 		constructor: function(options){
 			this._handleGoTo();
-			this.options = options;
+			this.options = options||{};
+			for(var key in options){
+				if(key in this){
+					this[key] = options[key];
+				}
+			}
 			return ItemViewCopy.constructor.apply(this, arguments);
 		},
 
