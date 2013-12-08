@@ -1,7 +1,6 @@
 define([], function () {
 
 	return {
-		buffer: null,
 		progressNode: null,
 		requestsNode: null,
 		currentRequestsCount: 0,
@@ -36,7 +35,7 @@ define([], function () {
 				});
 			}
 		},
-		// downloadProgressHandler: function () {
+		// downloadProgressHandler: function () {
 		// 	debugger;
 		// },
 		methodWrapper: function (type, url, headers, contentType, data, cbError, cbSuccess) {
@@ -70,60 +69,34 @@ define([], function () {
 			};
 
 			promise.fail(function(err){
-				if(!promise._preventDefaultError && (typeof App.onError == "function")){
+				if(!promise._preventDefaultError && typeof App.onError == "function"){
 					App.onError(err);
 				}
 			});
 			
 			return promise;
 		},
-		authorization: function (headers) {
-			var bearer = App.store.getBearer();
-			return bearer && (headers.Authorization = bearer) && headers;
-		},
-		runBuffer: function () {
-			var finalPromise;
-			var bufferEle;
-			var promise;
-			for(var i = 0, len = this.buffer.length; i < len; i++) {
-				bufferEle = this.buffer[i];
-				promise = bufferEle.method.apply(this, this.buffer[i].args);
-				finalPromise = i ? promise : finalPromise.then(promise);
-				this.buffer.shift();
-			}
-			return finalPromise;
+		authorization: function () {
+			return {
+				Authorization: App.store.getBearer()
+			};
 		},
 		ajax: function (options) {
 			var url = options.url;
 			var data = options.data;
 			var method = options.type.toLowerCase();
 			//var headers = options.auth ? this.authorization() : {};
-			var headers = {};
-			headers = this.authorization(headers);
+			var headers = this.authorization();
+			(headers['Authorization'] == null) && (headers = {});
 			var contentType = options.contentType;
 			if(options.dataType != null) {
 				headers.dataType = options.dataType;
 			}
 			var cbError = options.error;
 			var cbSuccess = options.success;
-			if(method === 'patch') {
-				method = 'put';
-			}
-			if(options.storeBuffer) {
-				this.buffer.push({
-					method: this[method],
-					args: [url, headers, contentType, data, cbError, cbSuccess]
-				});
-			}
-			var promise;
-			if(options.runBuffer && this.buffer.length) {
-				promise = this.runBuffer();
-				promise.then(this[method](url, headers, contentType, data, cbError, cbSuccess) || cbError());
-			}
-			else {
-				promise = this[method](url, headers, contentType, data, cbError, cbSuccess) || cbError();
-			}
-			return promise;
+			if(method=="patch")
+				method = "put";
+			return this[method](url, headers, contentType, data, cbError, cbSuccess) || cbError();
 		},
 		constructor: function (options) {
 			$.extend(this, options);
