@@ -140,7 +140,7 @@ define(["../model/Model"], function(Model){
 				if(model[attr] != null){
 					inputs.prop('checked', model[attr]);
 				}
-				this.listenTo(model, 'change:'+attr, function(){
+				this.listenTo(model, 'change:'+attr, function(evt){
 					inputs.prop('checked', model[attr]);
 				});
 			}
