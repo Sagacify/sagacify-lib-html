@@ -35,7 +35,7 @@ define([], function () {
 		getBearer: function () {
 			var id;
 			var token;
-			if(id = this.get('id')) && (token = this.get('token')) {
+			if((id = this.get('id')) && (token = this.get('token'))) {
 				return 'bearer ' + id + '|' + token;
 			}
 			return null;

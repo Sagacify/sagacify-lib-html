@@ -1,7 +1,8 @@
 define([
 	'./native/native',
 	'./marionette/marionette',
-	'./jquery/jquery'
+	'./jquery/jquery',
+	'./moment/moment'
 ], function (){
 
 });
