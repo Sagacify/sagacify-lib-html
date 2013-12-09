@@ -15,7 +15,12 @@ String.prototype.base64Sanitize = function(base64) {
 };
 
 String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
+	var capitalized = "";
+	var split = this.split('.');
+	split.forEach(function(part){
+		capitalized += part.charAt(0).toUpperCase()+part.slice(1);
+	});
+    return capitalized;
 };
 
 String.prototype.inject = function(occurences){
