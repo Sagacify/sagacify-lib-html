@@ -80,8 +80,6 @@ define([
 			}
 
 			this.geocoder.geocode(parameters, function (results, status) {
-				console.log(results);
-				console.log(status);
 				me.handleResponse(results, status, callback);
 			});
 		};
