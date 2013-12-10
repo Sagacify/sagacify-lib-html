@@ -22,6 +22,7 @@ define([
 			this.inherited(arguments);
 			on(this.closeNode, selectEvent, function(evt){
 				evt.preventDefault();
+				evt.stopPropagation();
 			});
 		}
 		

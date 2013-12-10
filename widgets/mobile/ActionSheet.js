@@ -7,8 +7,9 @@ define([
 	'saga/widgets/mobile/Button', 
 	'dojo/dom-construct', 
 	'dojo/dom-class', 
-	'dojo/_base/connect'], 
-	function(declare, config, _Widget, View, on, Button, domConstruct, domClass, connect) {
+	'dojo/_base/connect',
+	'dojo/has'], 
+	function(declare, config, _Widget, View, on, Button, domConstruct, domClass, connect, has) {
 	
 	return declare('saga.ActionSheet', [_Widget, View], {
 		
@@ -103,12 +104,17 @@ define([
 		},
 		
 		dismissActionSheet: function() {
-			this.performTransition(null, -1, "revealv", null);
+			if(has('android')){
+				this.destroy();
+			}
+			else{
+				this.performTransition(null, -1, "revealv", null);
 			
-			var me = this;
-			this.on("afterTransitionOut", function(){
-				me.destroy();
-			});	
+				var me = this;
+				this.on("afterTransitionOut", function(){
+					me.destroy();
+				});	
+			}
 		},
 		
 		destroy: function() {

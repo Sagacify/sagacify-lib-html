@@ -37,8 +37,8 @@ define([
 			this.width = width;
 			this.domNode.style.width = width+"px";
 			this.spinner.el.style.left = (width/2-45)+"px";
+			this.spinner.el.style.width = "40px";
 			this.labelNode.style.left = (width/2-20)+"px";
-			
 			this.specialLabelNode.style.left = "20px";
 			this.specialLabelNode.style.width = (width-40)+"px";
 		},
