@@ -2,8 +2,6 @@ define([], function () {
 
 	return {
 
-		loggedIn: false,
-
 		rememberMe: true, // should be false but true is more convenient in dev.
 
 		getStore: function () {
