@@ -34,18 +34,18 @@ $.fn.sgCrop = function(canvas){
 	canvas = canvas[0]||canvas;
 	var context = canvas.getContext("2d");
 
-    var ratioX = this.actualImgWidth/this.width();
-    var ratioY = this.actualImgHeight/this.height();
-    
-    var x = this.jcrop_api.ui.selection.position().left;
-    var y = this.jcrop_api.ui.selection.position().top;
-    var width = this.jcrop_api.ui.selection.width();
-    var height = this.jcrop_api.ui.selection.height();
+	var ratioX = this.actualImgWidth/this.width();
+	var ratioY = this.actualImgHeight/this.height();
+	
+	var x = this.jcrop_api.ui.selection.position().left;
+	var y = this.jcrop_api.ui.selection.position().top;
+	var width = this.jcrop_api.ui.selection.width();
+	var height = this.jcrop_api.ui.selection.height();
 
-    context.drawImage(this[0], x*ratioX, y*ratioY, width*ratioX, height*ratioY, 0, 0, $(canvas).width(), $(canvas).height());
-    var base64 = canvas.toDataURL();
-    if(generatedCanvas){
-    	canvas.remove();
-    }
-    return base64;
+	context.drawImage(this[0], x*ratioX, y*ratioY, width*ratioX, height*ratioY, 0, 0, $(canvas).width(), $(canvas).height());
+	var base64 = canvas.toDataURL();
+	if(generatedCanvas){
+		canvas.remove();
+	}
+	return base64;
 };

@@ -47,11 +47,14 @@ define([
 				method = method_list[i];
 				if(is.String(method)) {
 					valid = !this[method] || this[method](obj);
+					// For development only, in case we forgot a method
+					if(!this[method]) console.error('Missing format validation method ' + method + '() !');
 				}
 				else if(is.Object(method)) {
 					validation_method = Object.keys(method)[0];
 					validation_args = [obj].concat(method[validation_method]);
-					valid = this[validation_method].apply(this, validation_args);
+					valid = !this[validation_method] || this[validation_method].apply(this, validation_args);
+					if(!this[validation_method]) console.error('Missing format validation method ' + method + '() !');
 				}
 				else {
 					valid = false;
