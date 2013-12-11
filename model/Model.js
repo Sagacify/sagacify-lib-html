@@ -209,8 +209,12 @@ define([
 			};
 
 			var properties = {id: {get:get("_id")}};
+			var me = this;
 
 			this.schema.tree.keys().forEach(function(key){
+				if(key in me)
+					key = "_"+key;
+				console.log(key)
 				properties[key] = {get: get(key), set:set(key)};
 				if(key.contains(".")){
 					var attr = key.split(".")[0];
@@ -219,6 +223,8 @@ define([
 			});
 
 			this.schema.virtuals.keys().forEach(function(key){
+				if(key in me)
+					key = "_"+key;
 				properties[key] = {get: get(key), set:set(key)};
 				if(key.contains(".")){
 					var attr = key.split(".")[0];
@@ -227,6 +233,8 @@ define([
 			});
 
 			this.schema.actions.keys().forEach(function(key){
+				if(key in me)
+					key = "_"+key;
 				properties[key] = {get: getAction(key)};
 			});
 

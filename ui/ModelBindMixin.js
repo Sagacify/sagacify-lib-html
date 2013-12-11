@@ -75,7 +75,7 @@ define(["../model/Model"], function(Model){
 				model[attr] = $(this).attr('src');
 			});
 
-			if(typeof model[attr] == "string"){
+			if(!model[attr] || typeof model[attr] == "string"){
 				imgs.attr('src', model[attr]);
 			}
 			this.listenTo(model, 'change:'+attr, function(model){
