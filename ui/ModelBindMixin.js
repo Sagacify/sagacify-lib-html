@@ -78,8 +78,16 @@ define(["../model/Model"], function(Model){
 			if(typeof model[attr] == "string"){
 				imgs.attr('src', model[attr]);
 			}
+			else if(!model[attr]){
+				imgs.attr('src', img.prop('default'));
+			}
 			this.listenTo(model, 'change:'+attr, function(model){
-				imgs.attr('src', model[attr]);
+				if(typeof model[attr] == "string"){
+					imgs.attr('src', model[attr]);
+				}
+				else if(!model[attr]){
+					imgs.attr('src', img.prop('default'));
+				}
 			});
 		},
 

@@ -1,5 +1,5 @@
 $.fn.sgRenderImage = function(img){
-	if(this.is('input') && (this.attr('type') !== 'file')) {
+	if(this.is('input') && (this.attr('type') == 'file')) {
 		this.change(function (evt) {
 			if(this.files && this.files[0]) {
 				var fr = new FileReader();
