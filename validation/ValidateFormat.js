@@ -137,7 +137,7 @@ define([
 		},
 
 		isBelgianVat: function (str) {
-			return !!str.match(/^BE0[0-9]{9}$/i);
+			return !!str.match(/^BE0[0-9]{3}\.[0-9]{3}\.[0-9]{3}$/i);
 		},
 
 		isPhoneNumber: function (str) {
