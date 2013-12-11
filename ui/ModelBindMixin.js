@@ -106,7 +106,7 @@ define(["../model/Model"], function(Model){
 			});
 
 			//if(this[attr] != null){
-				if(inputs.data('_inputmask')){
+				if(inputs.data('_inputmask') && inputs.data('_inputmask').opts.mask == "d/m/y"){
 					var dateString = "";
 					if(model[attr]){
 						dateString = moment(model[attr]).format('DD/MM/YYYY');
@@ -123,7 +123,7 @@ define(["../model/Model"], function(Model){
 						inputs.val(me.attrToEl(fullAttr, model[attr].toLocaleString().split(" ")[0], inputs));
 					}
 				}
-				else if(inputs.data('_inputmask')){
+				else if(inputs.data('_inputmask') && inputs.data('_inputmask').opts.mask == "d/m/y"){
 					var dateString = "";
 					if(model[attr] instanceof Date){
 						if(!model[attr].getTime()){
