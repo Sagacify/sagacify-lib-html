@@ -214,7 +214,6 @@ define([
 			this.schema.tree.keys().forEach(function(key){
 				if(key in me)
 					key = "_"+key;
-				console.log(key)
 				properties[key] = {get: get(key), set:set(key)};
 				if(key.contains(".")){
 					var attr = key.split(".")[0];
