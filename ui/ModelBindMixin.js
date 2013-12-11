@@ -100,6 +100,9 @@ define(["../model/Model"], function(Model){
 				if($(this).hasClass('picker__input') && this.value.length > 2 && this.value[2]==':'){
 					model[attr] = me.attrToModel(fullAttr, $(this).pickatime('picker').get('highlight', 'HH:i'), $(this));
 				}
+				else if(inputs.data('_inputmask') && inputs.data('_inputmask').opts.mask == "d/m/y"){
+					model[attr] = me.attrToModel(fullAttr, moment(this.value, 'DD/MM/YYYY').toDate(), $(this));
+				}
 				else{
 					model[attr] = me.attrToModel(fullAttr, this.value, $(this));
 				}
