@@ -116,21 +116,35 @@ define([
 		};
 
 		this.map = new google.maps.Map(mapNode, {
-			zoom				:	this.zoom,
-			center				:	this.center(),
-			mapTypeId			:	google.maps.MapTypeId.ROADMAP,
-			scrollwheel			:	false,
-			zoomControl			:	true,
-			scaleControl		:	false,
-			mapTypeControl		:	true,
-			panControl			:	false,
-			zoomControlOptions	:	{
-				style			:	google.maps.ZoomControlStyle.SMALL,
-				position		:	google.maps.ControlPosition.LEFT_BOTTOM
-			},
-			mapTypeControlOptions:	{
-				position		:	google.maps.ControlPosition.RIGHT_BOTTOM
-			}
+			zoom						:	this.zoom,
+			center						:	this.center(),
+			mapTypeId					:	google.maps.MapTypeId.ROADMAP,
+			scrollwheel					:	false,
+			scaleControl				:	true,
+			// scaleControlOptions			:	{
+			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			// },
+			panControl					:	true,
+			// panControlOptions			:	{
+			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			// },
+			zoomControl					:	true,
+			// zoomControlOptions			:	{
+			// 	style					:	google.maps.ZoomControlStyle.SMALL,
+			// 	position				:	google.maps.ControlPosition.LEFT_BOTTOM
+			// },
+			mapTypeControl				:	false,
+			// mapTypeControlOptions		:	{
+			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			// },
+			streetViewControl			:	false,
+			// streetViewControlOptions	:	{
+			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			// },
+			overviewMapControl			:	true,
+			// overviewMapControlOptions	:	{
+			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			// },
 		});
 
 	};

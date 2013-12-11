@@ -2,10 +2,6 @@ define([], function (is) {
 
 	return {
 
-		MongooseDocument: function() {
-			return exports.isObject(obj) && ('_id' in obj);
-		},
-
 		Object: function (obj) {
 			return Object.prototype.toString.call(obj) === '[object Object]';
 		},
@@ -18,16 +14,20 @@ define([], function (is) {
 			return Object.prototype.toString.call(obj) === '[object String]';
 		},
 
+		DateString: function (obj) {
+			return this.String(obj) && obj.match(/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}T[0-9]{2}\:[0-9]{2}\:[0-9]{2}\.[0-9]{3}Z$/);
+		},
+
 		Function: function (obj) {
 			return Object.prototype.toString.call(obj) === '[object Function]';
 		},
 
 		Date: function (obj) {
-			return Object.prototype.toString.call(obj) === '[object Date]';
+			return (Object.prototype.toString.call(obj) === '[object Date]') && !isNaN(obj.getTime());
 		},
 
 		Number: function (obj) {
-			return Object.prototype.toString.call(obj) === '[object Number]';
+			return (Object.prototype.toString.call(obj) === '[object Number]') && !isNaN(obj);
 		},
 
 		NotNull: function (obj) {

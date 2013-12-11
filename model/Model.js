@@ -380,12 +380,18 @@ define([
 			if(url && App.server_routes[method][url] && App.server_routes[method][url].validation && App.server_routes[method][url].validation[pathAttr]) {
 				return {
 					success: ValidateFormat.validate(
+								attr,
 								this[attr],
 								App.server_routes[method][url].validation[pathAttr] || []
 							)
 				};
 			}
-			return {success:true};
+			else {
+				return {
+					success:
+					true
+				};
+			}
 		},
 
 		//bind this to els
