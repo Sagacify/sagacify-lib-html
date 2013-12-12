@@ -199,7 +199,7 @@ define(["../model/Model"], function(Model){
 		},
 
 		validClass: function(attr){
-			return 'valid';
+			return 'valide';
 		},
 
 		errorClass: function(attr){
