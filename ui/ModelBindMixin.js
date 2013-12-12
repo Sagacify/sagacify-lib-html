@@ -230,10 +230,10 @@ define(["../model/Model"], function(Model){
 
 		bindValidation: function(els, model, attr){
 			var me = this;
-			this.model.on('change:'+attr, function(model){
-				var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
-				var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
-				if(this.sgValidate(attr).success){
+			var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
+			var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
+			this.listenTo(model, 'change:'+attr, function(){
+				if(model.sgValidate(attr).success){
 					els.removeClass(errorClass);
 					els.addClass(validClass);
 				}
