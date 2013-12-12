@@ -351,10 +351,6 @@ define([
 			return {instance:instance, path:path};
 		},
 
-		sgValidate: function(attrs){
-
-		},
-
 		sgValidate: function(attr){
 			if(!attr){
 				for(var attr in this.treeVirtuals()){
