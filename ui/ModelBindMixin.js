@@ -100,19 +100,41 @@ define(["../model/Model"], function(Model){
 				if($(this).hasClass('picker__input') && this.value.length > 2 && this.value[2]==':'){
 					model[attr] = me.attrToModel(fullAttr, $(this).pickatime('picker').get('highlight', 'HH:i'), $(this));
 				}
+				else if(inputs.data('_inputmask') && inputs.data('_inputmask').opts.mask == "d/m/y"){
+					model[attr] = me.attrToModel(fullAttr, moment(this.value, 'DD/MM/YYYY').toDate(), $(this));
+				}
 				else{
 					model[attr] = me.attrToModel(fullAttr, this.value, $(this));
 				}
 			});
 
 			//if(this[attr] != null){
-				inputs.val(this.attrToEl(fullAttr, model[attr]||"", inputs));
+				if(inputs.data('_inputmask') && inputs.data('_inputmask').opts.mask == "d/m/y"){
+					var dateString = "";
+					if(model[attr]){
+						dateString = moment(model[attr]).format('DD/MM/YYYY');
+					}
+					inputs.val(me.attrToEl(fullAttr, dateString, inputs));
+				}
+				else{
+					inputs.val(this.attrToEl(fullAttr, model[attr]||"", inputs));
+				}
 			//}
 			this.listenTo(model, 'change:'+attr, function(){
 				if(inputs.hasClass('picker__input')){
 					if(model[attr] instanceof Date){
 						inputs.val(me.attrToEl(fullAttr, model[attr].toLocaleString().split(" ")[0], inputs));
 					}
+				}
+				else if(inputs.data('_inputmask') && inputs.data('_inputmask').opts.mask == "d/m/y"){
+					var dateString = "";
+					if(model[attr] instanceof Date){
+						if(!model[attr].getTime()){
+							return;
+						}
+						dateString = moment(model[attr]).format('DD/MM/YYYY');
+					}
+					inputs.val(me.attrToEl(fullAttr, dateString, inputs));
 				}
 				else{
 					inputs.val(me.attrToEl(fullAttr, model[attr], inputs));
@@ -208,10 +230,10 @@ define(["../model/Model"], function(Model){
 
 		bindValidation: function(els, model, attr){
 			var me = this;
-			this.model.on('change:'+attr, function(model){
-				var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
-				var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
-				if(this.sgValidate(attr).success){
+			var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
+			var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
+			this.listenTo(model, 'change:'+attr, function(){
+				if(model.sgValidate(attr).success){
 					els.removeClass(errorClass);
 					els.addClass(validClass);
 				}

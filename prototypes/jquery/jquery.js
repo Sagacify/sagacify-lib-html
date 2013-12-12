@@ -1,5 +1,4 @@
 define([
-	'./HideShow',
 	'./Image',
 	'./Input',
 	'./Link'

@@ -121,18 +121,18 @@ define([
 			mapTypeId					:	google.maps.MapTypeId.ROADMAP,
 			scrollwheel					:	false,
 			scaleControl				:	true,
-			// scaleControlOptions			:	{
-			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
-			// },
+			scaleControlOptions			:	{
+				position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			},
 			panControl					:	true,
 			// panControlOptions			:	{
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
 			// },
 			zoomControl					:	true,
-			// zoomControlOptions			:	{
-			// 	style					:	google.maps.ZoomControlStyle.SMALL,
-			// 	position				:	google.maps.ControlPosition.LEFT_BOTTOM
-			// },
+			zoomControlOptions			:	{
+				style					:	google.maps.ZoomControlStyle.SMALL,
+				position				:	google.maps.ControlPosition.LEFT_BOTTOM
+			},
 			mapTypeControl				:	false,
 			// mapTypeControlOptions		:	{
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
