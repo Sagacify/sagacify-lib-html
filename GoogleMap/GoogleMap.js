@@ -120,11 +120,11 @@ define([
 			center						:	this.center(),
 			mapTypeId					:	google.maps.MapTypeId.ROADMAP,
 			scrollwheel					:	false,
-			scaleControl				:	true,
-			scaleControlOptions			:	{
-				position				:	google.maps.ControlPosition.RIGHT_BOTTOM
-			},
-			panControl					:	true,
+			scaleControl				:	false,
+			// scaleControlOptions			:	{
+			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			// },
+			panControl					:	false,
 			// panControlOptions			:	{
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
 			// },
@@ -133,17 +133,17 @@ define([
 				style					:	google.maps.ZoomControlStyle.SMALL,
 				position				:	google.maps.ControlPosition.LEFT_BOTTOM
 			},
-			mapTypeControl				:	false,
-			// mapTypeControlOptions		:	{
-			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
-			// },
+			mapTypeControl				:	true,
+			mapTypeControlOptions		:	{
+				position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			},
 			streetViewControl			:	false,
 			// streetViewControlOptions	:	{
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
 			// },
 			overviewMapControl			:	true,
 			// overviewMapControlOptions	:	{
-			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
+			// 	position				:	google.maps.ControlPosition.LEFT_BOTTOM
 			// },
 		});
 
