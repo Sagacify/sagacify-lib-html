@@ -352,6 +352,13 @@ define([
 		},
 
 		sgValidate: function(attr){
+			if(is.Array(attr)){
+				var success = true;
+				attr.forEach(function(attr){
+					success &= this.sgValidate(attr).success;
+				});
+				return {success: success};
+			}
 			if(!attr){
 				for(var attr in this.treeVirtuals()){
 					var val = this.sgValidate(attr);
