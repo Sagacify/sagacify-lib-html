@@ -25,7 +25,7 @@ define([
 
 		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
 			keepOnRegionClose = true
-			childName = (childName == null) ? 'childView' : childName;
+			childName = (childName == null || childName === true) ? 'childView' : childName;
 
 			// if(region.currentView && region.currentView._keepOnRegionClose){
 			// 	delete region.currentView;
