@@ -75,19 +75,18 @@ define(["../model/Model"], function(Model){
 				model[attr] = $(this).attr('src');
 			});
 
-			if(typeof model[attr] == "string"){
-				imgs.attr('src', model[attr]);
+			var setImage = function(){
+				if(model[attr] instanceof Model){
+					imgs.attr('src', model[attr]._url||imgs.attr('default'));
+				}
+				else {
+					imgs.attr('src', model[attr]||imgs.attr('default'));
+				}
 			}
-			else if(!model[attr]){
-				imgs.attr('src', img.prop('default'));
-			}
+
+			setImage();
 			this.listenTo(model, 'change:'+attr, function(model){
-				if(typeof model[attr] == "string"){
-					imgs.attr('src', model[attr]);
-				}
-				else if(!model[attr]){
-					imgs.attr('src', img.prop('default'));
-				}
+				setImage();
 			});
 		},
 
