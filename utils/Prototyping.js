@@ -3,9 +3,10 @@ define([
 	'saga/utils/AvatarGeneration',
 	'dojo/dom-style', 
 	'dojo/date/locale',
+    'app/stores/ClientAdminStore',	
 	'dojo/on'	
 	],
-	function(declare, AvatarGeneration, domStyle, locale, on){
+	function(declare, AvatarGeneration, domStyle, locale, ClientAdminStore, on){
 		declare("Prototyping", null, {
 
 		});
@@ -73,6 +74,24 @@ define([
 				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
 			}
 
+			HTMLInputElement.prototype.autoCompletion = function(collectionName, handler){
+				var store =  new ClientAdminStore();
+				store.collectionName = collectionName;
+                var timer;
+                var me = this;
+                on(this, 'keydown', function(evt) {
+                    clearTimeout(timer);
+                    timer = setTimeout(function(){
+                    	if (!me.value) {
+                    		handler([]);
+                    		return;
+                    	};
+                        store.getSearchRessources(me.value, collectionName, 5).then(function(data){
+                        	handler(data);
+                        });
+                    },500);                    
+                });
+			}
 
 			HTMLInputElement.prototype.inputTimeCalendarOnChange = function(onChangeCallback){
 
