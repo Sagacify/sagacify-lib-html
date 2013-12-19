@@ -175,11 +175,11 @@ define(["../model/Model"], function(Model){
 			}
 		},
 
-		bindSelects: function(selects, model, attr, fullAttr){
+		bindSelects: function(selects, model, attr, fullAttr) {
 			if(selects.length) {
 				var me = this;
 				selects.on('change', function(){
-					model[attr] = this.options[this.selectedIndex].innerHTML;
+					model[attr] = this.options[this.selectedIndex].val();
 				});
 
 				if(model[attr] != null) {
@@ -192,8 +192,9 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindDefaultsEls: function(els, model, attr, fullAttr){
-			if(!els.length)
+			if(!els.length) {
 				return;
+			}
 			if(model[attr] != null)
 				els.html(this.attrToEl(fullAttr, model[attr]||"", els));
 
