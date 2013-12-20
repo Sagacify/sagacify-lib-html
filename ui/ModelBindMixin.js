@@ -179,7 +179,7 @@ define(["../model/Model"], function(Model){
 			if(selects.length) {
 				var me = this;
 				selects.on('change', function(){
-					model[attr] = this.options[this.selectedIndex].val();
+					model[attr] = $(this.options[this.selectedIndex]).val();
 				});
 
 				if(model[attr] != null) {
