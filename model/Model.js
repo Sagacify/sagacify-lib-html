@@ -106,7 +106,7 @@ define([
 					//handle as primitive
 					else{
 						if(schemaElement.type == "Date"){
-							raw = Date.create(raw);
+							raw = new Date(raw);
 						}
 						// take trace of initial attributes for revert
 						if(me.schema.tree[attribute] && !(attribute in me._originalAttributes)){
