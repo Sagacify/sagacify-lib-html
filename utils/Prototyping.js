@@ -44,35 +44,124 @@ define([
 			}
 
 			HTMLInputElement.prototype.inputDateCalendarOnChange = function(onChangeCallback){
+				this.setWithDateMask();
+				if (onChangeCallback) {
+					$(this).change(onChangeCallback);
+				};
 
-				// this.inputDateCalendarSetDate(date);
-				this.dateFormatingPicker = 'dd/mm/yyyy';
+				
+
+				// $(this).inputmask('dd/mm/yyyy');
+
+				// var me = this;
+				// on(this, 'blur', function(evt){
+				// 	onChangeCallback(this.getDate());
+				// });
+
+				// // this.inputDateCalendarSetDate(date);
+				// this.dateFormatingPicker = 'dd/mm/yyyy';
 				this.dateFormatingDojo = 'dd/MM/yyyy';
 
-				var me = this;
-			    me.pickDate = $(this).pickadate({
-					weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
-					format:this.dateFormatingPicker,
-					formatSubmit: this.dateFormatingPicker,
-					// Buttons
-					today: 'Today',
-					clear: 'Clear',
-					showMonthsShort: true, 
-					onSet: function(){
-						if (onChangeCallback) {
-							onChangeCallback();	
-						};
-					}
-                });
+				// var me = this;
+			 //    me.pickDate = $(this).pickadate({
+				// 	weekdaysShort: [ 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ],
+				// 	format:this.dateFormatingPicker,
+				// 	formatSubmit: this.dateFormatingPicker,
+				// 	// Buttons
+				// 	today: 'Today',
+				// 	clear: 'Clear',
+				// 	showMonthsShort: true, 
+				// 	onSet: function(){
+				// 		if (onChangeCallback) {
+				// 			onChangeCallback();	
+				// 		};
+				// 	}
+    //             });
 			}
 
 			HTMLInputElement.prototype.inputDateCalendarSetDate = function(date){
-				this.savedDate = date;
-				this.isADateInput = true;
-				this.dateFormatingPicker = 'dd/mm/yyyy';
+				this.setDate(date);
+				// $(this).val(date);
+				// this.savedDate = date;
+				// this.isADateInput = true;
+				// this.dateFormatingPicker = 'dd/mm/yyyy';
 				this.dateFormatingDojo = 'dd/MM/yyyy';
-				$(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
+				// $(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
 			}
+
+
+
+			HTMLInputElement.prototype.inputTimeCalendarOnChange = function(onChangeCallback){
+				this.setWithTimeMask();
+
+				if (onChangeCallback) {
+					$(this).change(onChangeCallback);
+				};				
+
+				// $(this).inputmask("HH:mm");
+				// var me = this;
+				// on(this, 'change', function(evt){
+				// 	onChangeCallback(this.getDate());
+				// });
+
+				// this.dateFormatingPicker = 'HH:i';
+				this.dateFormatingDojo = "HH:mm";
+				
+				// var me = this;
+			 //    this.picker = $(this).pickatime({
+				// 	format:this.dateFormatingPicker,
+				// 	onSet: function(){
+				// 		if (onChangeCallback) {
+				// 			onChangeCallback()	
+				// 		};
+						
+				// 	}					
+    //             });
+			}
+
+			HTMLInputElement.prototype.inputTimeCalendarSetTime= function(date){
+				this.setDate(date);
+				// $(this).val(date);
+				// this.savedDate = date;
+				// this.dateFormatingPicker = 'HH:i';
+				this.dateFormatingDojo = "HH:mm";
+				// var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
+				// this.value = timeStr		
+			};
+
+			HTMLInputElement.prototype.setWithDateMask = function(){
+				this.setWithInputMask('dd/mm/yyyy');
+			}, 
+
+			HTMLInputElement.prototype.setWithTimeMask = function(){
+				this.setWithInputMask("hh:mm");
+			}, 
+
+			HTMLInputElement.prototype.setWithInputMask = function(mask, options){
+				$(this).inputmask(mask, options);
+			}, 
+
+
+			HTMLInputElement.prototype.getDate = function(){
+				// debugger
+				// $(this).val;
+				var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
+				if (!result) {
+					return new Date();
+				}
+				return result;
+			};
+
+			HTMLInputElement.prototype.setDate = function(date){
+				$(this).val(date);
+				// var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
+				// if (!result) {
+				// 	return new Date();
+				// }
+				// return result;
+			};
+
+
 
 			HTMLInputElement.prototype.autoCompletion = function(collectionName, handler){
 				var store =  new ClientAdminStore();
@@ -93,39 +182,6 @@ define([
                 });
 			}
 
-			HTMLInputElement.prototype.inputTimeCalendarOnChange = function(onChangeCallback){
-
-				// this.inputTimeCalendarSetTime(date);
-				this.dateFormatingPicker = 'HH:i';
-				this.dateFormatingDojo = "HH:mm";
-				
-				var me = this;
-			    this.picker = $(this).pickatime({
-					format:this.dateFormatingPicker,
-					onSet: function(){
-						if (onChangeCallback) {
-							onChangeCallback()	
-						};
-						
-					}					
-                });
-			}
-
-			HTMLInputElement.prototype.inputTimeCalendarSetTime= function(date){
-				this.savedDate = date;
-				this.dateFormatingPicker = 'HH:i';
-				this.dateFormatingDojo = "HH:mm";
-				var timeStr = dojo.date.locale.format(this.savedDate, {selector:"time", timePattern: this.dateFormatingDojo});
-				this.value = timeStr				
-			};
-
-			HTMLInputElement.prototype.getDate = function(){
-				var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
-				if (!result) {
-					return new Date();
-				}
-				return result;
-			};
 
 			HTMLTextAreaElement.prototype.fitSizeToText = function(minHeight){
 				minHeight = minHeight||0;
