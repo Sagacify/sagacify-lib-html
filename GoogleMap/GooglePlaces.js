@@ -46,7 +46,7 @@ define([
 
 		this.set_Location = function(loc){
 			this.selected_location = loc;
-		}
+		};
 
 		this.bind_Event = function (googleEvent, callback) {
 			var me = this;

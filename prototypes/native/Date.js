@@ -31,13 +31,15 @@ Date.prototype.inputFormat = function(){
     return this.getFullYear()+"-"+(month)+"-"+(day) ;
 };
 
-Date.create = function(date){
-	return new Date(date);
+Date.prototype.isInPast = function () {
+	var now = new Date().setHours(0,0,0,0);
+	var date = this.setHours(0,0,0,0);
+	return now > date;
 };
 
-sec = 1000;
-min = 60*sec;
-hour = 60*min;
-day = 24*hour;
-week = 7*day;
-year = 52*week;
+// sec = 1000;
+// min = 60*sec;
+// hour = 60*min;
+// day = 24*hour;
+// week = 7*day;
+// year = 52*week;

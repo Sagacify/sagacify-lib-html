@@ -106,7 +106,7 @@ define([
 					//handle as primitive
 					else{
 						if(schemaElement.type == "Date"){
-							raw = Date.create(raw);
+							raw = new Date(raw);
 						}
 						// take trace of initial attributes for revert
 						if(me.schema.tree[attribute] && !(attribute in me._originalAttributes)){
@@ -252,35 +252,6 @@ define([
 			return {instance:instance, path:path};
 		},
 
-		// defineAttrProperty: function(attr){
-		// 	var get = function(attr){
-		// 		return function(){
-		// 			return this.get(attr);
-		// 		};
-		// 	};
-
-		// 	var mget = function(attr){
-		// 		return function(){
-		// 			return this._mattributes[attr];
-		// 		};
-		// 	}
-
-		// 	var set = function(attr){
-		// 		return function(value){
-		// 			return this.set(attr, value);
-		// 		};
-		// 	};
-
-		// 	var properties = {};
-		// 	properties[attr] = {get: get(attr), set:set(attr)};
-		// 	if(attr.contains(".")){
-		// 		var splitAttr = attr.split(".")[0];
-		// 		properties[splitAttr] = {get: mget(splitAttr)};
-		// 	}
-
-		// 	Object.defineProperties(this, properties);
-		// },
-
 		handleMattributes: function(){
 			this._mattributes = {};
 			var me = this;
@@ -401,136 +372,6 @@ define([
 				};
 			}
 		},
-
-		//bind this to els
-		// bindToEls: function(els, attr){
-		// 	this.bindToImages(els.filter('img'), attr);
-		// 	this.bindToInputDates(els.filter(':input[type=date]'), attr);
-		// 	this.bindToInputCheckboxs(els.filter(':input[type=radio]'), attr);
-		// 	this.bindToSelects(els.filter('select'), attr);
-		// 	this.bindToInputs(els.filter(':input').not(':input[type=date], :input[type=radio],select'), attr);
-		// 	this.bindToDefaultsEls(els.not('img, :input'), attr);
-		// },
-
-		// bindToImages: function(imgs, attr){
-		// 	if(!imgs.length)
-		// 		return;
-		// 	var me = this;
-		// 	imgs.on('load', function(){
-		// 		me[attr] = $(this).attr('src');
-		// 	});
-
-		// 	if(typeof this[attr] == "string"){
-		// 		imgs.attr('src', this[attr]);
-		// 	}
-		// 	this.on('change:'+attr, function(model){
-		// 		imgs.attr('src', this[attr]);
-		// 	});
-		// },
-
-		// bindToInputs: function(inputs, attr){
-		// 	if(!inputs.length)
-		// 		return;
-		// 	var me = this;
-		// 	inputs.change(function(){
-		// 		if($(this).hasClass('picker__input') && this.value.length > 2 && this.value[2]==':'){
-		// 			me[attr] = $(this).pickatime('picker').get('highlight', 'HH:i');
-		// 		}
-		// 		else{
-		// 			me[attr] = this.value;
-		// 		}
-		// 	});
-
-		// 	//if(this[attr] != null){
-		// 		inputs.val(this[attr]||"");
-		// 	//}
-		// 	this.on('change:'+attr, function(){
-		// 		if(inputs.hasClass('picker__input')){
-		// 			if(this[attr] instanceof Date){
-		// 				inputs.val(this[attr].toLocaleString().split(" ")[0]);
-		// 			}
-		// 		}
-		// 		else{
-		// 			inputs.val(this[attr]);
-		// 		}
-		// 	});
-		// },
-
-		// bindToInputDates: function(inputDates, attr){
-		// 	if(!inputDates.length)
-		// 		return;
-		// 	var me = this;
-
-		// 	inputDates.on('blur', function(evt){
-		// 		me[attr] = new Date(this.value);
-		// 	});
-
-		// 	if(this[attr] && this[attr].getTime()){
-		// 		inputDates.val(this[attr].inputFormat());
-		// 	}
-		// 	this.on('change:'+attr, function(){
-		// 		if(this[attr].getTime())
-		// 			inputDates.val(this[attr].inputFormat());
-		// 	});
-		// },
-
-		// bindToInputCheckboxs: function(inputs, attr){
-		// 	if(inputs.length) {
-		// 		var me = this;
-		// 		$('input[name="'+inputs.prop('name')+'"]', inputs.parentsUntil().last()).change(function(evt){
-		// 			me[attr] = inputs.prop('checked');
-		// 		});
-
-		// 		if(this[attr] != null){
-		// 			inputs.prop('checked', this[attr]);
-		// 		}
-		// 		this.on('change:'+attr, function(){
-		// 			inputs.prop('checked', this[attr]);
-		// 		});
-		// 	}
-		// },
-
-		// bindToSelects: function(selects, attr){
-		// 	if(selects.length) {
-		// 		var me = this;
-		// 		selects.on('change', function(){
-		// 			me[attr] = this.options[this.selectedIndex].innerHTML;
-		// 		});
-
-		// 		if(this[attr] != null) {
-		// 			$('[value="'+this[attr]+'"]', selects).prop('selected', true);
-		// 		}
-		// 		this.on('change:'+attr, function(){
-		// 			$('[value="'+this[attr]+'"]', selects).prop('selected', true);
-		// 		});
-		// 	}
-		// },
-
-		// bindToDefaultsEls: function(els, attr){
-		// 	if(!els.length)
-		// 		return;
-
-		// 	if(this[attr] != null)
-		// 		els.html(this[attr]||"");
-
-		// 	this.on('change:'+attr, function(){
-		// 		if(this[attr] != null)
-		// 			els.html(this[attr]);
-		// 	});
-		// },
-
-		// bindValidationToEls: function(els, attr, validClass, errorClass){
-		// 	this.on('change:'+attr, function(model){
-		// 		if(this.sgValidate(attr).success){
-		// 			els.removeClass(errorClass);
-		// 			els.addClass(validClass);
-		// 		}
-		// 		else{
-		// 			els.removeClass(validClass);
-		// 			els.addClass(errorClass);
-		// 		}
-		// 	});
-		// },
 
 		fetch: function(attr, data, options){
 			if(is.String(attr)){

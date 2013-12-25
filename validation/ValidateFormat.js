@@ -129,7 +129,7 @@ define([
 		},
 
 		minDate: function (date, minDate) {
-			return date >= new Date(min);
+			return date >= new Date(minDate);
 		},
 
 		maxDate: function (date, maxDate) {
