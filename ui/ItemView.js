@@ -14,7 +14,13 @@ define([
 		render: function(options){
 			if(!this.template)
 				this.template = this.get_Template(options||this.model||this.data);
+
+			var elems = this.parseFirstElement();
+
 			Marionette.ItemView.prototype.render.apply(this, arguments);
+
+			this.reinjectFirstElement(elems);
+			
 			this.bindToModel();
 		},
 

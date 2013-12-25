@@ -31,7 +31,11 @@ define([
 		},
 
 		render: function(){
+			var elems = this.parseFirstElement();
+
 			Marionette.CollectionView.prototype.render.apply(this, arguments);
+
+			this.reinjectFirstElement(elems);
 		},
 
 		getCollection: function(){

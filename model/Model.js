@@ -145,6 +145,7 @@ define([
 				}
 			}
 			else if(args[0] && args[0].isObject()){
+				args[0] = args[0].clone();
 				if(args[0]._id){
 					this.set("_id", args[0]._id);
 					delete args[0]._id;
