@@ -25,6 +25,40 @@ define([], function(){
 
 		isRendered: function(){
 			return this._firstRenderDone;
+		},
+
+		parseFirstElement: function(){
+			if(!this.template)
+				return;
+
+			var inTag = this.template.split('<')[1].split('>')[0];
+			var elems = inTag.split(' ');
+			this.tagName = elems[0];
+			return elems;
+		},
+
+		reinjectFirstElement: function(elems){
+			if(!elems)
+				return;
+
+			var me = this;
+			elems.forEach(function(elem){
+				var splitElement = elem.split('=');
+				var key = splitElement[0];
+				var value = splitElement[1];
+				if(value){
+					value = value.substring(1, value.length-1);
+				}
+
+				switch(key){
+					case 'class':
+					me.$el.addClass(value);
+					break;
+					case 'style':
+					me.$el.css(value);
+					break;
+				}
+			});
 		}
 	}
 
