@@ -10,8 +10,31 @@ define([
 		declare("Prototyping", null, {
 
 		});
-		
+
+
+
 		Prototyping.setup = function(){
+
+			TranslationConvertor = function(obj){
+				if (!obj) {
+					return null;
+				};
+				if (obj instanceof String) {
+					return obj;
+				};
+				if (obj[DefaultLanguage]) {
+					return obj[DefaultLanguage];
+				};
+				if (obj['fr']) {
+					return obj['fr'];
+				};
+				for(var key in obj){
+					if (obj[key]) {
+						return obj[key];	
+					};
+				}
+			};
+
 			if(History){
 				History.openInTab = function(url){
 				  var win=window.open(url, '_blank');
