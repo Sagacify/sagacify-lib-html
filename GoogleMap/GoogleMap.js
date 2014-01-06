@@ -147,7 +147,7 @@ define([
 			// streetViewControlOptions	:	{
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
 			// },
-			overviewMapControl			:	true,
+			overviewMapControl			:	true
 			// overviewMapControlOptions	:	{
 			// 	position				:	google.maps.ControlPosition.LEFT_BOTTOM
 			// },
