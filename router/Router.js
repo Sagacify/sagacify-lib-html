@@ -86,6 +86,12 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			if(!args[1]) {
 				args[1] = {};
 			}
+			//check if args for route (:var)
+			for(key in args[1]){
+				if(args[0].contains(':'+key)){
+					args[0] = args[0].replace(':'+key, args[1][key]);
+				}
+			}
 			if(!('trigger' in args[1])) {
 				args[1].trigger = true;
 			}
