@@ -195,8 +195,9 @@ define(["../model/Model"], function(Model){
 			if(!els.length) {
 				return;
 			}
-			if(model[attr] != null)
-				els.html(this.attrToEl(fullAttr, model[attr]||"", els));
+			if(model[attr] != null){
+				els.html(this.attrToEl(fullAttr, model[attr], els));
+			}
 
 			this.listenTo(model, 'change:'+attr, function(){
 				if(model[attr] != null)
