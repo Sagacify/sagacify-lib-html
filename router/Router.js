@@ -10,19 +10,23 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			if(this.sagaRoutes){
 				this.handleSagaRoutes();
 			}
+			var me = this;
+			this.on('route', function(route, args){
+				me.lastRoute = {route: route, args:args};
+			});
 		},
 
 		handleSagaRoutes: function(){
 			for(var route in this.sagaRoutes) {
 				var specRoute = this.sagaRoutes[route];
+				var alias = "";
 				if(route.contains(" \@ ")){
 					var splitRoute = route.split(" \@ ");
-					var alias = splitRoute[0];
+					alias = splitRoute[0];
 					route = splitRoute[1];
 					this.aliases[alias] = route;
 				}
-
-				this.route(route, "sagaRoute", this.handleSagaRoute(route, specRoute));
+				this.route(route, alias||route, this.handleSagaRoute(route, specRoute));
 			}
 			// for(var route in this.sagaRoutes.auth){
 			// 	this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.auth[route], true));
