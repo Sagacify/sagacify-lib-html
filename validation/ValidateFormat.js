@@ -17,18 +17,19 @@ define([
 				var expected_Type;
 				var has_ValidType = true;
 				if(ele_config[0] in is) {
-					var expected_Type = expected_methods.splice(0, 1)[0];
-					var has_ValidType = this.validate_Type(ele, expected_Type);
+					expected_Type = expected_methods.splice(0, 1)[0];
+					has_ValidType = this.validate_Type(ele, expected_Type);
 				}
 				if(is.Array(expected_methods)) {
 					var has_ValidFormat = this.validate_Format(attr, ele, expected_methods);
 					return !!(has_ValidType && has_ValidFormat);
 				}
-				else{
+				else {
 					return false;
 				}
 			}
 			else {
+				App.alert($.t('DATA_VALIDATION.missing'));
 				return false;
 			}
 		},
@@ -59,12 +60,14 @@ define([
 						}));
 					}
 					// For development only, in case we forgot a method
+					/* START */
 					if(!(Object.prototype.toString.call(valid) === '[object Boolean]')) {
 						console.error('Format validation result for ' + method + ' is not a Boolean.');
 						console.error(valid);
 					}
 					if((method in this) && (valid !== true)) console.error('Failling ' + method + '() !');
 					if(!(method in this)) console.error('[1] - Missing format validation method ' + method + '() !');
+					/* END */
 				}
 				else if(is.Object(method)) {
 					validation_method = Object.keys(method)[0];
@@ -77,18 +80,19 @@ define([
 						}));
 					}
 					// For development only, in case we forgot a method
+					/* START */
 					if(!(Object.prototype.toString.call(valid) === '[object Boolean]')) {
 						console.error('Format validation result for ' + validation_method + ' is not a Boolean.');
 						console.error(valid);
 					}
 					if((validation_method in this) && (valid !== true)) console.error('Failling ' + validation_method + '() !');
 					if(!(validation_method in this)) console.error('[2] - Missing format validation method ' + validation_method + '() !');
+					/* END */
 				}
 				else {
 					valid = false;
 				}
 				if(valid !== true) {
-					valid = false;
 					break;
 				}
 			}
