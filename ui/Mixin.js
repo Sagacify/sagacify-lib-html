@@ -55,7 +55,12 @@ define([], function(){
 					me.$el.addClass(value);
 					break;
 					case 'style':
-					me.$el.css(value);
+					value.split(';').forEach(function(keyval){
+						var splitKeyval = keyval.split(':');
+						me.$el.css(splitKeyval[0], splitKeyval[1]);
+					});
+					default:
+					me.$el.attr(key, value);
 					break;
 				}
 			});
