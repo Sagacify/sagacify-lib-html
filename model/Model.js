@@ -116,7 +116,7 @@ define([
 					}
 				}
 				else{
-					//if the attribute is the first part of a composed attribute and the server has send the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
+					//if the attribute is the first part of a composed attribute and the server has sent the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
 					if(is.Object(raw)){
 						for(var key in raw){
 							me.set(attribute+"."+key, raw[key]);

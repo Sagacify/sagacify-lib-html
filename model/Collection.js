@@ -47,7 +47,7 @@ define([
 				return Backbone.Collection.prototype.get.apply(this, arguments);
 			}
 			var url = this.url instanceof Function?this.url():this.url;
-			if(this.schema.virtuals[id]) {
+			if(this.schema && this.schema.virtuals[id]) {
 				if(!this._virtuals[id]) {
 					if(this.schema.virtuals[id] instanceof Array) {
 						var model = App.models[this.schema.virtuals[id][0].type+"Model"].extend({urlRoot:url+'/'+id});
