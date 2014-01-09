@@ -11,3 +11,7 @@ $.fn.sgRenderImage = function(img){
 		});
 	}
 };
+
+$.fn.valChange = function(val){
+	return $(this).val(val).change();
+};
