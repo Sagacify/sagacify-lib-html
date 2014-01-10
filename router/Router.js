@@ -10,10 +10,11 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			if(this.sagaRoutes){
 				this.handleSagaRoutes();
 			}
-			var me = this;
-			this.on('route', function(route, args){
-				me.lastRoute = {route: route, args:args};
-			});
+			// var me = this;
+			// this.on('route', function(route, args){
+			// 	debugger
+			// 	me.lastRoute = {route: route, args:args};
+			// });
 		},
 
 		handleSagaRoutes: function(){
@@ -26,28 +27,19 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 					route = splitRoute[1];
 					this.aliases[alias] = route;
 				}
-				this.route(route, alias||route, this.handleSagaRoute(route, specRoute));
+				this.route(route, alias||route, this.handleSagaRoute(alias, route, specRoute));
 			}
-			// for(var route in this.sagaRoutes.auth){
-			// 	this.route(route, "sagaRoute", this.handleSagaRoute(route, this.sagaRoutes.auth[route], true));
-			// }
 		},
 
-		handleSagaRoute: function(route, funs, auth){
+		handleSagaRoute: function(alias, route, funs){
 			if(!(funs instanceof Array)){
 				funs = [funs];
 			}
 
 			var me = this;
 			return function () {
-				if(auth){
-					if(!me.isAuth()){
-						me.authFailed();
-						return;
-					}
-				}
-
 				var args = Array.apply(null, arguments);
+				me.lastRoute = {alias: alias, route:route, args:args};
 				var routeLayout = function(layout, fun){
 					var fun_name;
 					var fun_staticArgs;
@@ -72,7 +64,6 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 						throw new Error("Route " + route + " not followable.");
 					}
 				};
-
 				var layout = App.layout;
 				funs.forEach(function(fun){
 					if(typeof layout.willShowChild == "function"){
