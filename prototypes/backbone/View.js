@@ -31,3 +31,18 @@ Backbone.View.prototype.stopListening = function(obj, name, callback){
 		return _stopListening.apply(this, arguments);
 	}
 };
+
+
+Backbone.View.prototype.appendChild = function(childView, container){
+	if (!childView.$el) {
+		return;
+	};
+
+	container.append(childView.$el);
+	if (!childView.onShow) {
+		return;
+	};
+	this.on('show', function(evt){
+		childView.onShow();
+	});
+};
