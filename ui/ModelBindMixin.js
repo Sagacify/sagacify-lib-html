@@ -72,7 +72,9 @@ define(["../model/Model"], function(Model){
 			if(!imgs.length)
 				return;
 			imgs.on('load', function(){
-				model[attr] = $(this).attr('src');
+				var src = $(this).attr('src');
+				if(src != imgs.attr('default'))
+					model[attr] = src;
 			});
 
 			var setImage = function(){

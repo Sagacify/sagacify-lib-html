@@ -27,6 +27,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 					route = splitRoute[1];
 					this.aliases[alias] = route;
 				}
+				console.log(route)
 				this.route(route, alias||route, this.handleSagaRoute(alias, route, specRoute));
 			}
 		},

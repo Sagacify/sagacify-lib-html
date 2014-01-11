@@ -5,3 +5,9 @@
 // 		casing: "upper" //auto uppercasing
 // 	},
 // });
+
+if($.inputmask){
+	$.extend($.inputmask.defaults.aliases, {
+
+	});
+}
