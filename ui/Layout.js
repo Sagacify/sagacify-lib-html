@@ -31,7 +31,7 @@ define([
 
 		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
 			keepOnRegionClose = true
-			childName = (childName == null || childName === true) ? 'childView' : childName;
+			childName = (/*childName == null ||*/ childName === true) ? 'childView' : childName;
 
 			// if(region.currentView && region.currentView._keepOnRegionClose){
 			// 	delete region.currentView;
@@ -60,6 +60,7 @@ define([
 				// 	this[childName].render = render;
 				// }
 				// else{
+					console.log('bouh', this[childName].cid)
 					region.showOnRender(this, this[childName]);
 				//}
 				return this[childName];
