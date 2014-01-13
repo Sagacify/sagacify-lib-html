@@ -100,7 +100,11 @@ obj_proto.setHidden = function(path, val){
 	});
 };
 
+obj_proto.isEmpty = function(){
+	return this.keys().length == 0;
+};
+
 
 for(var key in obj_proto){
-	Object.defineProperty(Object.prototype, key, {value: obj_proto[key]});
+	Object.defineProperty(Object.prototype, key, {writable: true, value: obj_proto[key]});
 }

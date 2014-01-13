@@ -25,18 +25,14 @@ define([
 			this.bindToModel();
 		},
 
-		getModel: function(){
-			return null;
-		},
-
 		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
-			keepOnRegionClose = true
+			//keepOnRegionClose = true
 			childName = (/*childName == null ||*/ childName === true) ? 'childView' : childName;
 
 			// if(region.currentView && region.currentView._keepOnRegionClose){
 			// 	delete region.currentView;
 			// }
-
+			console.log(childName)
 			if(!childName || !(this[childName] instanceof childClass)) {
 				var view = new childClass(childArgs||{});
 				// if(keepOnRegionClose){
@@ -46,6 +42,9 @@ define([
 
 				if(childName){
 					this[childName] = view;
+				}
+				else{
+					this[childName] = null;
 				}
 
 				region.showOnRender(this, view);

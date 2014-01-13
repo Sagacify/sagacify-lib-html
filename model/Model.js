@@ -279,7 +279,18 @@ define([
 			childToJSON = function(parent){
 				for(var attr in parent){
 					if(parent[attr] && typeof parent[attr].toJSON == "function"){
-						parent[attr] = parent[attr].toJSON(notmpath);
+						var val = parent[attr].toJSON(notmpath);
+						if(parent[attr] instanceof SagaModel){
+							if(val && !val.isEmpty()){
+								parent[attr] = val;
+							}
+							else{
+								delete parent[attr];
+							}
+						}
+						else{
+							parent[attr] = val;
+						}
 					}
 					else if(is.Object(parent[attr])||is.Array(parent[attr])){
 						childToJSON(parent[attr]);
@@ -412,6 +423,14 @@ define([
 				return Backbone.Model.prototype.save.apply(this, arguments);
 			}
 		}
+
+		// changedAttributes: function(){
+		// 	var changedAttributes = Backbone.Model.prototype.changedAttributes(this, arguments)||{};
+		// 	for(var key in this.attributes){
+		// 		var value = this[key];
+		// 		if(value && value.)
+		// 	}
+		// }
 
 	});
 
