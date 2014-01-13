@@ -70,7 +70,7 @@ define([
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
-							return null;
+							return undefined;
 						}
 
 						var url = is.Function(me.url)?me.url():me.url;
@@ -122,7 +122,7 @@ define([
 							me.set(attribute+"."+key, raw[key]);
 						}
 					}
-					return null;
+					return undefined;
 				}
 			}
 
@@ -137,7 +137,7 @@ define([
 					return this[setterName](args[0], args[1]);
 				}
 				var value = getset(args[0], args[1]);
-				if(value == null){
+				if(value === undefined){
 					return;
 				}
 				else{
@@ -152,7 +152,7 @@ define([
 				}
 				args[0].keys().forEach(function(key){
 					var value = getset(key, args[0][key]);
-					if(value == null){
+					if(value === undefined){
 						delete args[0][key];	
 					}
 					else{

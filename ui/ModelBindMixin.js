@@ -5,7 +5,9 @@ define(["../model/Model"], function(Model){
 		modelBind: false,
 
 		bindToModel: function(){
-			if(this.modelBind && this.model && !this._modelBound){
+			console.log(this.cid)
+			console.log(this._modelBound)
+			if(this.modelBind && this.model){
 				//var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
 				//var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;
 				var treeVirtuals = this.model.treeVirtuals();
@@ -53,7 +55,7 @@ define(["../model/Model"], function(Model){
 					}
 				}
 
-				this._modelBound = true;
+				//this._modelBound = true;
 			}
 		},
 
@@ -71,8 +73,10 @@ define(["../model/Model"], function(Model){
 		bindImages: function(imgs, model, attr, fullAttr){
 			if(!imgs.length)
 				return;
-			imgs.on('load', function(){
-				model[attr] = $(this).attr('src');
+			!this._modelBound && imgs.on('load', function(){
+				var src = $(this).attr('src');
+				if(src != imgs.attr('default'))
+					model[attr] = src;
 			});
 
 			var setImage = function(){
@@ -85,7 +89,7 @@ define(["../model/Model"], function(Model){
 			}
 
 			setImage();
-			this.listenTo(model, 'change:'+attr, function(model){
+			!this._modelBound && this.listenTo(model, 'change:'+attr, function(model){
 				setImage();
 			});
 		},
@@ -95,7 +99,7 @@ define(["../model/Model"], function(Model){
 				return;
 
 			var me = this;
-			inputs.change(function(){
+			!this._modelBound && inputs.change(function(){
 				if($(this).hasClass('picker__input') && this.value.length > 2 && this.value[2]==':'){
 					model[attr] = me.attrToModel(fullAttr, $(this).pickatime('picker').get('highlight', 'HH:i'), $(this));
 				}
@@ -119,7 +123,7 @@ define(["../model/Model"], function(Model){
 					inputs.val(this.attrToEl(fullAttr, model[attr]||"", inputs));
 				}
 			//}
-			this.listenTo(model, 'change:'+attr, function(){
+			!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
 				if(inputs.hasClass('picker__input')){
 					if(model[attr] instanceof Date){
 						inputs.val(me.attrToEl(fullAttr, model[attr].toLocaleString().split(" ")[0], inputs));
@@ -146,14 +150,14 @@ define(["../model/Model"], function(Model){
 				return;
 			var me = this;
 
-			inputDates.on('blur', function(evt){
+			!this._modelBound && inputDates.on('blur', function(evt){
 				model[attr] = new Date(this.value);
 			});
 
 			if(model[attr] && model[attr].getTime()){
 				inputDates.val(model[attr].inputFormat());
 			}
-			this.listenTo(model, 'change:'+attr, function(){
+			!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
 				if(model[attr] && model[attr].getTime && model[attr].getTime())
 					inputDates.val(model[attr].inputFormat());
 			});
@@ -169,7 +173,7 @@ define(["../model/Model"], function(Model){
 				if(model[attr] != null){
 					inputs.prop('checked', model[attr]);
 				}
-				this.listenTo(model, 'change:'+attr, function(evt){
+				!this._modelBound && this.listenTo(model, 'change:'+attr, function(evt){
 					inputs.prop('checked', model[attr]);
 				});
 			}
@@ -178,14 +182,14 @@ define(["../model/Model"], function(Model){
 		bindSelects: function(selects, model, attr, fullAttr) {
 			if(selects.length) {
 				var me = this;
-				selects.on('change', function(){
+				!this._modelBound && selects.on('change', function(){
 					model[attr] = $(this.options[this.selectedIndex]).val();
 				});
 
 				if(model[attr] != null) {
 					$('[value="'+model[attr]+'"]', selects).prop('selected', true);
 				}
-				this.listenTo(model, 'change:'+attr, function(){
+				!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
 					$('[value="'+model[attr]+'"]', selects).prop('selected', true);
 				});
 			}
@@ -199,7 +203,7 @@ define(["../model/Model"], function(Model){
 				els.html(this.attrToEl(fullAttr, model[attr], els));
 			}
 
-			this.listenTo(model, 'change:'+attr, function(){
+			!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
 				if(model[attr] != null)
 					els.html(this.attrToEl(fullAttr, model[attr], els));
 			});

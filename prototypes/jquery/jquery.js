@@ -1,7 +1,9 @@
 define([
 	'./Image',
 	'./Input',
-	'./Link'
+	'./Link',
+	'./Button',
+	'./InputMask'
 ], function (){
 
 });
