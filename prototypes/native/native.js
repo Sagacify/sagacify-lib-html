@@ -1,3 +1,3 @@
-define(['./Array', './Date', './Function', './String', './Object', './Console', './HTMLElement'], function(){
+define(['./Object', './Array', './Date', './Function', './String', './Console', './HTMLElement'], function(){
 
 });

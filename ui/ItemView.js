@@ -22,10 +22,6 @@ define([
 			this.reinjectFirstElement(elems);
 			
 			this.bindToModel();
-		},
-
-		getModel: function(){
-			return null;
 		}
 
 	});
