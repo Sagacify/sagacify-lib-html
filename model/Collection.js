@@ -100,7 +100,11 @@ define([
 				}
 				args = argsObj;
 			}
-			return $.post(url+'/'+action, args||{});
+			return SGAjax.ajax({
+				type: 'POST',
+				url: url+'/'+action, 
+				data: args||{}
+			});
 		},
 
 		clientSort: function () {
