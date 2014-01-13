@@ -5,8 +5,6 @@ define(["../model/Model"], function(Model){
 		modelBind: false,
 
 		bindToModel: function(){
-			console.log(this.cid)
-			console.log(this._modelBound)
 			if(this.modelBind && this.model){
 				//var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
 				//var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;

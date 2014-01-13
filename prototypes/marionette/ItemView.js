@@ -30,20 +30,6 @@ define([
 			$(this.el).i18n();
 		},
 
-		_handleGoTo: function(){
-			this.events = this.events||{};
-			var me = this;
-			if(this.goTo){
-				this.goTo.keys().forEach(function(key){
-					me.events[key] = function(evt){
-						if(app.layout.modalRegion)
-							app.layout.modalRegion.hide();
-						app.router.navigate(me.goTo[key]);
-					};
-				});
-			}
-		},
-
 		sgValidate: function (domNode) {
 			domNode = domNode || this.$el || $(this.el);
 			var isValid = true;
@@ -126,6 +112,10 @@ define([
 				}
 			}
 			return isValid;
+		},
+
+		getModel: function(){
+			return null;
 		}
 
 	});
