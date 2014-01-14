@@ -65,11 +65,21 @@ define([
 			else{
 				var doc = Backbone.Collection.prototype.get.apply(this, arguments);
 				if(!doc) {
-					this.add(new this.model({_id:id}, {urlRoot: url, parent:{instance:this, paht:""}}));
+					this.add(new this.model({_id:id}, {urlRoot: url, parent:{instance:this, path:""}}));
 					doc = this.last();
 				}
 				return doc;
 			}
+		},
+
+		getBySlug: function(slug){
+			var doc = this.findWhere({slug:slug});
+			var url = this.url instanceof Function?this.url():this.url;
+			if(!doc){
+				this.add(new this.model({slug:slug}, {urlRoot: url, parent:{instance:this, path:""}}));
+				doc = this.last();
+			}
+			return doc;
 		},
 
 		set: function (models, options) {
@@ -265,6 +275,9 @@ define([
 			}
 			else{
 				where = this;
+			}
+			if(!where || !where.filter){
+				return where;
 			}
 			return where.filter(function (model) {
 				for(var key in fun_attrs) {

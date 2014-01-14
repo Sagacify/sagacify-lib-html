@@ -32,7 +32,6 @@ define([
 			// if(region.currentView && region.currentView._keepOnRegionClose){
 			// 	delete region.currentView;
 			// }
-			console.log(childName)
 			if(!childName || !(this[childName] instanceof childClass)) {
 				var view = new childClass(childArgs||{});
 				// if(keepOnRegionClose){
@@ -59,7 +58,6 @@ define([
 				// 	this[childName].render = render;
 				// }
 				// else{
-					console.log('bouh', this[childName].cid)
 					region.showOnRender(this, this[childName]);
 				//}
 				return this[childName];

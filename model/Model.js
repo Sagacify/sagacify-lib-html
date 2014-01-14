@@ -37,6 +37,7 @@ define([
 			}
 			if(is.Function(this[getterName]) && this[getterName]!=arguments.callee.caller)
 				return this[getterName]();
+
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
@@ -436,6 +437,15 @@ define([
 			}
 			else{
 				return Backbone.Model.prototype.save.apply(this, arguments);
+			}
+		},
+
+		url: function(){
+			if(!this._id && this.slug){
+				return this.urlRoot + this.slug;
+			}
+			else{
+				return Backbone.Model.prototype.url.apply(this, arguments);
 			}
 		}
 
