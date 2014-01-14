@@ -104,10 +104,6 @@ define([
 			deferred.done(function (results) {
 				if('token' in results) {
 					App.store.set('token', results.token);
-					callback(null);
-				}
-				else {
-					callback(results.error);
 				}
 			});
 
@@ -151,7 +147,6 @@ define([
 					App.user = new App.models.UserModel(results.user, {
 						url:'/api/user'
 					});
-					callback(null);
 				}
 			});
 
