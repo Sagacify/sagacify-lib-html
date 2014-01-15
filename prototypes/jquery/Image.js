@@ -43,7 +43,7 @@ $.fn.sgCrop = function(canvas){
 	var height = this.jcrop_api.ui.selection.height();
 
 	context.drawImage(this[0], x*ratioX, y*ratioY, width*ratioX, height*ratioY, 0, 0, $(canvas).width(), $(canvas).height());
-	var base64 = canvas.toDataURL();
+	var base64 = canvas.toDataURL('image/jpeg');
 	if(generatedCanvas){
 		canvas.remove();
 	}
