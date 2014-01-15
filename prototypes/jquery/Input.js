@@ -13,5 +13,8 @@ $.fn.sgRenderImage = function(img){
 };
 
 $.fn.valChange = function(val){
-	return $(this).val(val).change();
+	if(val != $(this).val())
+		return $(this).val(val).change();
+	else
+		return $(this);
 };

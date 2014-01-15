@@ -81,6 +81,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			if(!args[1]) {
 				args[1] = {};
 			}
+
 			//check if args for route (:var)
 			for(key in args[1]){
 				if(args[0].contains(':'+key)){
@@ -90,8 +91,18 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			if(!('trigger' in args[1])) {
 				args[1].trigger = true;
 			}
-			Marionette.AppRouter.prototype.navigate.apply(this, args);
+
+			if(args[1].forceReload && args[0] == Backbone.history.fragment){
+				this.forceReload();
+			}
+			else{
+				Marionette.AppRouter.prototype.navigate.apply(this, args);
+			}
 		},
+
+		forceReload: function(){
+			Backbone.history.loadUrl(Backbone.history.fragment);
+		},	
 
 		isAuth: function(){
 			return true;
