@@ -37,6 +37,7 @@ define([
 			}
 			if(is.Function(this[getterName]) && this[getterName]!=arguments.callee.caller)
 				return this[getterName]();
+
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
@@ -168,14 +169,29 @@ define([
 			var url = this.url instanceof Function?this.url():this.url;
 			if(args instanceof Array){
 				argsObj = {};
+
 				if(this.schema.actions[action]){
-					this.schema.actions[action].args.forEach(function(arg, i){
-						argsObj[arg] = args[i];
-					});
+					if (this.schema.actions[action].args) {
+						this.schema.actions[action].args.forEach(function(arg, i){
+							argsObj[arg] = args[i];
+						});						
+					}
 				}
 				args = argsObj;
 			}
-			return $.post(url+'/'+action, args||{});
+			var deferred = SGAjax.ajax({
+				type: 'POST',
+				url: url+'/'+action, 
+				data: args||{}
+			});
+
+			var me = this;
+			deferred.done(function(data){
+				me.trigger('action', args);
+				me.trigger('action:'+action, args);
+			});
+
+			return deferred;
 		},
 
 		defineSchemaProperties: function(){
@@ -421,6 +437,15 @@ define([
 			}
 			else{
 				return Backbone.Model.prototype.save.apply(this, arguments);
+			}
+		},
+
+		url: function(){
+			if(!this._id && this.slug){
+				return this.urlRoot + this.slug;
+			}
+			else{
+				return Backbone.Model.prototype.url.apply(this, arguments);
 			}
 		}
 

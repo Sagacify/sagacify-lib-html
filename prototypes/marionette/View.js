@@ -43,6 +43,13 @@ define([
 					};
 				});
 			}
+		},
+
+		_handleGoToAfterRender: function(){
+			for(var key in this.goTo){
+				var sel = key.split(" ")[1];
+				$(sel, this.$el).filter("a").attr("href", '/'+(App.router.aliases[this.goTo[key]]||this.goTo[key]));
+			}
 		}
 
 	});

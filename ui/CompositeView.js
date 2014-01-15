@@ -13,6 +13,7 @@ define([
 		render: function(){
 			var elems = this.parseFirstElement();
 			Marionette.CompositeView.prototype.render.apply(this, arguments);
+			this._handleGoToAfterRender();
 			this.reinjectFirstElement(elems);
 		}
 
