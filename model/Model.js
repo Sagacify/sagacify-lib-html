@@ -449,13 +449,6 @@ define([
 			}
 		}
 
-		// changedAttributes: function(){
-		// 	var changedAttributes = Backbone.Model.prototype.changedAttributes(this, arguments)||{};
-		// 	for(var key in this.attributes){
-		// 		var value = this[key];
-		// 		if(value && value.)
-		// 	}
-		// }
 
 	});
 
