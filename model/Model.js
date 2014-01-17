@@ -15,6 +15,9 @@ define([
 
 		primitiveTypes: ["String", "Number", "Boolean", "Date", "ObjectId"],
 
+		//model to be transformed in id in toJSON if _isId
+		_isId: false,
+
 		constructor: function(attributes, options){
 			if(options){
 				if("url" in options)
@@ -129,7 +132,11 @@ define([
 
 			var args = Array.apply(null, arguments);
 
-			if(args[0] && args[0].isString()){
+			if(args[1] && args[1].add === true && !is.Object(args[0])){
+				throw new Error('String cannot be directly added.');
+				return;
+			}
+			else if(args[0] && args[0].isString()){
 				var setterName = "set";
 				for(attrPart in args[0].split(".")){
 					setterName+=attrPart.capitalize();
@@ -286,6 +293,9 @@ define([
 		},
 
 		toJSON: function(notmpath){
+			if(this._isId){
+				return this._id;
+			}
 			var json;
 			if(!notmpath)
 				json = Backbone.Model.prototype.toJSON.apply(this, arguments);
