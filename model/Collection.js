@@ -84,11 +84,13 @@ define([
 
 		set: function (models, options) {
 			if(is.Array(models) && models.length && !is.Object(models[0])) {
-				this.refs = models;
+				wrappedModels = [];
+				models.forEach(function(model){
+					wrappedModels.push({_id:model});
+				});
+				models = wrappedModels;
 			}
-			else{
-				Backbone.Collection.prototype.set.apply(this, arguments);
-			}
+			Backbone.Collection.prototype.set.apply(this, arguments);
 		},
 
 		add: function () {
