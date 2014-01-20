@@ -11,9 +11,9 @@ define([
 
 	_.extend(Backbone.Marionette.CollectionView.prototype, {
 
-		// getItemView: function(item){
-		// 	return CollectionViewCopy.constructor.apply(this, arguments);
-		// },
+		constructor: function(options){
+			return CollectionViewCopy.constructor.apply(this, arguments);
+		},
 
 		onBottomReached: null,
 
@@ -32,7 +32,17 @@ define([
 			}
 		},
 
-		beforeConstructor: function(){
+		_handleOptions: function(options){
+			this.options = options||{};
+			for(var key in options){
+				if(key in this){
+					this[key] = options[key];
+				}
+			}
+		},
+
+		beforeConstructor: function(options){
+			this._handleOptions(options);
 			this._prepareCollection();
 			this._handleBottomReached();
 			this._handleFirstRender();
