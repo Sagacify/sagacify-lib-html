@@ -458,6 +458,17 @@ define([
 			else{
 				return Backbone.Model.prototype.url.apply(this, arguments);
 			}
+		},
+
+		destroy: function(){
+			var deferred = Backbone.Model.prototype.destroy.apply(this, arguments);
+
+			var me = this;
+			deferred.done(function (res) {
+				me.trigger('sync:destroy');
+			});
+
+			return deferred;
 		}
 
 
