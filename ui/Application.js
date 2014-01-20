@@ -17,7 +17,8 @@ define([
 			}
 
 			$(window).scroll(function (evt){
-				if(me.isBottomReached()){
+				if(me.isBottomReached()) {
+					console.log('TRIGGER');
 					me.trigger("bottomReached");
 				}
 			});
@@ -55,7 +56,11 @@ define([
 		},
 
 		isBottomReached: function () {
-			return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
+			// body.scrollTop is deprecated in strict mode. 
+			// Please use 'documentElement.scrollTop' if in strict mode and 'body.scrollTop' only if in quirks mode.
+			// return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
+			return (document.body.scrollHeight - window.innerHeight - 5) < document.documentElement.scrollTop
+				|| (document.body.scrollHeight - window.innerHeight + 5) < document.documentElement.scrollTop;
 		},
 
 		getUser: function(){

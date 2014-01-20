@@ -2,6 +2,8 @@ define([], function () {
 
 	return {
 
+		maxIdleTime: 20,
+
 		rememberMe: true, // should be false but true is more convenient in dev.
 
 		getStore: function () {
@@ -37,6 +39,13 @@ define([], function () {
 				return 'bearer ' + id + '|' + token;
 			}
 			return null;
+		},
+
+		init: function () {
+			var me = this;
+			App.ActivityController.on('inactivity:' + this.maxIdleTime, function () {
+				me.clear();
+			});
 		}
 
 	};
