@@ -40,6 +40,18 @@ define([
 			this._virtuals = {};
 			this.defineSchemaProperties();
 			Backbone.Collection.prototype.constructor.apply(this, arguments);
+
+			this._handleCustomEvents();
+		},
+
+		_handleCustomEvents: function(){
+			this.on('add', function(){
+				var added = arguments[0];
+				var me = this;
+				this.listenTo(added, 'sync:destroy', function(res){
+					me.trigger('sync:remove');
+				});
+			});
 		},
 
 		get: function (id) {
@@ -94,8 +106,10 @@ define([
 		add: function () {
 			var ret = Backbone.Collection.prototype.add.apply(this, arguments);
 			var added = this.last();
-			if(added)
+
+			if(added){
 				added.parent = {instance:this, path:""};
+			}
 			return ret;
 		},
 
