@@ -70,7 +70,7 @@ define([
 					var type = is.Array(schemaElement)?schemaElement[0].type:schemaElement.type;
 					var ref = is.Array(schemaElement)?schemaElement[0].ref:schemaElement.ref;
 					//handle as model or collection
-					if(is.Object(raw) && ref && !attribute.endsWith("._id") || is.Array(raw)){
+					if(is.Object(raw) && ref /*&& !attribute.endsWith("._id")*/ || is.Array(raw)){
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
