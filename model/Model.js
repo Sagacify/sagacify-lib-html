@@ -121,11 +121,16 @@ define([
 				}
 				else{
 					//if the attribute is the first part of a composed attribute and the server has sent the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
+					
 					if(is.Object(raw)){
 						for(var key in raw){
 							me.set(attribute+"."+key, raw[key]);
 						}
 					}
+					if (args[2] && args[2].force) {
+						return raw;
+					};
+
 					return undefined;
 				}
 			}
@@ -298,7 +303,7 @@ define([
 				return this._id;
 			}
 			var json;
-			if(!notmpath)
+			if(notmpath !== true)
 				json = Backbone.Model.prototype.toJSON.apply(this, arguments);
 			else
 				json = _.clone(this._mattributes);
