@@ -3,7 +3,6 @@ define([
 	'./Mixin',
 	'./ModelBindMixin'
 ], function (Marionette, Mixin, ModelBindMixin) {
-
 	var ItemView = Marionette.ItemView.extend({
 
 		constructor: function(){

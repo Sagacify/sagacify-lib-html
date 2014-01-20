@@ -76,10 +76,10 @@ define([
 							docColl.set(raw);
 							return undefined;
 						}
-
 						var url = is.Function(me.url)?me.url():me.url;
 						if(is.Array(schemaElement)){
-							var collectionUrl = me.isNew()?"":(url+'/'+attribute);
+							//var collectionUrl = me.isNew()?"":(url+'/'+attribute);
+							var collectionUrl = url+'/'+attribute;
 							//collection of ref
 							if(ref){
 								return new App.collections[ref+"Collection"](raw||[], {url:collectionUrl, parent:{instance:me, path:attribute}});
@@ -186,6 +186,7 @@ define([
 				}
 				args = argsObj;
 			}
+
 			var deferred = SGAjax.ajax({
 				type: 'POST',
 				url: url+'/'+action, 
@@ -227,7 +228,7 @@ define([
 				return function(){
 					return function(){
 						var argsArray = Array.apply(null, arguments);
-						return this.do.apply(this, [action, argsArray]);
+						return this.do.apply(this, [action, argsArray[0]]);
 					};
 				};
 			};
