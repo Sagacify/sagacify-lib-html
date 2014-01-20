@@ -38,7 +38,7 @@ define([
 				}
 			})
 			.fail(function (error) {
-				App.store.clear();
+				App.store.logout();
 				App.memory.free();
 			});
 
@@ -71,7 +71,7 @@ define([
 				}
 			})
 			.fail(function (error) {
-				App.store.clear();
+				App.store.logout();
 				App.memory.free();
 			});
 
