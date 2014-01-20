@@ -65,7 +65,7 @@ define([
 
 		showLoadingView: function(){
 			this.closeEmptyView();
-			var LoadingView = Marionette.getOption(this, "loadingView");
+			var LoadingView = Backbone.Marionette.getOption(this, "loadingView");
 
 			if(LoadingView && !this._loadingView){
 				var model = new Backbone.Model();
