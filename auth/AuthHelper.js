@@ -147,6 +147,7 @@ define([
 					App.user = new App.models.UserModel(results.user, {
 						url:'/api/user'
 					});
+					App.layout.isLoggedIn(); // not sure it should be called ?!
 				}
 			});
 
