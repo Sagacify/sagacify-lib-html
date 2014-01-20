@@ -96,19 +96,27 @@ define([
 
 		set: function (models, options) {
 			if(is.Array(models) && models.length && !is.Object(models[0])) {
-				this.refs = models;
+				wrappedModels = [];
+				models.forEach(function(model){
+					wrappedModels.push({_id:model});
+				});
+				models = wrappedModels;
 			}
-			else{
-				Backbone.Collection.prototype.set.apply(this, arguments);
-			}
+			Backbone.Collection.prototype.set.apply(this, arguments);
 		},
 
 		add: function () {
+			var _isId = false;
+			if(is.String(arguments[0])){
+				_isId = true;
+				arguments[0] = {_id:arguments[0]};
+			}
 			var ret = Backbone.Collection.prototype.add.apply(this, arguments);
 			var added = this.last();
 
 			if(added){
 				added.parent = {instance:this, path:""};
+				added._isId = _isId;
 			}
 			return ret;
 		},

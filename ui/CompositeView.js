@@ -5,8 +5,8 @@ define([
 
 	var CompositeView = Marionette.CompositeView.extend({
 
-		constructor: function(){
-			this.beforeConstructor();
+		constructor: function(options){
+			this.beforeConstructor(options);
 			Marionette.CompositeView.prototype.constructor.apply(this, arguments);
 		},
 

@@ -5,8 +5,8 @@ define([
 
 	var CollectionView = Marionette.CollectionView.extend({
 
-		constructor: function(){
-			this.beforeConstructor();
+		constructor: function(options){
+			this.beforeConstructor(options);
 			Marionette.CollectionView.prototype.constructor.apply(this, arguments);
 		},
 
