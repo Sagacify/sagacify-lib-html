@@ -483,10 +483,6 @@ define([
 			this.changed = {};
 			this.src = null;
 			return Backbone.Model.prototype.clear.apply(this, arguments);
-		},
-
-		validForSave: function (){
-			return null;
 		}
 	});
 
