@@ -474,6 +474,14 @@ define([
 			});
 
 			return deferred;
+		},
+
+		clear: function(){
+			this.attributes = {};
+			this._mattributes = {};
+			this.changed = {};
+			this.src = null;
+			return Backbone.Model.prototype.clear.apply(this, arguments);
 		}
 
 

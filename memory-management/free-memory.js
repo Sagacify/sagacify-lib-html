@@ -14,7 +14,7 @@ define([
 	}
 
 	function freeUser () {
-		App.user = null;
+		App.user.clear();
 	}
 
 	return function  () {
