@@ -111,6 +111,7 @@ define([
 		},
 
 		logout: function () {
+			debugger
 			var me = this;
 			var deferred = SGAjax.ajax({
 				url: '/auth/logout',
