@@ -2,7 +2,7 @@ define([], function () {
 
 	return {
 
-		maxIdleTime: 1,
+		maxIdleTime: 20,
 
 		getStore: function () {
 			//return this.rememberMe ? localStorage : sessionStorage;

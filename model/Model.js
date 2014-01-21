@@ -177,8 +177,8 @@ define([
 			return Backbone.Model.prototype.set.apply(this, args);
 		},
 
-		do: function(action, args){
-			var url = this.url instanceof Function?this.url():this.url;
+		do: function(action, args, options){
+			var url = this.url instanceof Function?this.url(options):this.url;
 			if(args instanceof Array){
 				argsObj = {};
 
@@ -233,7 +233,7 @@ define([
 				return function(){
 					return function(){
 						var argsArray = Array.apply(null, arguments);
-						return this.do.apply(this, [action, argsArray[0]]);
+						return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
 					};
 				};
 			};
@@ -456,8 +456,8 @@ define([
 			}
 		},
 
-		url: function(){
-			if(!this._id && this.slug){
+		url: function(options){
+			if(!this._id && this.slug || options && options.slug){
 				return this.urlRoot + this.slug;
 			}
 			else{
