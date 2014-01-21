@@ -1,4 +1,4 @@
-define([
+apdefine([
 	'backbone.marionette',
 	'../model/Model',
 	'../model/Collection'
