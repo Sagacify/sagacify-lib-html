@@ -78,11 +78,18 @@ define(["../model/Model"], function(Model){
 			});
 
 			var setImage = function(){
+				var src;
 				if(model[attr] instanceof Model){
-					imgs.attr('src', model[attr]._url||imgs.attr('default'));
+					src = model[attr]._url||imgs.attr('default');
 				}
 				else {
-					imgs.attr('src', model[attr]||imgs.attr('default'));
+					src = model[attr]||imgs.attr('default');
+				}
+				if(!src && imgs.attr('avatar-name')){
+					imgs.createNameAvatar(model[imgs.attr('avatar-name')]);
+				}
+				else{
+					imgs.attr('src', src);
 				}
 			}
 

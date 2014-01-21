@@ -49,3 +49,52 @@ $.fn.sgCrop = function(canvas){
 	}
 	return base64;
 };
+
+$.fn.createNameAvatar = function(name, size){
+	// Script by Julien Henrotte
+	var canvas = document.createElement('canvas');
+	canvas.width = size||$(this).attr('avatar-size')||$(this).width()||100;
+	canvas.height = size||$(this).attr('avatar-size')||$(this).height()||100;
+
+	var fontSize = canvas.width / 2 + 'px';
+
+	var firstNameInitiales;
+	var lastNameInitiales;
+	var initiales;
+	//Get the initials
+	if(name){
+		firstNameInitiales = name.split(' ').slice(0, -1).join(' ').charAt(0);
+		lastNameInitiales = name.split(' ').slice(-1).join(' ').charAt(0);
+		initiales = firstNameInitiales + lastNameInitiales;
+	}
+	else{
+		initiales = "?";
+	}
+
+	var moduloResult;
+	//get color from initiales and apply color
+	if(firstNameInitiales){
+		moduloResult = (firstNameInitiales.charCodeAt(0) + lastNameInitiales.charCodeAt(0)) % 10;
+	}
+	else if(lastNameInitiales){
+		moduloResult = lastNameInitiales.charCodeAt(0) % 10;
+	}
+	else{
+		moduloResult = 0;
+	}
+	var colorMod = ["#FFD213","#cc3333","#4DBA61","#8B2786","#A85B34","#ff6600","#0099cc","#3A4769","#433225","#35384D"];
+
+	canvas.style.background = colorMod[moduloResult];
+
+	var context = canvas.getContext('2d'),
+	x = canvas.width / 2,
+	y = canvas.height / 2;
+	context.font = fontSize + ' ' + "Calibri";
+	context.textAlign = 'center';
+	context.textBaseline = 'middle';
+	context.fillStyle = 'white';
+	context.fillText(initiales, x, y);
+
+	$(this).attr('src', canvas.toDataURL());
+	$(this).css('background', colorMod[moduloResult]);
+};
