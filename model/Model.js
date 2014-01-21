@@ -476,6 +476,18 @@ define([
 
 			return deferred;
 		},
+<<<<<<< HEAD
+=======
+
+		clear: function(){
+			this.attributes = {};
+			this._mattributes = {};
+			this.changed = {};
+			this.src = null;
+			return Backbone.Model.prototype.clear.apply(this, arguments);
+		}
+
+>>>>>>> ad5f2538167c89531f649e4f36fd09a9a48d5bf9
 
 		validForSave: function(){
 			return null;

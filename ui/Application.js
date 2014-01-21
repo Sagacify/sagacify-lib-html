@@ -70,6 +70,7 @@ define([
 		},
 
 		setUser: function(user){
+			debugger
 			this._user = user;
 		}
 		
