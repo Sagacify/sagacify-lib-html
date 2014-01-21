@@ -442,6 +442,7 @@ define([
 		},
 
 		save: function(){
+			
 			if(arguments[0] instanceof Array){
 				var fields = arguments[0];
 				var json = this.toJSON();
@@ -474,9 +475,11 @@ define([
 			});
 
 			return deferred;
+		},
+
+		validForSave: function(){
+			return null;
 		}
-
-
 	});
 
 	return SagaModel;

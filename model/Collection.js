@@ -315,7 +315,16 @@ define([
 			while(len--) {
 				this.remove(this.models[len]);
 			}
-		}
+		}, 
+
+		removeAll: function(){
+			removed = [];
+			for (var i = this.models.length - 1; i >= 0; i--) {
+				this.remove(this.models[i]);
+				removed.push(this.models[i]);
+			};
+			return this.removed;
+		}, 
 
 	});
 });
