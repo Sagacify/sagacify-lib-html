@@ -62,11 +62,11 @@ define([
 			if(this.schema && this.schema.virtuals[id]) {
 				if(!this._virtuals[id]) {
 					if(this.schema.virtuals[id] instanceof Array) {
-						var model = App.models[this.schema.virtuals[id][0].type+"Model"].extend({urlRoot:url+'/'+id});
-						this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].type+"Collection"]([], {url:url+'/'+id, model:model, parent:{instance:this, path:""}});
+						var model = App.models[this.schema.virtuals[id][0].ref+"Model"].extend({urlRoot:url+'/'+id});
+						this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].ref+"Collection"]([], {url:url+'/'+id, model:model, parent:{instance:this, path:""}});
 					}
 					else{
-						this._virtuals[id] = new App.models[this.schema.virtuals[id].type+"Model"]({}, {url:url+'/'+id, parent:{instance:this, path:""}});
+						this._virtuals[id] = new App.models[this.schema.virtuals[id].ref+"Model"]({}, {url:url+'/'+id, parent:{instance:this, path:""}});
 					}
 				}
 				return this._virtuals[id];
