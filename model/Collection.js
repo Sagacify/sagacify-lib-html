@@ -118,6 +118,7 @@ define([
 				added.parent = {instance:this, path:""};
 				added._isId = _isId;
 			}
+
 			return ret;
 		},
 
