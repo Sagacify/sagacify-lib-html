@@ -56,7 +56,7 @@ $.fn.createNameAvatar = function(name, size){
 	canvas.width = size||$(this).attr('avatar-size')||$(this).width()||100;
 	canvas.height = size||$(this).attr('avatar-size')||$(this).height()||100;
 
-	var fontSize = canvas.width / 2 + 'px';
+	var fontSize = canvas.width / 3 + 'px';
 
 	var firstNameInitiales;
 	var lastNameInitiales;
@@ -82,14 +82,14 @@ $.fn.createNameAvatar = function(name, size){
 	else{
 		moduloResult = 0;
 	}
-	var colorMod = ["#FFD213","#cc3333","#4DBA61","#8B2786","#A85B34","#ff6600","#0099cc","#3A4769","#433225","#35384D"];
+	var colorMod = ["#FFD44D","#f05a49","#35bc7a","#59487f","#A85B34","#FD8E20","#1e8bc3","#335E86","#424352","#4d5466"];
 
 	canvas.style.background = colorMod[moduloResult];
 
 	var context = canvas.getContext('2d'),
 	x = canvas.width / 2,
 	y = canvas.height / 2;
-	context.font = fontSize + ' ' + "Calibri";
+	context.font = '100 ' + fontSize + ' ' + "Open Sans, Helvetica, Arial";
 	context.textAlign = 'center';
 	context.textBaseline = 'middle';
 	context.fillStyle = 'white';
