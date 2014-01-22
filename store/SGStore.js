@@ -67,6 +67,7 @@ define([], function () {
 		},
 
 		init: function (initialRememberMe) {
+			this.maxIdleTime = App.config.disconnectedAfter;
 			this.changeRememberMe(initialRememberMe);
 		}
 

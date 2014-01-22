@@ -57,9 +57,10 @@ define([
 		isBottomReached: function () {
 			// body.scrollTop is deprecated in strict mode. 
 			// Please use 'documentElement.scrollTop' if in strict mode and 'body.scrollTop' only if in quirks mode.
-			// return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
-			return (document.body.scrollHeight - window.innerHeight - 5) < document.documentElement.scrollTop
-				|| (document.body.scrollHeight - window.innerHeight + 5) < document.documentElement.scrollTop;
+			return (document.body.scrollTop || document.documentElement.scrollTop) == (document.body.scrollHeight-window.innerHeight);
+			// console.log(document.body.scrollHeight, window.innerHeight, document.documentElement.scrollTop, document.body.scrollTop);
+			// return (document.body.scrollHeight - window.innerHeight - 5) < document.documentElement.scrollTop
+			// 	|| (document.body.scrollHeight - window.innerHeight + 5) < document.documentElement.scrollTop;
 		},
 
 		getUser: function(){
