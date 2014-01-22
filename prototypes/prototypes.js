@@ -22,7 +22,6 @@ define([
 	// 	oldinsertBeforeFunction.apply(this, arguments);
 	// }
 
-
 	// var oldreplaceChildFunction =  HTMLElement.prototype.replaceChild;
 	// HTMLElement.prototype.replaceChild = function(newChild){
 	// 	if (this.SGBinded && this.SGSetBinding && !newChild.SGBinded) {
