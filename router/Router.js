@@ -10,11 +10,6 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			if(this.sagaRoutes){
 				this.handleSagaRoutes();
 			}
-			// var me = this;
-			// this.on('route', function(route, args){
-			// 	debugger
-			// 	me.lastRoute = {route: route, args:args};
-			// });
 		},
 
 		handleSagaRoutes: function(){
