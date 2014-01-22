@@ -34,17 +34,14 @@ define([
 		},
 
 		get: function(attribute){
-			var getterName = "get";
-			for(attrPart in attribute.split(".")){
-				getterName+=attrPart.capitalize();
-			}
+			var getterName = "get"+attribute.capitalize();
 			if(is.Function(this[getterName]) && this[getterName]!=arguments.callee.caller)
 				return this[getterName]();
 
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
-				if(schemaElement && schemaElement.ref){
+				if(schemaElement && schemaElement.ref && attribute != '_id'){
 					this.set(attribute, {});
 					value = Backbone.Model.prototype.get.apply(this, arguments);
 				}
@@ -142,10 +139,7 @@ define([
 				return;
 			}
 			else if(args[0] && args[0].isString()){
-				var setterName = "set";
-				for(attrPart in args[0].split(".")){
-					setterName+=attrPart.capitalize();
-				}
+				var setterName = "set"+args[0].capitalize();
 				if(is.Function(this[setterName]) && this[setterName]!=arguments.callee.caller){
 					return this[setterName](args[0], args[1]);
 				}

@@ -11,6 +11,11 @@ array_proto.merge = function(array){
 	});
 };
 
+
+array_proto.insert = function (index, item) {
+  this.splice(index, 0, item);
+};
+
 array_proto.popFirst = function(){
 	return this.splice(0, 1)[0];
 };
