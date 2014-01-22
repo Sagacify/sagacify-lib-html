@@ -82,7 +82,11 @@ define([], function () {
 			};
 		},
 		ajax: function (options) {
+
+
 			var url = options.url;
+
+
 			var data = options.data;
 			var method = options.type.toLowerCase();
 			//var headers = options.auth ? this.authorization() : {};
