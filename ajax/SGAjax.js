@@ -73,7 +73,7 @@ define([], function () {
 					App.onError(err);
 				}
 			});
-			
+
 			return promise;
 		},
 		authorization: function () {

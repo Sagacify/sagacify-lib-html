@@ -107,7 +107,10 @@ define([
 					//handle as primitive
 					else{
 						if(schemaElement.type == "Date"){
+							console.log(attribute)
+							console.log(raw)
 							raw = new Date(raw);
+							console.log(raw)
 						}
 						// take trace of initial attributes for revert
 						if(me.schema.tree[attribute] && !(attribute in me._originalAttributes)){

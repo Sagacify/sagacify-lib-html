@@ -24,7 +24,10 @@ define([
 		render: function() {
 			ItemViewCopy.render.apply(this, arguments);
 			this._handleGoToAfterRender();
-			$(this.el).i18n();
+			var $el = $(this.el);
+			if($el.i18n) {
+				$el.i18n();
+			}
 		},
 
 		sgValidate: function (domNode) {
