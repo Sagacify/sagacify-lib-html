@@ -34,7 +34,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			var me = this;
 			return function () {
 				var args = Array.apply(null, arguments);
-				me.lastRoute = {alias: alias, route:route, args:args};
+				me.lastRoute = {alias: alias, route:route, args:args.clone()};
 				var routeLayout = function(layout, fun){
 					var fun_name;
 					var fun_staticArgs;
