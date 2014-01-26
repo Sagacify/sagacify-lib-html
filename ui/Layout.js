@@ -8,10 +8,23 @@ define([
 	var Layout = Marionette.Layout.extend({
 
 		constructor: function(){
-			this._handleFirstRender();
-			this.model = this.getModel();
+			
+			this._handleFirstRender();		
+			this.model = this.getModel();	
+			
 			Marionette.Layout.prototype.constructor.apply(this, arguments);
 		},
+
+		// //override me
+		// _handleFirstRender: function(){
+
+		// },
+
+		// //override me
+		// getModel: function(){
+
+		// },
+
 
 		render: function (options) {
 			this.template = this.get_Template(options||this.model||this.data||this.options);
