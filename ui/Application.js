@@ -49,9 +49,24 @@ define([
 					});
 					App[collectionName] = new Collection();
 				}
+
 				deferred.resolve(App);
 			});
 			return deferred.promise();
+		},
+
+		createModel : function(ModelName, rawData) {
+			// debugger
+			var Model = this.getModelClass(ModelName);
+			return new Model(rawData);
+		},	
+
+		getModelClass: function(modelName){
+			// debugger
+			if ((modelName+'Model') in App.models) {
+				return App.models[(modelName+'Model')];
+			};
+			return null;
 		},
 
 		isBottomReached: function () {
