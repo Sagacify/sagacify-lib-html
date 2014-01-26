@@ -37,7 +37,6 @@ define([
 			var getterName = "get"+attribute.capitalize();
 			if(is.Function(this[getterName]) && this[getterName]!=arguments.callee.caller)
 				return this[getterName]();
-
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
@@ -152,11 +151,16 @@ define([
 				}
 			}
 			else if(args[0] && args[0].isObject()){
+				if(args[0] instanceof SagaModel){
+					return Backbone.Model.prototype.set.apply(this, [args[0].toJSON()]);
+				}
+
 				args[0] = args[0].clone();
 				if(args[0]._id){
 					this.set("_id", args[0]._id);
 					delete args[0]._id;
 				}
+
 				args[0].keys().forEach(function(key){
 					var value = getset(key, args[0][key]);
 					if(value === undefined){
