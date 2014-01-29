@@ -52,8 +52,6 @@ define(["../model/Model"], function(Model){
 						}
 					}
 				}
-
-				//this._modelBound = true;
 			}
 		},
 
@@ -76,8 +74,13 @@ define(["../model/Model"], function(Model){
 				if(src != imgs.attr('default'))
 					model[attr] = src;
 			});
-
+			var me = this;
 			var setImage = function(){
+
+				if(me.classManageAttrConversion(fullAttr,model[attr], imgs)){
+					return;
+				}
+
 				var src;
 				if(model[attr] instanceof Model){
 					src = model[attr]._url||imgs.attr('default');
@@ -91,6 +94,9 @@ define(["../model/Model"], function(Model){
 				else{
 					imgs.attr('src', src);
 				}
+
+				
+
 			}
 
 			setImage();
@@ -185,17 +191,23 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindSelects: function(selects, model, attr, fullAttr) {
+
 			if(selects.length) {
+
 				var me = this;
 				!this._modelBound && selects.on('change', function(){
 					model[attr] = $(this.options[this.selectedIndex]).val();
 				});
 
 				if(model[attr] != null) {
-					$('[value="'+model[attr]+'"]', selects).prop('selected', true);
+					// $('[value="'+model[attr]+'"]', selects).prop('selected', true);
+					selects.val(model[attr]);
+					this.attrToEl(fullAttr, model[attr], selects);
 				}
 				!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
-					$('[value="'+model[attr]+'"]', selects).prop('selected', true);
+					// $('[value="'+model[attr]+'"]', selects).prop('selected', true);
+					selects.val(model[attr]);
+					this.attrToEl(fullAttr, model[attr], selects);
 				});
 			}
 		},
@@ -222,7 +234,22 @@ define(["../model/Model"], function(Model){
 			return val;
 		},
 
+		classManageAttrConversion: function(attr, value, els){
+			var fct = this.methodForAttr(attr);
+			return fct && !!!this[fct](value, els);
+		},
+
+		methodForAttr: function(attr){
+			attr.capitalize()+'toEl';
+			var pathToModel = attr.charAt(0)+attr.capitalize().slice(1)+'ToEl';
+			if(typeof this[pathToModel] != 'function'){
+				return null;
+			}
+			return pathToModel;
+		},
+
 		attrToEl: function(attr, val, els){
+			attr.capitalize()+'toEl';
 			var pathToModel = attr.charAt(0)+attr.capitalize().slice(1)+'ToEl';
 			if(typeof this[pathToModel] == 'function'){
 				return this[pathToModel](val, els);
