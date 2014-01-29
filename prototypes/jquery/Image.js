@@ -50,60 +50,64 @@ $.fn.sgCrop = function(canvas){
 	return base64;
 };
 
-$.fn.createNameAvatar = function(name, size){
+$.fn.createNameAvatar = function (name, size) {
 
-	var me = this;
-	setTimeout(function() {
+	// Script by Julien Henrotte
+	var canvas = document.createElement('canvas')
+	  , ele = this.attr ? this : $(this);
 
-		// Script by Julien Henrotte
-		var canvas = document.createElement('canvas');
-		canvas.width = size||$(me).attr('avatar-size')||$(me).width()||100;
-		canvas.height = size||$(me).attr('avatar-size')||$(me).height()||100;
+	canvas.width = (size || ele.attr('avatar-size') || ele.width() || 100) | 0;
+	canvas.height = (size || ele.attr('avatar-size') || ele.height() || 100) | 0;
 
-		var fontSize = canvas.width / 3 + 'px';
+	var fontSize = ((canvas.width / 3) | 0) + 'px';
 
-		var firstNameInitiales;
-		var lastNameInitiales;
-		var initiales;
-		//Get the initials
-		if(name){
-			firstNameInitiales = name.split(' ').slice(0, -1).join(' ').charAt(0);
-			lastNameInitiales = name.split(' ').slice(-1).join(' ').charAt(0);
-			initiales = firstNameInitiales + lastNameInitiales;
-		}
-		else{
-			initiales = "?";
-		}
+	var firstNameInitiales
+	  , lastNameInitiales
+	  , initials = '?';
 
-		var moduloResult;
-		//get color from initiales and apply color
-		if(firstNameInitiales){
-			moduloResult = (firstNameInitiales.charCodeAt(0) + lastNameInitiales.charCodeAt(0)) % 10;
-		}
-		else if(lastNameInitiales){
-			moduloResult = lastNameInitiales.charCodeAt(0) % 10;
-		}
-		else{
-			moduloResult = 0;
-		}
-		var colorMod = ["#FFD44D","#f05a49","#35bc7a","#59487f","#A85B34","#FD8E20","#1e8bc3","#335E86","#424352","#4d5466"];
+	// Get the initials
+	if(name) {
+		firstNameInitiales = name.split(/\s+/);
+		lastNameInitiales = firstNameInitiales.splice(-1, 1).join('')[0] || '';
+		firstNameInitiales = firstNameInitiales.join('')[0] || '';
+		initials = firstNameInitiales + lastNameInitiales;
+	}
 
-		canvas.style.background = colorMod[moduloResult];
+	// Get color from initials and apply color
+	var moduloResult = 0;
 
-		var context = canvas.getContext('2d'),
-		x = canvas.width / 2,
-		y = canvas.height / 2;
-		context.font = '100 ' + fontSize + ' ' + "Open Sans, Helvetica, Arial";
-		context.textAlign = 'center';
-		context.textBaseline = 'middle';
-		context.fillStyle = 'white';
-		context.fillText(initiales, x, y);
+	if(firstNameInitiales) {
+		moduloResult = (initials.charCodeAt(0) + initials.charCodeAt(1)) % 10;
+	}
+	else if(lastNameInitiales) {
+		moduloResult = lastNameInitiales.charCodeAt(0) % 10;
+	}
 
-		$(me).attr('src', canvas.toDataURL());
-		$(me).css('background', colorMod[moduloResult]);
+	var colorMod = [
+		'#FFD44D',
+		'#f05a49',
+		'#35bc7a',
+		'#59487f',
+		'#A85B34',
+		'#FD8E20',
+		'#1e8bc3',
+		'#335E86',
+		'#424352',
+		'#4d5466'
+	];
 
+	canvas.style.background = colorMod[moduloResult];
 
-	}, 1);
+	var context = canvas.getContext('2d'),
+	x = (canvas.width / 2) | 0,
+	y = (canvas.height / 2) | 0;
+	context.font = '100 ' + fontSize + ' ' + 'Open Sans, Helvetica, Arial';
+	context.textAlign = 'center';
+	context.textBaseline = 'middle';
+	context.fillStyle = 'white';
+	context.fillText(initials, x, y);
 
+	ele.attr('src', canvas.toDataURL());
+	ele.css('background', colorMod[moduloResult]);
 
 };
