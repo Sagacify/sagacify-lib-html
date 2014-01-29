@@ -78,7 +78,7 @@ define(["../model/Model"], function(Model){
 			var me = this;
 			var setImage = function(){
 
-				if(me.classManageAttrConversion(fullAttr,model[attr], imgs)){
+				if(me.classManageAttrConversion(fullAttr, model[attr], imgs)){
 					return;
 				}
 
@@ -94,9 +94,7 @@ define(["../model/Model"], function(Model){
 				}
 				else{
 					imgs.attr('src', src);
-				}
-
-				
+				}				
 
 			}
 

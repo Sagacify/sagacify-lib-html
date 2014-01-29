@@ -101,6 +101,8 @@ $.fn.createNameAvatar = function (name, size) {
 	var context = canvas.getContext('2d'),
 	x = (canvas.width / 2) | 0,
 	y = (canvas.height / 2) | 0;
+	context.fillStyle = colorMod[moduloResult];
+	context.fillRect(0, 0, canvas.width, canvas.height);
 	context.font = '100 ' + fontSize + ' ' + 'Open Sans, Helvetica, Arial';
 	context.textAlign = 'center';
 	context.textBaseline = 'middle';
@@ -108,6 +110,6 @@ $.fn.createNameAvatar = function (name, size) {
 	context.fillText(initials, x, y);
 
 	ele.attr('src', canvas.toDataURL());
-	ele.css('background', colorMod[moduloResult]);
+	//ele.css('background', colorMod[moduloResult]);
 
 };
