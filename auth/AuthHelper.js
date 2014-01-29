@@ -74,13 +74,14 @@ define([
 			return deferred;
 		},
 
-		forgotPassword: function (username) {
+		forgotPassword: function (username, lang) {
 			var me = this;
 			return SGAjax.ajax({
 				url: '/auth/forgot_password',
 				type: 'POST',
 				data: {
-					username: username
+					username: username,
+					lang: lang
 				}
 			});
 		},
