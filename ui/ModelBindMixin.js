@@ -56,6 +56,7 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindEls: function(els, model, attr, fullAttr){
+
 			this.bindImages(els.filter('img'), model, attr, fullAttr);
 			this.bindInputDates(els.filter(':input[type=date]'), model, attr, fullAttr);
 			this.bindInputCheckboxs(els.filter(':input[type=radio]'), model, attr, fullAttr);
@@ -213,9 +214,11 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindDefaultsEls: function(els, model, attr, fullAttr){
+
 			if(!els.length) {
 				return;
 			}
+			
 			if(model[attr] != null){
 				els.html(this.attrToEl(fullAttr, model[attr], els));
 			}
