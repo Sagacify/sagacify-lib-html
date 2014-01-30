@@ -316,17 +316,17 @@ define([
 			while(len--) {
 				this.remove(this.models[len]);
 			}
-		}, 
+		},
 
 		removeAll: function(){
-			removed = [];
+			var removed = [];
 			for (var i = this.models.length - 1; i >= 0; i--) {
 				this.remove(this.models[i]);
 				removed.push(this.models[i]);
-			};
+			}
 			this.trigger('remove:all');
-			return this.removed;
-		}, 
+			return removed;
+		}
 
 	});
 });
