@@ -63,6 +63,9 @@ define([
 				if(('token' in results) && ('user' in results)) {
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
+					App.user = new App.models.UserModel(results.user, {
+						url:'/api/user'
+					});
 					App.layout.isLoggedIn();
 				}
 			})
