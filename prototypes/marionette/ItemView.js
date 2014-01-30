@@ -22,7 +22,17 @@ define([
 		},
 
 		render: function() {
+			var __t;
+			if(this.model){
+				__t = this.model.__t;
+			}
+
 			ItemViewCopy.render.apply(this, arguments);
+
+			if(__t){
+				this.model.__t = __t;
+			}
+
 			this._handleGoToAfterRender();
 			var $el = $(this.el);
 			if($el.i18n) {

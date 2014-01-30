@@ -51,7 +51,6 @@ $.fn.sgCrop = function(canvas){
 };
 
 $.fn.createNameAvatar = function (name, size) {
-
 	// Script by Julien Henrotte
 	var canvas = document.createElement('canvas')
 	  , ele = this.attr ? this : $(this);
