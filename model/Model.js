@@ -228,7 +228,7 @@ define([
 
 			var set = function(attr){
 				return function(value){
-					if(attr == '__t' || typeof this.__tIsValid != "function" || !this.__tIsValid(value)){
+					if(attr == '__t' && (typeof this.__tIsValid != "function" || !this.__tIsValid(value))){
 						return;
 					}
 					return this.set(attr, value);
