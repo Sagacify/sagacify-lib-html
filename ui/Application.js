@@ -27,6 +27,7 @@ define([
 
 		fetchModels: function (){
 			var deferred = $.Deferred();
+			var me = this;
 			$.get('/api/app_models', function (structure){
 				var App = {};
 				App.server_routes = structure.routes;
@@ -54,6 +55,14 @@ define([
 			});
 			return deferred.promise();
 		},
+
+		// modelExtension: function(){
+		// 	return {__tIsValid:function(){return false}};
+		// },
+
+		// collectionExtension: function(){
+		// 	return {};
+		// },
 
 		createModel : function(ModelName, rawData) {
 			// debugger
