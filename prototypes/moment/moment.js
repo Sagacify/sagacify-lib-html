@@ -21,5 +21,15 @@ define([
 		return this.isAfter(moment());
 	};
 
+	Moment.fn.sgFromNow = function(maxDays){
+		maxDays = maxDays||2;
+		if(moment().diff(this, 'days') <= maxDays){
+			return this.fromNow();
+		}
+		else{
+			return this.format("MMMM Do YYYY");
+		}
+	};
+
 });
 
