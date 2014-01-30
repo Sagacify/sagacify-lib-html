@@ -54,7 +54,7 @@ define([
 			return value;
 		},
 
-		set: function(){
+		set: function SGSetter(){
 			if(arguments.callee.caller == Backbone.Model.prototype.save){
 				return true;
 			}

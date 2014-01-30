@@ -1,8 +1,8 @@
 $.fn.goTo = function(aliasOrRoute, args){
 
-	var route = App.router.aliases[aliasOrRoute]!=null?App.router.aliases[aliasOrRoute]:aliasOrRoute;
-	if(args){
-		for(key in args){
+	var route = App.router.aliases[aliasOrRoute] != null ? App.router.aliases[aliasOrRoute] : aliasOrRoute;
+	if(args) {
+		for(var key in args) {
 			if(route.contains(':'+key)){
 				route = route.replace(':'+key, args[key]);
 			}
@@ -10,7 +10,7 @@ $.fn.goTo = function(aliasOrRoute, args){
 	}
 	
 	if(this.is('a')){
-		this.attr('href', route);		
+		this.attr('href', route);
 	}
 	
 	var me = this;
@@ -18,5 +18,3 @@ $.fn.goTo = function(aliasOrRoute, args){
 		App.router.navigate(route);
 	});
 };
-
-

@@ -70,7 +70,7 @@ define([
 				}
 			})
 			.fail(function (error) {
-				App.store.logout();
+				// App.store.logout();
 				App.memory.free();
 			});
 

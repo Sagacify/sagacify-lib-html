@@ -7,7 +7,7 @@ String.prototype.endsWith = function(str){
 };
 
 String.prototype.contains = function(str){
-	return this.indexOf(str) != -1;
+	return ~this.indexOf(str);
 };
 
 String.prototype.base64Sanitize = function(base64) {
