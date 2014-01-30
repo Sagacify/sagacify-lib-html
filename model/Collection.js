@@ -324,6 +324,7 @@ define([
 				this.remove(this.models[i]);
 				removed.push(this.models[i]);
 			};
+			this.trigger('remove:all');
 			return this.removed;
 		}, 
 

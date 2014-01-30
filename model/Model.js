@@ -161,12 +161,17 @@ define([
 					delete args[0]._id;
 				}
 
+				
 				args[0].keys().forEach(function(key){
 					var value = getset(key, args[0][key]);
 					if(value === undefined){
 						delete args[0][key];	
 					}
 					else{
+						// if(key == '__t'){
+						// 	console.log(args[0][key])
+						// 	console.log(value)
+						// }
 						args[0][key] = value;
 					}
 				});
@@ -223,6 +228,9 @@ define([
 
 			var set = function(attr){
 				return function(value){
+					if(attr == '__t' || typeof this.__tIsValid != "function" || !this.__tIsValid(value)){
+						return;
+					}
 					return this.set(attr, value);
 				};
 			};
@@ -440,7 +448,6 @@ define([
 		},
 
 		save: function(){
-			
 			if(arguments[0] instanceof Array){
 				var fields = arguments[0];
 				var json = this.toJSON();
@@ -485,7 +492,17 @@ define([
 
 		validForSave: function(){
 			return null;
+		},
+
+		__tIsValid: function(__t){
+			if(!App.__t_valids){
+				return false;
+			}
+			else{
+				return App.__t_valids.contains(__t);
+			}
 		}
+
 	});
 
 	return SagaModel;
