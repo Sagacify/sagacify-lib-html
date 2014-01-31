@@ -217,9 +217,9 @@ define(["../model/Model"], function(Model){
 				return;
 			}
 			
-			if(model[attr] != null){
+			// if(model[attr] != null){
 				els.html(this.attrToEl(fullAttr, model[attr], els));
-			}
+			// }
 
 			!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
 				if(model[attr] != null)
