@@ -31,9 +31,10 @@ define([
 				if(('token' in results) && ('user' in results)) {
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
-					App.user = new App.models.UserModel(results.user, {
-						url:'/api/user'
-					});
+					// App.user = new App.models.UserModel(results.user, {
+					// 	url:'/api/user'
+					// });
+					//App.user.set(results.user);
 					App.layout.isLoggedIn();
 				}
 			})
@@ -48,7 +49,7 @@ define([
 		login: function (username, password) {
 			var me = this;
 			App.store.clear();
-			App.memory.free();
+			//App.memory.free();
 
 			var deferred = SGAjax.ajax({
 				url: '/auth/login',
@@ -63,9 +64,10 @@ define([
 				if(('token' in results) && ('user' in results)) {
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
-					App.user = new App.models.UserModel(results.user, {
-						url:'/api/user'
-					});
+					// App.user = new App.models.UserModel(results.user, {
+					// 	url:'/api/user'
+					// });
+					//App.user.set(results.user);
 					App.layout.isLoggedIn();
 				}
 			})
@@ -119,7 +121,6 @@ define([
 			})
 			.always(function (results) {
 				App.memory.free();
-				App.user.clear();
 				App.layout.isLoggedOut();
 				App.store.clear();
 			});

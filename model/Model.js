@@ -138,6 +138,9 @@ define([
 				return;
 			}
 			else if(args[0] && args[0].isString()){
+				if(args[0] == "notifications" && this.url == "/api/user"){
+					console.log('set notifications user')
+				}
 				var setterName = "set"+args[0].capitalize();
 				if(is.Function(this[setterName]) && this[setterName]!=arguments.callee.caller){
 					return this[setterName](args[0], args[1]);
@@ -482,6 +485,7 @@ define([
 			return deferred;
 		},
 
+		//TODO: improve function to avoid remove embedded models and collections, and clear them
 		clear: function(){
 			this.attributes = {};
 			this._mattributes = {};

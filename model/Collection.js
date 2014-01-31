@@ -34,7 +34,11 @@ define([
 				if(options.url)
 					this.url = options.url;
 				if(options.parent)
+
 					this.parent = options.parent;
+				if(options.url == "/api/user/notifications"){
+					//debugger
+				}
 			}
 
 			this._virtuals = {};
