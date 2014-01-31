@@ -32,15 +32,13 @@ define([], function () {
 
 		logout: function () {
 			var rememberMe = App.store.get('rememberMe');
-			if((rememberMe !== 'true') || (rememberMe !== true)) {
+			if(!((rememberMe === 'true') || (rememberMe === true))) {
 				App.layout.logout();
-				App.layout.isLoggedOut();
 				this.clear();
 			}
 		},
 
 		changeRememberMe: function (rememberMe) {
-			//console.log('GOING TO SET -> ' + ((rememberMe === 'true') || (rememberMe === true)));
 			if((rememberMe === 'true') || (rememberMe === true)) {
 				this.setRememberMe();
 			}
@@ -50,7 +48,6 @@ define([], function () {
 		},
 
 		unsetRememberMe: function () {
-			//console.log('UNSET');
 			var me = this;
 			App.ActivityController.on('inactivity:' + this.maxIdleTime, function () {
 				if(me.getBearer()) {
@@ -61,7 +58,6 @@ define([], function () {
 		},
 
 		setRememberMe: function () {
-			//console.log('SET');
 			App.ActivityController.off('inactivity:' + this.maxIdleTime);
 			this.set('rememberMe', true);
 		},

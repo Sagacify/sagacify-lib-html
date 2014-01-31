@@ -118,10 +118,10 @@ define([
 				auth: true
 			})
 			.always(function (results) {
-				App.store.clear();
 				App.memory.free();
 				App.user.clear();
 				App.layout.isLoggedOut();
+				App.store.clear();
 			});
 
 			return deferred;
