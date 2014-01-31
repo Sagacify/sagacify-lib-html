@@ -118,7 +118,7 @@ define([
 				auth: true
 			})
 			.always(function (results) {
-				App.store.clear();
+				//App.store.clear();
 				App.memory.free();
 				App.user.clear();
 				App.layout.isLoggedOut();
