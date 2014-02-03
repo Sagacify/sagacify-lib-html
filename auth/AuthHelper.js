@@ -49,7 +49,7 @@ define([
 		login: function (username, password) {
 			var me = this;
 			App.store.clear();
-			//App.memory.free();
+			App.memory.free();
 
 			var deferred = SGAjax.ajax({
 				url: '/auth/login',
