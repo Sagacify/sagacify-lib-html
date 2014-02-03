@@ -56,13 +56,15 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindEls: function(els, model, attr, fullAttr){
-
+		
 			this.bindImages(els.filter('img'), model, attr, fullAttr);
 			this.bindInputDates(els.filter(':input[type=date]'), model, attr, fullAttr);
 			this.bindInputCheckboxs(els.filter(':input[type=radio]'), model, attr, fullAttr);
 			this.bindSelects(els.filter('select'), model, attr, fullAttr);
-			this.bindInputs(els.filter(':input').not(':input[type=date], :input[type=radio],select'), model, attr, fullAttr);
-			this.bindDefaultsEls(els.not('img, :input'), model, attr, fullAttr);
+
+			this.bindInputs(els.filter(':input').not('button, :input[type=date], :input[type=radio],select'), model, attr, fullAttr);
+			
+			this.bindDefaultsEls(els.not('img, :input[type]'), model, attr, fullAttr);
 
 			this.bindValidation(els, model, attr);
 		},
