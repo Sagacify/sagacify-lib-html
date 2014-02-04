@@ -40,6 +40,8 @@ define([
 					var collectionName = schemas[schemaName].collection.name;
 					var Model = App.models[schemaName+'Model'] = SagaModel.extend({
 						urlRoot:'/api/'+collectionName+'/',
+						collectionName:collectionName,
+						schemaName:schemaName,
 						schema: schemas[schemaName].doc,
 						idAttribute: "_id"
 					});
