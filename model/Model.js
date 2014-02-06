@@ -185,14 +185,14 @@ define([
 
 		do: function(action, args, options){
 			var url = this.url instanceof Function?this.url(options):this.url;
-			if(args instanceof Array){
+			if(args instanceof Array) {
 				argsObj = {};
 
 				if(this.schema.actions[action]){
 					if (this.schema.actions[action].args) {
 						this.schema.actions[action].args.forEach(function(arg, i){
 							argsObj[arg] = args[i];
-						});						
+						});
 					}
 				}
 				args = argsObj;
@@ -200,8 +200,8 @@ define([
 
 			var deferred = SGAjax.ajax({
 				type: 'POST',
-				url: url+'/'+action, 
-				data: args||{}
+				url: url + '/' + action,
+				data: args || {}
 			});
 
 			var me = this;
@@ -227,7 +227,7 @@ define([
 				return function(){
 					return this._mattributes[attr];
 				};
-			}
+			};
 
 			var set = function(attr){
 				return function(value){
