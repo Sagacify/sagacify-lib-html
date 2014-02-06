@@ -33,6 +33,10 @@ define([], function(){
 			$.each(firstLine[0].attributes, function(){
 				me.$el.attr(this.name, this.value);
 			});
+
+			if(typeof this.onFirstElementsReinjected == "function"){
+				this.onFirstElementsReinjected();
+			}
 		}
 	}
 
