@@ -6,8 +6,14 @@ define(["../model/Model"], function(Model){
 
 		bindToModel: function(){
 			if(this.modelBind && this.model){
+							
 				//var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
 				//var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;
+
+				if (!this.model.treeVirtuals) {
+					return;
+				};
+
 				var treeVirtuals = this.model.treeVirtuals();
 				var me = this;
 				var getSelector = function(attr){
