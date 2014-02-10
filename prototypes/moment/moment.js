@@ -13,6 +13,16 @@ define([
 		return this.add(parseInt(splitTime[0]), 'hours').add(parseInt(splitTime[1]), 'minutes');
 	};
 
+	Moment.fn.sgSetTime = function(time){
+		if(!time){
+			return;
+		}
+		var splitTime = time.split(':');
+		var hours = splitTime[0];
+		var minutes = splitTime[1];
+		this.hours(hours).minutes(minutes);
+	};
+
 	Moment.fn.isInPast = function(){
 		return this.isBefore(moment());
 	};
