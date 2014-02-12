@@ -30,3 +30,7 @@ String.prototype.inject = function(occurences){
 	});
 	return strToReturn;
 };
+
+String.prototype.idToDate = function (occurences) {
+	return new Date(parseInt(this._id.slice(0, 8), 16) * 1000);
+};
