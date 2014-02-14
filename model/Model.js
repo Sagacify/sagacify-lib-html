@@ -61,6 +61,10 @@ define([
 
 			var me = this;
 			var getset = function(attribute, raw){
+				if(raw instanceof SagaModel || raw instanceof SagaCollection){
+					return raw;
+				}
+
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
 				if(schemaElement){
 					var type = is.Array(schemaElement)?schemaElement[0].type:schemaElement.type;
