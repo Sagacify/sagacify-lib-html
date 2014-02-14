@@ -104,12 +104,30 @@ define(['../types/validateType'], function (is) {
 		},
 
 		isYoutubeVideo: function (url) {
-			return this.getYoutubeVideoID(url) ? true : false;
+			return this.getYoutubeVideoId(url) ? true : false;
 		},
 
-		getYoutubeVideoID: function (url) {
-			var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-			return (url.match(p)) ? RegExp.$1 : false;
+		getYoutubeVideoId: function (url) {
+			var pattern = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+			return (String(url).match(pattern)) ? RegExp.$1 : null;
+		},
+
+		isDailymotionVideo: function (url) {
+			return this.getDailymotionVideoId(url) ? true : false;
+		},
+
+		getDailymotionVideoId: function (url) {
+			var pattern = url.match(/^.+dailymotion.com\/((video|hub)\/([^_]+))?[^#]*(#video=([^_&]+))?/);
+			return pattern ? pattern[5] || pattern[3] : null;
+		},
+
+		isVimeoVideo: function (url) {
+			return this.getVimeoVideoId(url) ? true : false;
+		},
+
+		getVimeoVideoId: function (url) {
+			var pattern = url.match(/https?:\/\/(?:www\.)?vimeo.com\/(?:channels\/|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/);
+			return pattern ? pattern[3] : null;
 		},
 
 		isNumeric: function (str) {
