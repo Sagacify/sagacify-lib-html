@@ -6,7 +6,6 @@ define([
 	var ItemView = Marionette.ItemView.extend({
 
 		constructor: function(){
-			this.model = this.getModel();
 			Marionette.ItemView.prototype.constructor.apply(this, arguments);
 		},
 

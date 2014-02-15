@@ -198,9 +198,7 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindSelects: function(selects, model, attr, fullAttr) {
-
 			if(selects.length) {
-
 				var me = this;
 				!this._modelBound && selects.on('change', function(){
 					model[attr] = $(this.options[this.selectedIndex]).val();
@@ -212,7 +210,7 @@ define(["../model/Model"], function(Model){
 					this.attrToEl(fullAttr, model[attr], selects);
 				}
 				!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
-					// $('[value="'+model[attr]+'"]', selects).prop('selected', true);
+					//$('[value="'+model[attr]+'"]', selects).prop('selected', true);
 					selects.val(model[attr]);
 					this.attrToEl(fullAttr, model[attr], selects);
 				});
@@ -220,7 +218,6 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindDefaultsEls: function(els, model, attr, fullAttr){
-
 			if(!els.length) {
 				return;
 			}
