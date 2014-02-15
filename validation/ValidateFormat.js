@@ -103,6 +103,33 @@ define(['../types/validateType'], function (is) {
 			return str.length < 2083 && str.match(/^(?!mailto:)(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?:(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[0-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))|localhost)(?::\d{2,5})?(?:\/[^\s]*)?$/i);
 		},
 
+		isYoutubeVideo: function (url) {
+			return this.getYoutubeVideoId(url) ? true : false;
+		},
+
+		getYoutubeVideoId: function (url) {
+			var pattern = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+			return (String(url).match(pattern)) ? RegExp.$1 : null;
+		},
+
+		isDailymotionVideo: function (url) {
+			return this.getDailymotionVideoId(url) ? true : false;
+		},
+
+		getDailymotionVideoId: function (url) {
+			var pattern = url.match(/^.+dailymotion.com\/((video|hub)\/([^_]+))?[^#]*(#video=([^_&]+))?/);
+			return pattern ? pattern[5] || pattern[3] : null;
+		},
+
+		isVimeoVideo: function (url) {
+			return this.getVimeoVideoId(url) ? true : false;
+		},
+
+		getVimeoVideoId: function (url) {
+			var pattern = url.match(/https?:\/\/(?:www\.)?vimeo.com\/(?:channels\/|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/);
+			return pattern ? pattern[3] : null;
+		},
+
 		isNumeric: function (str) {
 			return !!str.match(/^[0-9]+$/);
 		},

@@ -36,19 +36,11 @@ define([
 		},
 
 		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
-			//keepOnRegionClose = true
-			childName = (/*childName == null ||*/ childName === true) ? 'childView' : childName;
 
-			// if(region.currentView && region.currentView._keepOnRegionClose){
-			// 	delete region.currentView;
-			// }
+			childName = (childName === true) ? 'childView' : childName;
+
 			if(!childName || !(this[childName] instanceof childClass)) {
 				var view = new childClass(childArgs||{});
-				// if(keepOnRegionClose){
-				// 	view._keepOnRegionClose = true;
-				// 	delete region.currentView;
-				// }
-
 				if(childName){
 					this[childName] = view;
 				}
@@ -59,17 +51,8 @@ define([
 				region.showOnRender(this, view);
 
 				return view;
-			}
-			else{
-				// if(this[childName]._keepOnRegionClose){
-				// 	var render = this[childName].render;
-				// 	this[childName].render = function(){};
-				// 	region.showOnRender(this, this[childName]);
-				// 	this[childName].render = render;
-				// }
-				// else{
-					region.showOnRender(this, this[childName]);
-				//}
+			} else {
+				region.showOnRender(this, this[childName]);
 				return this[childName];
 			}
 		}
