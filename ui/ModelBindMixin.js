@@ -70,7 +70,7 @@ define(["../model/Model"], function(Model){
 
 			this.bindInputs(els.filter(':input').not('button, :input[type=date], :input[type=radio],select'), model, attr, fullAttr);
 			
-			this.bindDefaultsEls(els.not('img, :input[type]'), model, attr, fullAttr);
+			this.bindDefaultsEls(els.not('img, :input[type], select'), model, attr, fullAttr);
 
 			this.bindValidation(els, model, attr);
 		},
@@ -205,12 +205,10 @@ define(["../model/Model"], function(Model){
 				});
 
 				if(model[attr] != null) {
-					// $('[value="'+model[attr]+'"]', selects).prop('selected', true);
 					selects.val(model[attr]);
 					this.attrToEl(fullAttr, model[attr], selects);
 				}
 				!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
-					//$('[value="'+model[attr]+'"]', selects).prop('selected', true);
 					selects.val(model[attr]);
 					this.attrToEl(fullAttr, model[attr], selects);
 				});
