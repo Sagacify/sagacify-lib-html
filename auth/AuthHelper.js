@@ -29,12 +29,12 @@ define([
 
 			deferred.done(function (results) {
 				if(('token' in results) && ('user' in results)) {
+					//TODO CONFIG USERS
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
-					// App.user = new App.models.UserModel(results.user, {
-					// 	url:'/api/user'
-					// });
-					//App.user.set(results.user);
+					App.user = new App.models.UserModel(results.user, {
+						url:'/api/user'
+					});
 					App.layout.isLoggedIn();
 				}
 			})
@@ -62,12 +62,12 @@ define([
 
 			deferred.done(function (results) {
 				if(('token' in results) && ('user' in results)) {
+					//TODO CONFIG USERS
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
-					// App.user = new App.models.UserModel(results.user, {
-					// 	url:'/api/user'
-					// });
-					//App.user.set(results.user);
+					App.user = new App.models.UserModel(results.user, {
+						url:'/api/user'
+					});
 					App.layout.isLoggedIn();
 				}
 			})
