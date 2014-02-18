@@ -11,13 +11,14 @@ define([
 	_.extend(Backbone.Marionette.ItemView.prototype, {
 
 		constructor: function(options){
-			this._handleGoTo();
 			this.options = options||{};
 			for(var key in options){
 				if(key in this){
 					this[key] = options[key];
 				}
 			}
+			this.model = this.getModel();
+			this._handleGoTo();
 			return ItemViewCopy.constructor.apply(this, arguments);
 		},
 

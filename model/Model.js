@@ -62,6 +62,7 @@ define([
 			var me = this;
 			var getset = function(attribute, raw){
 				if(raw instanceof SagaModel || raw instanceof SagaCollection){
+
 					return raw;
 				}
 

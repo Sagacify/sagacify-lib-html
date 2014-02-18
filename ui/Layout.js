@@ -10,7 +10,6 @@ define([
 		constructor: function(){
 			
 			this._handleFirstRender();		
-			this.model = this.getModel();	
 			
 			Marionette.Layout.prototype.constructor.apply(this, arguments);
 		},
