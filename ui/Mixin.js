@@ -23,7 +23,8 @@ define([], function(){
 			});
 		},
 
-		isRendered: function(){
+		//ATTENTION! tu ecrase un attribut de marrionnette...
+		sgisRendered: function(){
 			return this._firstRenderDone;
 		},
 

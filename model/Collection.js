@@ -365,6 +365,18 @@ define([
 			});
 		},
 
+		removePaginate: function(){
+			this._paginate = {
+				currentPage: 0,
+				// which page should pagination start from
+				perPage: 0,
+				// how many items per page should be shown (0 is no limit)
+				maxPages: 0,
+				// max pages (0 is not limit) 
+				_maxPagesReached: false
+			};
+		},
+
 		clear: function ()  {
 			var len = this.models.length;
 			while (len--) {
@@ -375,9 +387,10 @@ define([
 		removeAll: function () {
 			var removed = [];
 			for (var i = this.models.length - 1; i >= 0; i--) {
-				this.remove(this.models[i]);
 				removed.push(this.models[i]);
 			}
+			this.clear();
+			this.removePaginate()
 			this.trigger('remove:all');
 			return removed;
 		},
