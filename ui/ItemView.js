@@ -6,13 +6,12 @@ define([
 	var ItemView = Marionette.ItemView.extend({
 
 		constructor: function(){
-			this.model = this.getModel();
 			Marionette.ItemView.prototype.constructor.apply(this, arguments);
 		},
 
 		render: function(options){
 			if(!this.template)
-				this.template = this.get_Template(options||this.model||this.data);
+				this.template = this.get_Template(options||this.rawModel||this.model||this.data);
 
 			Marionette.ItemView.prototype.render.apply(this, arguments);
 

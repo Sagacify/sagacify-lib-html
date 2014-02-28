@@ -6,8 +6,14 @@ define(["../model/Model"], function(Model){
 
 		bindToModel: function(){
 			if(this.modelBind && this.model){
+							
 				//var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
 				//var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;
+
+				if (!this.model.treeVirtuals) {
+					return;
+				};
+
 				var treeVirtuals = this.model.treeVirtuals();
 				var me = this;
 				var getSelector = function(attr){
@@ -52,18 +58,19 @@ define(["../model/Model"], function(Model){
 						}
 					}
 				}
-
-				//this._modelBound = true;
 			}
 		},
 
 		bindEls: function(els, model, attr, fullAttr){
+		
 			this.bindImages(els.filter('img'), model, attr, fullAttr);
 			this.bindInputDates(els.filter(':input[type=date]'), model, attr, fullAttr);
 			this.bindInputCheckboxs(els.filter(':input[type=radio]'), model, attr, fullAttr);
 			this.bindSelects(els.filter('select'), model, attr, fullAttr);
-			this.bindInputs(els.filter(':input').not(':input[type=date], :input[type=radio],select'), model, attr, fullAttr);
-			this.bindDefaultsEls(els.not('img, :input'), model, attr, fullAttr);
+
+			this.bindInputs(els.filter(':input').not('button, :input[type=date], :input[type=radio],select'), model, attr, fullAttr);
+			
+			this.bindDefaultsEls(els.not('img, :input[type], select'), model, attr, fullAttr);
 
 			this.bindValidation(els, model, attr);
 		},
@@ -76,14 +83,27 @@ define(["../model/Model"], function(Model){
 				if(src != imgs.attr('default'))
 					model[attr] = src;
 			});
-
+			var me = this;
 			var setImage = function(){
+
+				if(me.classManageAttrConversion(fullAttr, model[attr], imgs)){
+					return;
+				}
+
+				var src;
 				if(model[attr] instanceof Model){
-					imgs.attr('src', model[attr]._url||imgs.attr('default'));
+					src = model[attr]._url||imgs.attr('default');
 				}
 				else {
-					imgs.attr('src', model[attr]||imgs.attr('default'));
+					src = model[attr]||imgs.attr('default');
 				}
+				if(!src && imgs.attr('avatar-name')){
+					imgs.createNameAvatar(model[imgs.attr('avatar-name')]);
+				}
+				else{
+					imgs.attr('src', src);
+				}				
+
 			}
 
 			setImage();
@@ -185,10 +205,12 @@ define(["../model/Model"], function(Model){
 				});
 
 				if(model[attr] != null) {
-					$('[value="'+model[attr]+'"]', selects).prop('selected', true);
+					selects.val(model[attr]);
+					this.attrToEl(fullAttr, model[attr], selects);
 				}
 				!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
-					$('[value="'+model[attr]+'"]', selects).prop('selected', true);
+					selects.val(model[attr]);
+					this.attrToEl(fullAttr, model[attr], selects);
 				});
 			}
 		},
@@ -197,9 +219,10 @@ define(["../model/Model"], function(Model){
 			if(!els.length) {
 				return;
 			}
-			if(model[attr] != null){
+			
+			// if(model[attr] != null){
 				els.html(this.attrToEl(fullAttr, model[attr], els));
-			}
+			// }
 
 			!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
 				if(model[attr] != null)
@@ -215,7 +238,22 @@ define(["../model/Model"], function(Model){
 			return val;
 		},
 
+		classManageAttrConversion: function(attr, value, els){
+			var fct = this.methodForAttr(attr);
+			return fct && !!!this[fct](value, els);
+		},
+
+		methodForAttr: function(attr){
+			attr.capitalize()+'toEl';
+			var pathToModel = attr.charAt(0)+attr.capitalize().slice(1)+'ToEl';
+			if(typeof this[pathToModel] != 'function'){
+				return null;
+			}
+			return pathToModel;
+		},
+
 		attrToEl: function(attr, val, els){
+			attr.capitalize()+'toEl';
 			var pathToModel = attr.charAt(0)+attr.capitalize().slice(1)+'ToEl';
 			if(typeof this[pathToModel] == 'function'){
 				return this[pathToModel](val, els);

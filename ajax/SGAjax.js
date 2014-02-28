@@ -17,12 +17,7 @@ define([], function () {
 			if(this.requestsNode) {
 				this.showRequestsProgress(this.requestsNode);
 			}
-			// if('success') {}
-			// else if('notmodified') {}
-			// else if('error') {}
-			// else if('timeout') {}
-			// else if('abort') {}
-			// else if('parsererror') {}
+
 		},
 		beforeSendHandler: function (xhr, settings) {
 			this.currentRequestsCount += 1;
@@ -56,10 +51,15 @@ define([], function () {
 				contentType: contentType || 'application/json; charset=utf-8',
 				//dataType: 'json',
 				success: cbSuccess,
+
 				error: cbError,
+
 				headers: headers,
+
 				data: (typeof data === 'object') && (type !== 'GET') ? JSON.stringify(data) : data,
+
 				type: type,
+
 				url: url
 			});
 
@@ -69,11 +69,14 @@ define([], function () {
 			};
 
 			promise.fail(function(err){
+				if (!err.status) {
+					app.nc.trigger('socket:no_response');
+				};
 				if(!promise._preventDefaultError && typeof App.onError == "function"){
 					App.onError(err);
 				}
 			});
-			
+
 			return promise;
 		},
 		authorization: function () {
@@ -81,8 +84,13 @@ define([], function () {
 				Authorization: App.store.getBearer()
 			};
 		},
+
 		ajax: function (options) {
+
+
 			var url = options.url;
+
+
 			var data = options.data;
 			var method = options.type.toLowerCase();
 			//var headers = options.auth ? this.authorization() : {};
@@ -96,8 +104,10 @@ define([], function () {
 			var cbSuccess = options.success;
 			if(method=="patch")
 				method = "put";
+
 			return this[method](url, headers, contentType, data, cbError, cbSuccess) || cbError();
 		},
+
 		constructor: function (options) {
 			$.extend(this, options);
 			var originalXhr = $.ajaxSettings.xhr;
@@ -125,6 +135,7 @@ define([], function () {
 				return me.ajax.apply(me, arguments);
 			};
 		},
+
 		delete: function (url, headers, contentType, data, cbError, cbSuccess) {
 			return this.methodWrapper('DELETE', url, headers, contentType, data, cbError, cbSuccess);
 		},

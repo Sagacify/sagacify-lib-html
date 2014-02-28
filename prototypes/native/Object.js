@@ -105,6 +105,19 @@ obj_proto.isEmpty = function(){
 };
 
 
+Object.values = function (obj) {
+    var vals = [];
+    
+    for (var i = 0; i < Object.keys(obj).length; i++) {
+    	var key = Object.keys(obj)[i];
+
+    	vals.push(obj[key]);
+    };
+    return vals;
+}
+
+
+
 for(var key in obj_proto){
 	Object.defineProperty(Object.prototype, key, {writable: true, value: obj_proto[key]});
 }

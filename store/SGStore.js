@@ -4,10 +4,9 @@ define([], function () {
 
 		maxIdleTime: 20,
 
-		rememberMe: true, // should be false but true is more convenient in dev.
-
 		getStore: function () {
-			return this.rememberMe ? localStorage : sessionStorage;
+			//return this.rememberMe ? localStorage : sessionStorage;
+			return localStorage;
 		},
 
 		get: function (key) {
@@ -18,18 +17,8 @@ define([], function () {
 			return this.getStore().setItem(key, value);
 		},
 
-		setObject: function (obj) {
-			var keys = Object.keys(obj);
-			var len = keys.length;
-			var i;
-			while(i--) {
-				i = keys[len];
-				this.set(i, obj[i]);
-			}
-		},
-
 		clear: function () {
-			return this.getStore().clear();
+			this.getStore().clear();
 		},
 
 		getBearer: function () {
@@ -41,11 +30,40 @@ define([], function () {
 			return null;
 		},
 
-		init: function () {
+		logout: function () {
+			var rememberMe = App.store.get('rememberMe');
+			if(!((rememberMe === 'true') || (rememberMe === true))) {
+				App.layout.logout();
+			}
+		},
+
+		changeRememberMe: function (rememberMe) {
+			if((rememberMe === 'true') || (rememberMe === true)) {
+				this.setRememberMe();
+			}
+			else {
+				this.unsetRememberMe();
+			}
+		},
+
+		unsetRememberMe: function () {
 			var me = this;
 			App.ActivityController.on('inactivity:' + this.maxIdleTime, function () {
-				me.clear();
+				if(me.getBearer()) {
+					me.logout();
+				}
 			});
+			this.set('rememberMe', false);
+		},
+
+		setRememberMe: function () {
+			App.ActivityController.off('inactivity:' + this.maxIdleTime);
+			this.set('rememberMe', true);
+		},
+
+		init: function (initialRememberMe) {
+			this.maxIdleTime = App.config.disconnectedAfter;
+			this.changeRememberMe(initialRememberMe);
 		}
 
 	};

@@ -23,16 +23,26 @@ define([], function(){
 			});
 		},
 
-		isRendered: function(){
+		//ATTENTION! tu ecrase un attribut de marrionnette...
+		sgisRendered: function(){
 			return this._firstRenderDone;
 		},
 
 		reinjectFirstElement: function(){
+
 			var me = this;
 			var firstLine = $(this.template.substring(0, this.template.indexOf('>')+1));
+
+			if (!firstLine[0]) {
+				debugger
+			};
 			$.each(firstLine[0].attributes, function(){
 				me.$el.attr(this.name, this.value);
 			});
+
+			if(typeof this.onFirstElementsReinjected == "function"){
+				this.onFirstElementsReinjected();
+			}
 		}
 	}
 

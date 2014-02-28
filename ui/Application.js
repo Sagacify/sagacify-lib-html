@@ -18,7 +18,6 @@ define([
 
 			$(window).scroll(function (evt){
 				if(me.isBottomReached()) {
-					console.log('TRIGGER');
 					me.trigger("bottomReached");
 				}
 			});
@@ -28,6 +27,7 @@ define([
 
 		fetchModels: function (){
 			var deferred = $.Deferred();
+			var me = this;
 			$.get('/api/app_models', function (structure){
 				var App = {};
 				App.server_routes = structure.routes;
@@ -40,6 +40,8 @@ define([
 					var collectionName = schemas[schemaName].collection.name;
 					var Model = App.models[schemaName+'Model'] = SagaModel.extend({
 						urlRoot:'/api/'+collectionName+'/',
+						collectionName:collectionName,
+						schemaName:schemaName,
 						schema: schemas[schemaName].doc,
 						idAttribute: "_id"
 					});
@@ -50,17 +52,41 @@ define([
 					});
 					App[collectionName] = new Collection();
 				}
+
 				deferred.resolve(App);
 			});
 			return deferred.promise();
 		},
 
+		// modelExtension: function(){
+		// 	return {__tIsValid:function(){return false}};
+		// },
+
+		// collectionExtension: function(){
+		// 	return {};
+		// },
+
+		createModel : function(ModelName, rawData) {
+			// debugger
+			var Model = this.getModelClass(ModelName);
+			return new Model(rawData);
+		},	
+
+		getModelClass: function(modelName){
+			// debugger
+			if ((modelName+'Model') in App.models) {
+				return App.models[(modelName+'Model')];
+			};
+			return null;
+		},
+
 		isBottomReached: function () {
 			// body.scrollTop is deprecated in strict mode. 
 			// Please use 'documentElement.scrollTop' if in strict mode and 'body.scrollTop' only if in quirks mode.
-			// return document.body.scrollTop == (document.body.scrollHeight-window.innerHeight);
-			return (document.body.scrollHeight - window.innerHeight - 5) < document.documentElement.scrollTop
-				|| (document.body.scrollHeight - window.innerHeight + 5) < document.documentElement.scrollTop;
+			return (document.body.scrollTop || document.documentElement.scrollTop) == (document.body.scrollHeight-window.innerHeight);
+			// console.log(document.body.scrollHeight, window.innerHeight, document.documentElement.scrollTop, document.body.scrollTop);
+			// return (document.body.scrollHeight - window.innerHeight - 5) < document.documentElement.scrollTop
+			// 	|| (document.body.scrollHeight - window.innerHeight + 5) < document.documentElement.scrollTop;
 		},
 
 		getUser: function(){

@@ -49,3 +49,66 @@ $.fn.sgCrop = function(canvas){
 	}
 	return base64;
 };
+
+$.fn.createNameAvatar = function (name, size) {
+	// Script by Julien Henrotte
+	var canvas = document.createElement('canvas')
+	  , ele = this.attr ? this : $(this);
+
+	canvas.width = (size || ele.attr('avatar-size') || ele.width() || 100) | 0;
+	canvas.height = (size || ele.attr('avatar-size') || ele.height() || 100) | 0;
+
+	var fontSize = ((canvas.width / 3) | 0) + 'px';
+
+	var firstNameInitiales
+	  , lastNameInitiales
+	  , initials = '?';
+
+	// Get the initials
+	if(name) {
+		firstNameInitiales = name.split(/\s+/);
+		lastNameInitiales = firstNameInitiales.splice(-1, 1).join('')[0] || '';
+		firstNameInitiales = firstNameInitiales.join('')[0] || '';
+		initials = firstNameInitiales + lastNameInitiales;
+	}
+
+	// Get color from initials and apply color
+	var moduloResult = 0;
+
+	if(firstNameInitiales) {
+		moduloResult = (initials.charCodeAt(0) + initials.charCodeAt(1)) % 10;
+	}
+	else if(lastNameInitiales) {
+		moduloResult = lastNameInitiales.charCodeAt(0) % 10;
+	}
+
+	var colorMod = [
+		'#FFD44D',
+		'#f05a49',
+		'#35bc7a',
+		'#59487f',
+		'#A85B34',
+		'#FD8E20',
+		'#1e8bc3',
+		'#335E86',
+		'#424352',
+		'#4d5466'
+	];
+
+	canvas.style.background = colorMod[moduloResult];
+
+	var context = canvas.getContext('2d'),
+	x = (canvas.width / 2) | 0,
+	y = (canvas.height / 2) | 0;
+	context.fillStyle = colorMod[moduloResult];
+	context.fillRect(0, 0, canvas.width, canvas.height);
+	context.font = '100 ' + fontSize + ' ' + 'Open Sans, Helvetica, Arial';
+	context.textAlign = 'center';
+	context.textBaseline = 'middle';
+	context.fillStyle = 'white';
+	context.fillText(initials, x, y);
+
+	ele.attr('src', canvas.toDataURL());
+	//ele.css('background', colorMod[moduloResult]);
+
+};

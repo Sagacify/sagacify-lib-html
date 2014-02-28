@@ -6,7 +6,7 @@ define(['backbone.marionette'], function(){
 
 	_.extend(Backbone.Marionette.Region.prototype, {
 		showOnRender: function(parentLayout, view, doNotKeep){
-			if(parentLayout.isRendered()){
+			if(parentLayout.sgisRendered()){
 				this.show(view);
 			}
 			else{
@@ -28,7 +28,7 @@ define(['backbone.marionette'], function(){
       //this.close();
     //}
 
-    if(!view.isRendered())
+    if(!view.sgisRendered())
     view.render();
 
     //if (isDifferentView || isViewClosed) {

@@ -10,11 +10,6 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			if(this.sagaRoutes){
 				this.handleSagaRoutes();
 			}
-			// var me = this;
-			// this.on('route', function(route, args){
-			// 	debugger
-			// 	me.lastRoute = {route: route, args:args};
-			// });
 		},
 
 		handleSagaRoutes: function(){
@@ -39,7 +34,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			var me = this;
 			return function () {
 				var args = Array.apply(null, arguments);
-				me.lastRoute = {alias: alias, route:route, args:args};
+				me.lastRoute = {alias: alias, route:route, args:args.clone()};
 				var routeLayout = function(layout, fun){
 					var fun_name;
 					var fun_staticArgs;

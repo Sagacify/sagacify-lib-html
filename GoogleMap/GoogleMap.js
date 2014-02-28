@@ -127,11 +127,12 @@ define([
 			mapTypeId					:	google.maps.MapTypeId.ROADMAP,
 			scrollwheel					:	false,
 			scaleControl				:	false,
-			// scaleControlOptions			:	{
+			// keyboardShortcuts		: 	false,
+			// scaleControlOptions		:	{
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
 			// },
 			panControl					:	false,
-			// panControlOptions			:	{
+			// panControlOptions		:	{
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
 			// },
 			zoomControl					:	true,
@@ -148,7 +149,7 @@ define([
 			// 	position				:	google.maps.ControlPosition.RIGHT_BOTTOM
 			// },
 			overviewMapControl			:	true
-			// overviewMapControlOptions	:	{
+			// overviewMapControlOptions:	{
 			// 	position				:	google.maps.ControlPosition.LEFT_BOTTOM
 			// },
 		});

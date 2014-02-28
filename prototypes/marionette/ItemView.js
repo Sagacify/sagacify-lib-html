@@ -11,20 +11,35 @@ define([
 	_.extend(Backbone.Marionette.ItemView.prototype, {
 
 		constructor: function(options){
-			this._handleGoTo();
 			this.options = options||{};
 			for(var key in options){
 				if(key in this){
 					this[key] = options[key];
 				}
 			}
+			this.model = this.getModel();
+			this._handleGoTo();
 			return ItemViewCopy.constructor.apply(this, arguments);
 		},
 
 		render: function() {
+			var __t;
+			if(this.model){
+				__t = this.model.__t;
+			}
+
 			ItemViewCopy.render.apply(this, arguments);
+
+			if(__t){
+				this.model.__t = __t;
+			}
+
 			this._handleGoToAfterRender();
-			$().i18n && $(this.el).i18n();
+
+			var $el = $(this.el);
+			if($el.i18n) {
+				$el.i18n();
+			}
 		},
 
 		sgValidate: function (domNode) {

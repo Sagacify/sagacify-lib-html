@@ -7,7 +7,7 @@ String.prototype.endsWith = function(str){
 };
 
 String.prototype.contains = function(str){
-	return this.indexOf(str) != -1;
+	return ~this.indexOf(str);
 };
 
 String.prototype.base64Sanitize = function(base64) {
@@ -29,4 +29,8 @@ String.prototype.inject = function(occurences){
 		strToReturn = strToReturn.replace("%s", occurence);
 	});
 	return strToReturn;
+};
+
+String.prototype.idToDate = function (occurences) {
+	return new Date(parseInt(this._id.slice(0, 8), 16) * 1000);
 };

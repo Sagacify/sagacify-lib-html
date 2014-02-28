@@ -34,17 +34,13 @@ define([
 		},
 
 		get: function(attribute){
-			var getterName = "get";
-			for(attrPart in attribute.split(".")){
-				getterName+=attrPart.capitalize();
-			}
+			var getterName = "get"+attribute.capitalize();
 			if(is.Function(this[getterName]) && this[getterName]!=arguments.callee.caller)
 				return this[getterName]();
-
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
-				if(schemaElement && schemaElement.ref){
+				if(schemaElement && schemaElement.ref && attribute != '_id'){
 					this.set(attribute, {});
 					value = Backbone.Model.prototype.get.apply(this, arguments);
 				}
@@ -58,19 +54,24 @@ define([
 			return value;
 		},
 
-		set: function(){
+		set: function SGSetter(){
 			if(arguments.callee.caller == Backbone.Model.prototype.save){
 				return true;
 			}
 
 			var me = this;
 			var getset = function(attribute, raw){
+				if(raw instanceof SagaModel || raw instanceof SagaCollection){
+
+					return raw;
+				}
+
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
 				if(schemaElement){
 					var type = is.Array(schemaElement)?schemaElement[0].type:schemaElement.type;
 					var ref = is.Array(schemaElement)?schemaElement[0].ref:schemaElement.ref;
 					//handle as model or collection
-					if(is.Object(raw) && ref && !attribute.endsWith("._id") || is.Array(raw)){
+					if(is.Object(raw) && ref /*&& !attribute.endsWith("._id")*/ || is.Array(raw)){
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
@@ -121,11 +122,16 @@ define([
 				}
 				else{
 					//if the attribute is the first part of a composed attribute and the server has sent the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
+					
 					if(is.Object(raw)){
 						for(var key in raw){
 							me.set(attribute+"."+key, raw[key]);
 						}
 					}
+					if (args[2] && args[2].force) {
+						return raw;
+					};
+
 					return undefined;
 				}
 			}
@@ -137,10 +143,10 @@ define([
 				return;
 			}
 			else if(args[0] && args[0].isString()){
-				var setterName = "set";
-				for(attrPart in args[0].split(".")){
-					setterName+=attrPart.capitalize();
+				if(args[0] == "notifications" && this.url == "/api/user"){
+					console.log('set notifications user')
 				}
+				var setterName = "set"+args[0].capitalize();
 				if(is.Function(this[setterName]) && this[setterName]!=arguments.callee.caller){
 					return this[setterName](args[0], args[1]);
 				}
@@ -153,17 +159,27 @@ define([
 				}
 			}
 			else if(args[0] && args[0].isObject()){
+				if(args[0] instanceof SagaModel){
+					return Backbone.Model.prototype.set.apply(this, [args[0].toJSON()]);
+				}
+
 				args[0] = args[0].clone();
 				if(args[0]._id){
 					this.set("_id", args[0]._id);
 					delete args[0]._id;
 				}
+
+				
 				args[0].keys().forEach(function(key){
 					var value = getset(key, args[0][key]);
 					if(value === undefined){
 						delete args[0][key];	
 					}
 					else{
+						// if(key == '__t'){
+						// 	console.log(args[0][key])
+						// 	console.log(value)
+						// }
 						args[0][key] = value;
 					}
 				});
@@ -172,16 +188,16 @@ define([
 			return Backbone.Model.prototype.set.apply(this, args);
 		},
 
-		do: function(action, args){
-			var url = this.url instanceof Function?this.url():this.url;
-			if(args instanceof Array){
+		do: function(action, args, options){
+			var url = this.url instanceof Function?this.url(options):this.url;
+			if(args instanceof Array) {
 				argsObj = {};
 
 				if(this.schema.actions[action]){
 					if (this.schema.actions[action].args) {
 						this.schema.actions[action].args.forEach(function(arg, i){
 							argsObj[arg] = args[i];
-						});						
+						});
 					}
 				}
 				args = argsObj;
@@ -189,8 +205,8 @@ define([
 
 			var deferred = SGAjax.ajax({
 				type: 'POST',
-				url: url+'/'+action, 
-				data: args||{}
+				url: url + '/' + action,
+				data: args || {}
 			});
 
 			var me = this;
@@ -216,10 +232,13 @@ define([
 				return function(){
 					return this._mattributes[attr];
 				};
-			}
+			};
 
 			var set = function(attr){
 				return function(value){
+					if(attr == '__t' && (typeof this.__tIsValid != "function" || !this.__tIsValid(value))){
+						return;
+					}
 					return this.set(attr, value);
 				};
 			};
@@ -228,7 +247,7 @@ define([
 				return function(){
 					return function(){
 						var argsArray = Array.apply(null, arguments);
-						return this.do.apply(this, [action, argsArray[0]]);
+						return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
 					};
 				};
 			};
@@ -298,7 +317,7 @@ define([
 				return this._id;
 			}
 			var json;
-			if(!notmpath)
+			if(notmpath !== true)
 				json = Backbone.Model.prototype.toJSON.apply(this, arguments);
 			else
 				json = _.clone(this._mattributes);
@@ -451,8 +470,8 @@ define([
 			}
 		},
 
-		url: function(){
-			if(!this._id && this.slug){
+		url: function(options){
+			if(!this._id && this.slug || options && options.slug){
 				return this.urlRoot + this.slug;
 			}
 			else{
@@ -469,8 +488,29 @@ define([
 			});
 
 			return deferred;
-		}
+		},
 
+		//TODO: improve function to avoid remove embedded models and collections, and clear them
+		clear: function(){
+			this.attributes = {};
+			this._mattributes = {};
+			this.changed = {};
+			this.src = null;
+			return Backbone.Model.prototype.clear.apply(this, arguments);
+		},
+
+		validForSave: function(){
+			return null;
+		},
+
+		__tIsValid: function(__t){
+			if(!App.__t_valids){
+				return false;
+			}
+			else{
+				return App.__t_valids.contains(__t);
+			}
+		}
 
 	});
 
