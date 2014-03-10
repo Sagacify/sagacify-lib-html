@@ -32,12 +32,13 @@ define([
 					//TODO CONFIG USERS
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
+					//Top contraignat...
 					App.layout.isLoggedIn();
 				}
 			})
 			.fail(function (error) {
 				App.store.logout();
-				App.memory.free();
+				App.memory && App.memory.free();
 			});
 
 			return deferred;
@@ -46,7 +47,7 @@ define([
 		login: function (username, password) {
 			var me = this;
 			App.store.clear();
-			App.memory.free();
+			App.memory && App.memory.free();
 
 			var deferred = SGAjax.ajax({
 				url: '/auth/login',
@@ -66,7 +67,7 @@ define([
 				}
 			})
 			.fail(function (error) {
-				App.memory.free();
+				App.memory && App.memory.free();
 			});
 
 			return deferred;
@@ -114,7 +115,7 @@ define([
 				auth: true
 			})
 			.always(function (results) {
-				App.memory.free();
+				App.memory && App.memory.free();
 				App.layout.isLoggedOut();
 				App.store.clear();
 			});
