@@ -13,7 +13,6 @@ define([
 
 	function freeUser () {
 		if(App.user instanceof Backbone.Model) {
-			debugger
 			App.user.clear();
 		}
 	}
