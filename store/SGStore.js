@@ -48,7 +48,7 @@ define([], function () {
 
 		unsetRememberMe: function () {
 			var me = this;
-			App.ActivityController.on('inactivity:' + this.maxIdleTime, function () {
+			App.ActivityController && App.ActivityController.on('inactivity:' + this.maxIdleTime, function () {
 				if(me.getBearer()) {
 					me.logout();
 				}
@@ -57,7 +57,7 @@ define([], function () {
 		},
 
 		setRememberMe: function () {
-			App.ActivityController.off('inactivity:' + this.maxIdleTime);
+			App.ActivityController && App.ActivityController.off('inactivity:' + this.maxIdleTime);
 			this.set('rememberMe', true);
 		},
 
