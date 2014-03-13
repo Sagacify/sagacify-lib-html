@@ -149,10 +149,15 @@ define([
 			return deferred;
 		},
 
-		reverse_validation: function (data, token) {
+		reverse_validation: function (data, id, token) {
+			var url = '/auth/reverse_validation';
+			if(id && token) {
+				url+= '?token=' + token + '&id=' + id;
+			}
+
 			var me = this;
 			var deferred = SGAjax.ajax({
-				url: '/auth/user/reverse_validation',
+				url: url,
 				type: 'POST',
 				data: data
 			});
