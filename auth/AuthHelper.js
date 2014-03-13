@@ -147,6 +147,31 @@ define([
 			});
 
 			return deferred;
+		},
+
+		reverse_validation: function (data, token) {
+			var me = this;
+			var deferred = SGAjax.ajax({
+				url: '/auth/user/reverse_validation',
+				type: 'POST',
+				data: data
+			});
+
+			deferred.done(function (results) {
+				if(('token' in results) && ('user' in results)) {
+					//TODO CONFIG USERS
+					App.store.set('token', results.token);
+					App.store.set('id', results.user.username);
+					//Top contraignat...
+					App.layout.isLoggedIn();
+				}
+			})
+			.fail(function (error) {
+				App.store.logout();
+				App.memory && App.memory.free();
+			});
+
+			return deferred;
 		}
 
 	};
