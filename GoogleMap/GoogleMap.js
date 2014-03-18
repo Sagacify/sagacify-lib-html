@@ -31,7 +31,7 @@ define([
 			var me = this;
 			var listener = google.maps.event.addListener(this.map, 'idle', function() {
 				var zoom = me.map.getZoom();
-				me.map.setZoom((zoom || 1) - 1);
+				//me.map.setZoom((zoom || 1) - 1);
 				google.maps.event.removeListener(listener);
 			});
 		};
