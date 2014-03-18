@@ -34,7 +34,7 @@ define([
 				me.map.setZoom((zoom || 1) - 1);
 				google.maps.event.removeListener(listener);
 			});
-		},
+		};
 
 		this.set_MarkerEventHandlers = function (infobox, marker) {
 			var me = this;
@@ -43,7 +43,7 @@ define([
 			});
 			google.maps.event.addListener(marker, 'click', function () {
 				infobox[infobox.getMap() ? 'close' : 'open'](me.map, marker);
-				if(me.displayed_infobox && (me.displayed_infobox !== infobox)) {
+				if(me.displayed_infobox && me.displayed_infobox !== infobox) {
 					me.displayed_infobox.close();
 				}
 				me.displayed_infobox = infobox;
