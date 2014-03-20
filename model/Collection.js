@@ -395,6 +395,12 @@ define([
 			return removed;
 		},
 
+		mergeWithCollection: function(anotherCollection){
+			for (var i = 0; i < anotherCollection.models.length; i++) {
+				this.add(anotherCollection.models[i])
+			};
+		},
+
 		sgClientFilter: function (attrs) {
 			var items = this.where(attrs);
 			var Collection = SagaCollection.extend({
@@ -404,6 +410,7 @@ define([
 			});
 			return new Collection(items);
 		}
+
 	});
 
 	return SagaCollection;

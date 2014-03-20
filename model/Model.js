@@ -85,6 +85,9 @@ define([
 							var collectionUrl = url+'/'+attribute;
 							//collection of ref
 							if(ref){
+								if (!App.collections[ref+"Collection"]) {
+									debugger
+								};
 								return new App.collections[ref+"Collection"](raw||[], {url:collectionUrl, parent:{instance:me, path:attribute}});
 							}
 							//collection of primitives
