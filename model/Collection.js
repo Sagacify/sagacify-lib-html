@@ -409,7 +409,7 @@ define([
 				schema: this.schema
 			});
 			return new Collection(items);
-		},
+		}
 
 	});
 

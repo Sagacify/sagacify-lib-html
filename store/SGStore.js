@@ -17,6 +17,10 @@ define([], function () {
 			return this.getStore().setItem(key, value);
 		},
 
+		unset: function (key) {
+			return this.getStore().removeItem(key);
+		},
+
 		clear: function () {
 			this.getStore().clear();
 		},
