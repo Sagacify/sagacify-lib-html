@@ -172,6 +172,7 @@ define([
 		},
 
 		do: function (action, args) {
+			debugger
 			var url = this.url instanceof Function ? this.url() : this.url;
 			if (args instanceof Array) {
 				argsObj =   {};
@@ -304,7 +305,8 @@ define([
 					return function () {
 						return function () {
 							var argsArray = Array.apply(null, arguments);
-							return this.do.apply(this, [action, argsArray]);
+							//return this.do.apply(this, [action, argsArray]);
+							return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
 						};
 					};
 				};
