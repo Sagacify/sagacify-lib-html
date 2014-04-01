@@ -1,7 +1,8 @@
 define([
 	'backbone',
-	'../types/validateType'
-], function (Backbone, is) {
+	'../types/validateType',
+	'../ajax/SGAjax'
+], function (Backbone, is, SGAjax) {
 	var SagaCollection = Backbone.Collection.extend({
 
 		_isLoading: false,
