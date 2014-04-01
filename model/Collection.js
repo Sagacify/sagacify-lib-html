@@ -172,7 +172,6 @@ define([
 		},
 
 		do: function (action, args) {
-			debugger
 			var url = this.url instanceof Function ? this.url() : this.url;
 			if (args instanceof Array) {
 				argsObj =   {};
