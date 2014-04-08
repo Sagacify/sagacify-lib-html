@@ -29,9 +29,13 @@ define([
 			}
 			this.map.fitBounds(bounds);
 			var me = this;
+			var zoom = -1;
+			var mapzoom;
 			var listener = google.maps.event.addListener(this.map, 'idle', function() {
-				var zoom = me.map.getZoom();
-				//me.map.setZoom((zoom || 1) - 1);
+				mapzoom = me.map.getZoom();
+				zoom = (zoom === -1) ? mapzoom - 1 : mapzoom;
+				me.map.setZoom(zoom || 1);
+				me.map.fitBounds(bounds);
 				google.maps.event.removeListener(listener);
 			});
 		};
