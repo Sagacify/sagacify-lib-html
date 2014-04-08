@@ -81,7 +81,7 @@ define([
 			}
 		},
 		
-		presentViewController: function(viewController) {
+		presentViewController: function(viewController, transition) {
 			viewController.domNode.style.top = Window.domNode.clientHeight+"px";
 			viewController.domNode.style.left = "0px";
 			viewController.domNode.style.width = Window.domNode.clientWidth+"px";
@@ -89,26 +89,42 @@ define([
 			viewController.domNode.style.zIndex = "2";
 			viewController.domNode.style.position = "absolute";
 			viewController.placeAt(Window.domNode);
-			viewController.performTransition(null, 1, "revealv", null);
+			viewController.performTransition(null, 1, transition||"revealv", null);
 			
 			var eventsBlocker = domConstruct.create("div", {style:"z-index:1000;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, Window.domNode);
-			viewController.on("afterTransitionOut", function(){
+
+			var onAfterTransitionOut = function(){
 				if(typeof viewController.startup == "function")
 					viewController.startup();
 				viewController.domNode.style.display = "";
 				viewController.domNode.style.top = "0px";
 				viewController.domNode.style.left = "0px";
 				domConstruct.destroy(eventsBlocker);
-			});
+			}
+
+			if(transition == "none"){
+				onAfterTransitionOut();
+			}
+			else{
+				viewController.on("afterTransitionOut", onAfterTransitionOut);
+			}
 		},
 		
-		dismissViewController: function() {
-			this.performTransition(null, -1, "revealv", null);
+		dismissViewController: function(transition) {
+			this.performTransition(null, -1, transition||"revealv", null);
 			
 			var me = this;
-			this.on("afterTransitionOut", function(){
+
+			var onAfterTransitionOut = function(){
 				me.destroy();
-			});	
+			}
+
+			if(transition == "none"){
+				onAfterTransitionOut();
+			}
+			else{
+				this.on("afterTransitionOut", onAfterTransitionOut);
+			}
 		},
 		
 		presentActionSheet: function(actionSheetOptions) {

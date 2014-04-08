@@ -161,8 +161,8 @@ define([
 			}).play();
 			//}
 		},
-		
-		startup: function(){
+
+		createNumPad: function(){
 			this.numPad = new NumPad();
 			this.numPad.domNode.style.top = this.frame.height+"px";
 			this.numPad.domNode.style.left = "0px";
@@ -184,7 +184,11 @@ define([
 					me.numPadVisible = false;
 				}
 			});
-			
+		},
+		
+		startup: function(){
+			this.createNumPad();
+
 			var loadingBar = new LoadingBar();
 			loadingBar.setWidth(this.frame.width);
 			loadingBar.domNode.style.position = "absolute";

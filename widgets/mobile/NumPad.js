@@ -5,15 +5,18 @@ define([
 	'dojo/text!./templates/NumPad.html',
 	'dojo/_base/config',
 	'dojo/on',
-	'dojo/dom-class'], 
+	'dojo/dom-class',
+	'dojo/dom-style'], 
 	
-	function(declare, _Widget, View, template, config, on, domClass) {
+	function(declare, _Widget, View, template, config, on, domClass, domStyle) {
 	
 	return declare('saga.NumPad', [_Widget, View], {
 		
 		templateString: template,
 		
 		focus: false,
+
+		separator: true,
 				
 		constructor: function(args) {
 			
@@ -31,15 +34,23 @@ define([
 			var me = this;
 			dojo.forEach(this.domNode.children, function(li, i){
 				var text = li.children[0].innerHTML;
+				if(text == '.' && !me.separator){
+					domStyle.set(li, 'opacity', 0.5);
+				}
+
 				on(li, selectEvent, function(evt){
 					evt.preventDefault();
-					me.onKeySelected.apply(me, [text]);
+					if(text != "." || me.separator){
+						me.onKeySelected.apply(me, [text]);
+					}
 					if(text == "OK")
 						Window.dismissNumPad();
 					evt.stopPropagation();
 				});
 				on(li, downEvent, function(evt){
-					domClass.add(li, "selected");					
+					if(text != "." || me.separator){
+						domClass.add(li, "selected");
+					}				
 				});
 				on(li, upEvent, function(evt){
 					domClass.remove(li, "selected");					
