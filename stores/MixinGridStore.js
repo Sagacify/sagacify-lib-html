@@ -1,8 +1,9 @@
 define([
 	"dojo/_base/declare",
-	"./util/QueryResults"
+	"./util/QueryResults",
+	"dojo/io-query"
 	], 
-	function(declare, QueryResults) {
+	function(declare, QueryResults, ioQuery) {
 	
 	return declare("saga.MixinGridStore", null, {
 
@@ -12,11 +13,21 @@ define([
 			query += options.start + "&limit=" + options.count;
 
 			if (this.filtersToApply && this.filtersToApply.length) {
+				var filtersObj = {};
 				for (var i = 0; i < this.filtersToApply.length; i++) {
-					var fitlerObj = this.filtersToApply[i];
-					query +="&filter_"+fitlerObj.key+"="+fitlerObj.value;
+					var aFilter = this.filtersToApply[i];
+					filtersObj["filter_"+aFilter.key] = aFilter.value;
 				};
-			};
+				query += "&"+ioQuery.objectToQuery(filtersObj);
+
+			}
+
+			// if (this.filtersToApply && this.filtersToApply.length) {
+			// 	for (var i = 0; i < this.filtersToApply.length; i++) {
+			// 		var fitlerObj = this.filtersToApply[i];
+			// 		query +="&filter_"+fitlerObj.key+"="+fitlerObj.value;
+			// 	};
+			// };
 			
 			if(options.sort){
 				query += "&sort_by=";
@@ -58,6 +69,11 @@ define([
 			/* override me */
 			debugger
 			return null;
+		},
+
+		getSize: function(){
+			//Improve me.
+			return parseInt(this.range.split("/")[1]);
 		}
 	})
 });
