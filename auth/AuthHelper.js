@@ -151,7 +151,7 @@ define([
 		reverse_validation: function (data, id, token) {
 			var url = '/auth/reverse_validation';
 			if(id && token) {
-				url+= '?token=' + token + '&id=' + id;
+				url += '?token=' + token + '&id=' + id;
 			}
 
 			var me = this;

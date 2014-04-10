@@ -62,13 +62,12 @@ define(["../model/Model"], function(Model){
 		},
 
 		bindEls: function(els, model, attr, fullAttr){
-		
 			this.bindImages(els.filter('img'), model, attr, fullAttr);
 			this.bindInputDates(els.filter(':input[type=date]'), model, attr, fullAttr);
-			this.bindInputCheckboxs(els.filter(':input[type=radio]'), model, attr, fullAttr);
+			this.bindInputCheckboxs(els.filter(':input[type=radio], :input[type=checkbox]'), model, attr, fullAttr);
 			this.bindSelects(els.filter('select'), model, attr, fullAttr);
 
-			this.bindInputs(els.filter(':input').not('button, :input[type=date], :input[type=radio],select'), model, attr, fullAttr);
+			this.bindInputs(els.filter(':input').not('button, :input[type=date], :input[type=radio], :input[type=checkbox], select'), model, attr, fullAttr);
 			
 			this.bindDefaultsEls(els.not('img, :input[type], select'), model, attr, fullAttr);
 
@@ -184,7 +183,7 @@ define(["../model/Model"], function(Model){
 		bindInputCheckboxs: function(inputs, model, attr, fullAttr){
 			if(inputs.length) {
 				var me = this;
-				$('input[name="'+inputs.prop('name')+'"]', inputs.parentsUntil().last()).change(function(evt){
+				inputs.change(function(evt){
 					model[attr] = inputs.prop('checked');
 				});
 
