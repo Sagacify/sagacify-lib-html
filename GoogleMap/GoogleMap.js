@@ -25,11 +25,13 @@ define([
 		this.set_Bounds = function () {
 			var bounds = new google.maps.LatLngBounds();
 			for(var i = 0, len = this.points.length; i < len; i++) {
+				console.log('\n> Point n°' + (i + 1) + ' :');
+				console.log(this.points[i]);
 				bounds.extend(this.points[i]);
 			}
 			this.map.fitBounds(bounds);
 			var me = this;
-			var zoom = -1;
+			var zoom = -2;
 			var mapzoom;
 			var listener = google.maps.event.addListener(this.map, 'idle', function() {
 				mapzoom = me.map.getZoom();
