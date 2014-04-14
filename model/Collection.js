@@ -61,7 +61,7 @@ define([
 			});
 		},
 
-		get: function (id) {
+		get: function (id, options) {
 			if (id instanceof this.model) {
 				return Backbone.Collection.prototype.get.apply(this, arguments);
 			}
@@ -92,13 +92,19 @@ define([
 				}
 				return this._virtuals[id];
 			} else if (!id || id == "new") {
-				return new this.model({}, {
+				var doc = new this.model({}, {
 					urlRoot: url,
 					parent: {
 						instance: this,
 						path: ""
 					}
 				});
+
+				if(options && options.add){
+					this.add(doc);
+				}
+
+				return doc;
 			} else {
 				var doc = Backbone.Collection.prototype.get.apply(this, arguments);
 				if (!doc) {
@@ -151,6 +157,10 @@ define([
 		},
 
 		add: function () {
+			// if(arguments[0] == 'new'){
+			// 	return Backbone.Collection.prototype.add.apply(this, [this.get('new')]);
+			// }
+
 			var _isId = false;
 			if (is.String(arguments[0])) {
 				_isId = true;
