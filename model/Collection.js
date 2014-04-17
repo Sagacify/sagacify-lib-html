@@ -31,17 +31,19 @@ define([
 		},
 
 		constructor: function (models, options) {
+			this._paginate = {
+				currentPage: 0,
+				perPage: 0,
+				maxPages: 0,
+				_maxPagesReached: false
+			}
+
 			if (models && !(models instanceof Array)) {
 				options = models;
 			}
 			if (options) {
 				if (options.url) this.url = options.url;
-				if (options.parent)
-
-				this.parent = options.parent;
-				if (options.url == "/api/user/notifications") {
-					//debugger
-				}
+				if (options.parent) this.parent = options.parent;
 			}
 
 			this._virtuals = {};
@@ -107,7 +109,7 @@ define([
 				return doc;
 			} else {
 				var doc = Backbone.Collection.prototype.get.apply(this, arguments);
-				if (!doc) {
+				if (!doc && arguments.callee.caller != Backbone.Collection.prototype.set) {
 					this.add(new this.model({
 						_id: id
 					}, {
@@ -153,7 +155,7 @@ define([
 				});
 				models = wrappedModels;
 			}
-			Backbone.Collection.prototype.set.apply(this, arguments);
+			return Backbone.Collection.prototype.set.apply(this, arguments);
 		},
 
 		add: function () {
