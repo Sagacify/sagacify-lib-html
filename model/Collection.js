@@ -93,7 +93,7 @@ define([
 					}
 				}
 				return this._virtuals[id];
-			} else if (!id || id == "new") {
+			} else if (id == "new") {
 				var doc = new this.model({}, {
 					urlRoot: url,
 					parent: {
