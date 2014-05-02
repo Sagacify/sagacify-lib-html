@@ -12,14 +12,13 @@ define([
 		});
 
 
-
 		Prototyping.setup = function(){
 
 			TranslationConvertor = function(obj){
 				if (!obj) {
 					return null;
 				};
-				if (obj instanceof String) {
+				if (obj instanceof String || typeof(obj) == "string") {
 					return obj;
 				};
 				if (obj[DefaultLanguage]) {
@@ -198,12 +197,56 @@ define([
                     		handler([]);
                     		return;
                     	};
-                        store.getSearchRessources(me.value, collectionName, 5).then(function(data){
+                        store.getSearchRessources(me.value, collectionName, 20).then(function(data){
                         	handler(data);
                         });
                     },500);                    
                 });
 			}
+
+			HTMLTextAreaElement.prototype.generateMentionTags = function(interaction){
+
+                var store = new Store.BridgeWaterStore();
+
+                var me = this;
+
+                $(this).textcomplete([
+                {
+                    match: /(^|\s)@(\w*)$/,
+                    search: function (term, callback) {
+                        if (!term) {
+                            return callback([])
+                        };
+                        store.searchForMention(term).then(callback);
+                    },
+                    template: function(object){
+                        return object ? object.name.convertToAscii() : "Unknow";
+                    },
+                    replace: function (value) {
+                        return '$1@:['+value.name.convertToAscii()+"]"
+                    },
+                },
+                {
+                    match: /(^|\s)#(\w*)$/,
+                    search: function (term, callback) {
+                        if (!term) {
+                            return callback([])
+                        };
+                        store.searchForHashtag(term).then(callback)
+                    },
+                    template: function(object){
+                        return object ? object.name.convertToAscii() : "Unknow";
+                    },
+                    replace: function (value) {
+                        return '$1#:[' + value.name.convertToAscii() + ']';
+                    },
+                },
+
+                ])
+                .on('textComplete:select', function (e, value) {
+                    interaction.addValue(value);
+                });
+			};
 
 
 			HTMLTextAreaElement.prototype.fitSizeToText = function(minHeight){
@@ -279,6 +322,13 @@ define([
 				this.reverse();
 			};
 
+			Array.prototype.getReverseVersion = function(){
+				var result = [];
+				for (var i = this.length - 1; i >= 0; i--) {
+					result.push(this[i]); 
+				};
+				return result;
+			},
 
 			Array.prototype.last = function(){
 				return this[this.length-1];
@@ -333,6 +383,15 @@ define([
 			
 			String.prototype.endsWith = function(str){
 				return this.slice(this.length-str.length, this.length) == str
+			};
+
+			String.prototype.contains = function(str){
+				return !!this.indexOf(str);
+			};
+
+			String.prototype.replaceAll = function (find, replace) {
+  			  var str = this;
+    		  return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
 			};
 
 			Number.prototype.max2DigitsAfterDecimal = function(){
