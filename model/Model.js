@@ -22,6 +22,8 @@ define([
 			if(options){
 				if("url" in options)
 					this.url = options.url;
+				if("urlRoot" in options)
+					this.urlRoot = options.urlRoot;
 				if(options.parent)
 					this.parent = options.parent;
 				this.isValidationRef = options.isValidationRef;
@@ -108,7 +110,7 @@ define([
 							}
 						}
 						else {
-							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
+							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()&&typeof me.url == "function"?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
 					}
 					//handle as primitive
@@ -142,6 +144,8 @@ define([
 			var args = Array.apply(null, arguments);
 
 			if(args[1] && args[1].add === true && !is.Object(args[0])){
+				console.log(args[0])
+				console.log(args[1])
 				throw new Error('String cannot be directly added.');
 				return;
 			}

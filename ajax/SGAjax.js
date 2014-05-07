@@ -1,4 +1,6 @@
-define([], function () {
+define([
+
+], function () {
 
 	return {
 		progressNode: null,
