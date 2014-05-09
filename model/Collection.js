@@ -423,6 +423,14 @@ define([
 				schema: this.schema
 			});
 			return new Collection(items);
+		},
+
+		getAttr: function(attr){
+			var url = this.url instanceof Function ? this.url() : this.url;
+			return SGAjax.ajax({
+				type: 'GET',
+				url: url + '/' + attr
+			});
 		}
 
 	});
