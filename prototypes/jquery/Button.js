@@ -1,7 +1,7 @@
-$.fn.enable = function(options){
+$.fn.enable = function (options) {
 	this.prop('disabled', false);
 };
 
-$.fn.disable = function(options){
+$.fn.disable = function (options) {
 	this.prop('disabled', true);
 };
