@@ -403,6 +403,12 @@ define([
 				schema: this.schema
 			});
 			return new Collection(items);
+		},
+
+		setAsIds: function(){
+			this.models.forEach(function(model){
+				model._isId = true;
+			});
 		}
 	});
 
