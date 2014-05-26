@@ -2,11 +2,18 @@ define([
 
 ], function () {
 
-	return function GooglePlaces (getter_Lat, getter_Lng) {
-		if(getter_Lat && getter_Lng) {
-			this.lat = getter_Lat;
+	var closure = function (val) {
+		return typeof val !== 'number' ? val : function () {
+			return val;
+		};
+	};
 
-			this.lng = getter_Lng;
+	return function GooglePlaces (getter_Lat, getter_Lng) {
+
+		if(getter_Lat && getter_Lng) {
+			this.lat = closure(getter_Lat);
+
+			this.lng = closure(getter_Lng);
 
 			this.earthRadius = 6371;
 
@@ -34,7 +41,9 @@ define([
 					country: ['be']
 				}
 			};
-			this.bounds && (options.bounds = this.bounds);
+			if(this.bounds) {
+				options.bounds = this.bounds;
+			}
 			this.autocomplete = new google.maps.places.Autocomplete(selectField, options);
 		};
 
@@ -70,7 +79,7 @@ define([
 				(loc.address_components[0] && loc.address_components[0].short_name || ''),
 				(loc.address_components[1] && loc.address_components[1].short_name || ''),
 				(loc.address_components[2] && loc.address_components[2].short_name || '')
-			].join(',');
+			].join(', ');
 		};
 
 		this.get_LocationAddressComps = function (loc) {

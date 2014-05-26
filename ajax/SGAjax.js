@@ -86,10 +86,7 @@ define([], function () {
 		},
 
 		ajax: function (options) {
-
-
 			var url = options.url;
-
 
 			var data = options.data;
 			var method = options.type.toLowerCase();
@@ -115,18 +112,18 @@ define([], function () {
 				xhr: function () {
 					var req = originalXhr();
 					var me = this;
-					if(req) {
-						if(req.addEventListener.isFunction() && (me.progress !== undefined)) {
-							req.addEventListener('progress', function (evt) {
-								me.progress(evt);
-							}, false);
-						}
-						if(req.upload.isObject() && (me.progressUpload !== undefined)) {
-							req.upload.addEventListener('progress', function (evt) {
-								me.progressUpload(evt);
-							}, false);
-						}
-					}
+					// if(req) {
+					// 	if(req.addEventListener.isFunction() && (me.progress !== undefined)) {
+					// 		req.addEventListener('progress', function (evt) {
+					// 			me.progress(evt);
+					// 		}, false);
+					// 	}
+					// 	if(req.upload && req.upload.isObject() && (me.progressUpload !== undefined)) {
+					// 		req.upload.addEventListener('progress', function (evt) {
+					// 			me.progressUpload(evt);
+					// 		}, false);
+					// 	}
+					// }
 					return req;
 				}
 			});

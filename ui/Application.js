@@ -1,7 +1,8 @@
 define([
 	'backbone.marionette',
 	'../model/Model',
-	'../model/Collection'
+	'../model/Collection',
+	'jquery'
 ], function (Marionette, SagaModel, SagaCollection) {
 	
 	return Marionette.Application.extend({
@@ -54,7 +55,10 @@ define([
 				}
 
 				deferred.resolve(App);
-			});
+			}).fail(function(err){
+				debugger
+			});;
+
 			return deferred.promise();
 		},
 

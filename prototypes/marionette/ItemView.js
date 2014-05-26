@@ -35,6 +35,7 @@ define([
 			}
 
 			this._handleGoToAfterRender();
+
 			var $el = $(this.el);
 			if($el.i18n) {
 				$el.i18n();

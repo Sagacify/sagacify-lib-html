@@ -10,6 +10,7 @@ define([
 	var ItemView = Marionette.ItemView.extend({
 
 		constructor: function(){
+			this.uid = String.guid();
 			Marionette.ItemView.prototype.constructor.apply(this, arguments);
 		},
 

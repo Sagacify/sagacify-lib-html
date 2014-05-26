@@ -32,7 +32,6 @@ define([
 					//TODO CONFIG USERS
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
-					//Top contraignat...
 					App.layout.isLoggedIn();
 				}
 			})
@@ -152,7 +151,7 @@ define([
 		reverse_validation: function (data, id, token) {
 			var url = '/auth/reverse_validation';
 			if(id && token) {
-				url+= '?token=' + token + '&id=' + id;
+				url += '?token=' + token + '&id=' + id;
 			}
 
 			var me = this;
@@ -167,8 +166,18 @@ define([
 					//TODO CONFIG USERS
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
-					//Top contraignat...
 					App.layout.isLoggedIn();
+
+					// supp
+					App.store.set('_id', results.user._id);
+					App.store.set('slug', results.user.slug);
+					var avatar = results.user.avatar;
+					if(avatar) {
+						App.store.set('avatar', avatar);
+					}
+					App.nc.trigger('user:first_load', results);
+					App.SocketManager.reload();
+					App.router.navigate('dashboard');
 				}
 			})
 			.fail(function (error) {

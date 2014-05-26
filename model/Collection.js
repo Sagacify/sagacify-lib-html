@@ -1,7 +1,8 @@
 define([
 	'backbone',
-	'../types/validateType'
-], function (Backbone, is) {
+	'../types/validateType',
+	'../ajax/SGAjax'
+], function (Backbone, is, SGAjax) {
 	var SagaCollection = Backbone.Collection.extend({
 
 		_isLoading: false,
@@ -30,17 +31,19 @@ define([
 		},
 
 		constructor: function (models, options) {
+			this._paginate = {
+				currentPage: 0,
+				perPage: 0,
+				maxPages: 0,
+				_maxPagesReached: false
+			}
+
 			if (models && !(models instanceof Array)) {
 				options = models;
 			}
 			if (options) {
 				if (options.url) this.url = options.url;
-				if (options.parent)
-
-				this.parent = options.parent;
-				if (options.url == "/api/user/notifications") {
-					//debugger
-				}
+				if (options.parent) this.parent = options.parent;
 			}
 
 			this._virtuals = {};
@@ -60,7 +63,7 @@ define([
 			});
 		},
 
-		get: function (id) {
+		get: function (id, options) {
 			if (id instanceof this.model) {
 				return Backbone.Collection.prototype.get.apply(this, arguments);
 			}
@@ -90,17 +93,23 @@ define([
 					}
 				}
 				return this._virtuals[id];
-			} else if (!id || id == "new") {
-				return new this.model({}, {
+			} else if (id == "new") {
+				var doc = new this.model({}, {
 					urlRoot: url,
 					parent: {
 						instance: this,
 						path: ""
 					}
 				});
+
+				if(options && options.add){
+					this.add(doc);
+				}
+
+				return doc;
 			} else {
 				var doc = Backbone.Collection.prototype.get.apply(this, arguments);
-				if (!doc) {
+				if (!doc && arguments.callee.caller != Backbone.Collection.prototype.set) {
 					this.add(new this.model({
 						_id: id
 					}, {
@@ -146,10 +155,14 @@ define([
 				});
 				models = wrappedModels;
 			}
-			Backbone.Collection.prototype.set.apply(this, arguments);
+			return Backbone.Collection.prototype.set.apply(this, arguments);
 		},
 
 		add: function () {
+			// if(arguments[0] == 'new'){
+			// 	return Backbone.Collection.prototype.add.apply(this, [this.get('new')]);
+			// }
+
 			var _isId = false;
 			if (is.String(arguments[0])) {
 				_isId = true;
@@ -304,7 +317,8 @@ define([
 					return function () {
 						return function () {
 							var argsArray = Array.apply(null, arguments);
-							return this.do.apply(this, [action, argsArray]);
+							//return this.do.apply(this, [action, argsArray]);
+							return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
 						};
 					};
 				};
@@ -395,6 +409,12 @@ define([
 			return removed;
 		},
 
+		mergeWithCollection: function(anotherCollection){
+			for (var i = 0; i < anotherCollection.models.length; i++) {
+				this.add(anotherCollection.models[i])
+			};
+		},
+
 		sgClientFilter: function (attrs) {
 			var items = this.where(attrs);
 			var Collection = SagaCollection.extend({
@@ -409,7 +429,16 @@ define([
 			this.models.forEach(function(model){
 				model._isId = true;
 			});
+		},
+
+		getAttr: function(attr){
+			var url = this.url instanceof Function ? this.url() : this.url;
+			return SGAjax.ajax({
+				type: 'GET',
+				url: url + '/' + attr
+			});
 		}
+
 	});
 
 	return SagaCollection;

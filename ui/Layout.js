@@ -10,11 +10,8 @@ define([
 	var Layout = Marionette.Layout.extend({
 
 		constructor: function(){
-			
 			this._handleFirstRender();		
-			
 			this.uid = String.guid();
-
 			Marionette.Layout.prototype.constructor.apply(this, arguments);
 		},
 
