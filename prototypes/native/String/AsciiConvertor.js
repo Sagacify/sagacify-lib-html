@@ -1,48 +1,58 @@
-exports.regexify = function regexify (string) {
-	var specials = [
-		// order matters for these
-		'-',
-		'[',
-		']',
-		// order doesn't matter for any of these
-		'/',
-		'{',
-		'}',
-		'(',
-		')',
-		'*',
-		'+',
-		'?',
-		'.',
-		'\\',
-		'^',
-		'$',
-		'|',
-		// from there on not obligatory but advised
-		'~',
-		'!',
-		'@',
-		'#',
-		'%',
-		'&',
-		'´',
-		'`',
-		'/',
-		'=',
-		'_',
-		':',
-		';',
-		'"',
-		'\'',
-		'<',
-		'>',
-		','
-	];
+var specials = null;
+var ascii_translator = null;
+
+
+
+String.prototype.convertToAscii = function(){
+	var res = '';
+	for (var i = 0; i < this.length; i++) {
+		res += ascii_translator[this[i]] || this[i];
+	};
+	return res;
+}
+
+String.prototype.escapeSpecials = function(){
+	var res = "";
+	for (var i = 0; i < this.length; i++) {
+		if (specials.indexOf(this[i])==-1) {
+			res+=this[i]
+		};
+	};
+	return res;
+}
+
+String.prototype.regexify = function regexify () {
 	var regex = RegExp('[' + specials.join('\\') + ']', 'g');
-	return string.replace(regex, '\\$&');
+	return this.replace(regex, '\\$&');
 };
 
-var ascii_translator = {
+
+String.prototype.asciify = function asciify () {
+	var res = "";
+	for (var i = 0; i < this.length; i++) {
+		 res += ascii_translator[this[i]] | this[i]; 
+	};
+	return res
+};
+
+String.prototype.filter_NonAscii = function() {
+	var asciiString = '';
+	for(var i = 0, len = this.length; i < len; i++) {
+		asciiString += this[i].asciify();
+	}
+	return asciiString;
+}
+
+String.prototype.build_RegExp = function () {
+	var regexString = this.regexify();
+	regexString = regexString.filter_NonAscii();
+	regexString = regexString.replace(/\s/g, '(\\s*)');
+	return new RegExp(regexString, 'gi');
+};
+
+
+
+ascii_translator = {
 	'Á':'A',
 	'Ă':'A',
 	'Ắ':'A',
@@ -869,22 +879,42 @@ var ascii_translator = {
 	'ₓ':'x'
 };
 
-exports.asciify = function asciify (char) {
-	var asciifiedChar;
-	return (asciifiedChar = ascii_translator[char]) ? '(' + asciifiedChar + '|' + char +')' : char;
-};
-
-function filter_NonAscii (utfString) {
-	var asciiString = '';
-	for(var i = 0, len = utfString.length; i < len; i++) {
-		asciiString += exports.asciify(utfString[i]);
-	}
-	return asciiString;
-}
-
-exports.build_RegExp = function (string) {
-	var regexString = exports.regexify(string);
-	regexString = filter_NonAscii(regexString);
-	regexString = regexString.replace(/\s/g, '(\\s*)');
-	return new RegExp(regexString, 'gi');
-};
+specials = [
+	// order matters for these
+	'-',
+	'[',
+	']',
+	// order doesn't matter for any of these
+	'/',
+	'{',
+	'}',
+	'(',
+	')',
+	'*',
+	'+',
+	'?',
+	'.',
+	'\\',
+	'^',
+	'$',
+	'|',
+	// from there on not obligatory but advised
+	'~',
+	'!',
+	'@',
+	'#',
+	'%',
+	'&',
+	'´',
+	'`',
+	'/',
+	'=',
+	'_',
+	':',
+	';',
+	'"',
+	'\'',
+	'<',
+	'>',
+	','
+];

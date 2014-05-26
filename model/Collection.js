@@ -425,6 +425,12 @@ define([
 			return new Collection(items);
 		},
 
+		setAsIds: function(){
+			this.models.forEach(function(model){
+				model._isId = true;
+			});
+		},
+
 		getAttr: function(attr){
 			var url = this.url instanceof Function ? this.url() : this.url;
 			return SGAjax.ajax({
