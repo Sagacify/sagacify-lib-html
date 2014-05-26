@@ -3,7 +3,7 @@ define([
 	'saga/utils/AvatarGeneration',
 	'dojo/dom-style', 
 	'dojo/date/locale',
-    'app/stores/ClientAdminStore',	
+	'app/stores/ClientAdminStore',	
 	'dojo/on'	
 	],
 	function(declare, AvatarGeneration, domStyle, locale, ClientAdminStore, on){
@@ -24,6 +24,7 @@ define([
 				if (obj[DefaultLanguage]) {
 					return obj[DefaultLanguage];
 				};
+
 				if (obj['fr']) {
 					return obj['fr'];
 				};
@@ -32,12 +33,14 @@ define([
 						return obj[key];	
 					};
 				}
+				
+				return '';
 			};
 
 			if(History){
 				History.openInTab = function(url){
-				  var win=window.open(url, '_blank');
-				  win.focus();				
+					var win=window.open(url, '_blank');
+					win.focus();				
 				}
 
 				//var version = getInternetExplorerVersion();
@@ -99,17 +102,17 @@ define([
 				// 		};
 				// 	}
     //             });
-			}
+}
 
-			HTMLInputElement.prototype.inputDateCalendarSetDate = function(date){
-				this.setDate(date);
+HTMLInputElement.prototype.inputDateCalendarSetDate = function(date){
+	this.setDate(date);
 				// $(this).val(date);
 				// this.savedDate = date;
 				// this.isADateInput = true;
 				// this.dateFormatingPicker = 'dd/mm/yyyy';
 				this.dateFormatingDojo = 'dd/MM/yyyy';
 				// $(this).attr('data-value', dojo.date.locale.format(this.savedDate, {selector:"date", datePattern: this.dateFormatingDojo}));
-			}
+			};
 
 
 
@@ -120,26 +123,9 @@ define([
 					$(this).change(onChangeCallback);
 				};				
 
-				// $(this).inputmask("HH:mm");
-				// var me = this;
-				// on(this, 'change', function(evt){
-				// 	onChangeCallback(this.getDate());
-				// });
-
-				// this.dateFormatingPicker = 'HH:i';
 				this.dateFormatingDojo = "HH:mm";
 				
-				// var me = this;
-			 //    this.picker = $(this).pickatime({
-				// 	format:this.dateFormatingPicker,
-				// 	onSet: function(){
-				// 		if (onChangeCallback) {
-				// 			onChangeCallback()	
-				// 		};
-						
-				// 	}					
-    //             });
-			}
+			};
 
 			HTMLInputElement.prototype.inputTimeCalendarSetTime= function(date){
 				this.setDate(date);
@@ -153,15 +139,15 @@ define([
 
 			HTMLInputElement.prototype.setWithDateMask = function(){
 				this.setWithInputMask('dd/mm/yyyy');
-			}, 
+			};
 
 			HTMLInputElement.prototype.setWithTimeMask = function(){
 				this.setWithInputMask("hh:mm");
-			}, 
+			};
 
 			HTMLInputElement.prototype.setWithInputMask = function(mask, options){
 				$(this).inputmask(mask, options);
-			}, 
+			};
 
 
 			HTMLInputElement.prototype.getDate = function(){
@@ -176,11 +162,6 @@ define([
 
 			HTMLInputElement.prototype.setDate = function(date){
 				$(this).val(date);
-				// var result =  dojo.date.locale.parse(this.value, {datePattern:this.dateFormatingDojo, selector: "date"});
-				// if (!result) {
-				// 	return new Date();
-				// }
-				// return result;
 			};
 
 
@@ -188,118 +169,117 @@ define([
 			HTMLInputElement.prototype.autoCompletion = function(collectionName, handler){
 				var store =  new ClientAdminStore();
 				store.collectionName = collectionName;
-                var timer;
-                var me = this;
-                on(this, 'keydown', function(evt) {
-                    clearTimeout(timer);
-                    timer = setTimeout(function(){
-                    	if (!me.value) {
-                    		handler([]);
-                    		return;
-                    	};
-                        store.getSearchRessources(me.value, collectionName, 20).then(function(data){
-                        	handler(data);
-                        });
-                    },500);                    
-                });
+				var timer;
+				var me = this;
+				on(this, 'keydown', function(evt) {
+					clearTimeout(timer);
+					timer = setTimeout(function(){
+						if (!me.value) {
+							handler([]);
+							return;
+						};
+						store.getSearchRessources(me.value, collectionName, 20).then(function(data){
+							handler(data);
+						});
+					},500);                    
+				});
 			}
 
 			HTMLTextAreaElement.prototype.generateMentionTags = function(interaction){
 
-                var store = new Store.BridgeWaterStore();
+				var store = new Store.BridgeWaterStore();
 
-                var me = this;
+				var me = this;
 
-                $(this).textcomplete([
-                {
-                    match: /(^|\s)@(\w*)$/,
-                    search: function (term, callback) {
-                        if (!term) {
-                            return callback([])
-                        };
-                        store.searchForMention(term).then(callback);
-                    },
-                    template: function(object){
-                        return object ? object.name.convertToAscii() : "Unknow";
-                    },
-                    replace: function (value) {
-                        return '$1@:['+value.name.convertToAscii()+"]"
-                    },
-                },
-                {
-                    match: /(^|\s)#(\w*)$/,
-                    search: function (term, callback) {
-                        if (!term) {
-                            return callback([])
-                        };
-                        store.searchForHashtag(term).then(callback)
-                    },
-                    template: function(object){
-                        return object ? object.name.convertToAscii() : "Unknow";
-                    },
-                    replace: function (value) {
-                        return '$1#:[' + value.name.convertToAscii() + ']';
-                    },
-                },
-
-                ])
-                .on('textComplete:select', function (e, value) {
-                    interaction.addValue(value);
-                });
+				$(this).textcomplete([
+				{
+					'match': /(^|\s)@(\w*)$/,
+					'search': function (term, callback) {
+						if (!term) {
+							return callback([])
+						};
+						store.searchForMention(term).then(callback);
+					},
+					'template': function(object){
+						return object ? object.name.convertToAscii() : "Unknow";
+					},
+					'replace': function (value) {
+						return '$1@:['+value.name.convertToAscii()+"]"
+					}
+				},
+				{
+					'match': /(^|\s)#(\w*)$/,
+					'search': function (term, callback) {
+						if (!term) {
+							return callback([])
+						};
+						store.searchForHashtag(term).then(callback);
+					},
+					'template': function(object){
+						return object ? object.name.convertToAscii() : "Unknow";
+					},
+					'replace': function (value) {
+						return '$1#:[' + value.name.convertToAscii() + ']';
+					}
+				}
+				])
+				.on('textComplete:select', function (e, value) {
+					interaction.addValue(value);
+				});
 			};
 
 
 			HTMLTextAreaElement.prototype.fitSizeToText = function(minHeight){
 				minHeight = minHeight||0;
-                if(this.scrollHeight > minHeight)
-                    this.style.height = (this.scrollHeight+2) + 'px';
-            };
+				if(this.scrollHeight > minHeight)
+					this.style.height = (this.scrollHeight+2) + 'px';
+			};
 
-            HTMLTextAreaElement.prototype.setAutoFitSizeToText = function(minHeight){
-            	var me = this;
-            	this.addEventListener && this.addEventListener('input', function(evt){
-                    me.fitSizeToText(minHeight);
-                });
+			HTMLTextAreaElement.prototype.setAutoFitSizeToText = function(minHeight){
+				var me = this;
+				this.addEventListener && this.addEventListener('input', function(evt){
+					me.fitSizeToText(minHeight);
+				});
 
-                this['attachEvent'] && this.attachEvent('onkeyup', function(evt){
-                	me.fitSizeToText(minHeight);
-                });
-            };
+				this['attachEvent'] && this.attachEvent('onkeyup', function(evt){
+					me.fitSizeToText(minHeight);
+				});
+			};
 
 			HTMLImageElement.prototype.loadPicture= function(picture){
 				if (!picture) {
 					return
 				};
 
-                this.src = picture.path;
+				this.src = picture.path;
                 // (new AvatarPicture()).generateImg(this, this.data.author.name, this.data.author.name);    
-			};
+            };
 
-			HTMLImageElement.prototype.loadUser = function(user){
-				if(user) {
-					if(user.profilePicture) {
-						console.log('PROFILE PICTURE');
-						console.log(user.profilePicture);
-						this.loadPicture(user.profilePicture);
-					}
-					else {
-						this.loadAvatar(user.name);
-					}
-				}
-			};
+            HTMLImageElement.prototype.loadUser = function(user){
+            	if(user) {
+            		if(user.profilePicture) {
+            			console.log('PROFILE PICTURE');
+            			console.log(user.profilePicture);
+            			this.loadPicture(user.profilePicture);
+            		}
+            		else {
+            			this.loadAvatar(user.name);
+            		}
+            	}
+            };
 
-			HTMLImageElement.prototype.loadGroup = function(group){
-				if (!group) {
-					return;
-				};
-				if (group.logo) {
-					this.loadPicture(group.logo);
-				} else {
-					this.loadAvatar(group.name);
-				}
-			};
+            HTMLImageElement.prototype.loadGroup = function(group){
+            	if (!group) {
+            		return;
+            	};
+            	if (group.logo) {
+            		this.loadPicture(group.logo);
+            	} else {
+            		this.loadAvatar(group.name);
+            	}
+            };
 
-			HTMLImageElement.prototype.loadAvatar = function(name){
+            HTMLImageElement.prototype.loadAvatar = function(name){
                 //No picture available
                 var width = domStyle.get(this, "width");
                 var height = domStyle.get(this, "height");
@@ -310,124 +290,124 @@ define([
                 // domAttr.set(this, "src", data);
                 this.src = data;
                 this.style.background = canvasArray[1];
-			};
+            };
 
-			Array.prototype.clone= function(){
-				return this.slice(0);
-			};
+            Array.prototype.clone= function(){
+            	return this.slice(0);
+            };
 
-			Array.prototype.popFirst= function(){
-				this.reverse();
-				this.pop();
-				this.reverse();
-			};
+            Array.prototype.popFirst= function(){
+            	this.reverse();
+            	this.pop();
+            	this.reverse();
+            };
 
-			Array.prototype.getReverseVersion = function(){
-				var result = [];
-				for (var i = this.length - 1; i >= 0; i--) {
-					result.push(this[i]); 
-				};
-				return result;
-			},
+            Array.prototype.getReverseVersion = function(){
+            	var result = [];
+            	for (var i = this.length - 1; i >= 0; i--) {
+            		result.push(this[i]); 
+            	};
+            	return result;
+            },
 
-			Array.prototype.last = function(){
-				return this[this.length-1];
-			};
+            Array.prototype.last = function(){
+            	return this[this.length-1];
+            };
 
-			Array.prototype.contains = function(item) {
-				return this.indexOf(item) != -1;
-			};
-			
-			Array.prototype.containsObject = function(_id){
-				return this.filter(function(item){return item._id == _id;}).length > 0;
-			};
-			
-			Array.prototype.remove = function(item){
-				var index = this.indexOf(item);
-				if(index != -1)
-					this.splice(index, 1);
-			};
-			
-			Array.prototype.removeObject = function(_id){
-				for(var i = 0; i < this.length; i++){
-					if(this[i]._id == _id){
-						this.splice(i, 1);
-						return;	
-					}
-				}
-			};
+            Array.prototype.contains = function(item) {
+            	return this.indexOf(item) != -1;
+            };
 
-			Array.prototype.equals = function(array){
-				for(var i = 0; i < this.length; i++){
-					if(this[i] != array[i])
-						return false;
-				}
-				return true;
-			};
-			
-			String.prototype.capitalize = function() {
-			    return this.charAt(0).toUpperCase() + this.slice(1);
-			}
-			
-			String.prototype.inject = function(occurences){
-				var strToReturn = this;
-				occurences.forEach(function(occurence){
-					strToReturn = strToReturn.replace("%s", occurence);
-				});
-				return strToReturn;
-			};
-			
-			String.prototype.startsWith = function(str){
-				return this.slice(0, str.length) == str;
-			};
-			
-			String.prototype.endsWith = function(str){
-				return this.slice(this.length-str.length, this.length) == str
-			};
+            Array.prototype.containsObject = function(_id){
+            	return this.filter(function(item){return item._id == _id;}).length > 0;
+            };
 
-			String.prototype.contains = function(str){
-				return !!this.indexOf(str);
-			};
+            Array.prototype.remove = function(item){
+            	var index = this.indexOf(item);
+            	if(index != -1)
+            		this.splice(index, 1);
+            };
 
-			String.prototype.replaceAll = function (find, replace) {
-  			  var str = this;
-    		  return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
-			};
+            Array.prototype.removeObject = function(_id){
+            	for(var i = 0; i < this.length; i++){
+            		if(this[i]._id == _id){
+            			this.splice(i, 1);
+            			return;	
+            		}
+            	}
+            };
 
-			Number.prototype.max2DigitsAfterDecimal = function(){
-				if(this % 1 != 0)
-					return this.toFixed(2);
-				else
-					return this;
-			};
+            Array.prototype.equals = function(array){
+            	for(var i = 0; i < this.length; i++){
+            		if(this[i] != array[i])
+            			return false;
+            	}
+            	return true;
+            };
 
-			String.prototype.isEmail = function(str){
-				var re = /\S+@\S+\.\S+/;
-				return re.test(this);
-			};
+            String.prototype.capitalize = function() {
+            	return this.charAt(0).toUpperCase() + this.slice(1);
+            }
 
-			Date.prototype.getWeekDayName = function(){
-				return this.weekDayName()[this.getDay()];
-			};
+            String.prototype.inject = function(occurences){
+            	var strToReturn = this;
+            	occurences.forEach(function(occurence){
+            		strToReturn = strToReturn.replace("%s", occurence);
+            	});
+            	return strToReturn;
+            };
 
-			Date.prototype.weekDayName = function(){
-				return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-			};
+            String.prototype.startsWith = function(str){
+            	return this.slice(0, str.length) == str;
+            };
 
-			Date.prototype.verbose = function(full){
+            String.prototype.endsWith = function(str){
+            	return this.slice(this.length-str.length, this.length) == str
+            };
 
-				if (full) {
-					return this.toLocaleDateString();
-				};
+            String.prototype.contains = function(str){
+            	return !!this.indexOf(str);
+            };
 
-				var me = this;
-				function verboseWithFutureDate(aLastDate)
-				{
-					var difference =  Math.abs(me.getTime() - aLastDate.getTime());
-					difference = difference/1000;
-					if (difference < 60) {
-						return "A moment ago";
-					}
+            String.prototype.replaceAll = function (find, replace) {
+            	var str = this;
+            	return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+            };
+
+            Number.prototype.max2DigitsAfterDecimal = function(){
+            	if(this % 1 != 0)
+            		return this.toFixed(2);
+            	else
+            		return this;
+            };
+
+            String.prototype.isEmail = function(str){
+            	var re = /\S+@\S+\.\S+/;
+            	return re.test(this);
+            };
+
+            Date.prototype.getWeekDayName = function(){
+            	return this.weekDayName()[this.getDay()];
+            };
+
+            Date.prototype.weekDayName = function(){
+            	return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            };
+
+            Date.prototype.verbose = function(full){
+
+            	if (full) {
+            		return this.toLocaleDateString();
+            	};
+
+            	var me = this;
+            	function verboseWithFutureDate(aLastDate)
+            	{
+            		var difference =  Math.abs(me.getTime() - aLastDate.getTime());
+            		difference = difference/1000;
+            		if (difference < 60) {
+            			return "A moment ago";
+            		}
 					var indicator = 3600; //minutes - de 3600
 					if (difference < indicator) {
 						return "In "+Math.floor(difference / 60.0)+" minutes";
