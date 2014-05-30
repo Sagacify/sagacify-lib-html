@@ -176,9 +176,8 @@ define([
 			return !!str.match(/^[0-9\s\+]+$/);
 		},
 
-		// ^[A-Za-z\s0-9]+(,\s)[A-Za-z\s0-9]+(,\s)[A-Za-z\s0-9]+
 		isGoogleMapAddress: function (str) {
-			return is.String(str) && !!str.match(/^[^,]+(,\s)[^,]+(,\s)[^,]+$/g);
+			return is.String(str) && !!str.match(/^([^,]+(,\s))?[^,]+(,\s)[^,]+$/g);
 		}
 
 	};
