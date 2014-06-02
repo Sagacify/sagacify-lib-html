@@ -391,6 +391,11 @@ define([
 			};
 		},
 
+		resetPaginate: function(){
+			this._paginate.currentPage = 0;
+			this._paginate._maxPagesReached = false;
+		},
+
 		clear: function ()  {
 			var len = this.models.length;
 			while (len--) {
@@ -404,7 +409,7 @@ define([
 				removed.push(this.models[i]);
 			}
 			this.clear();
-			this.removePaginate()
+			this.resetPaginate()
 			this.trigger('remove:all');
 			return removed;
 		},
