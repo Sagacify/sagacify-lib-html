@@ -1,11 +1,16 @@
 define([
 	'backbone.marionette',
 	'./Mixin',
-	'./ModelBindMixin'
-], function (Marionette, Mixin, ModelBindMixin) {
+	'./ModelBindMixin',
+	'./ActionsBindMixin',
+	'./OutletBindMixin'
+
+
+], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin) {
 	var ItemView = Marionette.ItemView.extend({
 
 		constructor: function(){
+			this.uid = String.guid();
 			Marionette.ItemView.prototype.constructor.apply(this, arguments);
 		},
 
@@ -16,13 +21,20 @@ define([
 			Marionette.ItemView.prototype.render.apply(this, arguments);
 
 			this.reinjectFirstElement();
-			
+		},
+
+		bindUIElements: function(){
+
 			this.bindToModel();
-		}
+			this.bindOutlets();
+			this.bindActions();
+
+			return Marionette.ItemView.prototype.bindUIElements.apply(this, arguments);
+		},
 
 	});
 
-	_.extend(ItemView.prototype, Mixin, ModelBindMixin);
+	_.extend(ItemView.prototype, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin);
 
 	return ItemView;
 });

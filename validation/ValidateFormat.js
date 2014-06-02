@@ -1,4 +1,6 @@
-define(['../types/validateType'], function (is) {
+define([
+	'../types/validateType'
+], function (is) {
 	return {
 
 		validate: function (attr, ele, ele_config) {
@@ -50,7 +52,7 @@ define(['../types/validateType'], function (is) {
 				if (is.String(method)) {
 					valid = !this[method] || this[method](obj);
 					if (!valid) {
-						App.alert('In field "' + attr + '", ' + $.t('DATA_VALIDATION.' + method, {
+						App.alert($.t('general_words.in_field') + ' "' + attr + '", ' + $.t('DATA_VALIDATION.' + method, {
 							val: this.clean_ErrorArgs(obj)
 						}));
 					}
@@ -60,14 +62,16 @@ define(['../types/validateType'], function (is) {
 						console.error('Format validation result for ' + method + ' is not a Boolean.');
 						console.error(valid);
 					}
+					//if(method in this) { console.log('Passed : ' + method); }
 					if ((method in this) && (valid !== true)) console.error('Failling ' + method + '() !');
-					if (!(method in this)) console.error('[1] - Missing format validation method ' + method + '() !'); /* END */
+					if (!(method in this)) console.error('[1] - Missing format validation method ' + method + '() !');
+					/* END */
 				} else if (is.Object(method)) {
 					validation_method = Object.keys(method)[0];
 					validation_args = [obj].concat(method[validation_method]);
 					valid = !this[validation_method] || this[validation_method].apply(this, validation_args);
 					if (!valid) {
-						App.alert('In field "' + attr + '", ' + $.t('DATA_VALIDATION.' + validation_method, {
+						App.alert($.t('general_words.in_field') + ' "' + attr + '", ' + $.t('DATA_VALIDATION.' + validation_method, {
 							val: this.clean_ErrorArgs(obj),
 							arg: this.clean_ErrorArgs(validation_args[1])
 						}));
@@ -78,8 +82,10 @@ define(['../types/validateType'], function (is) {
 						console.error('Format validation result for ' + validation_method + ' is not a Boolean.');
 						console.error(valid);
 					}
+					//if(validation_method in this) { console.log('Passed : ' + validation_method); }
 					if ((validation_method in this) && (valid !== true)) console.error('Failling ' + validation_method + '() !');
-					if (!(validation_method in this)) console.error('[2] - Missing format validation method ' + validation_method + '() !'); /* END */
+					if (!(validation_method in this)) console.error('[2] - Missing format validation method ' + validation_method + '() !');
+					/* END */
 				} else {
 					valid = false;
 				}
@@ -168,6 +174,11 @@ define(['../types/validateType'], function (is) {
 
 		isPhoneNumber: function (str) {
 			return !!str.match(/^[0-9\s\+]+$/);
+		},
+
+		isGoogleMapAddress: function (str) {
+			return is.String(str) && !!str.match(/^([^,]+(,\s))?[^,]+(,\s)[^,]+$/g);
 		}
+
 	};
 });

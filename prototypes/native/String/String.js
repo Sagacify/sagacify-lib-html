@@ -34,3 +34,13 @@ String.prototype.inject = function(occurences){
 String.prototype.idToDate = function (occurences) {
 	return new Date(parseInt(this._id.slice(0, 8), 16) * 1000);
 };
+
+
+String.guid = function(){
+	function s4() {
+	    return Math.floor((1 + Math.random()) * 0x10000)
+	               .toString(16)
+	               .substring(1);
+	}
+	return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
+}

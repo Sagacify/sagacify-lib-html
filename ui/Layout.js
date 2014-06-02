@@ -1,38 +1,37 @@
 define([
 	'backbone.marionette',
 	'./Mixin',
-	'./ModelBindMixin'
-], function (Marionette, Mixin, ModelBindMixin) {
+	'./ModelBindMixin',
+	'./ActionsBindMixin',
+	'./OutletBindMixin'
+], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin) {
 
 	// prototype of the base Marionette Layout
 	var Layout = Marionette.Layout.extend({
 
 		constructor: function(){
-			
 			this._handleFirstRender();		
-			
+			this.uid = String.guid();
 			Marionette.Layout.prototype.constructor.apply(this, arguments);
 		},
 
-		// //override me
-		// _handleFirstRender: function(){
-
-		// },
-
-		// //override me
-		// getModel: function(){
-
-		// },
-
-
 		render: function (options) {
-			this.template = this.get_Template(options||this.rawModel||this.model||this.data||this.options);
 
+			this.template = this.get_Template(options||this.rawModel||this.model||this.data||this.options);
+			
 			Marionette.Layout.prototype.render.apply(this, arguments);
 			
 			this.reinjectFirstElement();
+			
+		},
+
+		bindUIElements: function(){
 
 			this.bindToModel();
+			this.bindOutlets();
+			this.bindActions();
+
+			return Marionette.Layout.prototype.bindUIElements.apply(this, arguments);
 		},
 
 		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
@@ -59,7 +58,7 @@ define([
 
 	});
 
-	_.extend(Layout.prototype, Mixin, ModelBindMixin);
+	_.extend(Layout.prototype, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin);
 
 	return Layout;
 });

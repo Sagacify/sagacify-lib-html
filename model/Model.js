@@ -22,6 +22,8 @@ define([
 			if(options){
 				if("url" in options)
 					this.url = options.url;
+				if("urlRoot" in options)
+					this.urlRoot = options.urlRoot;
 				if(options.parent)
 					this.parent = options.parent;
 				this.isValidationRef = options.isValidationRef;
@@ -35,9 +37,12 @@ define([
 
 		get: function(attribute){
 			var getterName = "get"+attribute.capitalize();
-			if(is.Function(this[getterName]) && this[getterName]!=arguments.callee.caller)
+
+			if(is.Function(this[getterName]) && this[getterName] != arguments.callee.caller)
 				return this[getterName]();
+
 			var value = Backbone.Model.prototype.get.apply(this, arguments);
+
 			if(!value){
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];
 				if(schemaElement && schemaElement.ref && attribute != '_id'){
@@ -47,6 +52,8 @@ define([
 				if(schemaElement instanceof Array && is.Object(schemaElement[0])){
 					this.set(attribute, []);
 					value = Backbone.Model.prototype.get.apply(this, arguments);
+
+					//hum
 					if(schemaElement[0].single)
 						value.add({});
 				}
@@ -62,16 +69,16 @@ define([
 			var me = this;
 			var getset = function(attribute, raw){
 				if(raw instanceof SagaModel || raw instanceof SagaCollection){
-
 					return raw;
 				}
 
 				var schemaElement = me.schema.tree[attribute] || me.schema.virtuals[attribute];
 				if(schemaElement){
-					var type = is.Array(schemaElement)?schemaElement[0].type:schemaElement.type;
-					var ref = is.Array(schemaElement)?schemaElement[0].ref:schemaElement.ref;
+					//Contain a Schema element
+					var type = is.Array(schemaElement) ? schemaElement[0].type : schemaElement.type;
+					var ref = is.Array(schemaElement) ? schemaElement[0].ref : schemaElement.ref;
 					//handle as model or collection
-					if(is.Object(raw) && ref /*&& !attribute.endsWith("._id")*/ || is.Array(raw)){
+					if(is.Object(raw) && ref || is.Array(raw)){
 						var docColl = Backbone.Model.prototype.get.apply(me, [attribute]);
 						if(docColl instanceof SagaModel || docColl instanceof SagaCollection){
 							docColl.set(raw);
@@ -79,7 +86,6 @@ define([
 						}
 						var url = is.Function(me.url)?me.url():me.url;
 						if(is.Array(schemaElement)){
-							//var collectionUrl = me.isNew()?"":(url+'/'+attribute);
 							var collectionUrl = url+'/'+attribute;
 							//collection of ref
 							if(ref){
@@ -106,13 +112,12 @@ define([
 								});
 								return new Collection(raw||[], {parent:{instance:me, path:attribute}});
 							}
+						} else {
+							// return new App.models[ref+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
+							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()&&typeof me.url == "function"?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
 						}
-						else {
-							return new App.models[ref+"Model"](raw||{}, {url:me.isNew()?"":(url+'/'+attribute), parent:{instance:me, path:attribute}});
-						}
-					}
-					//handle as primitive
-					else{
+					} else {
+						//handle as primitive
 						if(schemaElement.type == "Date"){
 							raw = new Date(raw);
 						}
@@ -122,10 +127,8 @@ define([
 						}
 						return raw;
 					}
-				}
-				else{
+				} else {
 					//if the attribute is the first part of a composed attribute and the server has sent the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
-					
 					if(is.Object(raw)){
 						for(var key in raw){
 							me.set(attribute+"."+key, raw[key]);
@@ -142,13 +145,12 @@ define([
 			var args = Array.apply(null, arguments);
 
 			if(args[1] && args[1].add === true && !is.Object(args[0])){
+				console.log(args[0])
+				console.log(args[1])
 				throw new Error('String cannot be directly added.');
 				return;
 			}
 			else if(args[0] && args[0].isString()){
-				if(args[0] == "notifications" && this.url == "/api/user"){
-					console.log('set notifications user')
-				}
 				var setterName = "set"+args[0].capitalize();
 				if(is.Function(this[setterName]) && this[setterName]!=arguments.callee.caller){
 					return this[setterName](args[0], args[1]);
@@ -248,20 +250,22 @@ define([
 
 			var getAction = function(action){
 				return function(){
-					return function(){
-						var argsArray = Array.apply(null, arguments);
-						return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
+					return function(args, options){
+						// var argsArray = Array.apply(null, arguments);
+						return this.do.apply(this, [action, args, options]);
+						// return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
 					};
 				};
 			};
 
 			var properties = {id: {get:get("_id")}};
-			var me = this;
 
+			var me = this;
 			this.schema.tree.keys().forEach(function(key){
 				if(key in me)
 					key = "_"+key;
 				properties[key] = {get: get(key), set:set(key)};
+
 				if(key.contains(".")){
 					var attr = key.split(".")[0];
 					properties[attr] = {get: mget(attr)};
