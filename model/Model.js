@@ -479,7 +479,11 @@ define([
 
 		url: function(options){
 			if(!this._id && this.slug || options && options.slug){
-				return this.urlRoot + this.slug;
+				if (this.urlRoot.endsWith("/")) {
+					return this.urlRoot + this.slug;
+				} else {
+					return this.urlRoot+"/"+this.slug;
+				}
 			}
 			else{
 				return Backbone.Model.prototype.url.apply(this, arguments);

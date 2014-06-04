@@ -28,6 +28,10 @@ define([
 				__t = this.model.__t;
 			}
 
+			if(!this.template){
+				debugger
+			}
+
 			ItemViewCopy.render.apply(this, arguments);
 
 			if(__t){
