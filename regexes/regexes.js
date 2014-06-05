@@ -873,9 +873,9 @@ define([], function () {
 			'ₓ':'x'
 		},
 
-		asciify: function (char) {
+		asciify: function (chr) {
 			var asciifiedChar;
-			return (asciifiedChar = this.ascii_translator[char]) ? '(' + asciifiedChar + '|' + char +')' : char;
+			return (asciifiedChar = this.ascii_translator[chr]) ? '(' + asciifiedChar + '|' + chr +')' : chr;
 		},
 
 		filter_NonAscii: function (utfString) {
