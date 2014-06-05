@@ -420,6 +420,21 @@ define([
 			};
 		},
 
+		saveAndMergeByPosition: function () {
+			var clonedCollection = this.clone();
+			var me = this;
+
+			var deferred = clonedCollection.save();
+
+			deferred.done(function () {
+				for (var i = 0; i < clonedCollection.models.length; i++) {
+					me.models[i].set(clonedCollection.models[i]);
+				}
+			});
+
+			return deferred;
+		},
+
 		sgClientFilter: function (attrs) {
 			var items = this.where(attrs);
 			var Collection = SagaCollection.extend({
