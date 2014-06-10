@@ -521,6 +521,19 @@ define([
 			else{
 				return App.__t_valids.contains(__t);
 			}
+		},
+
+		clone: function () {
+			var clone = Backbone.Model.prototype.clone.apply(this, arguments);
+			for(var attr in clone.attributes) {
+				if(clone.attributes[attr] instanceof SagaModel) {
+					clone.attributes[attr] = clone.attributes[attr].clone();
+				}
+				if(clone.attributes[attr] instanceof SagaCollection) {
+					clone.attributes[attr] = clone.attributes[attr].clone({models:true});
+				}
+			}
+			return clone;
 		}
 
 	});
