@@ -29,32 +29,22 @@ define([
 		fetchModels: function (){
 			var deferred = $.Deferred();
 			var me = this;
+
 			$.get('/api/app_models', function (structure){
-				var App = {};
 				App.server_routes = structure.routes;
-				App.models = {};
-				App.collections = {};
+
 				console.log('Models structure : ');
 				console.log(structure);
+
+				App.models = {};
+				App.collections = {};
+
 				var schemas = structure.schemas;
-				for(var schemaName in schemas){
-					var collectionName = schemas[schemaName].collection.name;
-					var Model = App.models[schemaName+'Model'] = SagaModel.extend({
-						urlRoot:'/api/'+collectionName+'/',
-						collectionName:collectionName,
-						schemaName:schemaName,
-						schema: schemas[schemaName].doc,
-						idAttribute: "_id"
-					});
-					var Collection = App.collections[schemaName+'Collection'] = SagaCollection.extend({
-						model: Model,
-						url: '/api/'+collectionName,
-						schema: schemas[schemaName].collection
-					});
-					App[collectionName] = new Collection();
-				}
+				
+				me.loadSchemas(schemas)
 
 				deferred.resolve(App);
+				
 			}).fail(function(err){
 				debugger
 			});;
@@ -62,13 +52,39 @@ define([
 			return deferred.promise();
 		},
 
-		// modelExtension: function(){
-		// 	return {__tIsValid:function(){return false}};
-		// },
+		loadSchemas: function(schemas){
+			for(var schemaName in schemas){
+				this.loadSchema(schemas[schemaName])
+			}
+		},
 
-		// collectionExtension: function(){
-		// 	return {};
-		// },
+		loadSchema: function(schema){
+			this.generateModel(schema);
+			this.generateCollection(schema);
+		},
+
+		generateModel: function(schema){
+			App.models[schema.doc.modelName+'Model'] = (this.modelClassForSchema(schema)).extend({
+				urlRoot:'/api/'+schema.collection.name+'/',
+				collectionName:schema.collection.name,
+				schemaName:schema.doc.modelName,
+				schema: schema.doc,
+				idAttribute: "_id"
+			});
+		},	
+
+		generateCollection: function(schema){
+			var Collection = App.collections[schema.doc.modelName+'Collection'] = SagaCollection.extend({
+				model: App.models[schema.doc.modelName+'Model'],
+				url: '/api/'+schema.collection.name,
+				schema: schema.collection
+			});
+			App[schema.collection.name] = new Collection();
+		},	
+
+		modelClassForSchema: function(schema){
+			return SagaModel;
+		},	
 
 		createModel : function(ModelName, rawData) {
 			// debugger
