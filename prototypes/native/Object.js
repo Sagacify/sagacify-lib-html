@@ -5,13 +5,14 @@ obj_proto.clone = function () {
 		return this;
 	}
 	else {
-		var copy = this.constructor();
-		for(var attr in this) {
-			if(this.hasOwnProperty(attr)) {
-				copy[attr] = this[attr];
-			}
-		}
-		return copy;
+		// var copy = this.constructor();
+		// for(var attr in this) {
+		// 	if(this.hasOwnProperty(attr)) {
+		// 		copy[attr] = this[attr];
+		// 	}
+		// }
+		// return copy;
+		return JSON.parse(JSON.stringify(this));
 	}
 };
 
