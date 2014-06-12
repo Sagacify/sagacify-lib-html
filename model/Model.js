@@ -479,7 +479,11 @@ define([
 
 		url: function(options){
 			if(!this._id && this.slug || options && options.slug){
-				return this.urlRoot + this.slug;
+				if (this.urlRoot.endsWith("/")) {
+					return this.urlRoot + this.slug;
+				} else {
+					return this.urlRoot+"/"+this.slug;
+				}
 			}
 			else{
 				return Backbone.Model.prototype.url.apply(this, arguments);
@@ -517,6 +521,19 @@ define([
 			else{
 				return App.__t_valids.contains(__t);
 			}
+		},
+
+		clone: function () {
+			var clone = Backbone.Model.prototype.clone.apply(this, arguments);
+			for(var attr in clone.attributes) {
+				if(clone.attributes[attr] instanceof SagaModel) {
+					clone.attributes[attr] = clone.attributes[attr].clone();
+				}
+				if(clone.attributes[attr] instanceof SagaCollection) {
+					clone.attributes[attr] = clone.attributes[attr].clone({models:true});
+				}
+			}
+			return clone;
 		}
 
 	});

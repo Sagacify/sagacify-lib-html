@@ -4,8 +4,6 @@ define([
 	'./ModelBindMixin',
 	'./ActionsBindMixin',
 	'./OutletBindMixin'
-
-
 ], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin) {
 	var ItemView = Marionette.ItemView.extend({
 
@@ -30,7 +28,7 @@ define([
 			this.bindActions();
 
 			return Marionette.ItemView.prototype.bindUIElements.apply(this, arguments);
-		},
+		}
 
 	});
 
