@@ -12,7 +12,11 @@ define([
 
 		render: function(){
 			Marionette.CollectionView.prototype.render.apply(this, arguments);
-		}
+			if (this.elCssClass) {
+				this.$el.addClass(this.elCssClass);
+			};
+		}, 
+
 
 	});
 

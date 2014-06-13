@@ -1,9 +1,10 @@
 define([
 	'backbone.marionette',
-	'../model/Model',
+	'../prototypes/backbone/backbone',
+	'../model/Model/Model',
 	'../model/Collection',
-	'jquery'
-], function (Marionette, SagaModel, SagaCollection) {
+	'jquery',
+], function (Marionette, backbone, SagaModel, SagaCollection) {
 	
 	return Marionette.Application.extend({
 
@@ -63,7 +64,7 @@ define([
 			this.generateCollection(schema);
 		},
 
-		generateModel: function(schema){
+		generateModel: function(schema){	
 			App.models[schema.doc.modelName+'Model'] = (this.modelClassForSchema(schema)).extend({
 				urlRoot:'/api/'+schema.collection.name+'/',
 				collectionName:schema.collection.name,
@@ -71,6 +72,11 @@ define([
 				schema: schema.doc,
 				idAttribute: "_id"
 			});
+			// App.models[schema.doc.modelName+'Model'].generateEmbedded(schema)
+		},	
+
+		modelClassForSchema: function(schema){
+			return SagaModel;
 		},	
 
 		generateCollection: function(schema){
@@ -80,10 +86,6 @@ define([
 				schema: schema.collection
 			});
 			App[schema.collection.name] = new Collection();
-		},	
-
-		modelClassForSchema: function(schema){
-			return SagaModel;
 		},	
 
 		createModel : function(ModelName, rawData) {
