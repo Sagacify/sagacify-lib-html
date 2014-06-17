@@ -1,5 +1,5 @@
 define([
-	'./View'
+	'./View',
+	'./Extend'
 ], function (){
-
 });
