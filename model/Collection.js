@@ -240,10 +240,12 @@ define([
 				//options.data[key] = JSON.stringify(this._filters[key]);
 				options.data[key] = this._filters[key];
 			}
+
+			return options;
 		},
 
 		fetch: function (options) {
-			this._prepareFetchOptions(options);
+			options = this._prepareFetchOptions(options);
 
 			this._isLoading = true;
 			var fetch = Backbone.Collection.prototype.fetch.apply(this, [options]);

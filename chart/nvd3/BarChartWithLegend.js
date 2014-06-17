@@ -2,11 +2,15 @@ define([], function(){
 	var BarChartWithLegend = function (options){
 		options = options||{};
 
-		var data = options.data||exampleData();
-		var color = nv.utils.defaultColor();
-		data[0].values.forEach(function(item, i){
-			item.color = color(item, i);
-		});
+		var data = options.data||[{values:[]}];//||exampleData();
+
+		var loadDataColors = function(){
+			var color = nv.utils.defaultColor();
+			data[0].values.forEach(function(item, i){
+				item.color = color(item, i);
+			});
+		}
+		loadDataColors();
 
 		var containerSelector = options.containerSelector;
 
@@ -17,8 +21,8 @@ define([], function(){
 			.showValues(true)
 			.margin({top:50})
 
-		chart.xAxis.tickFormat("")
-		    .axisLabel("Sector"); 
+		chart.xAxis.tickFormat("");
+
 
 		var svg = d3.select(containerSelector)
 		  .datum(data); 
@@ -44,8 +48,6 @@ define([], function(){
 			chartData[0].values = chartData[0].values.filter(function(item){
 				return !item.disabled;
 			});
-			console.log(data)
-			console.log(chartData)
 			svg.datum(chartData).transition().duration(500).call(chart);
 			legendSvg.datum(data[0].values).transition().duration(500).call(legend);
 			chart.update();
@@ -53,6 +55,16 @@ define([], function(){
 
 		nv.utils.windowResize(chart.update);
 		nv.utils.windowResize(legend);
+
+		chart.loadData = function(newData){
+			data = newData;
+			loadDataColors();
+			svg.datum(data).transition().duration(500).call(chart);
+			legendSvg.datum(data[0].values).transition().duration(500).call(legend);
+			chart.update();
+		}
+
+		
 
 		return chart;	
 	};
