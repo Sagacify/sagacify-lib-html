@@ -57,9 +57,12 @@ define([
 			if(this.collection && !this.collection.isMaxReached() && !this.collection.isLoading()){
 				this.showLoadingView();
 				var me = this;
-				this.collection.nextPage().always(function(){
+				var def = this.collection.nextPage();
+				def.always(function(){
+					me.isProcessingNextPage = false;
 					me.closeLoadingView();
 				});
+				return def;
 			}
 		},
 

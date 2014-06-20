@@ -2,11 +2,36 @@ define([], function(){
 	var BarChartWithLegend = function (options){
 		options = options||{};
 
-		var data = options.data||exampleData();
-		var color = nv.utils.defaultColor();
-		data[0].values.forEach(function(item, i){
-			item.color = color(item, i);
-		});
+		var data = options.data||[{values:[]}];//||exampleData();
+
+		var loadDataColors = function(){
+			var color = [
+				"#ed5565", //Light red
+				"#FC6E51", //Light orange
+				"#ffce54", //Light yellow
+				"#a0d468", //Light green
+				"#48cfad", //Light turquoise
+				"#4fc1e9", //Light blue
+				"#5d9cec", //Light dark blue
+				"#ac92ec", //Light purple
+				"#ec87c0", //Light pink
+				"#656d78", //Light black
+				"#da4453", //Dark red
+				"#e9573f", //Dark orange
+				"#f6bb42", //Dark yellow
+				"#8cc152", //Dark green
+				"#37bc9b", //Dark turquoise
+				"#3bafda", //Dark blue
+				"#4a89dc", //Dark dark blue
+				"#8e6edc", //Dark purple
+				"#d770ad", //Dark pink
+				"#434a54" //Dark dark black
+			];
+			data[0].values.forEach(function(item, i){
+				item.color = color[i % color.length];
+			});
+		}
+		loadDataColors();
 
 		var containerSelector = options.containerSelector;
 
@@ -17,8 +42,8 @@ define([], function(){
 			.showValues(true)
 			.margin({top:50})
 
-		chart.xAxis.tickFormat("")
-		    .axisLabel("Sector"); 
+		chart.xAxis.tickFormat("");
+
 
 		var svg = d3.select(containerSelector)
 		  .datum(data); 
@@ -44,8 +69,6 @@ define([], function(){
 			chartData[0].values = chartData[0].values.filter(function(item){
 				return !item.disabled;
 			});
-			console.log(data)
-			console.log(chartData)
 			svg.datum(chartData).transition().duration(500).call(chart);
 			legendSvg.datum(data[0].values).transition().duration(500).call(legend);
 			chart.update();
@@ -53,6 +76,16 @@ define([], function(){
 
 		nv.utils.windowResize(chart.update);
 		nv.utils.windowResize(legend);
+
+		chart.loadData = function(newData){
+			data = newData;
+			loadDataColors();
+			svg.datum(data).transition().duration(500).call(chart);
+			legendSvg.datum(data[0].values).transition().duration(500).call(legend);
+			chart.update();
+		}
+
+		
 
 		return chart;	
 	};

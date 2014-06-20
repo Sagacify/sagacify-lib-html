@@ -11,6 +11,14 @@ array_proto.merge = function (array) {
 	});
 };
 
+array_proto.findFirst = function (condition) {
+	var res = this.filter(condition);
+	if (res && res.length) {
+		return res[0]
+	};
+	return null; 
+};
+
 array_proto.insert = function (index, item) {
 	this.splice(index, 0, item);
 };

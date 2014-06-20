@@ -1,4 +1,4 @@
-define(["../model/Model"], function(Model){
+define(["../model/Model/Model"], function(Model){
 	
 	return {
 
@@ -223,10 +223,25 @@ define(["../model/Model"], function(Model){
 				els.html(this.attrToEl(fullAttr, model[attr], els));
 			// }
 
-			!this._modelBound && this.listenTo(model, 'change:'+attr, function(){
-				if(model[attr] != null)
-					els.html(this.attrToEl(fullAttr, model[attr], els));
-			});
+
+			if (!this._modelBound) {
+				// if (!attr.contains('.')) {
+					this.listenTo(model, 'change:'+attr, function(){
+						if(model[attr] != null)
+							els.html(this.attrToEl(fullAttr, model[attr], els));
+					});
+				// } else {
+				// 	debugger
+				// 	var splitterAttr = attr.split(".");
+				// 	var currentModel = model;
+				// 	for (var i = 0; i < splitterAttr.length; i++) {
+				// 		this.listenTo(currentModel, 'change:'+splitterAttr[i], function(){
+				// 			els.html(this.attrToEl(fullAttr, model[attr], els));
+				// 		})
+				// 		currentModel = currentModel[splitterAttr[i]];
+				// 	};
+				// }			
+			};
 		},
 
 		attrToModel: function(attr, val, els){

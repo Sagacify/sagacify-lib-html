@@ -20,7 +20,7 @@ define([
 		var splitTime = time.split(':');
 		var hours = splitTime[0];
 		var minutes = splitTime[1];
-		this.hours(hours).minutes(minutes);
+		return this.hours(hours).minutes(minutes);
 	};
 
 	Moment.fn.isInPast = function(){
