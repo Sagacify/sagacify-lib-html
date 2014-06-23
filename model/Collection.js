@@ -264,6 +264,7 @@ define([
 			if (!options.data) options.data = {};
 
 			if (options.first) {
+				this.removeAll();
 				this._paginate.currentPage = 0;
 			}
 
