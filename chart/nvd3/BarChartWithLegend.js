@@ -38,11 +38,11 @@ define([], function(){
 		var chart = nv.models.discreteBarChart()
 			.x(function(d) { return d.label })
 			.y(function(d) { return d.value })
-			.tooltips(false)
+			.tooltips(true)
 			.showValues(true)
 			.margin({top:50})
 
-		chart.xAxis.tickFormat("");
+		//chart.xAxis.tickFormat("");
 
 
 		var svg = d3.select(containerSelector)
