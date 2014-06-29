@@ -25,7 +25,6 @@ define([
 		}		
 	});
 	_.extend(SagaModel.prototype, ModelBase(SagaModel));
-	// SagaModel.addClassMethods(ModelClass)
 
 	return SagaModel;
 });

@@ -64,7 +64,7 @@ define([
 			this.generateCollection(schema);
 		},
 
-		generateModel: function(schema){	
+		generateModel: function(schema){
 			App.models[schema.doc.modelName+'Model'] = (this.modelClassForSchema(schema)).extend({
 				urlRoot:'/api/'+schema.collection.name+'/',
 				collectionName:schema.collection.name,
@@ -72,7 +72,6 @@ define([
 				schema: schema.doc,
 				idAttribute: "_id"
 			});
-			// App.models[schema.doc.modelName+'Model'].generateEmbedded(schema)
 		},	
 
 		modelClassForSchema: function(schema){

@@ -97,7 +97,9 @@ define(["../model/Model/Model"], function(Model){
 					src = model[attr]||imgs.attr('default');
 				}
 				if(!src && imgs.attr('avatar-name')){
-					imgs.createNameAvatar(model[imgs.attr('avatar-name')]);
+					var path = imgs.attr('avatar-name');
+					var name = model[path];
+					imgs.createNameAvatar(name);
 				}
 				else{
 					imgs.attr('src', src);
