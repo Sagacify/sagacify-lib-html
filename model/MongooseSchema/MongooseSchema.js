@@ -31,18 +31,21 @@ define([
 			}
 		},
 
-		generateSubSchemaForAttribute: function(attribute, jsonSchema){
-			this[attribute] = app.SchemaFactory(jsonSchema);
-			// if ('doc' in jsonSchema && 'doc' in jsonSchema) {
-			// 	this[attribute] = new MongooseSchema(jsonSchema);
-			// 	return;
-			// }
-			// if (is.Array(jsonSchema)) {
-			// 	this[attribute] = new MongooseArraySchema(jsonSchema[0])
-			// 	return
-			// }
+		getAttributes: function(){
+			if (!this._allAttributes) {
+				this._allAttributes = {};
+			};
+			return this._allAttributes;
+		},
 
-			// this[attribute] = new MongoosePrimitiveSchema(jsonSchema);
+		getActions: function(){
+			return this.getDocument().actions
+		},
+
+		generateSubSchemaForAttribute: function(attribute, jsonSchema){
+			this.getAttributes()[attribute] = app.SchemaFactory(jsonSchema);
+			this[attribute] = this.getAttributes()[attribute];
+			return this[attribute]
 		},
 
 		loadClasses: function() {

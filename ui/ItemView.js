@@ -1,9 +1,10 @@
 define([
 	'backbone.marionette',
 	'./Mixin',
-	'./ModelBindMixin',
-	'./ActionsBindMixin',
-	'./OutletBindMixin'
+	'./mixins/ModelBindMixin',
+	'./mixins/ActionsBindMixin',
+	'./mixins/OutletBindMixin'
+
 ], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin) {
 	var ItemView = Marionette.ItemView.extend({
 

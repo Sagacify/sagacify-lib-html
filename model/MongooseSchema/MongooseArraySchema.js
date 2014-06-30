@@ -17,6 +17,10 @@ define([
 			return this.getContent() instanceof app.MongoosePrimitiveSchema;
 		},
 
+		contentIsPrimitiveArray: function(){
+			return this.cannotGenerateCollection();
+		},
+
 		cannotGenerateCollection: function(){
 			return this.primitifContent() && !this.getContent().isModelReference() 
 		},

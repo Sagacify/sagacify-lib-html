@@ -1,4 +1,4 @@
-define(["../model/Model/Model"], function(Model){
+define(["saga/model/Model/Model"], function(Model){
 	
 	return {
 
@@ -7,9 +7,6 @@ define(["../model/Model/Model"], function(Model){
 		bindToModel: function(){
 			if(this.modelBind && this.model){
 							
-				//var validClass = typeof this.validClass === 'function' ? this.validClass(attr) : this.validClass;
-				//var errorClass = typeof this.errorClass === 'function' ? this.errorClass(attr) : this.errorClass;
-
 				if (!this.model.treeVirtuals) {
 					return;
 				};

@@ -1,4 +1,4 @@
-define(["../model/Model/Model"], function(Model){
+define([], function(){
 	
 	return {
 

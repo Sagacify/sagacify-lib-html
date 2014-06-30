@@ -1,7 +1,7 @@
 define([
 	'backbone',
 	'../../types/validateType',
-	'../Model/v2/Model',
+	'../Model/Model',
 	'../Collection/Collection',
 ], function (
 	Backbone, 

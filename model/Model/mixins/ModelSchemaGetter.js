@@ -1,8 +1,8 @@
 define([
 	'saga/validation/ValidateFormat',
-	'./../../../Collection',
-	'../../../../types/validateType',
-	'../../../../ajax/SGAjax'
+	'saga/model/Collection/Collection',
+	'saga/types/validateType',
+	'saga/ajax/SGAjax'
 ], function (ValidateFormat, SagaCollection, is, SGAjax) {
 	return function(SagaModel){
 		return {

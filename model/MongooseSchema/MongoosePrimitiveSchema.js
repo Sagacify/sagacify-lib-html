@@ -1,6 +1,6 @@
 define([
 	'./MongooseElement',
-	'../Model/v2/Model',
+	'../Model/Model',
 	'../Collection/Collection'
 ], function (MongooseElement, DefaultModel, DefaultCollection) {
 
@@ -13,6 +13,10 @@ define([
 		isModelReference: function(){
 			return !!this.ref;
 		}, 
+
+		freeType : function(){
+			return !this.isModelReference() && !this.type;
+		},
 
 		getModelClass: function(){
 			return app.models[this.ref+'Model'];

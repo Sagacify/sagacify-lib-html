@@ -1,8 +1,8 @@
 define([
 	'saga/validation/ValidateFormat',
-	'./../../../Collection',
-	'../../../../types/validateType',
-	'../../../../ajax/SGAjax'
+	'saga/model/Collection/Collection',
+	'saga/types/validateType',
+	'saga/ajax/SGAjax'
 ], function (ValidateFormat, SagaCollection, is, SGAjax) {
 	return function(SagaModel){
 		return {
@@ -26,11 +26,16 @@ define([
 			},
 
 			_schemaSetCollectionAttribute: function(attribute, raw){
+
 				var mSchema = this.mongooseSchema[attribute];
 				var docColl = Backbone.Model.prototype.get.apply(this, [attribute]);
 				if(docColl){
-					docColl.set(raw);
-					return undefined;
+					if (mSchema.contentIsPrimitiveArray()) {
+						return raw;	
+					} else {
+						docColl.set(raw);
+						return undefined;
+					}
 				}
 
 				var Collection = mSchema.getCollectionClass()
@@ -49,39 +54,34 @@ define([
 			},	
 
 
-			// //attribute for model
-			// _schemaSetPrimitiveAttribute: function(attribute, raw){
-				
-			// },
-
-
-			_generateUrl: function(){
-				return  is.Function(this.url)?this.url():this.url;
-			},
-
 			_schemaSetter: function (attribute, raw){
 
-				if(raw instanceof SagaModel || raw instanceof SagaCollection){
+				if(raw instanceof SagaModel || raw instanceof SagaCollection || attribute == '_id'){
 					return raw;
 				}
 
 				var mSchema = this.mongooseSchema[attribute];
 				var schemaElement = this.schema.tree[attribute] || this.schema.virtuals[attribute];	
 				if(mSchema){
-					var ref = is.Array(schemaElement) ? schemaElement[0].ref : schemaElement.ref;
 
-					//handle as model or collection
-					if(is.Object(raw) && ref || is.Array(raw)){
+					if(mSchema instanceof app.MongooseArraySchema){
+						return this._schemaSetCollectionAttribute(attribute, raw);
+					}
 
-						if(mSchema instanceof app.MongooseArraySchema){
-							return this._schemaSetCollectionAttribute(attribute, raw);
-						}
+					if ((mSchema instanceof app.MongoosePrimitiveSchema) && mSchema.freeType()) {
+						return raw;
+					};
 
-						if (mSchema instanceof app.MongoosePrimitiveSchema && mSchema.isModelReference()) {
-							return this._schemaSetModelAttribute(attribute, raw);
+					if (is.Object(raw) && ((mSchema instanceof app.MongoosePrimitiveSchema) && mSchema.isModelReference())) {
+						return this._schemaSetModelAttribute(attribute, raw);
+					}
+					 else {
+						if (!is.Object(raw) && (mSchema instanceof app.MongoosePrimitiveSchema)) {
+							debugger
 						};
+					}
 
-					} else {
+					if (mSchema instanceof app.MongoosePrimitiveSchema) {
 						//handle as primitive
 						if(mSchema.type == "Date"){
 							raw = new Date(raw);
@@ -91,7 +91,23 @@ define([
 							this._originalAttributes[attribute] = raw;
 						}
 						return raw;
-					}
+					};
+
+					debugger
+					return raw;
+
+					// } else {
+
+					// 	//handle as primitive
+					// 	if(mSchema.type == "Date"){
+					// 		raw = new Date(raw);
+					// 	}
+					// 	// take trace of initial attributes for revert
+					// 	if(this.schema.tree[attribute] && !(attribute in this._originalAttributes)){
+					// 		this._originalAttributes[attribute] = raw;
+					// 	}
+					// 	return raw;
+					// }
 				} else {
 
 					//if the attribute is the first part of a composed attribute and the server has sent the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 

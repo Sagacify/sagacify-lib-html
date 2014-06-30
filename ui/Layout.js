@@ -1,9 +1,9 @@
 define([
 	'backbone.marionette',
 	'./Mixin',
-	'./ModelBindMixin',
-	'./ActionsBindMixin',
-	'./OutletBindMixin'
+	'./mixins/ModelBindMixin',
+	'./mixins/ActionsBindMixin',
+	'./mixins/OutletBindMixin'
 ], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin) {
 
 	// prototype of the base Marionette Layout
