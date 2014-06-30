@@ -3,8 +3,9 @@ define([
 	'../prototypes/backbone/backbone',
 	'../model/Model/Model',
 	'../model/Collection',
+	'../model/MongooseSchema/MongooseSchema',
 	'jquery',
-], function (Marionette, backbone, SagaModel, SagaCollection) {
+], function (Marionette, backbone, SagaModel, SagaCollection, MongooseSchema) {
 	
 	return Marionette.Application.extend({
 
@@ -41,8 +42,8 @@ define([
 				App.collections = {};
 
 				var schemas = structure.schemas;
-				
-				me.loadSchemas(schemas)
+				me.prepareSchemaClasses(schemas);
+				me.loadSchemaClasses();
 
 				deferred.resolve(App);
 				
@@ -53,39 +54,59 @@ define([
 			return deferred.promise();
 		},
 
-		loadSchemas: function(schemas){
-			for(var schemaName in schemas){
-				this.loadSchema(schemas[schemaName])
+		prepareSchemaClasses: function(schemas){
+			app.MongooseSchemas = {};
+			for(var ModelName in schemas){
+				app.MongooseSchemas[ModelName] = new MongooseSchema(schemas[ModelName]);
 			}
 		},
 
-		loadSchema: function(schema){
-			this.generateModel(schema);
-			this.generateCollection(schema);
+		loadSchemaClasses: function(){
+			for(var modelName in app.MongooseSchemas){
+				var currentSchema = app.MongooseSchemas[modelName];
+				currentSchema.loadClasses();
+
+				//For compatibility
+				App.models[modelName+'Model'] =  currentSchema.getModelClass()
+				App.collections[modelName+'Collection'] =  currentSchema.getCollectionClass()
+
+				// set root collections
+				App[ currentSchema.getCollectionName()] = new (currentSchema.getCollectionClass())();
+			}			
 		},
 
-		generateModel: function(schema){
-			App.models[schema.doc.modelName+'Model'] = (this.modelClassForSchema(schema)).extend({
-				urlRoot:'/api/'+schema.collection.name+'/',
-				collectionName:schema.collection.name,
-				schemaName:schema.doc.modelName,
-				schema: schema.doc,
-				idAttribute: "_id"
-			});
-		},	
+		// loadSchemas: function(schemas){
+		// 	for(var schemaName in schemas){
+		// 		this.loadSchema(schemas[schemaName])
+		// 	}
+		// },
+		// loadSchema: function(schema){
+		// 	this.generateModel(schema);
+		// 	this.generateCollection(schema);
+		// },
 
-		modelClassForSchema: function(schema){
-			return SagaModel;
-		},	
+		// generateModel: function(schema){
+		// 	App.models[schema.doc.modelName+'Model'] = (this.modelClassForSchema(schema)).extend({
+		// 		urlRoot:'/api/'+schema.collection.name+'/',
+		// 		collectionName:schema.collection.name,
+		// 		schemaName:schema.doc.modelName,
+		// 		schema: schema.doc,
+		// 		idAttribute: "_id"
+		// 	});
+		// },	
 
-		generateCollection: function(schema){
-			var Collection = App.collections[schema.doc.modelName+'Collection'] = SagaCollection.extend({
-				model: App.models[schema.doc.modelName+'Model'],
-				url: '/api/'+schema.collection.name,
-				schema: schema.collection
-			});
-			App[schema.collection.name] = new Collection();
-		},	
+		// modelClassForSchema: function(schema){
+		// 	return SagaModel;
+		// },	
+
+		// generateCollection: function(schema){
+		// 	var Collection = App.collections[schema.doc.modelName+'Collection'] = SagaCollection.extend({
+		// 		model: App.models[schema.doc.modelName+'Model'],
+		// 		url: '/api/'+schema.collection.name,
+		// 		schema: schema.collection
+		// 	});
+		// 	App[schema.collection.name] = new Collection();
+		// },	
 
 		createModel : function(ModelName, rawData) {
 			// debugger

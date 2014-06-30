@@ -7,6 +7,7 @@ define([
 
 	var SagaModel = Backbone.Model.extend({
 		constructor: function(attributes, options){
+
 			if(options){
 				if("url" in options)
 					this.url = options.url;
@@ -22,7 +23,10 @@ define([
 			this.handleMattributes();
 
 			Backbone.Model.prototype.constructor.apply(this, arguments);
-		}		
+		}, 
+
+		idAttribute: "_id"
+
 	});
 	_.extend(SagaModel.prototype, ModelBase(SagaModel));
 
