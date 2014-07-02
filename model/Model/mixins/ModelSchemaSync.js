@@ -115,6 +115,45 @@ define([
 				return json;
 			},
 
+
+
+			JSONFromSchema: function(schemaFormat){
+				if (!schemaFormat) {
+					this.JSONFromSchema(this.mongooseSchema);
+				};
+
+				// put id only
+				if (schemaFormat instanceof app.MongoosePrimitiveSchema) {
+					return this._id;
+				};
+
+				var outputJSON = {};
+				var attributes = schemaFormat.getAttributes()
+
+				for(var attribute in attributes){
+					if (attribute == "users") {
+						debugger
+						this.users;
+					};					
+					
+					var subSchema = attributes[attribute];
+					var currentValue = this.get(attribute);
+					if (currentValue) {
+						if (is.Object(currentValue) && 'JSONFromSchema' in currentValue) {
+							var value = currentValue.JSONFromSchema(subSchema);
+							//Collection or model or embedded schema
+							(value != undefined) && (outputJSON[attribute] = value);
+							continue;
+						};
+						//Primitive case
+						outputJSON[attribute] = currentValue;
+					};
+				};
+
+				return outputJSON;
+			},
+
+
 		}
 	}
 

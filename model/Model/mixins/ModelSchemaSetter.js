@@ -75,11 +75,6 @@ define([
 					if (is.Object(raw) && ((mSchema instanceof app.MongoosePrimitiveSchema) && mSchema.isModelReference())) {
 						return this._schemaSetModelAttribute(attribute, raw);
 					}
-					 else {
-						if (!is.Object(raw) && (mSchema instanceof app.MongoosePrimitiveSchema)) {
-							debugger
-						};
-					}
 
 					if (mSchema instanceof app.MongoosePrimitiveSchema) {
 						//handle as primitive
@@ -127,6 +122,10 @@ define([
 			},
 
 			set: function SGSetter(attribute, raw){
+
+				if (attribute == '_id' && raw.isString) {
+					this.cid = raw;
+				};
 
 				// ??
 				if(arguments.callee.caller == Backbone.Model.prototype.save){

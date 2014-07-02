@@ -26,6 +26,9 @@ define([
 
 	var SagaModel = Backbone.Model.extend({
 		constructor: function(attributes, options){
+
+			this.cid = String.guid();
+
 			if(options){
 				if("url" in options)
 					this.url = options.url;
@@ -39,8 +42,10 @@ define([
 			this._originalAttributes = {};
 			this.defineSchemaProperties();
 			this.handleMattributes();
+			var ret = Backbone.Model.prototype.constructor.apply(this, arguments);
+			this.postCreate && this.postCreate();
 
-			Backbone.Model.prototype.constructor.apply(this, arguments);
+			return ret;
 		}, 
 		
 		idAttribute: "_id",

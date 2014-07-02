@@ -25,19 +25,36 @@ define([
 			return this.primitifContent() && !this.getContent().isModelReference() 
 		},
 
+		setSuperSchema: function(superSchema){
+			this.getContent().setSuperSchema(superSchema.getContent());
+			MongooseElement.prototype.setSuperSchema.apply(this, arguments);
+		},
+
 		getCollectionClass: function(){
 			if (this.cannotGenerateCollection()) {
 				return null;
 			};
 
-			return this.defaultCollectionClass().extend({
-				mongooseSchema: this,
+			if (!this._generatedDefaultCollection) {
+				this._generatedDefaultCollection = this.defaultCollectionClass().extend(
+				{
+					mongooseSchema: this,
 
-				//deprecatel
-				model: this.getModelClass(),
-				schema: this._rawContentSchema.collection
-			});
+					//deprecatel
+					model: this.getModelClass(),
+					schema: this._rawContentSchema.collection
+				});
+			};
+
+			return this._generatedDefaultCollection;
 		}, 
+
+		generateSubSchema: function(){
+			if (this.getContent() instanceof app.MongooseSchema) {
+				this.getContent().generateSubSchema()
+			};
+		},
+
 
 		getModelClass: function(){
 			return this.contentSchema.getModelClass();

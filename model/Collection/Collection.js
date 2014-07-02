@@ -163,9 +163,6 @@ define([
 		},
 
 		add: function () {
-			// if(arguments[0] == 'new'){
-			// 	return Backbone.Collection.prototype.add.apply(this, [this.get('new')]);
-			// }
 
 			var _isId = false;
 			if (is.String(arguments[0])) {
@@ -174,7 +171,9 @@ define([
 					_id: arguments[0]
 				};
 			}
+
 			var ret = Backbone.Collection.prototype.add.apply(this, arguments);
+
 			var added = this.last();
 
 			if (added) {
@@ -187,6 +186,14 @@ define([
 
 			return ret;
 		},
+
+		remove: function(){
+			var oldLength = this.length
+			var ret = Backbone.Collection.prototype.remove.apply(this, arguments);
+			
+			return ret;
+		},
+
 
 		do: function (action, args) {
 			var url = this.url instanceof Function ? this.url() : this.url;
@@ -529,7 +536,40 @@ define([
 				type: 'GET',
 				url: url + '/' + attr
 			});
+		}, 
+
+		previousModel: function(model){
+			if (!model) {
+				return;
+			};
+			var index = this.indexOf(model)
+			if (index == undefined) {
+				return;
+			};
+			return this.at(index-1);
+		}, 
+
+		nextModel: function(model){
+			if (!model) {
+				return;
+			};
+			var index = this.indexOf(model)
+			if (index == undefined) {
+				return;
+			};
+			return this.at(index+1);
+		},
+
+
+		JSONFromSchema: function(schemaFormat){
+			var res = [];
+			var me = this;
+			this.each(function(model){
+				res.push(model.JSONFromSchema(schemaFormat.getContent()));
+			});
+			return res;
 		}
+
 
 	});
 

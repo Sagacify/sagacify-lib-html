@@ -17,28 +17,31 @@ define([
 			Backbone.Model.prototype.initialize.apply(this, arguments);
 		}, 
 
-
-		getModelClass: function(){
+		setSuperSchema: function(superSchema){
+			this._superSchema = superSchema;
 		},
 
+		getModelClass: function(){},
 
-		getCollectionClass: function(){
-		},
+		getCollectionClass: function(){},
 
 		defaultModelClass: function(){
-			if (this._parentSchema) {
-				return this._parentSchema.getModelClass();
+			if (this._superSchema) {
+				return this._superSchema.getModelClass();
 			};
 			return  DefaultModel
 		},
 
 		defaultCollectionClass: function(){
-			if (this._parentSchema) {
-				return this._parentSchema.getCollectionClass();
+			if (this._superSchema) {
+				return this._superSchema.getCollectionClass();
 			};
 			return  DefaultCollection
 		},
 
+		generateSubSchema: function(){
+			
+		}
 
 	});
 });

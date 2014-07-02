@@ -19,7 +19,6 @@ define([
 		initialize: function(schema){
 			MongooseElement.prototype.initialize.apply(this, arguments);
 			this._schema = schema;
-			this.generateSubSchema();
 		},
 
 		generateSubSchema: function(){
@@ -44,7 +43,13 @@ define([
 
 		generateSubSchemaForAttribute: function(attribute, jsonSchema){
 			this.getAttributes()[attribute] = app.SchemaFactory(jsonSchema);
+
+			if (this._superSchema && (attribute in this._superSchema)) {
+				this.getAttributes()[attribute].setSuperSchema(this._superSchema[attribute])
+			};
+
 			this[attribute] = this.getAttributes()[attribute];
+			this[attribute].generateSubSchema();
 			return this[attribute]
 		},
 
@@ -53,9 +58,7 @@ define([
 			this.getCollectionClass();
 		},
 
-		setParentSchema: function(parentSchema){
-			this._parentSchema = parentSchema;
-		},
+
 
 		getModelName: function(){
 			return this.getDocument().modelName;

@@ -63,6 +63,7 @@ define([
 
 		loadSchemaClasses: function(){
 			for(var modelName in app.MongooseSchemas){
+				app.MongooseSchemas[modelName].generateSubSchema();
 				var currentSchema = app.MongooseSchemas[modelName];
 				currentSchema.loadClasses();
 
@@ -72,7 +73,7 @@ define([
 
 				// set root collections
 				App[ currentSchema.getCollectionName()] = new (currentSchema.getCollectionClass())();
-			}			
+			}		
 		},
 
 		createModel : function(ModelName, rawData) {
