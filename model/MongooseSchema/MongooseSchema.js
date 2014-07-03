@@ -86,7 +86,7 @@ define([
 					mongooseSchema: this,
 
 					//Deprecated
-					urlRoot:this.rootUrl()+"/",
+					// urlRoot:this.rootUrl()+"/",
 					collectionName:this.getCollection().name,
 					schemaName:this.getModelName(),
 					schema: this.getDocument(),

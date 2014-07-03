@@ -10,7 +10,14 @@ define([
 				return  is.Function(this.url)?this.url():this.url;
 			},
 
+			// setUrl: function(customUrl){
+			// 	this.customUrl = customUrl;
+			// },
+
 			url: function(options){
+				if (this.custom_url) {
+					return this.custom_url;
+				};
 				if(!this._id && this.slug || options && options.slug){
 					if (this.urlRoot.endsWith("/")) {
 						return this.urlRoot + this.slug;
@@ -19,24 +26,24 @@ define([
 					}
 				}
 				else{
+					if (!this.urlRoot && !this.collection) {
+						this.urlRoot = '/api/'+this.mongooseSchema.getCollectionName()+"/";
+					};
 					return Backbone.Model.prototype.url.apply(this, arguments);
 				}
 			},
 
+			save: function(attributesToInclude, options){
+				options = _.defaults(options||{}, {
+					schemaSerialization:false,					
+				})
 
-			save: function(){
-				if(arguments[0] instanceof Array){
-					var fields = arguments[0];
-					var json = this.toJSON();
-					var partJson = {};
-					fields.forEach(function(field){
-						partJson[field] = json[field];
-					});
-					return this.save(partJson, {patch:true});
+				if(attributesToInclude instanceof Array){
+					var json = this.toJSON(options);
+					return this.save(_.pick(json, attributesToInclude), {patch:true});
 				}
-				else{
-					return Backbone.Model.prototype.save.apply(this, arguments);
-				}
+
+				return Backbone.Model.prototype.save.apply(this, arguments);
 			},
 
 
@@ -80,12 +87,21 @@ define([
 				}
 			},
 			
-			toJSON: function(notmpath){
+			toJSON: function(options){
+				options =_.defaults(options||{}, {
+					schemaSerialization:false, 
+					notmpath:undefined
+				});
+
+				if (options.schemaSerialization) {
+					return this.JSONFromSchema();
+				};
+
 				if(this._isId){
 					return this._id;
 				}
 				var json;
-				if(notmpath !== true)
+				if(options.notmpath !== true)
 					json = Backbone.Model.prototype.toJSON.apply(this, arguments);
 				else
 					json = _.clone(this._mattributes);
@@ -93,7 +109,7 @@ define([
 				childToJSON = function(parent){
 					for(var attr in parent){
 						if(parent[attr] && typeof parent[attr].toJSON == "function"){
-							var val = parent[attr].toJSON(notmpath);
+							var val = parent[attr].toJSON(options);
 							if(parent[attr] instanceof SagaModel){
 								if(val && !val.isEmpty()){
 									parent[attr] = val;
@@ -116,28 +132,30 @@ define([
 			},
 
 
-
 			JSONFromSchema: function(schemaFormat){
 				if (!schemaFormat) {
-					this.JSONFromSchema(this.mongooseSchema);
+					return this.JSONFromSchema(this.mongooseSchema);
 				};
 
 				// put id only
 				if (schemaFormat instanceof app.MongoosePrimitiveSchema) {
+					if (this.isNew()) {
+						//Full format
+						var expandedResult = this.JSONFromSchema(this.mongooseSchema);
+						if (expandedResult.keys().length) {
+							return expandedResult;
+						};
+						return undefined;
+					};
 					return this._id;
 				};
 
 				var outputJSON = {};
 				var attributes = schemaFormat.getAttributes()
-
 				for(var attribute in attributes){
-					if (attribute == "users") {
-						debugger
-						this.users;
-					};					
-					
 					var subSchema = attributes[attribute];
-					var currentValue = this.get(attribute);
+					var currentValue = this.get(attribute, {lazyCreation:false});
+
 					if (currentValue) {
 						if (is.Object(currentValue) && 'JSONFromSchema' in currentValue) {
 							var value = currentValue.JSONFromSchema(subSchema);

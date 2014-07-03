@@ -6,13 +6,21 @@ define([
 ], function (ValidateFormat, SagaCollection, is, SGAjax) {
 	return function(SagaModel){
 		return {
-			get: function(attribute){
+			get: function(attribute, options){
+				options = _.defaults(options||{}, {
+					lazyCreation:true
+				});
+
 
 				var getterName = "get"+attribute.capitalize();
 				if(is.Function(this[getterName]) && this[getterName] != arguments.callee.caller)
 					return this[getterName]();
 
 				var value = Backbone.Model.prototype.get.apply(this, arguments);
+
+				if (!options.lazyCreation) {
+					return value;
+				};
 
 				if(!value){
 			

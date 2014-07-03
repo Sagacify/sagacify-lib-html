@@ -47,9 +47,9 @@ define([
 						parent:{
 							instance:this, 
 							path:attribute
-						}
+						},
+						url: collectionUrl
 					});
-				collection.url = collectionUrl;
 				return collection;
 			},	
 
@@ -177,6 +177,7 @@ define([
 
 				var me = this;
 				dict.keys().forEach(function(key){
+
 					var value = me._schemaSetter(key, dict[key]);
 					if(value === undefined){
 						delete dict[key];	

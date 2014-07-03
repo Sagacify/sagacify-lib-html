@@ -162,17 +162,17 @@ define([
 			return Backbone.Collection.prototype.set.apply(this, arguments);
 		},
 
-		add: function () {
-
+		add: function (model, options) {
+			// _isId -> will be deprecated
 			var _isId = false;
-			if (is.String(arguments[0])) {
+
+			//Try add simple _id
+			if (is.String(model)) {
 				_isId = true;
-				arguments[0] = {
-					_id: arguments[0]
-				};
+				this.add({_id:model});
 			}
 
-			var ret = Backbone.Collection.prototype.add.apply(this, arguments);
+			var ret = Backbone.Collection.prototype.add.apply(this, [model, options]);
 
 			var added = this.last();
 
@@ -231,6 +231,7 @@ define([
 			_.extend(this._paginate, paginate);
 			return this;
 		},
+
 
 		_prepareFetchOptions: function (options) {
 			if (!options) options = {
@@ -478,6 +479,7 @@ define([
 		clear: function ()  {
 			var len = this.models.length;
 			while (len--) {
+				this.models[len].clear();
 				this.remove(this.models[len]);
 			}
 		},
@@ -487,7 +489,6 @@ define([
 			for (var i = this.models.length - 1; i >= 0; i--) {
 				removed.push(this.models[i]);
 			}
-			this.clear();
 			this.resetPaginate()
 			this.trigger('remove:all');
 			return removed;
@@ -524,6 +525,8 @@ define([
 			return new Collection(items);
 		},
 
+
+		//deprecated, use json output format from schema... (Voir Yvan)
 		setAsIds: function(){
 			this.models.forEach(function(model){
 				model._isId = true;
@@ -562,10 +565,17 @@ define([
 
 
 		JSONFromSchema: function(schemaFormat){
+
+			
+			if (!schemaFormat) {
+				return this.JSONFromSchema(this.mongooseSchema);
+			};
+
 			var res = [];
 			var me = this;
 			this.each(function(model){
-				res.push(model.JSONFromSchema(schemaFormat.getContent()));
+				var c = schemaFormat.getContent();
+				res.push(model.JSONFromSchema(c));
 			});
 			return res;
 		}

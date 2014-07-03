@@ -69,10 +69,12 @@ define([
 
 				//For compatibility
 				App.models[modelName+'Model'] =  currentSchema.getModelClass()
-				App.collections[modelName+'Collection'] =  currentSchema.getCollectionClass()
+				App.models[modelName+'Model'].prototype.urlRool = "/api/"+currentSchema.getCollectionName()+"/";
 
+
+				App.collections[modelName+'Collection'] =  currentSchema.getCollectionClass()
 				// set root collections
-				App[ currentSchema.getCollectionName()] = new (currentSchema.getCollectionClass())();
+				App[currentSchema.getCollectionName()] = new (currentSchema.getCollectionClass())();
 			}		
 		},
 

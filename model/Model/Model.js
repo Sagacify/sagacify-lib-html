@@ -26,12 +26,9 @@ define([
 
 	var SagaModel = Backbone.Model.extend({
 		constructor: function(attributes, options){
-
-			this.cid = String.guid();
-
 			if(options){
 				if("url" in options)
-					this.url = options.url;
+					this.urlRoot = options.url;
 				if("urlRoot" in options)
 					this.urlRoot = options.urlRoot;
 				if(options.parent)
@@ -47,7 +44,7 @@ define([
 
 			return ret;
 		}, 
-		
+
 		idAttribute: "_id",
 
 		parent: {
@@ -59,6 +56,7 @@ define([
 
 		//model to be transformed in id in toJSON if _isId
 		_isId: false,
+
 
 
 		root: function(){
@@ -87,6 +85,20 @@ define([
 
 		//TODO: improve function to avoid remove embedded models and collections, and clear them
 		clear: function(){
+
+			var attributes = this.mongooseSchema.getAttributes();
+			for(var attribute in attributes){
+				var subSchema = attributes[attribute];
+				var currentValue = this.get(attribute, {lazyCreation:false});
+
+				if (currentValue) {
+					if (is.Object(currentValue) && 'clear' in currentValue) {
+						currentValue.clear();
+						continue;
+					};
+				};
+			};
+
 			this.attributes = {};
 			this._mattributes = {};
 			this.changed = {};

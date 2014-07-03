@@ -55,7 +55,6 @@ define([
 			};
 		},
 
-
 		getModelClass: function(){
 			return this.contentSchema.getModelClass();
 		}
