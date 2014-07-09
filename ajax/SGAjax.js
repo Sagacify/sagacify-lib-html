@@ -56,6 +56,8 @@ define([
 
 				error: cbError,
 
+				timeout : 10000,
+
 				headers: headers,
 
 				data: (typeof data === 'object') && (type !== 'GET') ? JSON.stringify(data) : data,
@@ -71,6 +73,7 @@ define([
 			};
 
 			promise.fail(function(err){
+				debugger
 				if (!err.status) {
 					app.nc.trigger('socket:no_response');
 				};
