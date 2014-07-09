@@ -40,10 +40,15 @@ define([
 			this.defineSchemaProperties();
 			this.handleMattributes();
 			var ret = Backbone.Model.prototype.constructor.apply(this, arguments);
-			this.postCreate && this.postCreate();
+			this.postCreate && this.postCreate(options);
+
+			this._recorded = {};
 
 			return ret;
 		}, 
+
+		_isRecordingChanges:null,
+		_recorded:null,
 
 		idAttribute: "_id",
 

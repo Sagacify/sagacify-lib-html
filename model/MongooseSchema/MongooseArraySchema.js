@@ -3,10 +3,13 @@ define([
 ], function (MongooseElement) {
 
 	return  MongooseElement.extend({
-		initialize: function(content){
-			this._rawContentSchema = content;
-			this.contentSchema = app.SchemaFactory(content);
+		initialize: function(options){
 			MongooseElement.prototype.initialize.apply(this, arguments);
+			this._rawContentSchema = options.content;
+			this.contentSchema = app.SchemaFactory(options.content, this, 'content', this._override);
+			this.contentSchema.isEmbedded = true;
+
+
 		}, 
 
 		getContent: function(){
@@ -36,14 +39,18 @@ define([
 			};
 
 			if (!this._generatedDefaultCollection) {
-				this._generatedDefaultCollection = this.defaultCollectionClass().extend(
-				{
-					mongooseSchema: this,
 
-					//deprecatel
+				var defaultClass = this.defaultCollectionClass();
+				var classOverride = this._override.collection.clazz(defaultClass);
+				var instanceOverride = this._override.collection.instance(defaultClass);
+
+				var options = _.extend({
+					mongooseSchema: this,
 					model: this.getModelClass(),
 					schema: this._rawContentSchema.collection
-				});
+				}, instanceOverride);
+
+				this._generatedDefaultCollection = defaultClass.extend(options, classOverride);
 			};
 
 			return this._generatedDefaultCollection;
@@ -56,7 +63,7 @@ define([
 		},
 
 		getModelClass: function(){
-			return this.contentSchema.getModelClass();
+			return this.getContent().getModelClass();
 		}
 
 	});

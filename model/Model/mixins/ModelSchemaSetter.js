@@ -7,7 +7,7 @@ define([
 	return function(SagaModel){
 		return {
 
-			_schemaSetModelAttribute: function(attribute, raw){
+			_schemaSetModelAttribute: function(attribute, raw, options){
 				var mSchema = this.mongooseSchema[attribute];
 				var docColl = Backbone.Model.prototype.get.apply(this, [attribute]);
 				if(docColl){
@@ -25,7 +25,7 @@ define([
 					});
 			},
 
-			_schemaSetCollectionAttribute: function(attribute, raw){
+			_schemaSetCollectionAttribute: function(attribute, raw, options){
 
 				var mSchema = this.mongooseSchema[attribute];
 				var docColl = Backbone.Model.prototype.get.apply(this, [attribute]);
@@ -54,7 +54,7 @@ define([
 			},	
 
 
-			_schemaSetter: function (attribute, raw){
+			_schemaSetter: function (attribute, raw, options){
 
 				if(raw instanceof SagaModel || raw instanceof SagaCollection || attribute == '_id'){
 					return raw;
@@ -88,21 +88,9 @@ define([
 						return raw;
 					};
 
-					debugger
+
 					return raw;
 
-					// } else {
-
-					// 	//handle as primitive
-					// 	if(mSchema.type == "Date"){
-					// 		raw = new Date(raw);
-					// 	}
-					// 	// take trace of initial attributes for revert
-					// 	if(this.schema.tree[attribute] && !(attribute in this._originalAttributes)){
-					// 		this._originalAttributes[attribute] = raw;
-					// 	}
-					// 	return raw;
-					// }
 				} else {
 
 					//if the attribute is the first part of a composed attribute and the server has sent the value as object, e.g.: waited attr is user.name and server has sent user:{name:"..."} 
@@ -113,19 +101,83 @@ define([
 					}
 
 					//Strange case...
-					if (raw && raw.force) {
+					if (options && options.force) {
 						return raw;
 					};
 
-					return undefined;
+					//Custom client attribute
+					return raw;
 				}
 			},
 
-			set: function SGSetter(attribute, raw){
+			recordCollectionsChanges: function(record){
+				var colSubSet = this.getAllCollections();
+				for(var attribute in colSubSet){
+					this.recordCollectionChanges(attribute, colSubSet[attribute], record);
+				}
+			},
 
-				if (attribute == '_id' && raw.isString) {
-					this.cid = raw;
+			recordCollectionChanges: function(attribute, collection, record){
+				if (record) {
+					var me = this;
+					this.listenTo(collection, 'add', function(addedModel){
+						me.recordChange(attribute, {add:addedModel});
+					});
+					this.listenTo(collection, 'remove', function(deletedModel){
+						me.recordChange(attribute, {remove:deletedModel});
+					});
+				} else {
+					this.stopListening(collection);	
+				}
+			},
+
+			startRecordingChange: function(){
+				this.recordCollectionsChanges(true);
+				this._isRecordingChanges = true;
+			},
+
+
+			stopRecordingChange: function(){
+				this.recordCollectionsChanges(false);
+				this._isRecordingChanges = true;
+			},
+
+			resetRecord: function(){
+				var oldRecord = this._recorded;
+				this._recorded = {}
+				return oldRecord;
+			}, 
+
+			recordedChanges: function(){
+				return this._recorded;
+			},
+
+			isRecordingChanges: function(){
+				return !!this._isRecordingChanges;
+			},
+
+			recordChange: function(attribute, raw){
+				if (attribute == 'author.avatar') {
+					debugger
 				};
+				if (!(attribute in this._recorded)) {
+					this._recorded[attribute] = [];
+				};
+				this._recorded[attribute].push(raw);
+			},
+
+			set: function SGSetter(attribute, raw, options){
+				options = _.defaults(options||{}, {
+					record:true
+				})
+
+				if (this.isRecordingChanges() && options.record) {
+					this.recordChange(attribute, raw);
+				};
+
+				// if (attribute == '_id' && raw.isString) {
+				// 	this.cid = raw;
+				// };
 
 				// ??
 				if(arguments.callee.caller == Backbone.Model.prototype.save){
@@ -144,48 +196,47 @@ define([
 
 					var setterName = "set"+attribute.capitalize();
 					if(is.Function(this[setterName]) && this[setterName]!=arguments.callee.caller){
-						return this[setterName](attribute, raw);
+						return this[setterName](attribute, raw, options);
 					}									
 
-					var value = this._schemaSetter(attribute, raw);
+					var value = this._schemaSetter(attribute, raw, options);
 					if(value === undefined){
 						return;
 					} else{
-						return Backbone.Model.prototype.set.apply(this, [attribute, value]);
+						return Backbone.Model.prototype.set.apply(this, [attribute, value, options]);
 					}
 				}
 				
 				if(attribute && attribute.isObject()){
-					return this.batchSet(attribute);
+					return this.batchSet(attribute, options);
 				}
 				return Backbone.Model.prototype.set.apply(this, arguments);
 			},
 
 
-			batchSet: function(dict){
+			batchSet: function(dict, options){
 
 				if(dict instanceof SagaModel){
-					return Backbone.Model.prototype.set.apply(this, [dict.toJSON()]);
+					return Backbone.Model.prototype.set.apply(this, [dict.toJSON(), options]);
 				}
-				var args = Array.apply(null, arguments);
 
 				dict = dict.clone();
 				if(dict._id){
-					this.set("_id", dict._id);
+					this.set("_id", dict._id, options);
 					delete dict._id;
 				}
 
 				var me = this;
 				dict.keys().forEach(function(key){
 
-					var value = me._schemaSetter(key, dict[key]);
+					var value = me._schemaSetter(key, dict[key], options);
 					if(value === undefined){
 						delete dict[key];	
 					} else{
 						dict[key] = value;
 					}
 				});
-				return Backbone.Model.prototype.set.apply(this, [dict]);
+				return Backbone.Model.prototype.set.apply(this, [dict, options]);
 			},	
 			
 		}

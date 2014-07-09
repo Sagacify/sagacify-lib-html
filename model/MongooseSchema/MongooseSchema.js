@@ -7,6 +7,31 @@ define([
 ) {
 
 	return MongooseElement.extend({
+
+
+		initialize: function(options){
+			MongooseElement.prototype.initialize.apply(this, arguments);
+			this._schema = options.schema;
+		},
+
+		generateCompliantOverride: function(override){
+			override = override||{};
+			override.model = override.model||{};
+			override.model.attributes = override.model.attributes||{};
+			MongooseElement.prototype.generateCompliantOverride.apply(this, [override]);
+		},
+
+		isAModel: function(){
+			return this._id && this._id.ref;
+		},
+
+		isAnEmbedded: function(){
+			return this.isEmbedded;
+		},
+
+		isASemiEmbedded: function(){
+			return this.isAnEmbedded() && this.isAModel()
+		},
 		
 		getRawSubSchema: function(attribute){
 			return this.getDocument().tree[attribute] || this.getDocument().virtuals[attribute];
@@ -14,11 +39,6 @@ define([
 
 		rootUrl: function(){
 			return '/api/'+this.getCollection().name;
-		},
-
-		initialize: function(schema){
-			MongooseElement.prototype.initialize.apply(this, arguments);
-			this._schema = schema;
 		},
 
 		generateSubSchema: function(){
@@ -42,7 +62,8 @@ define([
 		},
 
 		generateSubSchemaForAttribute: function(attribute, jsonSchema){
-			this.getAttributes()[attribute] = app.SchemaFactory(jsonSchema);
+		
+			this.getAttributes()[attribute] = app.SchemaFactory(jsonSchema, this, attribute, this._override.model.attrs[attribute]);
 
 			if (this._superSchema && (attribute in this._superSchema)) {
 				this.getAttributes()[attribute].setSuperSchema(this._superSchema[attribute])
@@ -58,8 +79,6 @@ define([
 			this.getCollectionClass();
 		},
 
-
-
 		getModelName: function(){
 			return this.getDocument().modelName;
 		},
@@ -70,7 +89,7 @@ define([
 
 		getSchema: function(){
 			return this._schema;			
-		},
+		},	
 
 		getDocument: function(){
 			return this._schema.doc;			
@@ -81,45 +100,51 @@ define([
 		},
 
 		getModelClass: function(){
-			if (!this._modelClass) {
-				this._modelClass = this.defaultModelClass().extend({
-					mongooseSchema: this,
 
-					//Deprecated
-					// urlRoot:this.rootUrl()+"/",
-					collectionName:this.getCollection().name,
-					schemaName:this.getModelName(),
-					schema: this.getDocument(),
-					// idAttribute: "_id"		
-				});
+			if (!this._modelClass) {
+
+				var defaultClass = this.defaultModelClass();
+				var instanceOverride = this._override.model.instance(defaultClass);
+
+				var clazzOverride = this._override.model.clazz(defaultClass);
+				var options = _.extend({
+						mongooseSchema: this,
+
+						//Deprecated
+						collectionName:this.getCollection().name,
+						schemaName:this.getModelName(),
+						schema: this.getDocument(),
+					}, instanceOverride
+				);
+				this._modelClass = defaultClass.extend(options, clazzOverride);
 			};
 			return this._modelClass; 
 		},
 
-		// defaultModelClass: function(){
-		// 	if (this._parentSchema) {
-		// 		return this._parentSchema.getModelClass();
-		// 	};
-		// 	return  DefaultModel
-		// },
-
-		// defaultCollectionClass: function(){
-		// 	if (this._parentSchema) {
-		// 		return this._parentSchema.getCollectionClass();
-		// 	};
-		// 	return  DefaultCollection
-		// },
+		defaultModelClass: function(){
+			if (this.isASemiEmbedded() && !this._superSchema) {
+				return app.MongooseSchemas[this._id.ref].getModelClass();
+			};
+			return MongooseElement.prototype.defaultModelClass.apply(this, arguments);
+		},
 
 		getCollectionClass: function(){
 			if(!this._collectionClass){
-				this._collectionClass = this.defaultCollectionClass().extend({
-					mongooseSchema: this,
 
-					//Deprecated
-					model: this.getModelClass(),
-					url: this.rootUrl(),
-					schema: this.getCollection()
-				});				
+				var defaultClass = this.defaultCollectionClass();
+				var instanceOverride = this._override.collection.instance(defaultClass);
+				var clazzOverride = this._override.collection.clazz(defaultClass);
+
+				var options = _.extend({
+						mongooseSchema: this,
+
+						//Deprecated
+						model: this.getModelClass(),
+						url: this.rootUrl(),
+						schema: this.getCollection()
+					}, instanceOverride
+				);
+				this._collectionClass = defaultClass.extend(options, clazzOverride)
 			}
 			return this._collectionClass;
 		},

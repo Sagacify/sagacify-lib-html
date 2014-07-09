@@ -3,9 +3,10 @@ define([
 	'./Mixin',
 	'./mixins/ModelBindMixin',
 	'./mixins/ActionsBindMixin',
-	'./mixins/OutletBindMixin'
+	'./mixins/OutletBindMixin', 
+	'./mixins/ModelBindMixinV2'
 
-], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin) {
+], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin, ModelBindMixinV2) {
 	var ItemView = Marionette.ItemView.extend({
 
 		constructor: function(){
@@ -27,13 +28,14 @@ define([
 			this.bindToModel();
 			this.bindOutlets();
 			this.bindActions();
+			this.bindModelv2();
 
 			return Marionette.ItemView.prototype.bindUIElements.apply(this, arguments);
 		}
 
 	});
 
-	_.extend(ItemView.prototype, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin);
+	_.extend(ItemView.prototype, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin, ModelBindMixinV2);
 
 	return ItemView;
 });

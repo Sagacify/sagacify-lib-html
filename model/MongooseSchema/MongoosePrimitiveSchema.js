@@ -5,8 +5,8 @@ define([
 ], function (MongooseElement, DefaultModel, DefaultCollection) {
 
 	return MongooseElement.extend({
-		initialize: function(schema){
-			_.extend(this, schema);
+		initialize: function(options){
+			_.extend(this, options.schema);
 			MongooseElement.prototype.initialize.apply(this, arguments);
 		}, 
 
@@ -19,7 +19,9 @@ define([
 		},
 
 		getModelClass: function(){
-			return app.models[this.ref+'Model'];
+			return app.MongooseSchemas[this.ref].getModelClass()
+			// debugger
+			// return app.models[this.ref+'Model'];
 		},
 
 		getCollectionClass: function(){

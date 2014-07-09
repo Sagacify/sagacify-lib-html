@@ -54,28 +54,38 @@ define([
 			return deferred.promise();
 		},
 
+		getModelOverrides: function(){
+			return {};
+		},
+
 		prepareSchemaClasses: function(schemas){
 			app.MongooseSchemas = {};
 			for(var ModelName in schemas){
-				app.MongooseSchemas[ModelName] = new MongooseSchema(schemas[ModelName]);
+				app.MongooseSchemas[ModelName] = new MongooseSchema({schema:schemas[ModelName], parent:null, override:this.getModelOverrides()[ModelName]});
 			}
 		},
 
 		loadSchemaClasses: function(){
+
+			//Load meta constructor
 			for(var modelName in app.MongooseSchemas){
 				app.MongooseSchemas[modelName].generateSubSchema();
 				var currentSchema = app.MongooseSchemas[modelName];
 				currentSchema.loadClasses();
+				App.collections[modelName+'Collection'] =  currentSchema.getCollectionClass()
+			}		
 
+			// set root collections
+			//Load root collection (for )
+			for(var modelName in app.MongooseSchemas){
+				var currentSchema = app.MongooseSchemas[modelName];
+				App[currentSchema.getCollectionName()] = new (currentSchema.getCollectionClass())();
 				//For compatibility
 				App.models[modelName+'Model'] =  currentSchema.getModelClass()
-				App.models[modelName+'Model'].prototype.urlRool = "/api/"+currentSchema.getCollectionName()+"/";
+				App.models[modelName+'Model'].prototype.urlRool = "/api/"+currentSchema.getCollectionName();
 
+			}
 
-				App.collections[modelName+'Collection'] =  currentSchema.getCollectionClass()
-				// set root collections
-				App[currentSchema.getCollectionName()] = new (currentSchema.getCollectionClass())();
-			}		
 		},
 
 		createModel : function(ModelName, rawData) {
@@ -103,7 +113,7 @@ define([
 
 		getUser: function(){
 			if(!this._user){
-				this._user = new this.models.UserModel({}, {url:"/api/user"});
+				this._user = new (app.MongooseSchemas.User.getModelClass())({}, {url:"/api/user"});
 			}
 			return this._user;
 		},

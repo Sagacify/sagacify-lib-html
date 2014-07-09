@@ -7,6 +7,38 @@ define([
 	return function(SagaModel){
 		return {
 
+
+			validate: function(attrs, options){
+				
+				var attrs = attrs||this.mongooseSchema.getAttributes();
+				
+				var attributes = _.keys(attrs);
+				for (var i = 0; i < attributes.length; i++) {
+					
+					error = this.checkAttrIsValid(attributes[i])
+					if (error) {
+						res = {};
+						res[attributes[i]] = error;
+						return res;
+					};
+				};
+
+				debugger
+
+			},
+
+			checkAttrIsValid: function(attribute){
+				// if never setted ok
+				var val = this.get(attribute, {lazyCreation:false});
+
+				if (val != undefined) {
+					//Collection or model
+					if (val.validate) {
+						return val.validate();
+					};
+				};
+			},
+
 			isValidationRef: false,
 
 			validationRef: function(){
@@ -23,7 +55,7 @@ define([
 						path = "";
 						break;
 					}
-					if(path&&parent.path)
+					if(path && parent.path)
 						path = "."+path;
 					path = parent.path+path;
 				}

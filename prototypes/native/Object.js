@@ -118,6 +118,37 @@ Object.values = function (obj) {
 }
 
 
+function prototypeHash(obj){
+	var cKeys = _.keys(obj);
+	var hash = "";
+	cKeys = cKeys.sort();
+	for (var i = 0; i < cKeys.length; i++) {
+		hash += cKeys[i];
+	};
+	return hash;
+}
+
+function compareToObjectHash(obj1, obj2){
+	return prototypeHash(obj1) == prototypeHash(obj2);
+}
+
+function isExactlyInstanceOfRec(instanceConstructor, constructor){
+
+	if (compareToObjectHash(instanceConstructor.prototype, constructor.prototype)) {
+		return true;
+	};
+	
+	if (!instanceConstructor.__super__) {
+		return false;
+	};
+
+	return isExactlyInstanceOfRec(instanceConstructor.__super__.constructor, constructor)
+}
+
+Object.isExactlyInstanceOf = function(instance, constructor){
+	return isExactlyInstanceOfRec(instance.constructor, constructor);
+}
+
 
 for(var key in obj_proto){
 	Object.defineProperty(Object.prototype, key, {writable: true, value: obj_proto[key]});

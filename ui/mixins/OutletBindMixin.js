@@ -6,7 +6,6 @@ define([], function(){
 
 
 		bindOutlets: function(){
-
 			if (!this.outletsBind) {
 				return;
 			};
@@ -24,7 +23,8 @@ define([], function(){
 				outletName = this.dataset['sgoutlet'+me.uid];
 				me.bindOutlet(this, outletName);
 			});
-
+			
+			this.getOutlets();
 		},
 
 		bindOutlet: function(node, outletName){

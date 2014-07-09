@@ -16,16 +16,16 @@ define([
 		app.MongoosePrimitiveSchema = MongoosePrimitiveSchema;
 		app.MongooseArraySchema = MongooseArraySchema;
 
-		return function(jsonSchema){
+		return function(jsonSchema, parent, attribute, override){
 			if ('doc' in jsonSchema && 'doc' in jsonSchema) {
-				return new MongooseSchema(jsonSchema);
+				return new MongooseSchema({schema:jsonSchema, parent:parent, subPath:attribute, override:override});
 			}
 
 			if (is.Array(jsonSchema)) {
-				return new MongooseArraySchema(jsonSchema[0])
+				return new MongooseArraySchema({content:jsonSchema[0], parent:parent, subPath:attribute, override:override})
 			}
 
-			return new MongoosePrimitiveSchema(jsonSchema);
+			return new MongoosePrimitiveSchema({schema:jsonSchema, parent:parent, subPath:attribute, override:override});
 		}
 
 

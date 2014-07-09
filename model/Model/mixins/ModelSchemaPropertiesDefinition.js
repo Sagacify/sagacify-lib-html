@@ -30,6 +30,7 @@ define([
 
 
 			_defineAttributesProperties: function(){
+
 				var me = this;
 				var properties = {};
 
@@ -47,9 +48,9 @@ define([
 
 				var set = function(attr){
 					return function(value){
-						if(attr == '__t' && (typeof this.__tIsValid != "function" || !this.__tIsValid(value))){
-							return;
-						}
+						// if(attr == '__t' && (typeof this.__tIsValid != "function" || !this.__tIsValid(value))){
+						// 	return;
+						// }
 						return this.set(attr, value);
 					};
 				};

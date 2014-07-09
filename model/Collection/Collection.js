@@ -32,6 +32,30 @@ define([
 			path: null
 		},
 
+		isEmpty: function(){
+			return !!!this.length;
+		},
+
+		_prepareModel: function(attrs, options) {
+			// debugger
+			options = _.defaults(options||{}, {
+				insertStrictMode: false,
+			});
+			
+			if (options.insertStrictMode) {
+				if (Object.isExactlyInstanceOf(attrs, this.model)) {
+					return Backbone.Collection.prototype._prepareModel.apply(this, arguments);	
+				} else {
+					this.trigger('invalid', this, attrs, options);
+					return false;
+				}
+			};
+			
+			return Backbone.Collection.prototype._prepareModel.apply(this, arguments);	
+		},
+
+
+
 		constructor: function (models, options) {
 			this._paginate = {
 				currentPage: 0,
@@ -53,6 +77,8 @@ define([
 			Backbone.Collection.prototype.constructor.apply(this, arguments);
 
 			this._handleCustomEvents();
+			
+			this.fireEmptyEvent();
 		},
 
 		_handleCustomEvents: function () {
@@ -157,9 +183,23 @@ define([
 					});
 				});
 				models = wrappedModels;
+				return this.set(models, options);
 			}
 
-			return Backbone.Collection.prototype.set.apply(this, arguments);
+			var oldLength = this.length;	
+			var res =  Backbone.Collection.prototype.set.apply(this, arguments);
+			if (this.length != oldLength) {
+				this.fireEmptyEvent();
+			};
+			return res;
+		},
+
+		fireEmptyEvent: function(){
+			if (this.length) {
+				this.trigger('not-empty');
+			} else {
+				this.trigger('empty');
+			}
 		},
 
 		add: function (model, options) {
@@ -171,7 +211,6 @@ define([
 				_isId = true;
 				this.add({_id:model});
 			}
-
 			var ret = Backbone.Collection.prototype.add.apply(this, [model, options]);
 
 			var added = this.last();
@@ -188,9 +227,11 @@ define([
 		},
 
 		remove: function(){
-			var oldLength = this.length
+			var oldLength = this.length;	
 			var ret = Backbone.Collection.prototype.remove.apply(this, arguments);
-			
+			if (this.length != oldLength) {
+				this.fireEmptyEvent();
+			};
 			return ret;
 		},
 
@@ -489,6 +530,7 @@ define([
 			for (var i = this.models.length - 1; i >= 0; i--) {
 				removed.push(this.models[i]);
 			}
+			this.remove(removed);
 			this.resetPaginate()
 			this.trigger('remove:all');
 			return removed;
@@ -564,22 +606,43 @@ define([
 		},
 
 
-		JSONFromSchema: function(schemaFormat){
-
+		JSONFromSchema: function(options){
+			options = _.defaults(options||{}, {
+				schemaFormat : undefined	
+			})
 			
-			if (!schemaFormat) {
+			if (!options.schemaFormat) {
 				return this.JSONFromSchema(this.mongooseSchema);
 			};
 
 			var res = [];
 			var me = this;
 			this.each(function(model){
-				var c = schemaFormat.getContent();
-				res.push(model.JSONFromSchema(c));
+				var c = options.schemaFormat.getContent();
+				res.push(model.JSONFromSchema({schemaFormat:c}));
 			});
 			return res;
-		}
+		}, 
 
+		validate: function(){
+			var error = undefined;
+			for (var i = 0; i < this.models.length; i++) {
+				error = this.models[i].validate();
+				if(error) {
+					return ["index:"+i].concat(error);
+				}
+			};
+			return undefined;
+		},
+
+		isValid: function(){
+			var error = this.validate();
+			if (error) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 
 	});
 

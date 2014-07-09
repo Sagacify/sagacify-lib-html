@@ -3,15 +3,22 @@ define([
 	'./Mixin',
 	'./mixins/ModelBindMixin',
 	'./mixins/ActionsBindMixin',
-	'./mixins/OutletBindMixin'
-], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin) {
+	'./mixins/OutletBindMixin',
+	'./mixins/ModelBindMixinV2'
+
+], function (Marionette, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin, ModelBindMixinV2) {
 
 	// prototype of the base Marionette Layout
 	var Layout = Marionette.Layout.extend({
 
-		constructor: function(){
+		constructor: function(options){
+
+			this.parentWidget = options && options.parent;
+
 			this._handleFirstRender();		
+
 			this.uid = String.guid();
+
 			Marionette.Layout.prototype.constructor.apply(this, arguments);
 		},
 
@@ -30,6 +37,7 @@ define([
 			this.bindToModel();
 			this.bindOutlets();
 			this.bindActions();
+			this.bindModelv2();
 
 			return Marionette.Layout.prototype.bindUIElements.apply(this, arguments);
 		},
@@ -58,7 +66,7 @@ define([
 
 	});
 
-	_.extend(Layout.prototype, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin);
+	_.extend(Layout.prototype, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin, ModelBindMixinV2);
 
 	return Layout;
 });

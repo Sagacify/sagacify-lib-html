@@ -10,10 +10,6 @@ define([
 				return  is.Function(this.url)?this.url():this.url;
 			},
 
-			// setUrl: function(customUrl){
-			// 	this.customUrl = customUrl;
-			// },
-
 			url: function(options){
 				if (this.custom_url) {
 					return this.custom_url;
@@ -35,13 +31,9 @@ define([
 
 			save: function(attributesToInclude, options){
 				options = _.defaults(options||{}, {
-					schemaSerialization:false,					
-				})
-
-				if(attributesToInclude instanceof Array){
-					var json = this.toJSON(options);
-					return this.save(_.pick(json, attributesToInclude), {patch:true});
-				}
+					schemaSerialization:false,
+					attributeToKeep:attributesToInclude	
+				});
 
 				return Backbone.Model.prototype.save.apply(this, arguments);
 			},
@@ -51,7 +43,7 @@ define([
 				var deferred = Backbone.Model.prototype.destroy.apply(this, arguments);
 
 				var me = this;
-				deferred.done(function (res) {
+				deferred && deferred.done(function (res) {
 					me.trigger('sync:destroy');
 				});
 
@@ -88,15 +80,35 @@ define([
 			},
 			
 			toJSON: function(options){
+
 				options =_.defaults(options||{}, {
 					schemaSerialization:false, 
-					notmpath:undefined
+					notmpath:undefined, 
+					attributeToKeep:null,
+					recordedChanges:false,
 				});
 
-				if (options.schemaSerialization) {
-					return this.JSONFromSchema();
+				if (options.recordedChanges) {
+					options.attributeToKeep = _.keys(this.recordedChanges())
 				};
 
+
+				var json = null;
+				if (options.schemaSerialization) {
+					json = this.JSONFromSchema(options);
+				} else {
+					json = this._JSONFromAttr(options);	
+				}
+
+				if (options.attributeToKeep) {
+					json = _.pick(json, options.attributeToKeep)
+				};
+
+				return json;
+			},
+
+			//First version, json from attributes
+			_JSONFromAttr: function(options){
 				if(this._isId){
 					return this._id;
 				}
@@ -128,20 +140,24 @@ define([
 					}
 				}
 				childToJSON(json);
-				return json;
+				return json;				
 			},
 
 
-			JSONFromSchema: function(schemaFormat){
-				if (!schemaFormat) {
-					return this.JSONFromSchema(this.mongooseSchema);
+			JSONFromSchema: function(options){
+				options = _.defaults(options||{}, {
+					schemaFormat:undefined
+				})
+
+				if (!options.schemaFormat) {
+					return this.JSONFromSchema({schemaFormat:this.mongooseSchema});
 				};
 
 				// put id only
-				if (schemaFormat instanceof app.MongoosePrimitiveSchema) {
+				if (options.schemaFormat instanceof app.MongoosePrimitiveSchema) {
 					if (this.isNew()) {
 						//Full format
-						var expandedResult = this.JSONFromSchema(this.mongooseSchema);
+						var expandedResult = this.JSONFromSchema({schemaFormat:this.mongooseSchema});
 						if (expandedResult.keys().length) {
 							return expandedResult;
 						};
@@ -150,15 +166,23 @@ define([
 					return this._id;
 				};
 
+
+
 				var outputJSON = {};
-				var attributes = schemaFormat.getAttributes()
+				var attributes = options.schemaFormat.getAttributes();
+
+				if (options.schemaFormat.isASemiEmbedded()) {
+					attributes = _.pick(attributes, '_id')
+				};				
+
 				for(var attribute in attributes){
+
 					var subSchema = attributes[attribute];
 					var currentValue = this.get(attribute, {lazyCreation:false});
 
-					if (currentValue) {
+					if (currentValue != undefined) {
 						if (is.Object(currentValue) && 'JSONFromSchema' in currentValue) {
-							var value = currentValue.JSONFromSchema(subSchema);
+							var value = currentValue.JSONFromSchema({schemaFormat:subSchema});
 							//Collection or model or embedded schema
 							(value != undefined) && (outputJSON[attribute] = value);
 							continue;

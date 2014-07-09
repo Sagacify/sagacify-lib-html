@@ -6,6 +6,7 @@ define([
 ], function (ValidateFormat, SagaCollection, is, SGAjax) {
 	return function(SagaModel){
 		return {
+
 			get: function(attribute, options){
 				options = _.defaults(options||{}, {
 					lazyCreation:true
@@ -41,6 +42,24 @@ define([
 				}
 				return value;
 			},
+
+			//Sub set of objects containing only collection
+			getAllCollections: function(){
+				var attrs = this.mongooseSchema.getAttributes()
+				var res = {};
+				for(attribute in attrs){
+					if (attrs[attribute] instanceof app.MongooseArraySchema && !attrs[attribute].contentIsPrimitiveArray()) {
+						res[attribute] = this[attribute];
+					};
+				}
+				return res;
+			},
+
+			//Sub set of objects containing only collection
+			getAllModel: function(){
+
+			}
+
 			
 		}
 	}
