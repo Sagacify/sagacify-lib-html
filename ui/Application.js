@@ -10,6 +10,7 @@ define([
 	return Marionette.Application.extend({
 
 		constructor: function(options) {
+
 			var me = this;
 			Marionette.Application.prototype.constructor.apply(this, arguments);
 			if(options && options.models) {
@@ -82,7 +83,7 @@ define([
 				App[currentSchema.getCollectionName()] = new (currentSchema.getCollectionClass())();
 				//For compatibility
 				App.models[modelName+'Model'] =  currentSchema.getModelClass()
-				App.models[modelName+'Model'].prototype.urlRool = "/api/"+currentSchema.getCollectionName();
+				App.models[modelName+'Model'].prototype.urlRoot = "/api/"+currentSchema.getCollectionName();
 
 			}
 

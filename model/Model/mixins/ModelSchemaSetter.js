@@ -157,9 +157,9 @@ define([
 			},
 
 			recordChange: function(attribute, raw){
-				if (attribute == 'author.avatar') {
-					debugger
-				};
+				// if (attribute == 'author.avatar') {
+				// 	debugger
+				// };
 				if (!(attribute in this._recorded)) {
 					this._recorded[attribute] = [];
 				};
@@ -192,12 +192,7 @@ define([
 					return;
 				}
 
-				if(attribute && attribute.isString()){
-
-					var setterName = "set"+attribute.capitalize();
-					if(is.Function(this[setterName]) && this[setterName]!=arguments.callee.caller){
-						return this[setterName](attribute, raw, options);
-					}									
+				if(attribute && attribute.isString()){							
 
 					var value = this._schemaSetter(attribute, raw, options);
 					if(value === undefined){
@@ -236,7 +231,12 @@ define([
 						dict[key] = value;
 					}
 				});
-				return Backbone.Model.prototype.set.apply(this, [dict, options]);
+				
+				var res =  Backbone.Model.prototype.set.apply(this, [dict, options]);
+
+				this.trigger('batch-update', this.changed);
+				
+				return res;
 			},	
 			
 		}

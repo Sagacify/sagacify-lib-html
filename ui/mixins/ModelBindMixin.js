@@ -38,8 +38,7 @@ define(["saga/model/Model/Model"], function(Model){
 					var selector = getSelector(attr);
 					var els = $(selector, this.el);
 					this.bindEls(els, this.model, attr, attr);
-					//this.model.bindToEls(els, attr);
-					//this.model.bindValidationToEls(els, attr, validClass, errorClass);
+
 					//single embedded doc binding || developed ref doc
 					var child = this.model[attr];
 					if(this.model.schema.tree[attr] instanceof Array && this.model.schema.tree[attr][0].single)

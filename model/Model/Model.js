@@ -25,6 +25,7 @@ define([
 	) {
 
 	var SagaModel = Backbone.Model.extend({
+
 		constructor: function(attributes, options){
 			if(options){
 				if("url" in options)

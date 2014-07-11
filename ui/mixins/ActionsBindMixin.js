@@ -4,44 +4,59 @@ define([], function(){
 
 		actionsBind: false,
 
+
+		__defaultSGAction : 'click',
+
 		bindActions: function(){
 			if (!this.actionsBind) {
 				return;
 			};
 
+			this._putUids('sgaction');
+
 			var me = this;
-			$('[data-sgaction]', this.el).each(function(index){
-				var $node = $(this);
-				this.dataset["sgaction"+me.uid] = $node.data().sgaction
-				delete this.dataset["sgaction"];
-			});
-
-
-			$('[data-sgaction'+this.uid+']', this.el).each(function(index){
+			$('[data-sgaction-'+this.uid+']', this.el).each(function(index){
 				
-				var data = this.dataset['sgaction'+me.uid];
-				
+				var data = $(this).attr('data-sgaction-'+me.uid)
 				var actionsInfo = data && data.split(":");
-					
-				if (!actionsInfo || actionsInfo.length != 2) {
-					throw "Error for 'data-sgaction' for the widget";
+				if (!actionsInfo || !actionsInfo.length) {
+					throw "Error for 'data-sgaction' for the widget "
 					return;
 				};
 
-				me.bindNodeToAction(this, actionsInfo[0], actionsInfo[1]);
+				var method, trigger;
+				if (actionsInfo.length == 1) {
+					method = actionsInfo[0]
+					trigger = this.__defaultSGAction;
+				} else {
+					method = actionsInfo[1];
+					trigger = actionsInfo[0];
+				}
+				me.bindNodeToAction(this, trigger, method);
 			});			
 
 
 		},
 
-		bindNodeToAction: function(node, event, action){
-			if (!this[action]) {
-				throw "Define method for action:"+action;
+		bindNodeToAction: function(node, trigger, methodName){
+			if (!this[methodName]) {
+				throw "Define method for action:"+methodName;
 			};
+
 			var me = this;
-			this.listenTo($(node), event, function(evt){
-				me[action](evt);
-			} )
-		}
+			this.listenTo($(node), trigger, function(evt){
+				me[methodName](evt);
+			});
+
+			this.getActionNodes()[methodName] = node;
+
+		}, 
+
+		getActionNodes: function(){
+			if (!this.__actionNodes) {
+				this.__actionNodes = {};
+			};
+			return this.__actionNodes;
+		},	
 	}
 });

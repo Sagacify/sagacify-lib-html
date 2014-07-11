@@ -1,8 +1,15 @@
 define([
 	'backbone',
 	'../../types/validateType',
-	'../../ajax/SGAjax'
-], function (Backbone, is, SGAjax) {
+	'../../ajax/SGAjax',
+	'../ModelError'
+
+], function (
+	Backbone, 
+	is, 
+	SGAjax,
+	ModelError
+) {
 	var SagaCollection = Backbone.Collection.extend({
 
 		_isLoading: false,
@@ -629,11 +636,20 @@ define([
 			for (var i = 0; i < this.models.length; i++) {
 				error = this.models[i].validate();
 				if(error) {
-					return ["index:"+i].concat(error);
+					return error;
 				}
 			};
 			return undefined;
 		},
+
+		generateError: function(verbose, id){
+			return new ModelError({
+				verbose:verbose, 
+				identifier:id, 
+				model:this
+			});
+		},
+
 
 		isValid: function(){
 			var error = this.validate();

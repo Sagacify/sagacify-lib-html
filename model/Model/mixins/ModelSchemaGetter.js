@@ -13,10 +13,6 @@ define([
 				});
 
 
-				var getterName = "get"+attribute.capitalize();
-				if(is.Function(this[getterName]) && this[getterName] != arguments.callee.caller)
-					return this[getterName]();
-
 				var value = Backbone.Model.prototype.get.apply(this, arguments);
 
 				if (!options.lazyCreation) {

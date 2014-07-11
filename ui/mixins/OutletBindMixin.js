@@ -2,8 +2,17 @@ define([], function(){
 	
 	return {
 
-		outletsBind: false,
+		_putUids: function(dataType){
+			var me = this;
 
+			$('[data-'+dataType+']', this.el).each(function(index){
+				var $node = $(this);
+				$node.attr("data-"+dataType+"-"+me.uid,  $node.data()[dataType]);
+				$node.removeAttr('data-'+dataType);
+			});			
+		},
+
+		outletsBind: false,
 
 		bindOutlets: function(){
 			if (!this.outletsBind) {
@@ -12,15 +21,11 @@ define([], function(){
 
 			var me = this;
 
-			$('[data-sgoutlet]', this.el).each(function(index){
-				var $node = $(this);
-				this.dataset["sgoutlet"+me.uid] = $node.data().sgoutlet
-				delete this.dataset["sgoutlet"];
-			});
+			this._putUids("sgoutlet");
 
 
-			$('[data-sgoutlet'+this.uid+']', this.el).each(function(index){
-				outletName = this.dataset['sgoutlet'+me.uid];
+			$('[data-sgoutlet-'+this.uid+']', this.el).each(function(index){
+				outletName =  $(this).attr('data-sgoutlet-'+me.uid)
 				me.bindOutlet(this, outletName);
 			});
 			
@@ -28,12 +33,11 @@ define([], function(){
 		},
 
 		bindOutlet: function(node, outletName){
-			
 			if (this.getOutlets()[outletName]) {
-				//already binded
 				return;
 			};
-			this.getOutlets()[outletName] = $("[data-sgoutlet"+this.uid+"="+outletName+"]",this.el)
+
+			this.getOutlets()[outletName] = $(node);
 		},
 
 		getOutlets: function(){

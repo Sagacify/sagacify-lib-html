@@ -6,6 +6,7 @@ define([
 	'./String/String', 
 	'./String/AsciiConvertor',
 	'./Console', 
-	'./HTMLElement'
+	'./HTMLElement',
+	'./Math'
 ], function(){
 });

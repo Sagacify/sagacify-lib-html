@@ -2,11 +2,26 @@ define([
 	'saga/validation/ValidateFormat',
 	'saga/model/Collection/Collection',
 	'saga/types/validateType',
-	'saga/ajax/SGAjax'
-], function (ValidateFormat, SagaCollection, is, SGAjax) {
+	'saga/ajax/SGAjax',
+	'../../ModelError',
+
+], function (
+	ValidateFormat, 
+	SagaCollection, 
+	is, 
+	SGAjax,
+	ModelError
+	) {
 	return function(SagaModel){
 		return {
 
+			generateError: function(verbose, id){
+				return new ModelError({
+					verbose:verbose, 
+					identifier:id, 
+					model:this
+				});
+			},			
 
 			validate: function(attrs, options){
 				
@@ -22,9 +37,6 @@ define([
 						return res;
 					};
 				};
-
-				debugger
-
 			},
 
 			checkAttrIsValid: function(attribute){

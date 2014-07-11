@@ -4,82 +4,78 @@ define([], function(){
 
 		modelBindv2: false,
 
-		__bindingHTMLSeparator : ",",
-
 		bindModelv2: function(){
 
-			return;
 			if (!this.modelBindv2) {
 				return;
 			};
 			
-
-			this._putUids();
+			this._putUids('sgbind');
 
 			if(!this.model){
 				throw 'unknow model'
 			}
 
 			var me = this;
-			$('[data-sgbind'+this.uid+']', this.el).each(function(index){
-				attribute = this.dataset['sgbind'+me.uid];
-				attrs = null;
-				if (attribute.contains(me.__bindingHTMLSeparator)) {
-					attrs = attribute.split(me.__bindingHTMLSeparator);
-				} else {
-					attrs = [attribute];
-				}
-				for (var i = 0; i < attrs.length; i++) {
-					me.addBind($(this), attrs[i]);
-				};
-				
+			$('[data-sgbind-'+this.uid+']', this.el).each(function(index){
+				attributeInfo =  $(this).attr('data-sgbind-'+me.uid)
+				me.addBind($(this), attributeInfo);
 			});
 			
-			this.getBinds();
+			this.getModelBinds();
 		},
 
-		_putUids: function(){
-			var me = this;
+		// Attribute info: "change:name->.html(value)" 
+		// Attribute info: ":name->.html(value)" <=> change:name->.html(value)
+		// Attribute info: ":name" <=> change:name->.html(value)
+		// Attribute info: "change:name" <=> change:name->.html(value)
+		// Call nameToEl if present in controller
+		addBind: function(node, attributeInfo){
+			
+			var splittedAttribute = attributeInfo.split("->")
 
-			$('[data-sgbind]', this.el).each(function(index){
-				var $node = $(this);
-				this.dataset["sgbind"+me.uid] = $node.data().sgoutlet
-				delete this.dataset["sgbind"];
-			});			
-		},
+			var trigger = null
+			var viewAction = null;
+			var method = null;
 
-		addBind: function(node, attribute){
-			// if (!_.has(this.model.attributes, attribute)) {
-			// 	throw "unknow attribute"
-			// 	return;
-			// }; 
-
-			this.getBinds()[attribute] = node;
-
-			var appropriateMethod = "_defaultAttrToEl"
-			customMethod = attribute+'ToEl';
-			if (this[customMethod]) {
-				appropriateMethod = customMethod;
+			if (splittedAttribute.length >= 2) {
+				viewAction = splittedAttribute[1];
+			} else {
+				viewAction = '$.html(value)';
+			}
+			trigger = splittedAttribute[0];
+			if (trigger.startsWith(':')) {
+				trigger = 'change'+trigger;
 			};
 
 			var me = this;
-			this.listenTo(this.model, 'change:'+attribute, function(){
-				debugger
-				me[appropriateMethod](this.model[attribute], node);
+
+			debugger
+
+			this.listenTo(this.model, trigger, function(listener, value, options){
+
+				if (viewAction.startsWith('$')) {
+					var stringToApply  = 'node'+viewAction.substring(1);
+					console.log(stringToApply);
+					try {
+						eval(stringToApply);	
+					} catch(err) {
+						throw "Bad formated action "+viewAction;
+					}
+				} else {
+					if (me[viewAction]) {
+						return this[viewAction](value, node);
+					} else {
+						throw "Unknow thing to do with event "+ this.getModelBinds()[trigger+"->"+viewAction];
+					}
+				}
 			});
 
-			var val = this.model.get(attribute ,{lazyCreation:false})
-			if (val != undefined) {
-				this[appropriateMethod](val, node);
-			};
-
+			this.getModelBinds()[trigger+"->"+viewAction] = node;
 		},
 
-		_defaultAttrToEl: function(value, node){
-			node.html(value);
-		},
 
-		getBinds: function(){
+		getModelBinds: function(){
 			if (!this._bindsV2) {
 				this._bindsV2 = {};
 			};
