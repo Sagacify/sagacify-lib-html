@@ -35,6 +35,18 @@ String.prototype.idToDate = function (occurences) {
 	return new Date(parseInt(this._id.slice(0, 8), 16) * 1000);
 };
 
+String.prototype.unsign = function () {
+	if (!this) {
+		return "";
+	};
+	var splittedID = this.split("?");
+	if (splittedID.length) {
+		return splittedID[0];
+	};
+	return "";
+
+};
+
 
 String.guid = function(){
 	return ""+Math.uuid(10, 10);

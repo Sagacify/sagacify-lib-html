@@ -28,7 +28,11 @@ define([
 			_schemaSetCollectionAttribute: function(attribute, raw, options){
 
 				var mSchema = this.mongooseSchema[attribute];
-				var docColl = Backbone.Model.prototype.get.apply(this, [attribute]);
+				
+				var docColl = this.get(attribute, {lazyCreation:false});
+
+				// var docColl = Backbone.Model.prototype.get.apply(this, [attribute]);
+
 				if(docColl){
 					if (mSchema.contentIsPrimitiveArray()) {
 						return raw;	
@@ -223,7 +227,6 @@ define([
 
 				var me = this;
 				dict.keys().forEach(function(key){
-
 					var value = me._schemaSetter(key, dict[key], options);
 					if(value === undefined){
 						delete dict[key];	
