@@ -7,7 +7,7 @@ define([], function(){
 
 		__defaultSGAction : 'click',
 
-		bindActions: function(){
+		__bindActions: function(){
 			if (!this.actionsBind) {
 				return;
 			};
@@ -32,27 +32,44 @@ define([], function(){
 					method = actionsInfo[1];
 					trigger = actionsInfo[0];
 				}
-				me.bindNodeToAction(this, trigger, method);
+				me.__bindAction(this, trigger, method);
 			});			
-
-
 		},
 
-		bindNodeToAction: function(node, trigger, methodName){
+
+		__bindAction: function(node, trigger, methodName){
 			if (!this[methodName]) {
 				throw "Define method for action:"+methodName;
 			};
 
 			var me = this;
 			this.listenTo($(node), trigger, function(evt){
-				me[methodName](evt);
+				me[methodName](evt, node);
 			});
 
-			this.getActionNodes()[methodName] = node;
-
+			if (methodName in this.__getActionNodes()) {
+				var existingNode = this.__getActionNodes()[methodName].node;
+				this.__getActionNodes()[methodName].node = $(existingNode.get().concat([node]));
+			} else {
+				this.__getActionNodes()[methodName] = {
+					node : $(node),
+					trigger : trigger
+				};
+			}
 		}, 
 
-		getActionNodes: function(){
+		__unbindActions: function(){
+			if (!this.actionsBind) {
+				return;
+			};
+
+			_.each(this.__getActionNodes(), function(value, key){
+				this.stopListening(value.node, value.trigger);
+			}, this);
+			this.__actionNodes = {};
+		},
+
+		__getActionNodes: function(){
 			if (!this.__actionNodes) {
 				this.__actionNodes = {};
 			};

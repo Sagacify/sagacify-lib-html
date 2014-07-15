@@ -24,13 +24,18 @@ define([
 		},
 
 		bindUIElements: function(){
-
 			this.bindToModel();
 			this.bindOutlets();
-			this.bindActions();
-			this.bindModelv2();
+			this.__bindActions();
+			this.__createAllBinders();
 
 			return Marionette.ItemView.prototype.bindUIElements.apply(this, arguments);
+		},
+
+		unbindUIElements: function(){
+			this.__destroyAllBinder();
+			this.__unbindActions();
+			return Marionette.ItemView.prototype.unbindUIElements.apply(this, arguments);
 		}
 
 	});
