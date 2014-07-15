@@ -32,9 +32,10 @@ define([
 					
 					error = this.checkAttrIsValid(attributes[i])
 					if (error) {
-						res = {};
-						res[attributes[i]] = error;
-						return res;
+						if (error) {
+							error.model.trigger('invalid', error.model, error);
+						};
+						return error;
 					};
 				};
 			},

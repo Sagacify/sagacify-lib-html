@@ -105,7 +105,6 @@ define([
 					return this[setterName];
 				}
 
-
 				return function(value){
 					return this.set(attribute, value);
 				}

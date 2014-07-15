@@ -36,11 +36,16 @@ define([
 
 			this.bindToModel();
 			this.bindOutlets();
-			this.bindActions();
-			this.bindModelv2();
+			this.__bindActions();
+			this.__createAllBinders();
 
 			return Marionette.Layout.prototype.bindUIElements.apply(this, arguments);
 		},
+
+		unbindUIElements: function(){
+			this.__destroyAllBinder();
+			return Marionette.Layout.prototype.unbindUIElements.apply(this, arguments);
+		},		
 
 		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
 
