@@ -7,22 +7,31 @@ define([], function(){
 			this.controller = controller;
 
 			this.parseNodeAttribute();
+			this.configureBindFunction();
+
 			this.bind();
+			
 			this.tryTriggerFirstValue();
 	}
 
 	_.extend(Binder.prototype, {
-
 
 		// Attribute info: "change:name->.html(value)" 
 		// Attribute info: ":name->.html(value)" <=> change:name->.html(value)
 		// Attribute info: ":name" <=> change:name->.html(value)
 		// Attribute info: "change:name" <=> change:name->.html(value)
 		// Call nameToEl if present in controller
+		retrieveNodeData: function(){
+			return $(this.node).attr('data-sgbind-'+this.controller.uid);
+		},
+		setNodeData: function(data){
+			$(this.node).attr('data-sgbind-'+this.controller.uid, data);
+		},
 
 		//Prepare the binder
 		parseNodeAttribute: function(){
-			var attributeInfo = $(this.node).attr('data-sgbind-'+this.controller.uid);
+
+			var attributeInfo = this.retrieveNodeData();
 			var splittedAttribute = attributeInfo.split("->")			
 
 			this.trigger = null
@@ -35,13 +44,11 @@ define([], function(){
 				throw "Error with node "+ this.node;
 			};
 
-
 			//Syntaxic sugar :name  <=> change:name
 			if (this.trigger.startsWith(':')) {
 				this.attribute = this.trigger.replace(':','');
 				this.trigger = 'change'+this.trigger;
 			};
-
 
 			if (splittedAttribute.length >= 2) {
 				//Action is define 
@@ -58,13 +65,13 @@ define([], function(){
 					this.viewAction = '$.html(value)';
 				}
 			};
-
-			this.configureBindFunction();
 		},
 
 		isJqueryEvalAction: function(){
 			return this.viewAction.startsWith('$');
 		},
+
+
 
 		configureBindFunction: function(){
 			this._bindFunction = function(model, value, options){

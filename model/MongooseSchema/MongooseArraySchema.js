@@ -8,8 +8,6 @@ define([
 			this._rawContentSchema = options.content;
 			this.contentSchema = app.SchemaFactory(options.content, this, 'content', this._override);
 			this.contentSchema.isEmbedded = true;
-
-
 		}, 
 
 		getContent: function(){

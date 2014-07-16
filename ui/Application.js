@@ -1,6 +1,7 @@
 define([
 	'backbone.marionette',
 	'../prototypes/backbone/backbone',
+	// '../prototypes/prototypes',	
 	'../model/Model/Model',
 	'../model/Collection/Collection',
 	'../model/MongooseSchema/MongooseSchema',
@@ -61,9 +62,11 @@ define([
 
 		prepareSchemaClasses: function(schemas){
 			app.MongooseSchemas = {};
+			app.rawSchemas = schemas;
 			for(var ModelName in schemas){
 				app.MongooseSchemas[ModelName] = new MongooseSchema({schema:schemas[ModelName], parent:null, override:this.getModelOverrides()[ModelName]});
 			}
+			delete app['rawSchemas'];
 		},
 
 		loadSchemaClasses: function(){

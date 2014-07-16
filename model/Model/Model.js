@@ -4,6 +4,8 @@ define([
 	'saga/types/validateType',
 	'saga/ajax/SGAjax',
 
+	
+	'./mixins/ModelEvents',
 	'./mixins/ModelSchemaAction',
 	'./mixins/ModelSchemaPropertiesDefinition',
 	'./mixins/ModelSchemaSetter',
@@ -16,6 +18,7 @@ define([
 	is, 
 	SGAjax,
 
+	ModelEvents,
 	ModelSchemaAction,
 	ModelSchemaPropertiesDefinition, 
 	ModelSchemaSetter,
@@ -63,8 +66,6 @@ define([
 		//model to be transformed in id in toJSON if _isId
 		_isId: false,
 
-
-
 		root: function(){
 			var instance = this;
 			var path = "";
@@ -106,7 +107,7 @@ define([
 			};
 
 			this.attributes = {};
-			this._mattributes = {};
+			// this._mattributes = {};
 			this.changed = {};
 			this.src = null;
 			return Backbone.Model.prototype.clear.apply(this, arguments);
@@ -140,6 +141,7 @@ define([
 	});
 
 
+	_.extend(SagaModel.prototype, ModelEvents(SagaModel));
 	_.extend(SagaModel.prototype, ModelSchemaAction(SagaModel));
 	_.extend(SagaModel.prototype, ModelSchemaPropertiesDefinition(SagaModel));
 	_.extend(SagaModel.prototype, ModelSchemaSetter(SagaModel));

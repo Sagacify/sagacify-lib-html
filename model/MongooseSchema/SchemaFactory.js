@@ -17,7 +17,7 @@ define([
 		app.MongooseArraySchema = MongooseArraySchema;
 
 		return function(jsonSchema, parent, attribute, override){
-			if ('doc' in jsonSchema && 'doc' in jsonSchema) {
+			if ('doc' in jsonSchema) {
 				return new MongooseSchema({schema:jsonSchema, parent:parent, subPath:attribute, override:override});
 			}
 

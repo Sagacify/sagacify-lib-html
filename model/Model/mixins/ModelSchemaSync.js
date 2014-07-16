@@ -116,7 +116,7 @@ define([
 				if(options.notmpath !== true)
 					json = Backbone.Model.prototype.toJSON.apply(this, arguments);
 				else
-					json = _.clone(this._mattributes);
+					json = _.clone(this._mattributes||{});
 
 				childToJSON = function(parent){
 					for(var attr in parent){

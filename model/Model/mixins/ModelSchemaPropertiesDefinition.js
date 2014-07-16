@@ -18,6 +18,9 @@ define([
 						};
 					};
 				};
+				if (!this.mongooseSchema.getActions()) {
+					debugger
+				};
 				this.mongooseSchema.getActions().keys().forEach(function(key){
 					if(key in me)
 						key = "_"+key;
@@ -31,43 +34,12 @@ define([
 
 			_defineAttributesProperties: function(){
 
-				var me = this;
-				var properties = {};
-
-				var get = function(attr){
-					return function(){
-						return this.get(attr);
-					};
-				};
-
-				var mget = function(attr){
-					return function(){
-						return this._mattributes[attr];
-					};
-				};
-
-				var set = function(attr){
-					return function(value){
-						return this.set(attr, value);
-					};
-				};
-
-				var properties = {id: {get:get("_id")}};
-				var me = this;
 				this.schemaAttributes().forEach(function(key){
-					me._generateGetSetForAttribute(key)
-					// properties[key] = {};
-					// properties[key].get = me._defineGetter(key);
-					// var setter = me._defineSetter(key) 
-					// if (setter) {
-					// 	properties[key].set = setter;	
-					// };
-				});
-				// Object.defineProperties(this, properties);
+					this._generateGetSetForAttribute(key)
+				}, this);
 			},
 
 			_generateGetSetForAttribute: function(attribute){
-				// properties[attribute] = {};
 				var descriptor = {};
 				descriptor.get = this._defineGetter(attribute);
 				var setter = this._defineSetter(attribute) 
@@ -75,7 +47,6 @@ define([
 					descriptor.set = setter;	
 				};
 				Object.defineProperty(this, attribute, descriptor);
-				// Object.defineProperties(this, properties);
 			},
 
 			_defineGetter : function(attribute){
@@ -84,21 +55,12 @@ define([
 					return this[getterName];
 				}
 
-				if(key.contains(".")){
-					return function(){
-						return this._mattributes[attribute];
-					};							
-				}
-
 				return function(){
 					return this.get(attribute);
 				};
 			},
 
 			_defineSetter : function(attribute){
-				if(key.contains(".")){
-					return null;
-				};
 
 				var setterName = "set"+attribute.capitalize();
 				if(is.Function(this[setterName]) && this[setterName]){
@@ -123,25 +85,22 @@ define([
 			},
 			
 			handleMattributes: function(){
-				this._mattributes = {};
-				var me = this;
-				var handleMattribute = function(attr){
-					me.on("change:"+attr, function(model, value, options){
-						me._mattributes._set(attr, value);
-					});
-				}
+				// this._mattributes = {};
+				// var me = this;
+				// var handleMattribute = function(attr){
+				// 	me.on("change:"+attr, function(model, value, options){
+				// 		me._mattributes._set(attr, value);
+				// 	});
+				// }
 
-				for(var attr in this.schema.tree){
-					handleMattribute(attr);
-				}
-				for(var attr in this.schema.virtuals){
-					handleMattribute(attr);
-				}
-			},
-
-			
+				// for(var attr in this.schema.tree){
+				// 	handleMattribute(attr);
+				// }
+				// for(var attr in this.schema.virtuals){
+				// 	handleMattribute(attr);
+				// }
+			},			
 		}		
 	}
-
 
 });

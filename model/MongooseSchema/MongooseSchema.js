@@ -12,6 +12,60 @@ define([
 		initialize: function(options){
 			MongooseElement.prototype.initialize.apply(this, arguments);
 			this._schema = options.schema;
+
+			this.removeMPathObjects();
+		},
+
+		getEmbbeddedObjects: function(){
+			var res = [];
+			_.each(this.getDocument().tree, function(schema, attribute){
+				if (attribute.endsWith("._id") && schema.ref && schema.type) {
+					res.push(attribute.replace("._id", ""));
+				};
+			}, this);
+			return res;
+		},
+
+		removeMPathObjects: function(){
+			var embbededs = this.getEmbbeddedObjects();
+			for (var i = 0; i < embbededs.length; i++) {
+				this.removeMPathForEmbbeded(embbededs[i])
+			};
+		},
+
+		removeMPathForEmbbeded: function(attribute){
+			var res = this.mPathFor(attribute);
+			var pathToRemove = _.keys(res);
+			
+			var tree = {};
+			_.each(res, function(treeSchema, subAttribute){
+				subAttribute = subAttribute.replace(attribute+".", "");
+				tree[subAttribute] = treeSchema;
+			}, this);
+			
+			this.getDocument().tree[attribute] = {
+				collection:{action:{}, name:app.rawSchemas[tree._id.ref].collection.name, virtuals:{}},
+				doc:{
+					tree:tree,
+					modelName:tree._id.ref, 
+					virtuals:{},
+					actions:{}
+				}
+			}
+
+			// this.getDocument().tree = _.omit(this.getDocument().tree, pathToRemove);
+
+			return res;
+		},
+
+		mPathFor: function(embeddedAttr){
+			var res = {};
+			_.each(this.getDocument().tree, function(schema, attribute){
+				if (attribute.startsWith(embeddedAttr)) {
+					res[attribute] = schema
+				};
+			}, this);
+			return res;
 		},
 
 		generateCompliantOverride: function(override){
@@ -64,6 +118,14 @@ define([
 		generateSubSchemaForAttribute: function(attribute, jsonSchema){
 		
 			this.getAttributes()[attribute] = app.SchemaFactory(jsonSchema, this, attribute, this._override.model.attrs[attribute]);
+
+			// if (attribute == "space2") {
+				//Is a semi embedded (old mPath notation)
+				if (this.getAttributes()[attribute] instanceof app.MongooseSchema) {
+					this.getAttributes()[attribute].isEmbedded = true;
+				};
+			// };
+			
 
 			if (this._superSchema && (attribute in this._superSchema)) {
 				this.getAttributes()[attribute].setSuperSchema(this._superSchema[attribute])
