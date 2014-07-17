@@ -19,8 +19,12 @@ define([
 
 		_prepareCollection: function(){
 			this.collection = this.getCollection();
-			if(this.collection)
+			if(this.collection){
+				if (!this.collection.sgSort) {
+					debugger
+				};
 				this.collection.sgSort(this.sort).sgFilter(this.filters).sgPaginate(this.paginate);
+			}
 		},
 
 		_handleBottomReached: function(){
