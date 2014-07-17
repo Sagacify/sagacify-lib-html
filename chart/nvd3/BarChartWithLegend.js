@@ -5,30 +5,10 @@ define([], function(){
 		var data = options.data||[{values:[]}];//||exampleData();
 
 		var loadDataColors = function(){
-			var color = [
-				"#ed5565", //Light red
-				"#FC6E51", //Light orange
-				"#ffce54", //Light yellow
-				"#a0d468", //Light green
-				"#48cfad", //Light turquoise
-				"#4fc1e9", //Light blue
-				"#5d9cec", //Light dark blue
-				"#ac92ec", //Light purple
-				"#ec87c0", //Light pink
-				"#656d78", //Light black
-				"#da4453", //Dark red
-				"#e9573f", //Dark orange
-				"#f6bb42", //Dark yellow
-				"#8cc152", //Dark green
-				"#37bc9b", //Dark turquoise
-				"#3bafda", //Dark blue
-				"#4a89dc", //Dark dark blue
-				"#8e6edc", //Dark purple
-				"#d770ad", //Dark pink
-				"#434a54" //Dark dark black
-			];
+			var color = nv.utils.defaultColor();
 			data[0].values.forEach(function(item, i){
-				item.color = color[i % color.length];
+				if(!item.color)
+					item.color = color(item, i);
 			});
 		}
 		loadDataColors();
@@ -55,6 +35,8 @@ define([], function(){
 		legend.key(function(d) { return d.label; });
 
 		var legendSvg = svg.append("g").attr("class", "nvd3 legend");
+
+		legend.width($(containerSelector).width()-40);
 
 		legendSvg.datum(data[0].values) 
 			.transition()
@@ -83,6 +65,7 @@ define([], function(){
 			svg.datum(data).transition().duration(500).call(chart);
 			legendSvg.datum(data[0].values).transition().duration(500).call(legend);
 			chart.update();
+			$('.nvd3 .nv-legend', chart.container).children().attr('transform', 'translate(33, 5)');
 		}
 
 		
