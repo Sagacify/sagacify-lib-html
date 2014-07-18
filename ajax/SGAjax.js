@@ -56,7 +56,7 @@ define([
 
 				error: cbError,
 
-				timeout : 10000,
+				timeout : 200000,
 
 				headers: headers,
 
