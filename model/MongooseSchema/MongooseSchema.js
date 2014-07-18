@@ -53,8 +53,6 @@ define([
 				}
 			}
 
-			// this.getDocument().tree = _.omit(this.getDocument().tree, pathToRemove);
-
 			return res;
 		},
 
@@ -167,18 +165,22 @@ define([
 
 				var defaultClass = this.defaultModelClass();
 				var instanceOverride = this._override.model.instance(defaultClass);
-
 				var clazzOverride = this._override.model.clazz(defaultClass);
-				var options = _.extend({
-						mongooseSchema: this,
 
-						//Deprecated
-						collectionName:this.getCollection().name,
-						schemaName:this.getModelName(),
-						schema: this.getDocument(),
-					}, instanceOverride
-				);
-				this._modelClass = defaultClass.extend(options, clazzOverride);
+				if (!_.keys(clazzOverride).length && !_.keys(instanceOverride).length) {
+					this._modelClass = defaultClass;
+				} else {
+					var options = _.extend({
+							mongooseSchema: this,
+
+							//Deprecated
+							collectionName:this.getCollection().name,
+							schemaName:this.getModelName(),
+							schema: this.getDocument(),
+						}, instanceOverride
+					);
+					this._modelClass = defaultClass.extend(options, clazzOverride);
+				}
 			};
 			return this._modelClass; 
 		},
@@ -197,16 +199,21 @@ define([
 				var instanceOverride = this._override.collection.instance(defaultClass);
 				var clazzOverride = this._override.collection.clazz(defaultClass);
 
-				var options = _.extend({
-						mongooseSchema: this,
+				if (!_.keys(clazzOverride).length && !_.keys(instanceOverride).length) {
+					this._collectionClass = defaultClass;
+				} else {
+					var options = _.extend({
+							mongooseSchema: this,
 
-						//Deprecated
-						model: this.getModelClass(),
-						url: this.rootUrl(),
-						schema: this.getCollection()
-					}, instanceOverride
-				);
-				this._collectionClass = defaultClass.extend(options, clazzOverride)
+							//Deprecated
+							model: this.getModelClass(),
+							url: this.rootUrl(),
+							schema: this.getCollection()
+						}, instanceOverride
+					);
+					this._collectionClass = defaultClass.extend(options, clazzOverride)					
+				}
+
 			}
 			return this._collectionClass;
 		},

@@ -39,7 +39,7 @@ define([], function () {
 						return;
 					};
 				}
-				return Backbone.Model.prototype.on.apply(this, arguments);
+				return Backbone.Model.prototype.off.apply(this, arguments);
 			}
 		}
 	}

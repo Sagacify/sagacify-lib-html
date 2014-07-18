@@ -32,10 +32,35 @@ define([
 			save: function(attributesToInclude, options){
 				options = _.defaults(options||{}, {
 					schemaSerialization:false,
-					attributeToKeep:attributesToInclude	
+					attributeToKeep:attributesToInclude,
+					recordedChanges:false,					
 				});
 
-				return Backbone.Model.prototype.save.apply(this, arguments);
+				options.recordedChanges && this.stopRecordingChange();
+
+				if (options.recordedChanges) {
+					var success =  options.success;
+					options.success = function(model, resp, options){
+						success && success(model, resp, options);
+						if (options.recordedChanges) {
+							debugger
+							model.resetRecord();
+							model.startRecordingChange();
+						};
+					}
+
+				};
+
+
+				return Backbone.Model.prototype.save.apply(this, [undefined, options]);
+
+				// var me = this;
+				// def.always(function(){
+				// 	if (options.recordedChanges) {
+				// 		me.resetRecord();
+				// 	};
+				// });
+
 			},
 
 

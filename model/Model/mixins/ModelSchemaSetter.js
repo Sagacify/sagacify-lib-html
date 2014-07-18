@@ -29,17 +29,22 @@ define([
 			},
 
 			startRecordingChange: function(){
+				this.set('record-change', false);
+
 				this.recordCollectionsChanges(true);
 				this._isRecordingChanges = true;
 			},
 
 
 			stopRecordingChange: function(){
+				this.set('record-change', false);
+
 				this.recordCollectionsChanges(false);
 				this._isRecordingChanges = true;
 			},
 
 			resetRecord: function(){
+				this.set('record-change', false);
 				var oldRecord = this._recorded;
 				this._recorded = {}
 				return oldRecord;
@@ -54,7 +59,7 @@ define([
 			},
 
 			recordChange: function(attribute, raw){
-
+				this.set('record-change', true, {record:false});
 				if (!(attribute in this._recorded)) {
 					this._recorded[attribute] = [];
 				};
@@ -133,6 +138,10 @@ define([
 				if(attribute && attribute.isObject()){
 					return this.batchSet(attribute, options);
 				};
+
+
+				//Custom attributes
+				return  Backbone.Model.prototype.set.apply(this, [attribute, raw, options]);
 			},
 
 

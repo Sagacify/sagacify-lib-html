@@ -47,6 +47,7 @@ define([
 			this.postCreate && this.postCreate(options);
 
 			this._recorded = {};
+			this.set('record-change', false);
 
 			return ret;
 		}, 

@@ -81,6 +81,8 @@ define([], function () {
 					try {
 						eval(stringToApply);
 					} catch (err) {
+						console.log(err);
+						debugger
 						throw "Bad formated action " + this.viewAction;
 					}
 				} else {
@@ -106,6 +108,10 @@ define([], function () {
 		},
 
 		unBind: function () {
+			if (this.trigger =='change:record-change') {
+				debugger
+			};
+
 			this.model.off(this.trigger, this._bindFunction, this);
 			this.controller = null;
 			this.node = null;

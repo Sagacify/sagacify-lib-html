@@ -2,13 +2,27 @@ define([
 	'backbone',
 	'../../types/validateType',
 	'../../ajax/SGAjax',
-	'../ModelError'
+	'../ModelError',
+
+	'./mixins/CollectionHelpers',
+	'./mixins/CollectionPagination',
+	'./mixins/CollectionPropertiesDefinitions',
+	'./mixins/CollectionSync',
+	'./mixins/CollectionValidation',
+
 
 ], function (
 	Backbone, 
 	is, 
 	SGAjax,
-	ModelError
+	ModelError,
+
+	CollectionHelpers,
+	CollectionPagination,
+	CollectionPropertiesDefinitions,
+	CollectionSync,
+	CollectionValidation
+
 ) {
 	var SagaCollection = Backbone.Collection.extend({
 
@@ -22,45 +36,45 @@ define([
 
 		},
 
-		_paginate: {
-			currentPage: 0,
-			// which page should pagination start from
-			perPage: 0,
-			// how many items per page should be shown (0 is no limit)
-			maxPages: 0,
-			// max pages (0 is not limit) 
-			_maxPagesReached: false,
-			// fill intervals with "dummy" models (useful for grids)
-			dummyModels: false,
-		},
+		// //Interdit, au niveau des classes. Le pointer _paginate sera toujours le même!
+		// _paginate: {
+		// 	currentPage: 0,
+		// 	// which page should pagination start from
+		// 	perPage: 0,
+		// 	// how many items per page should be shown (0 is no limit)
+		// 	maxPages: 0,
+		// 	// max pages (0 is not limit) 
+		// 	_maxPagesReached: false,
+		// 	// fill intervals with "dummy" models (useful for grids)
+		// 	dummyModels: false,
+		// },
 
 		parent: {
 			instance: null,
 			path: null
 		},
 
-		isEmpty: function(){
-			return !!!this.length;
-		},
+		// isEmpty: function(){
+		// 	return !!!this.length;
+		// },
 
-		_prepareModel: function(attrs, options) {
-			// debugger
-			options = _.defaults(options||{}, {
-				insertStrictMode: false,
-			});
+		// _prepareModel: function(attrs, options) {
+		// 	// debugger
+		// 	options = _.defaults(options||{}, {
+		// 		insertStrictMode: false,
+		// 	});
 			
-			if (options.insertStrictMode) {
-				if (Object.isExactlyInstanceOf(attrs, this.model)) {
-					return Backbone.Collection.prototype._prepareModel.apply(this, arguments);	
-				} else {
-					this.trigger('invalid', this, attrs, options);
-					return false;
-				}
-			};
+		// 	if (options.insertStrictMode) {
+		// 		if (Object.isExactlyInstanceOf(attrs, this.model)) {
+		// 			return Backbone.Collection.prototype._prepareModel.apply(this, arguments);	
+		// 		} else {
+		// 			this.trigger('invalid', this, attrs, options);
+		// 			return false;
+		// 		}
+		// 	};
 			
-			return Backbone.Collection.prototype._prepareModel.apply(this, arguments);	
-		},
-
+		// 	return Backbone.Collection.prototype._prepareModel.apply(this, arguments);	
+		// },
 
 
 		constructor: function (models, options) {
@@ -85,7 +99,6 @@ define([
 
 			this._handleCustomEvents();
 			
-			this.fireEmptyEvent();
 		},
 
 		_handleCustomEvents: function () {
@@ -193,20 +206,7 @@ define([
 				return this.set(models, options);
 			}
 
-			var oldLength = this.length;	
-			var res =  Backbone.Collection.prototype.set.apply(this, arguments);
-			if (this.length != oldLength) {
-				this.fireEmptyEvent();
-			};
-			return res;
-		},
-
-		fireEmptyEvent: function(){
-			if (this.length) {
-				this.trigger('not-empty');
-			} else {
-				this.trigger('empty');
-			}
+			return Backbone.Collection.prototype.set.apply(this, arguments);
 		},
 
 		add: function (model, options) {
@@ -233,434 +233,432 @@ define([
 			return ret;
 		},
 
-		remove: function(){
-			var oldLength = this.length;	
-			var ret = Backbone.Collection.prototype.remove.apply(this, arguments);
-			if (this.length != oldLength) {
-				this.fireEmptyEvent();
-			};
-			return ret;
-		},
+
+		// do: function (action, args) {
+		// 	var url = this.url instanceof Function ? this.url() : this.url;
+		// 	if (args instanceof Array) {
+		// 		argsObj =   {};
+		// 		if (this.schema.actions[action]) {
+		// 			this.schema.actions[action].args.forEach(function (arg, i) {
+		// 				argsObj[arg] = args[i];
+		// 			});
+		// 		}
+		// 		args = argsObj;
+		// 	}
+		// 	return SGAjax.ajax({
+		// 		type: 'POST',
+		// 		url: url + '/' + action,
+		// 		data: args || {}
+		// 	});
+		// },
+
+		// clientSort: function () {
+		// 	return Backbone.Collection.prototype.sort.apply(this, arguments);
+		// },
+
+		// sgSort: function (sort) {
+		// 	this._sort = sort;
+		// 	return this;
+		// },
+
+		// sgFilter: function (filters) {
+		// 	this._filters = filters;
+		// 	return this;
+		// },
+
+		// sgPaginate: function (paginate) {
+		// 	_.extend(this._paginate, paginate);
+		// 	return this;
+		// },
 
 
-		do: function (action, args) {
-			var url = this.url instanceof Function ? this.url() : this.url;
-			if (args instanceof Array) {
-				argsObj =   {};
-				if (this.schema.actions[action]) {
-					this.schema.actions[action].args.forEach(function (arg, i) {
-						argsObj[arg] = args[i];
-					});
-				}
-				args = argsObj;
-			}
-			return SGAjax.ajax({
-				type: 'POST',
-				url: url + '/' + action,
-				data: args || {}
-			});
-		},
+		// _prepareFetchOptions: function (options) {
+		// 	if (!options) options = {
+		// 		data: {}
+		// 	};
+		// 	if (!options.data) options.data = {};
+		// 	if (this._sort) {
+		// 		if (typeof this._sort == "string") {
+		// 			options.data.sort_by = this._sort;
+		// 		} else {
+		// 			options.data.sort_by = this._sort.keys()[0];
+		// 			options.data.sort_how = this._sort[options.data.sort_by];
+		// 		}
+		// 	}
+		// 	for (var key in this._filters) {
+		// 		//options.data[key] = JSON.stringify(this._filters[key]);
+		// 		options.data[key] = this._filters[key];
+		// 	}
 
-		clientSort: function () {
-			return Backbone.Collection.prototype.sort.apply(this, arguments);
-		},
+		// 	return options;
+		// },
 
-		sgSort: function (sort) {
-			this._sort = sort;
-			return this;
-		},
+		// fetch: function (options) {
+		// 	options = this._prepareFetchOptions(options);
 
-		sgFilter: function (filters) {
-			this._filters = filters;
-			return this;
-		},
+		// 	this._isLoading = true;
+		// 	var fetch = Backbone.Collection.prototype.fetch.apply(this, [options]);
+		// 	var me = this;
+		// 	fetch.always(function (data) {
+		// 		me._isLoading = false;
+		// 	});
+		// 	return fetch;
+		// },
 
-		sgPaginate: function (paginate) {
-			_.extend(this._paginate, paginate);
-			return this;
-		},
+		// nextPage: function (options) {
+		// 	options = _.defaults(options||{}, {
+		// 		data: {},
+		// 		first: null,
+		// 	});
 
+		// 	options.remove = false;
 
-		_prepareFetchOptions: function (options) {
-			if (!options) options = {
-				data: {}
-			};
-			if (!options.data) options.data = {};
-			if (this._sort) {
-				if (typeof this._sort == "string") {
-					options.data.sort_by = this._sort;
-				} else {
-					options.data.sort_by = this._sort.keys()[0];
-					options.data.sort_how = this._sort[options.data.sort_by];
-				}
-			}
-			for (var key in this._filters) {
-				//options.data[key] = JSON.stringify(this._filters[key]);
-				options.data[key] = this._filters[key];
-			}
+		// 	if (options.first) {
+		// 		this.removeAll();
+		// 		this._paginate.currentPage = 0;
+		// 	}
 
-			return options;
-		},
+		// 	if (this._paginate.perPage) {
+		// 		options.data.offset = this._paginate.currentPage * this._paginate.perPage;
+		// 		options.data.limit = this._paginate.perPage;
+		// 	}
+		// 	var nextFetch = this.fetch(options);
+		// 	var me = this;
+		// 	nextFetch.done(function (data) {
+		// 		me._paginate.currentPage++;
+		// 		me._paginate._maxPagesReached = me._paginate.currentPage == me._paginate.maxPages || data.length < me._paginate.perPage;
+		// 	});
+		// 	return nextFetch;
+		// },
 
-		fetch: function (options) {
-			options = this._prepareFetchOptions(options);
+		// fillPage: function (options) {
+		// 	if(options.page == null){
+		// 		return;
+		// 	}
 
-			this._isLoading = true;
-			var fetch = Backbone.Collection.prototype.fetch.apply(this, [options]);
-			var me = this;
-			fetch.always(function (data) {
-				me._isLoading = false;
-			});
-			return fetch;
-		},
+		// 	this._pagesAlreadyFetched = this._pagesAlreadyFetched || [];
 
-		nextPage: function (options) {
-			if (!options) options = {
-				data: {}
-			};
-			options.remove = false;
-			if (!options.data) options.data = {};
+		// 	var numberPages = (options.numberPages||1);
 
-			if (options.first) {
-				this.removeAll();
-				this._paginate.currentPage = 0;
-			}
+		// 	if(!options.refill && this._pagesAlreadyFetched.contains(options.page)){
+		// 		return;
+		// 	}
+		// 	else{
+		// 		this._pagesAlreadyFetched.push(options.page);
+		// 	}
 
-			if (this._paginate.perPage) {
-				options.data.offset = this._paginate.currentPage * this._paginate.perPage;
-				options.data.limit = this._paginate.perPage;
-			}
-			var nextFetch = this.fetch(options);
-			var me = this;
-			nextFetch.done(function (data) {
-				me._paginate.currentPage++;
-				me._paginate._maxPagesReached = me._paginate.currentPage == me._paginate.maxPages || data.length < me._paginate.perPage;
-			});
-			return nextFetch;
-		},
+		// 	var from = options.page * this._paginate.perPage;
+		// 	var to = from + numberPages * this._paginate.perPage;
 
-		fillPage: function (options) {
-			if(options.page == null){
-				return;
-			}
+		// 	var me = this;
+		// 	var diff = function(){
+		// 		return to - me.length;
+		// 	}
+		// 	while(diff() > 0){
+		// 		this.add({});
+		// 	}
 
-			this._pagesAlreadyFetched = this._pagesAlreadyFetched || [];
+		// 	return this.getPage(options).done(function(models){
+		// 		models.forEach(function(model, i){
+		// 			console.log(from)
+		// 			me.models[from+i].set(model);
+		// 		});
+		// 	});
+		// },
 
-			var numberPages = (options.numberPages||1);
+		// getPage: function (options) {
+		// 	if (!options) options = {
+		// 		data: {}
+		// 	};
+		// 	options.remove = false;
+		// 	if (!options.data) options.data = {};
 
-			if(!options.refill && this._pagesAlreadyFetched.contains(options.page)){
-				return;
-			}
-			else{
-				this._pagesAlreadyFetched.push(options.page);
-			}
+		// 	if(this._paginate.perPage && options.page != null){
+		// 		options.data.offset = options.page * this._paginate.perPage;
+		// 		options.data.limit = (options.numberPages||1) * this._paginate.perPage;
+		// 	}
 
-			var from = options.page * this._paginate.perPage;
-			var to = from + numberPages * this._paginate.perPage;
+		// 	return this.dummyFetch(options);
+		// },
 
-			var me = this;
-			var diff = function(){
-				return to - me.length;
-			}
-			while(diff() > 0){
-				this.add({});
-			}
+		// isMaxReached: function () {
+		// 	return this._paginate._maxPagesReached;
+		// },
 
-			return this.getPage(options).done(function(models){
-				models.forEach(function(model, i){
-					console.log(from)
-					me.models[from+i].set(model);
-				});
-			});
-		},
+		// isLoading: function () {
+		// 	return this._isLoading;
+		// },
 
-		getPage: function (options) {
-			if (!options) options = {
-				data: {}
-			};
-			options.remove = false;
-			if (!options.data) options.data = {};
+		// dummyFetch: function(options) {
+		// 	this._prepareFetchOptions(options);
+		// 	var url = typeof this.url == "function" ? this.url() : this.url;
+		// 	return SGAjax.ajax({
+		// 		type: 'GET',
+		// 		url: url,
+		// 		data: options.data
+		// 	});
+		// },
 
-			if(this._paginate.perPage && options.page != null){
-				options.data.offset = options.page * this._paginate.perPage;
-				options.data.limit = (options.numberPages||1) * this._paginate.perPage;
-			}
+		// root: function () {
+		// 	var instance = this;
+		// 	var path = "";
+		// 	while (instance.parent.instance) {
+		// 		var parent = instance.parent;
+		// 		instance = parent.instance;
+		// 		path += parent.path;
+		// 	}
+		// 	return {
+		// 		instance: instance,
+		// 		path: path
+		// 	};
+		// },
 
-			return this.dummyFetch(options);
-		},
+		// clone: function (options) {
+		// 	if (!options) options = {};
+		// 	var models = options.models ? this.models : null;
+		// 	return new this.constructor(models, {
+		// 		url: this.url
+		// 	});
+		// },
 
-		isMaxReached: function () {
-			return this._paginate._maxPagesReached;
-		},
+		// defineSchemaProperties: function () {
+		// 	if (!this.schema) return;
 
-		isLoading: function () {
-			return this._isLoading;
-		},
+		// 	var properties = {};
 
-		dummyFetch: function(options) {
-			this._prepareFetchOptions(options);
-			var url = typeof this.url == "function" ? this.url() : this.url;
-			return SGAjax.ajax({
-				type: 'GET',
-				url: url,
-				data: options.data
-			});
-		},
+		// 	var get = function (attr) {
+		// 			return function () {
+		// 				return this.get(attr);
+		// 			};
+		// 		};
 
-		root: function () {
-			var instance = this;
-			var path = "";
-			while (instance.parent.instance) {
-				var parent = instance.parent;
-				instance = parent.instance;
-				path += parent.path;
-			}
-			return {
-				instance: instance,
-				path: path
-			};
-		},
+		// 	var getAction = function (action) {
+		// 			return function () {
+		// 				return function () {
+		// 					var argsArray = Array.apply(null, arguments);
+		// 					//return this.do.apply(this, [action, argsArray]);
+		// 					return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
+		// 				};
+		// 			};
+		// 		};
 
-		clone: function (options) {
-			if (!options) options = {};
-			var models = options.models ? this.models : null;
-			return new this.constructor(models, {
-				url: this.url
-			});
-		},
+		// 	this.schema.virtuals.keys().forEach(function (key) {
+		// 		properties[key] = {
+		// 			get: get(key)
+		// 		};
+		// 	});
 
-		defineSchemaProperties: function () {
-			if (!this.schema) return;
+		// 	this.schema.actions.keys().forEach(function (key) {
+		// 		properties[key] = {
+		// 			get: getAction(key)
+		// 		};
+		// 	});
 
-			var properties = {};
+		// 	Object.defineProperties(this, properties);
+		// },
 
-			var get = function (attr) {
-					return function () {
-						return this.get(attr);
-					};
-				};
+		// addGetterProperty: function (id) {
+		// 	if (!id) return;
 
-			var getAction = function (action) {
-					return function () {
-						return function () {
-							var argsArray = Array.apply(null, arguments);
-							//return this.do.apply(this, [action, argsArray]);
-							return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
-						};
-					};
-				};
+		// 	var get = function (attr) {
+		// 			return function () {
+		// 				return this.get(attr);
+		// 			};
+		// 		};
+		// 	var properties = {};
+		// 	properties["id_" + id] = {
+		// 		get: get(id)
+		// 	};
+		// 	Object.defineProperties(this, properties);
+		// },
 
-			this.schema.virtuals.keys().forEach(function (key) {
-				properties[key] = {
-					get: get(key)
-				};
-			});
+		// where: function (attrs, first) {
+		// 	var fun_attrs = {};
+		// 	for (var key in attrs) {
+		// 		if (typeof attrs[key] == "function") {
+		// 			fun_attrs[key] = attrs[key];
+		// 			delete attrs[key];
+		// 		}
+		// 	}
+		// 	var toFilter = this;
+		// 	var where;
+		// 	if (attrs.keys().length) {
+		// 		where = Backbone.Collection.prototype.where.apply(this, arguments);
+		// 	} else {
+		// 		where = this;
+		// 	}
+		// 	if (!where || !where.filter) {
+		// 		return where;
+		// 	}
+		// 	return where.filter(function (model) {
+		// 		for (var key in fun_attrs) {
+		// 			if (!fun_attrs[key](model[key])) return false;
+		// 		}
+		// 		return true;
+		// 	});
+		// },
 
-			this.schema.actions.keys().forEach(function (key) {
-				properties[key] = {
-					get: getAction(key)
-				};
-			});
+		// removePaginate: function(){
+		// 	this._paginate = {
+		// 		currentPage: 0,
+		// 		// which page should pagination start from
+		// 		perPage: 0,
+		// 		// how many items per page should be shown (0 is no limit)
+		// 		maxPages: 0,
+		// 		// max pages (0 is not limit) 
+		// 		_maxPagesReached: false
+		// 	};
+		// },
 
-			Object.defineProperties(this, properties);
-		},
+		// resetPaginate: function(){
+		// 	this._paginate.currentPage = 0;
+		// 	this._paginate._maxPagesReached = false;
+		// 	this._pagesAlreadyFetched = null;
+		// },
 
-		addGetterProperty: function (id) {
-			if (!id) return;
+		// clear: function ()  {
+		// 	var len = this.models.length;
+		// 	while (len--) {
+		// 		this.models[len].clear();
+		// 		this.remove(this.models[len]);
+		// 	}
+		// },
 
-			var get = function (attr) {
-					return function () {
-						return this.get(attr);
-					};
-				};
-			var properties = {};
-			properties["id_" + id] = {
-				get: get(id)
-			};
-			Object.defineProperties(this, properties);
-		},
+		// removeAll: function () {
+		// 	var removed = [];
+		// 	for (var i = this.models.length - 1; i >= 0; i--) {
+		// 		removed.push(this.models[i]);
+		// 	}
+		// 	this.remove(removed);
+		// 	this.resetPaginate()
+		// 	this.trigger('remove:all');
+		// 	return removed;
+		// },
 
-		where: function (attrs, first) {
-			var fun_attrs = {};
-			for (var key in attrs) {
-				if (typeof attrs[key] == "function") {
-					fun_attrs[key] = attrs[key];
-					delete attrs[key];
-				}
-			}
-			var toFilter = this;
-			var where;
-			if (attrs.keys().length) {
-				where = Backbone.Collection.prototype.where.apply(this, arguments);
-			} else {
-				where = this;
-			}
-			if (!where || !where.filter) {
-				return where;
-			}
-			return where.filter(function (model) {
-				for (var key in fun_attrs) {
-					if (!fun_attrs[key](model[key])) return false;
-				}
-				return true;
-			});
-		},
+		// mergeWithCollection: function(anotherCollection){
+		// 	for (var i = 0; i < anotherCollection.models.length; i++) {
+		// 		this.add(anotherCollection.models[i])
+		// 	};
+		// },
 
-		removePaginate: function(){
-			this._paginate = {
-				currentPage: 0,
-				// which page should pagination start from
-				perPage: 0,
-				// how many items per page should be shown (0 is no limit)
-				maxPages: 0,
-				// max pages (0 is not limit) 
-				_maxPagesReached: false
-			};
-		},
+		// saveAndMergeByPosition: function () {
+		// 	var clonedCollection = this.clone();
+		// 	var me = this;
 
-		resetPaginate: function(){
-			this._paginate.currentPage = 0;
-			this._paginate._maxPagesReached = false;
-			this._pagesAlreadyFetched = null;
-		},
+		// 	var deferred = clonedCollection.save();
 
-		clear: function ()  {
-			var len = this.models.length;
-			while (len--) {
-				this.models[len].clear();
-				this.remove(this.models[len]);
-			}
-		},
+		// 	deferred.done(function () {
+		// 		for (var i = 0; i < clonedCollection.models.length; i++) {
+		// 			me.models[i].set(clonedCollection.models[i]);
+		// 		}
+		// 	});
 
-		removeAll: function () {
-			var removed = [];
-			for (var i = this.models.length - 1; i >= 0; i--) {
-				removed.push(this.models[i]);
-			}
-			this.remove(removed);
-			this.resetPaginate()
-			this.trigger('remove:all');
-			return removed;
-		},
+		// 	return deferred;
+		// },
 
-		mergeWithCollection: function(anotherCollection){
-			for (var i = 0; i < anotherCollection.models.length; i++) {
-				this.add(anotherCollection.models[i])
-			};
-		},
+		// sgClientFilter: function (attrs) {
+		// 	var items = this.where(attrs);
+		// 	var Collection = SagaCollection.extend({
+		// 		model: this.model,
+		// 		url: this.url,
+		// 		schema: this.schema
+		// 	});
+		// 	return new Collection(items);
+		// },
 
-		saveAndMergeByPosition: function () {
-			var clonedCollection = this.clone();
-			var me = this;
+		// //deprecated, use json output format from schema... (Voir Yvan)
+		// setAsIds: function(){
+		// 	this.models.forEach(function(model){
+		// 		model._isId = true;
+		// 	});
+		// },
 
-			var deferred = clonedCollection.save();
+		// getAttr: function(attr){
+		// 	var url = this.url instanceof Function ? this.url() : this.url;
+		// 	return SGAjax.ajax({
+		// 		type: 'GET',
+		// 		url: url + '/' + attr
+		// 	});
+		// }, 
 
-			deferred.done(function () {
-				for (var i = 0; i < clonedCollection.models.length; i++) {
-					me.models[i].set(clonedCollection.models[i]);
-				}
-			});
+		// previousModel: function(model){
+		// 	if (!model) {
+		// 		return;
+		// 	};
+		// 	var index = this.indexOf(model)
+		// 	if (index == undefined) {
+		// 		return;
+		// 	};
+		// 	return this.at(index-1);
+		// }, 
 
-			return deferred;
-		},
-
-		sgClientFilter: function (attrs) {
-			var items = this.where(attrs);
-			var Collection = SagaCollection.extend({
-				model: this.model,
-				url: this.url,
-				schema: this.schema
-			});
-			return new Collection(items);
-		},
-
-
-		//deprecated, use json output format from schema... (Voir Yvan)
-		setAsIds: function(){
-			this.models.forEach(function(model){
-				model._isId = true;
-			});
-		},
-
-		getAttr: function(attr){
-			var url = this.url instanceof Function ? this.url() : this.url;
-			return SGAjax.ajax({
-				type: 'GET',
-				url: url + '/' + attr
-			});
-		}, 
-
-		previousModel: function(model){
-			if (!model) {
-				return;
-			};
-			var index = this.indexOf(model)
-			if (index == undefined) {
-				return;
-			};
-			return this.at(index-1);
-		}, 
-
-		nextModel: function(model){
-			if (!model) {
-				return;
-			};
-			var index = this.indexOf(model)
-			if (index == undefined) {
-				return;
-			};
-			return this.at(index+1);
-		},
+		// nextModel: function(model){
+		// 	if (!model) {
+		// 		return;
+		// 	};
+		// 	var index = this.indexOf(model)
+		// 	if (index == undefined) {
+		// 		return;
+		// 	};
+		// 	return this.at(index+1);
+		// },
 
 
-		JSONFromSchema: function(options){
-			options = _.defaults(options||{}, {
-				schemaFormat : undefined	
-			})
+		// JSONFromSchema: function(options){
+		// 	options = _.defaults(options||{}, {
+		// 		schemaFormat : undefined	
+		// 	})
 			
-			if (!options.schemaFormat) {
-				return this.JSONFromSchema(this.mongooseSchema);
-			};
+		// 	if (!options.schemaFormat) {
+		// 		return this.JSONFromSchema(this.mongooseSchema);
+		// 	};
 
-			var res = [];
-			var me = this;
-			this.each(function(model){
-				var c = options.schemaFormat.getContent();
-				res.push(model.JSONFromSchema({schemaFormat:c}));
-			});
-			return res;
-		}, 
+		// 	var res = [];
+		// 	var me = this;
+		// 	this.each(function(model){
+		// 		var c = options.schemaFormat.getContent();
+		// 		res.push(model.JSONFromSchema({schemaFormat:c}));
+		// 	});
+		// 	return res;
+		// }, 
 
-		validate: function(){
-			var error = undefined;
-			for (var i = 0; i < this.models.length; i++) {
-				error = this.models[i].validate();
-				if(error) {
-					return error;
-				}
-			};
-			return undefined;
-		},
+		// validate: function(){
+		// 	var error = undefined;
+		// 	for (var i = 0; i < this.models.length; i++) {
+		// 		error = this.models[i].validate();
+		// 		if(error) {
+		// 			return error;
+		// 		}
+		// 	};
+		// 	return undefined;
+		// },
 
-		generateError: function(verbose, id){
-			return new ModelError({
-				verbose:verbose, 
-				identifier:id, 
-				model:this
-			});
-		},
+		// generateError: function(verbose, id){
+		// 	return new ModelError({
+		// 		verbose:verbose, 
+		// 		identifier:id, 
+		// 		model:this
+		// 	});
+		// },
 
 
-		isValid: function(){
-			var error = this.validate();
-			if (error) {
-				return false;
-			} else {
-				return true;
-			}
-		}
+		// isValid: function(){
+		// 	var error = this.validate();
+		// 	if (error) {
+		// 		return false;
+		// 	} else {
+		// 		return true;
+		// 	}
+		// }
 
 	});
+	
+	_.extend(SagaCollection.prototype, CollectionHelpers(SagaCollection));
+	_.extend(SagaCollection.prototype, CollectionPagination(SagaCollection));
+	_.extend(SagaCollection.prototype, CollectionPropertiesDefinitions(SagaCollection));
+	_.extend(SagaCollection.prototype, CollectionSync(SagaCollection));
+	_.extend(SagaCollection.prototype, CollectionValidation(SagaCollection));
+	
 
 	return SagaCollection;
 });
