@@ -179,7 +179,17 @@ define([
 				
 				return this;
 			},	
-			
+
+			getUrlFor: function(subModel){
+				var cols = this.getAllCollections();
+				for(var attribute in cols){
+					if (cols[attribute] == subModel) {
+						return this.url()+"/"+attribute;
+					};
+				}	
+				return null;
+			}
+
 		}
 	}
 

@@ -167,9 +167,9 @@ define([
 				var instanceOverride = this._override.model.instance(defaultClass);
 				var clazzOverride = this._override.model.clazz(defaultClass);
 
-				if (!_.keys(clazzOverride).length && !_.keys(instanceOverride).length) {
-					this._modelClass = defaultClass;
-				} else {
+				// if (!_.keys(clazzOverride).length && !_.keys(instanceOverride).length) {
+				// 	this._modelClass = defaultClass;
+				// } else {
 					var options = _.extend({
 							mongooseSchema: this,
 
@@ -180,7 +180,7 @@ define([
 						}, instanceOverride
 					);
 					this._modelClass = defaultClass.extend(options, clazzOverride);
-				}
+				// }
 			};
 			return this._modelClass; 
 		},
@@ -194,14 +194,13 @@ define([
 
 		getCollectionClass: function(){
 			if(!this._collectionClass){
-
 				var defaultClass = this.defaultCollectionClass();
 				var instanceOverride = this._override.collection.instance(defaultClass);
 				var clazzOverride = this._override.collection.clazz(defaultClass);
 
-				if (!_.keys(clazzOverride).length && !_.keys(instanceOverride).length) {
-					this._collectionClass = defaultClass;
-				} else {
+				// if (!_.keys(clazzOverride).length && !_.keys(instanceOverride).length) {
+				// 	this._collectionClass = defaultClass;
+				// } else {
 					var options = _.extend({
 							mongooseSchema: this,
 
@@ -212,7 +211,7 @@ define([
 						}, instanceOverride
 					);
 					this._collectionClass = defaultClass.extend(options, clazzOverride)					
-				}
+				// }
 
 			}
 			return this._collectionClass;

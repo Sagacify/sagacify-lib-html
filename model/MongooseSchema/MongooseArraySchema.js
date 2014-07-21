@@ -46,16 +46,12 @@ define([
 				var classOverride = this._override.collection.clazz(defaultClass);
 				var instanceOverride = this._override.collection.instance(defaultClass);
 
-				if (!_.keys(classOverride).length && !_.keys(instanceOverride).length) {
-					this._generatedDefaultCollection = defaultClass;
-				} else {
-					var options = _.extend({
-						mongooseSchema: this,
-						model: this.getModelClass(),
-						schema: this._rawContentSchema.collection
-					}, instanceOverride);					
-					this._generatedDefaultCollection = defaultClass.extend(options, classOverride);
-				}
+				var options = _.extend({
+					mongooseSchema: this,
+					model: this.getModelClass(),
+					schema: this._rawContentSchema.collection
+				}, instanceOverride);					
+				this._generatedDefaultCollection = defaultClass.extend(options, classOverride);
 			};
 
 			return this._generatedDefaultCollection;

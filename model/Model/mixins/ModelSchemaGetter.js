@@ -171,8 +171,7 @@ define([
 			},
 
 			//Sub set of objects containing only collection
-			getAllModel: function(){
-
+			getAllModel: function(subCollection){
 			}
 
 			
