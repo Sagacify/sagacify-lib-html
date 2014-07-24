@@ -1,8 +1,6 @@
 define([
 	'./MongooseElement',
-	'../Model/Model',
-	'../Collection/Collection'
-], function (MongooseElement, DefaultModel, DefaultCollection) {
+], function (MongooseElement) {
 
 	return MongooseElement.extend({
 		initialize: function(options){

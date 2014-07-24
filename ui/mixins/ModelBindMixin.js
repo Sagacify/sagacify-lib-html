@@ -1,4 +1,4 @@
-define(["saga/model/Model/Model"], function(Model){
+define(["saga/model/MongooseModel/Model/Model"], function(Model){
 	
 	return {
 
@@ -285,16 +285,16 @@ define(["saga/model/Model/Model"], function(Model){
 			var me = this;
 			var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
 			var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
-			this.listenTo(model, 'change:'+attr, function(){
-				if(model.sgValidate(attr).success){
-					els.removeClass(errorClass);
-					els.addClass(validClass);
-				}
-				else{
-					els.removeClass(validClass);
-					els.addClass(errorClass);
-				}
-			});
+			// this.listenTo(model, 'change:'+attr, function(){
+				// if(model.sgValidate(attr).success){
+				// 	els.removeClass(errorClass);
+				// 	els.addClass(validClass);
+				// }
+				// else{
+				// 	els.removeClass(validClass);
+				// 	els.addClass(errorClass);
+				// }
+			// });
 		}
 	}
 

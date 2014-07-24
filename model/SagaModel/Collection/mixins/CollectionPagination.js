@@ -132,6 +132,12 @@ define([
 				this._filters = filters;
 				return this;
 			},
+
+
+			isLoading: function () {
+				return this._isLoading;
+			},
+			
 		}
 	}
 

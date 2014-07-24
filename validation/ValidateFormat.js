@@ -1,5 +1,5 @@
 define([
-	'../types/validateType'
+	'saga/types/validateType'
 ], function (is) {
 	return {
 

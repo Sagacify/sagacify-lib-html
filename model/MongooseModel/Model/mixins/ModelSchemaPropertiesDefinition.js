@@ -1,6 +1,6 @@
 define([
 	'saga/validation/ValidateFormat',
-	'saga/model/Collection/Collection',
+	'saga/model/MongooseModel/Collection/Collection',
 	'saga/types/validateType',
 	'saga/ajax/SGAjax'
 ], function (ValidateFormat, SagaCollection, is, SGAjax) {

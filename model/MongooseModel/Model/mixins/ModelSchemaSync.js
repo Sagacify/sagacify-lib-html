@@ -1,6 +1,6 @@
 define([
 	'saga/validation/ValidateFormat',
-	'saga/model/Collection/Collection',
+	'saga/model/MongooseModel/Collection/Collection',
 	'saga/types/validateType',
 	'saga/ajax/SGAjax'
 ], function (ValidateFormat, SagaCollection, is, SGAjax) {
@@ -43,7 +43,6 @@ define([
 					options.success = function(model, resp, options){
 						success && success(model, resp, options);
 						if (options.recordedChanges) {
-							debugger
 							model.resetRecord();
 							model.startRecordingChange();
 						};
@@ -53,14 +52,6 @@ define([
 
 
 				return Backbone.Model.prototype.save.apply(this, [undefined, options]);
-
-				// var me = this;
-				// def.always(function(){
-				// 	if (options.recordedChanges) {
-				// 		me.resetRecord();
-				// 	};
-				// });
-
 			},
 
 

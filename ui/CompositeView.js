@@ -14,7 +14,18 @@ define([
 			Marionette.CompositeView.prototype.render.apply(this, arguments);
 			this._handleGoToAfterRender();
 			this.reinjectFirstElement();
+		},
+
+		previousChild: function(itemView){
+			var previousModel = this.collection.previousModel(itemView.model);
+			return previousModel && this.children.findByModel(previousModel);
+		},
+
+		nextChild: function(itemView){
+			var nextModel = this.collection.nextModel(itemView.model);
+			return nextModel && this.children.findByModelx(itemView.model);
 		}
+		
 
 	});
 

@@ -26,7 +26,7 @@ define([
 			var nextModel = this.collection.nextModel(itemView.model);
 			return nextModel && this.children.findByModelx(itemView.model);
 		}
-
+		
 	});
 
 	_.extend(CollectionView.prototype, Mixin);

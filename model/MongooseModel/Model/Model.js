@@ -1,6 +1,8 @@
 define([
-	'backbone',
-	'saga/model/Collection/Collection',
+	'saga/model/SagaModel/Model/Model',
+
+	'saga/model/MongooseModel/Collection/Collection',
+
 	'saga/types/validateType',
 	'saga/ajax/SGAjax',
 
@@ -12,8 +14,8 @@ define([
 	'./mixins/ModelSchemaSync',
 	'./mixins/ModelSchemaValidation',
 	'./mixins/ModelSchemaGetter',
-], function (Backbone,
-	
+], function (
+	Model,
 	SagaCollection, 
 	is, 
 	SGAjax,
@@ -26,8 +28,8 @@ define([
 	ModelSchemaValidation,
 	ModelSchemaGetter
 	) {
-
-	var SagaModel = Backbone.Model.extend({
+	
+	var MongooseModel = Model.extend({
 
 		constructor: function(attributes, options){
 			if(options){
@@ -43,7 +45,7 @@ define([
 			this._originalAttributes = {};
 			this.defineSchemaProperties();
 			this.handleMattributes();
-			var ret = Backbone.Model.prototype.constructor.apply(this, arguments);
+			var ret = Model.prototype.constructor.apply(this, arguments);
 			this.postCreate && this.postCreate(options);
 
 			this._recorded = {};
@@ -111,7 +113,7 @@ define([
 			// this._mattributes = {};
 			this.changed = {};
 			this.src = null;
-			return Backbone.Model.prototype.clear.apply(this, arguments);
+			return Model.prototype.clear.apply(this, arguments);
 		},
 
 		validForSave : function(){
@@ -128,9 +130,9 @@ define([
 		},
 
 		clone: function () {
-			var clone = Backbone.Model.prototype.clone.apply(this, arguments);
+			var clone = Model.prototype.clone.apply(this, arguments);
 			for(var attr in clone.attributes) {
-				if(clone.attributes[attr] instanceof SagaModel) {
+				if(clone.attributes[attr] instanceof MongooseModel) {
 					clone.attributes[attr] = clone.attributes[attr].clone();
 				}
 				if(clone.attributes[attr] instanceof SagaCollection) {
@@ -142,14 +144,14 @@ define([
 	});
 
 
-	_.extend(SagaModel.prototype, ModelEvents(SagaModel));
-	_.extend(SagaModel.prototype, ModelSchemaAction(SagaModel));
-	_.extend(SagaModel.prototype, ModelSchemaPropertiesDefinition(SagaModel));
-	_.extend(SagaModel.prototype, ModelSchemaSetter(SagaModel));
-	_.extend(SagaModel.prototype, ModelSchemaSync(SagaModel));
-	_.extend(SagaModel.prototype, ModelSchemaValidation(SagaModel));
-	_.extend(SagaModel.prototype, ModelSchemaGetter(SagaModel));
+	_.extend(MongooseModel.prototype, ModelEvents(MongooseModel));
+	_.extend(MongooseModel.prototype, ModelSchemaAction(MongooseModel));
+	_.extend(MongooseModel.prototype, ModelSchemaPropertiesDefinition(MongooseModel));
+	_.extend(MongooseModel.prototype, ModelSchemaSetter(MongooseModel));
+	_.extend(MongooseModel.prototype, ModelSchemaSync(MongooseModel));
+	_.extend(MongooseModel.prototype, ModelSchemaValidation(MongooseModel));
+	_.extend(MongooseModel.prototype, ModelSchemaGetter(MongooseModel));
 	
 
-	return SagaModel;
+	return MongooseModel;
 });

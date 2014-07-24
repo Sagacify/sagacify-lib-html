@@ -1,8 +1,9 @@
 define([
 	'backbone',
-	'../../types/validateType',
-	'../Model/Model',
-	'../Collection/Collection',
+	'saga/types/validateType',
+	'saga/model/MongooseModel/Model/Model',
+	'saga/model/MongooseModel/Collection/Collection'
+
 ], function (
 	Backbone, 
 	is, 

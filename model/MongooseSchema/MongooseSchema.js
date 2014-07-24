@@ -1,6 +1,6 @@
 define([
 	'./MongooseElement',
-	'../../types/validateType'
+	'saga/types/validateType'
 ], function (
 	MongooseElement,
 	is

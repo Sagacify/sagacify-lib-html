@@ -1,12 +1,9 @@
 define([
 	'backbone.marionette',
 	'../prototypes/backbone/backbone',
-	// '../prototypes/prototypes',	
-	'../model/Model/Model',
-	'../model/Collection/Collection',
 	'../model/MongooseSchema/MongooseSchema',
 	'jquery',
-], function (Marionette, backbone, SagaModel, SagaCollection, MongooseSchema) {
+], function (Marionette, backbone, MongooseSchema) {
 	
 	return Marionette.Application.extend({
 

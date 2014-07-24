@@ -1,5 +1,5 @@
 define([
-	'../../ModelError'
+	'saga/model/ModelError'
 ], function (
 	ModelError
 	) {
@@ -34,8 +34,6 @@ define([
 				}
 			}			
 		}
-
-
 	}
 });
 

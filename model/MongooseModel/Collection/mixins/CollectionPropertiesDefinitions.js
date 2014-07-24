@@ -1,5 +1,5 @@
 define([
-	'../../../ajax/SGAjax',
+	'../../../../ajax/SGAjax',
 ], function (
 SGAjax
 	) {

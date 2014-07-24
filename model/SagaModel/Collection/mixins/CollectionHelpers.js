@@ -1,6 +1,6 @@
 define([
-	
-], function () {
+	'saga/types/validateType'
+], function (is) {
 	return function(SagaCollection){
 		return {
 			isEmpty: function(){
@@ -148,6 +148,32 @@ define([
 				return Backbone.Collection.prototype.sort.apply(this, arguments);
 			},
 
+			set: function (models, options) {
+				//ids array
+				if (is.Array(models) && models.length && !is.Object(models[0])) {
+					wrappedModels = [];
+					models.forEach(function (model) {
+						wrappedModels.push({
+							_id: model
+						});
+					});
+					models = wrappedModels;
+					return this.set(models, options);
+				}
+
+				return Backbone.Collection.prototype.set.apply(this, arguments);
+			},
+
+
+			add: function (model, options) {
+				//Try add simple _id
+				if (is.String(model)) {
+					_isId = true;
+					this.add({_id:model});
+				}
+				return  Backbone.Collection.prototype.add.apply(this, [model, options]);
+			},
+
 		}
 
 
@@ -156,10 +182,6 @@ define([
 
 });
 
-
-
-
-		
 
 
 
