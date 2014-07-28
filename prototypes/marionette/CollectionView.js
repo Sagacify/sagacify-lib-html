@@ -59,34 +59,34 @@ define([
 
 		nextPage: function(){
 			if(this.collection && !this.collection.isMaxReached() && !this.collection.isLoading()){
-				this.showLoadingView();
+				// this.showLoadingView();
 				var me = this;
 				var def = this.collection.nextPage();
 				def.always(function(){
 					me.isProcessingNextPage = false;
-					me.closeLoadingView();
+					// me.closeLoadingView();
 				});
 				return def;
 			}
 		},
 
-		showLoadingView: function(){
-			this.closeEmptyView();
-			var LoadingView = Backbone.Marionette.getOption(this, "loadingView");
+		// showLoadingView: function(){
+		// 	this.closeEmptyView();
+		// 	var LoadingView = Backbone.Marionette.getOption(this, "loadingView");
 
-			if(LoadingView && !this._loadingView){
-				var model = new Backbone.Model();
-				this.addItemView(model, LoadingView);
-				this._loadingView = this.children.last();
-			}
-		},
+		// 	if(LoadingView && !this._loadingView){
+		// 		var model = new Backbone.Model();
+		// 		this.addItemView(model, LoadingView);
+		// 		this._loadingView = this.children.last();
+		// 	}
+		// },
 
-		closeLoadingView: function(){
-			if (this._loadingView){
-				this.removeChildView(this._loadingView);
-				delete this._loadingView;
-			}
-		}
+		// closeLoadingView: function(){
+		// 	if (this._loadingView){
+		// 		this.removeChildView(this._loadingView);
+		// 		delete this._loadingView;
+		// 	}
+		// }
 
 	});
 });

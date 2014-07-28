@@ -18,13 +18,18 @@ define([
 				});
 			}
 
+			this.configureScrollEvent();
+
+			Object.defineProperties(this, {user: {get:this.getUser, set:this.setUser}});
+		},
+
+		configureScrollEvent: function(){
+			var me = this;
 			$(window).scroll(function (evt){
 				if(me.isBottomReached()) {
 					me.trigger("bottomReached");
 				}
 			});
-
-			Object.defineProperties(this, {user: {get:this.getUser, set:this.setUser}});
 		},
 
 		fetchModels: function (){
@@ -107,9 +112,6 @@ define([
 			// body.scrollTop is deprecated in strict mode. 
 			// Please use 'documentElement.scrollTop' if in strict mode and 'body.scrollTop' only if in quirks mode.
 			return (document.body.scrollTop || document.documentElement.scrollTop) == (document.body.scrollHeight-window.innerHeight);
-			// console.log(document.body.scrollHeight, window.innerHeight, document.documentElement.scrollTop, document.body.scrollTop);
-			// return (document.body.scrollHeight - window.innerHeight - 5) < document.documentElement.scrollTop
-			// 	|| (document.body.scrollHeight - window.innerHeight + 5) < document.documentElement.scrollTop;
 		},
 
 		getUser: function(){

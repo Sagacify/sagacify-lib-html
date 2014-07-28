@@ -18,14 +18,51 @@ define([
 		}, 
 
 		previousChild: function(itemView){
-			var previousModel = this.collection.previousModel(itemView.model);
-			return previousModel && this.children.findByModel(previousModel);
+			
+
+			// search child
+			var currentModel = itemView.model
+			var previousChild = null;
+			while(!previousChild){
+				var currentModel = this.collection.previousModel(currentModel);
+				if (!currentModel) {
+					return null;
+				};
+				previousChild = this.children.findByModel(currentModel)
+			}
+			return previousChild;
+
+
+			// if (previousModel && !this.children.findByModel(previousModel)) {
+			// 	debugger
+			// };
+			// return previousModel && this.children.findByModel(previousModel);
 		},
 
 		nextChild: function(itemView){
 			var nextModel = this.collection.nextModel(itemView.model);
 			return nextModel && this.children.findByModelx(itemView.model);
+		},
+
+
+		showLoadingView: function(){
+			this.closeEmptyView();
+			var LoadingView = Backbone.Marionette.getOption(this, "loadingView");
+
+			if(LoadingView && !this._loadingView){
+				var model = new Backbone.Model();
+				this.addItemView(model, LoadingView);
+				this._loadingView = this.children.last();
+			}
+		},
+
+		closeLoadingView: function(){
+			if (this._loadingView){
+				this.removeChildView(this._loadingView);
+				delete this._loadingView;
+			}
 		}
+
 		
 	});
 

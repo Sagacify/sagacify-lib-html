@@ -5,10 +5,10 @@ define([
 		return {
 		
 			_prepareFetchOptions: function (options) {
-				if (!options) options = {
-					data: {}
-				};
-				if (!options.data) options.data = {};
+				options = _.defaults(options||{}, {
+					data : {}
+				});
+
 				if (this._sort) {
 					if (typeof this._sort == "string") {
 						options.data.sort_by = this._sort;
@@ -26,9 +26,18 @@ define([
 			},
 
 			fetch: function (options) {
+				options = _.defaults(options||{}, {
+					paginate:false
+				})
+
+				if (options.paginate) {
+					options = this._preparePaginateFetchOptions(options);
+				};
+
 				options = this._prepareFetchOptions(options);
 
 				this._isLoading = true;
+				this.trigger('loading-start');
 
 				var success = options.success;
 				var error = options.error;
@@ -37,27 +46,21 @@ define([
 				options.success = function(){
 					success && success.apply(this, arguments);
 					me.trigger("Fetch:success");
+					me._isLoading = false;
+					me.trigger('loading-stop');
 				}
 				options.error = function(error){
 					error && error.apply(this, arguments);
 					me.trigger("Fetch:error", error);
+					me._isLoading = false;
+					me.trigger('loading-stop');
 				}
 
-				var fetch = Backbone.Collection.prototype.fetch.apply(this, [options]);
-				var me = this;
-				fetch.always(function (data) {
-					me._isLoading = false;
-				});
-				return fetch;
+				return  Backbone.Collection.prototype.fetch.apply(this, [options]);
+
 			},
 
 		}
 
 	}
 });
-
-
-
-
-
-

@@ -34,12 +34,7 @@ define([
 
 
 		constructor: function(attrs, options){
-			this._paginate = {
-				currentPage: 0,
-				perPage: 0,
-				maxPages: 0,
-				_maxPagesReached: false
-			}
+			this.removePaginate();
 
 			if (options) {
 				if (options.url) {
@@ -55,6 +50,7 @@ define([
 			this.updateUrl()
 			this._handleCustomEvents();
 		},
+
 
 		_handleCustomEvents: function () {
 			this.on('add', function () {

@@ -45,29 +45,60 @@ define([
 				_.extend(this._paginate, paginate);
 				return this;
 			},		
-			
-			nextPage: function (options) {
+
+			_preparePaginateFetchOptions: function (options) {
 				options = _.defaults(options||{}, {
 					data: {},
 					first: null,
-					remove: false
+					remove: false, 
+					success: null
 				});
-
-				if (options.first) {
-					this._paginate.currentPage = 0;
-				}
 
 				if (this._paginate.perPage) {
 					options.data.offset = this._paginate.currentPage * this._paginate.perPage;
 					options.data.limit = this._paginate.perPage;
 				}
-				var nextFetch = this.fetch(options);
+
+				var success = options.success;
 				var me = this;
-				nextFetch.done(function (data) {
+				options.success = function(data){
 					me._paginate.currentPage++;
 					me._paginate._maxPagesReached = me._paginate.currentPage == me._paginate.maxPages || data.length < me._paginate.perPage;
+					return success && success.apply(this, arguments);
+				}
+				return options;
+			},
+
+
+			nextPage: function (options) {
+				options = _.defaults(options||{}, {
+					paginate:true
 				});
-				return nextFetch;
+
+				if (this.isMaxReached()) {
+					return false;
+				};
+
+				if (options.first) {
+					this._paginate.currentPage = 0;
+				}
+
+				// if (this._paginate.perPage) {
+				// 	options.data.offset = this._paginate.currentPage * this._paginate.perPage;
+				// 	options.data.limit = this._paginate.perPage;
+				// }
+
+				// var success = options.success;
+				// options.success = function(){
+				// 	me._paginate.currentPage++;
+				// 	me._paginate._maxPagesReached = me._paginate.currentPage == me._paginate.maxPages || data.length < me._paginate.perPage;
+				// 	return success && success.apply(this, arguments);
+				// }
+
+				// return this.fetch(options);
+
+				// this._preparePaginateFetchOptions(options);
+				return this.fetch(options);
 			},
 
 			getPage: function (options) {
