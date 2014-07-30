@@ -33,7 +33,10 @@ define([
 			if (this._superSchema) {
 				return this._superSchema.getModelClass();
 			};
-
+			if (!app.MongooseSchemas[this.ref]) {
+				return app.customRef[this.ref];
+			};
+			
 			return app.MongooseSchemas[this.ref].getModelClass()
 		},	
 

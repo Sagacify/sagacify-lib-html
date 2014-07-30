@@ -44,6 +44,7 @@ define([
 
 			this._originalAttributes = {};
 			this.defineSchemaProperties();
+
 			this.handleMattributes();
 			var ret = Model.prototype.constructor.apply(this, arguments);
 			this.postCreate && this.postCreate(options);

@@ -33,44 +33,41 @@ define([
 
 
 			_defineAttributesProperties: function(){
-
-				this.schemaAttributes().forEach(function(key){
-					this._generateGetSetForAttribute(key)
-				}, this);
+				this._generateGetSetForAttributes(this.schemaAttributes())
 			},
 
-			_generateGetSetForAttribute: function(attribute){
-				var descriptor = {};
-				descriptor.get = this._defineGetter(attribute);
-				var setter = this._defineSetter(attribute) 
-				if (setter) {
-					descriptor.set = setter;	
-				};
-				Object.defineProperty(this, attribute, descriptor);
-			},
+			// _generateGetSetForAttribute: function(attribute){
+			// 	var descriptor = {};
+			// 	descriptor.get = this._defineGetter(attribute);
+			// 	var setter = this._defineSetter(attribute) 
+			// 	if (setter) {
+			// 		descriptor.set = setter;	
+			// 	};
+			// 	Object.defineProperty(this, attribute, descriptor);
+			// },
 
-			_defineGetter : function(attribute){
-				var getterName = "get"+attribute.capitalize();
-				if(is.Function(this[getterName]) && this[getterName]){
-					return this[getterName];
-				}
+			// _defineGetter : function(attribute){
+			// 	var getterName = "get"+attribute.capitalize();
+			// 	if(is.Function(this[getterName]) && this[getterName]){
+			// 		return this[getterName];
+			// 	}
 
-				return function(){
-					return this.get(attribute);
-				};
-			},
+			// 	return function(){
+			// 		return this.get(attribute);
+			// 	};
+			// },
 
-			_defineSetter : function(attribute){
+			// _defineSetter : function(attribute){
 
-				var setterName = "set"+attribute.capitalize();
-				if(is.Function(this[setterName]) && this[setterName]){
-					return this[setterName];
-				}
+			// 	var setterName = "set"+attribute.capitalize();
+			// 	if(is.Function(this[setterName]) && this[setterName]){
+			// 		return this[setterName];
+			// 	}
 
-				return function(value){
-					return this.set(attribute, value);
-				}
-			},
+			// 	return function(value){
+			// 		return this.set(attribute, value);
+			// 	}
+			// },
 
 			schemaAttributes: function(){
 				return this.mongooseSchema.getAttributes().keys();

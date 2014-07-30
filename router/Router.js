@@ -13,6 +13,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 		},
 
 		handleSagaRoutes: function(){
+
 			for(var route in this.sagaRoutes) {
 				var specRoute = this.sagaRoutes[route];
 				var alias = "";
