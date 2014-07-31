@@ -13,8 +13,7 @@ define([
 				automaticGetterAndSetter:false,
 			});
 			
-			Backbone.Model.prototype.constructor.apply(this, arguments);
-			
+			Backbone.Model.prototype.constructor.apply(this, arguments);			
 
 			if (options.automaticGetterAndSetter) {
 				if (attributes) {

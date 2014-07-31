@@ -61,9 +61,9 @@ define([
 
 				var success = options.success;
 				var me = this;
-				options.success = function(data){
+				options.success = function(data, resp){
 					me._paginate.currentPage++;
-					me._paginate._maxPagesReached = me._paginate.currentPage == me._paginate.maxPages || data.length < me._paginate.perPage;
+					me._paginate._maxPagesReached = me._paginate.currentPage == me._paginate.maxPages || resp.length < me._paginate.perPage;
 					return success && success.apply(this, arguments);
 				}
 				return options;

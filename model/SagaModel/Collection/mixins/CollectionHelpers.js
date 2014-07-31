@@ -169,7 +169,7 @@ define([
 				//Try add simple _id
 				if (is.String(model)) {
 					_isId = true;
-					this.add({_id:model});
+					this.add({_id:model}, options);
 				}
 				return  Backbone.Collection.prototype.add.apply(this, [model, options]);
 			},

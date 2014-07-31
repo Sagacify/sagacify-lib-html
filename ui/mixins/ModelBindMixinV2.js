@@ -78,6 +78,7 @@ define([], function () {
 					//Jquery eval function
 					var stringToApply = 'this.node' + this.viewAction.substring(1);
 					try {
+
 						eval(stringToApply);
 					} catch (err) {
 						console.log(err);

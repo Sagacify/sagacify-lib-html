@@ -23,105 +23,103 @@ define([
 ) {
 	var MongooseCollection = Collection.extend({
 
-		// _isLoading: false,
-
-		// _sort: {
-		// 	//field: asc|desc
-		// },
-
-		// _filters: {
-
-		// },
-
-		// parent: {
-		// 	instance: null,
-		// 	path: null
-		// },
 
 		constructor: function (models, options) {
-			// this._paginate = {
-			// 	currentPage: 0,
-			// 	perPage: 0,
-			// 	maxPages: 0,
-			// 	_maxPagesReached: false
-			// }
 
 			if (models && !(models instanceof Array)) {
 				options = models;
 			}
-			// if (options) {
-			// 	if (options.url) {
-			// 		this.url = options.url;
-					
-			// 	}
-			// 	if (options.parent) {
-			// 		this.parent = options.parent;
-			// 	}
-			// }
 
 
 			this._virtuals = {};
 			this.defineSchemaProperties();
 			Collection.prototype.constructor.apply(this, arguments);
-			// this.updateUrl()
-			// this._handleCustomEvents();
-			
 		},
-		
-		// updateUrl: function(){
-		// 	if (this.parent.instance) {
-		// 		if (!this.parent.instance.id) {
-		// 			var me = this;
-		// 			this.listenTo(this.parent.instance, 'change:'+this.parent.instance.idAttribute, function(parentModel, parentIdentifier){
-		// 				var regeneratedUrl = parentModel.getUrlFor(me);
-		// 				me.url = regeneratedUrl||me.url;
-		// 				me.stopListening(this.parent.instance, 'change:'+this.parent.instance.idAttribute);
-		// 			})
-		// 		};
-		// 	};
-		// },
 
-		// _handleCustomEvents: function () {
-		// 	this.on('add', function () {
-		// 		var added = arguments[0];
-		// 		var me = this;
-		// 		this.listenTo(added, 'sync:destroy', function (res) {
-		// 			me.trigger('sync:remove');
-		// 		});
-		// 	});
-		// },
+		__isAVirtual: function(attribute){
+			return !!this.mongooseSchemaForVirtual(attribute);
+		},
+
+		mongooseSchemaForVirtual: function(attribute){
+			return this.mongooseSchema.collection && this.mongooseSchema.collection[attribute];	
+		},
+
+		getVirtualAttribute: function(virtualAttribute, options){
+			
+			var currentValue = this._virtuals[virtualAttribute];
+
+			if (currentValue != undefined) {
+				return currentValue;
+			};
+
+			var subMongooseSchema = this.mongooseSchemaForVirtual(virtualAttribute);
+
+			if (subMongooseSchema instanceof app.MongooseArraySchema) {
+				var Collection = subMongooseSchema.getCollectionClass()
+				currentValue = new Collection(null, {
+					parent: {
+						instance: this,
+						path: ""
+					},					
+					url:this.url+"/"+virtualAttribute
+				});
+			};
+
+			//other case...
+			this.setVirtualAttribute(virtualAttribute, currentValue);
+
+			return this._virtuals[virtualAttribute];
+		},
+
+		setVirtualAttribute: function(virtualAttribute, newValue){
+			this._virtuals[virtualAttribute] = newValue;
+		},
+
+
 
 		get: function (id, options) {
 			if (id instanceof this.model) {
 				return Collection.prototype.get.apply(this, arguments);
 			}
 			var url = this.url instanceof Function ? this.url() : this.url;
-			if (this.schema && this.schema.virtuals[id]) {
-				if (!this._virtuals[id]) {
-					if (this.schema.virtuals[id] instanceof Array) {
-						var model = App.models[this.schema.virtuals[id][0].ref + "Model"].extend({
-							urlRoot: url + '/' + id
-						});
-						this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].ref + "Collection"]([], {
-							url: url + '/' + id,
-							model: model,
-							parent: {
-								instance: this,
-								path: ""
-							}
-						});
-					} else {
-						this._virtuals[id] = new App.models[this.schema.virtuals[id].ref + "Model"]({}, {
-							url: url + '/' + id,
-							parent: {
-								instance: this,
-								path: ""
-							}
-						});
-					}
-				}
-				return this._virtuals[id];
-			} else if (id == "new") {
+
+			if (this.__isAVirtual(id)) {
+				return this.getVirtualAttribute(id, options);
+			};
+
+			// if (this.schema && this.schema.virtuals[id]) {
+			// 	if (!this._virtuals[id]) {
+			// 		if (this.schema.virtuals[id] instanceof Array) {
+			// 			var model = null;
+			// 			if (app.customRef[this.schema.virtuals[id][0].ref]) {
+			// 				debugger
+			// 				model = app.customRef[this.schema.virtuals[id][0].ref]
+			// 			} else {
+			// 				model = App.models[this.schema.virtuals[id][0].ref + "Model"].extend({
+			// 					urlRoot: url + '/' + id
+			// 				});
+			// 			}
+			// 			this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].ref + "Collection"]([], {
+			// 				url: url + '/' + id,
+			// 				model: model,
+							// parent: {
+							// 	instance: this,
+							// 	path: ""
+							// }
+			// 			});
+			// 		} else {
+			// 			this._virtuals[id] = new App.models[this.schema.virtuals[id].ref + "Model"]({}, {
+			// 				url: url + '/' + id,
+			// 				parent: {
+			// 					instance: this,
+			// 					path: ""
+			// 				}
+			// 			});
+			// 		}
+			// 	}
+			// 	return this._virtuals[id];
+			// } else 
+			if (id == "new") {
 				var doc = new this.model({}, {
 					urlRoot: url,
 					parent: {
@@ -136,6 +134,7 @@ define([
 
 				return doc;
 			} else {
+				// ??
 				var doc = Collection.prototype.get.apply(this, arguments);
 				if (!doc && arguments.callee.caller != Collection.prototype.set) {
 					this.add(new this.model({
@@ -173,37 +172,12 @@ define([
 			return doc;
 		},
 
-		// set: function (models, options) {
-		// 	//ids array
-		// 	if (is.Array(models) && models.length && !is.Object(models[0])) {
-		// 		wrappedModels = [];
-		// 		models.forEach(function (model) {
-		// 			wrappedModels.push({
-		// 				_id: model
-		// 			});
-		// 		});
-		// 		models = wrappedModels;
-		// 		return this.set(models, options);
-		// 	}
-
-		// 	return Collection.prototype.set.apply(this, arguments);
-		// },
-
 		add: function (model, options) {
 			// _isId -> will be deprecated
 			var _isId = false;
 
-
-
 			var ret = Collection.prototype.add.apply(this, arguments);
 			
-			// //Try add simple _id
-			// if (is.String(model)) {
-			// 	_isId = true;
-			// 	this.add({_id:model});
-			// }
-			// var ret = Collection.prototype.add.apply(this, [model, options]);
-
 			var added = this.last();
 
 			if (added) {

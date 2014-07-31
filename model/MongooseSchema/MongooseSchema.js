@@ -93,15 +93,6 @@ define([
 			return '/api/'+this.getCollection().name;
 		},
 
-		generateSubSchema: function(){
-			for(var attribute in this.getDocument().tree){
-				this.generateSubSchemaForAttribute(attribute, this.getDocument().tree[attribute]);
-			}
-			for(var attribute in this.getDocument().virtuals){
-				this.generateSubSchemaForAttribute(attribute, this.getDocument().virtuals[attribute]);
-			}
-		},
-
 		getAttributes: function(){
 			if (!this._allAttributes) {
 				this._allAttributes = {};
@@ -113,25 +104,49 @@ define([
 			return this.getDocument().actions
 		},
 
+		generateSubSchema: function(){
+			this.generateDocumentSubSchemas();
+			this.generateCollectionSubSchemas();
+		},
+
+		generateDocumentSubSchemas: function(){
+			for(var attribute in this.getDocument().tree){
+				this[attribute] = this.getAttributes()[attribute] = this.generateSubSchemaForAttribute(attribute, this.getDocument().tree[attribute]);
+			}
+			for(var attribute in this.getDocument().virtuals){
+				this[attribute] = this.getAttributes()[attribute] = this.generateSubSchemaForAttribute(attribute, this.getDocument().virtuals[attribute]);
+			}
+		},
+
+		generateCollectionSubSchemas: function(){
+			this.collection = {};
+			for(var attribute in this.getCollection().virtuals){
+				// if (attribute == "stream") {
+				// 	debugger
+				// };
+				this.collection[attribute] = this.generateSubSchemaForAttribute(attribute, this.getCollection().virtuals[attribute]);
+			}
+		},
+
 		generateSubSchemaForAttribute: function(attribute, jsonSchema){
 		
-			this.getAttributes()[attribute] = app.SchemaFactory(jsonSchema, this, attribute, this._override.model.attrs[attribute]);
+			var subSchema = app.SchemaFactory(jsonSchema, this, attribute, this._override.model.attrs[attribute]);
 
-			// if (attribute == "space2") {
-				//Is a semi embedded (old mPath notation)
-				if (this.getAttributes()[attribute] instanceof app.MongooseSchema) {
-					this.getAttributes()[attribute].isEmbedded = true;
-				};
-			// };
-			
-
-			if (this._superSchema && (attribute in this._superSchema)) {
-				this.getAttributes()[attribute].setSuperSchema(this._superSchema[attribute])
+			if (subSchema instanceof app.MongooseSchema) {
+				subSchema.isEmbedded = true;
 			};
 
-			this[attribute] = this.getAttributes()[attribute];
-			this[attribute].generateSubSchema();
-			return this[attribute]
+			if (this._superSchema && (attribute in this._superSchema)) {
+				subSchema.setSuperSchema(this._superSchema[attribute])
+				// this.getAttributes()[attribute].setSuperSchema(this._superSchema[attribute])
+			};
+
+			// var subSchema = this.getAttributes()[attribute];
+			subSchema.generateSubSchema();
+			return subSchema;
+			// this[attribute] = this.getAttributes()[attribute];
+			// this[attribute].generateSubSchema();
+			// return this[attribute]
 		},
 
 		loadClasses: function() {

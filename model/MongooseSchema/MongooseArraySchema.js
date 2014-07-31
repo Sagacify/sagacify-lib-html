@@ -23,10 +23,6 @@ define([
 		},
 
 		cannotGenerateCollection: function(){
-			// if (this.getExtendsPath() == "EventResource.relatedResources") {
-			// 	debugger
-			// };
-
 			return this.primitifContent() && !this.getContent().isModelReference() 
 		},
 
