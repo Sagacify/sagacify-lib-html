@@ -121,9 +121,7 @@ define([
 		generateCollectionSubSchemas: function(){
 			this.collection = {};
 			for(var attribute in this.getCollection().virtuals){
-				// if (attribute == "stream") {
-				// 	debugger
-				// };
+
 				this.collection[attribute] = this.generateSubSchemaForAttribute(attribute, this.getCollection().virtuals[attribute]);
 			}
 		},

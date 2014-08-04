@@ -17,7 +17,8 @@ define([
 			return !this.isModelReference() && !this.type;
 		},
 
-		getModelClass: function(){
+		getModelClass: function(){		
+
 			if (!this._modelClass) {
 				this._override.model.instance()
 
@@ -34,7 +35,7 @@ define([
 				return this._superSchema.getModelClass();
 			};
 			if (!app.MongooseSchemas[this.ref]) {
-				return app.customRef[this.ref];
+				return app.customModelRef[this.ref];
 			};
 			
 			return app.MongooseSchemas[this.ref].getModelClass()

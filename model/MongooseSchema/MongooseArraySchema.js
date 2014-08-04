@@ -53,6 +53,20 @@ define([
 			return this._generatedDefaultCollection;
 		}, 
 
+		defaultCollectionClass: function(){
+
+			if (this.getContent().ref) {
+				console.log("default class for:"+this.getContent().ref)
+
+				if (!app.MongooseSchemas[this.getContent().ref]) {
+					return app.customCollectionRef[this.ref]|| MongooseElement.prototype.defaultCollectionClass.apply(this, arguments);
+				};				
+				
+				return app.MongooseSchemas[this.getContent().ref].getCollectionClass();
+			};
+			return MongooseElement.prototype.defaultCollectionClass.apply(this, arguments);
+		},	
+
 		generateSubSchema: function(){
 			if (this.getContent() instanceof app.MongooseSchema) {
 				this.getContent().generateSubSchema()

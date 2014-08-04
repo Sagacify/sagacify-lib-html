@@ -45,7 +45,7 @@ define([
 		},
 
 		getVirtualAttribute: function(virtualAttribute, options){
-			
+
 			var currentValue = this._virtuals[virtualAttribute];
 
 			if (currentValue != undefined) {
