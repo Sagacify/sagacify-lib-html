@@ -135,7 +135,7 @@ define([
 			};
 		},
 
-		delete: function (url, headers, contentType, data, cbError, cbSuccess) {
+		"delete": function (url, headers, contentType, data, cbError, cbSuccess) {
 			return this.methodWrapper('DELETE', url, headers, contentType, data, cbError, cbSuccess);
 		},
 		post: function (url, headers, contentType, data, cbError, cbSuccess) {

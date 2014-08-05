@@ -16,15 +16,11 @@ define([
 		},
 
 		_paginate: {
-			currentPage: 0,
-			// which page should pagination start from
-			perPage: 0,
-			// how many items per page should be shown (0 is no limit)
-			maxPages: 0,
-			// max pages (0 is not limit) 
-			_maxPagesReached: false,
-			// fill intervals with "dummy" models (useful for grids)
-			dummyModels: false,
+			currentPage: 0,	// which page should pagination start from
+			perPage: 0, // how many items per page should be shown (0 is no limit)
+			maxPages: 0, // max pages (0 is not limit) 
+			_maxPagesReached: false, // fill intervals with "dummy" models (useful for grids)
+			dummyModels: false
 		},
 
 		parent: {
@@ -188,7 +184,7 @@ define([
 			return ret;
 		},
 
-		do: function (action, args) {
+		"do": function (action, args) {
 			var url = this.url instanceof Function ? this.url() : this.url;
 			if (args instanceof Array) {
 				argsObj =   {};
@@ -389,7 +385,7 @@ define([
 						return function () {
 							var argsArray = Array.apply(null, arguments);
 							//return this.do.apply(this, [action, argsArray]);
-							return this.do.apply(this, [action, argsArray[0], argsArray[1]]);
+							return this["do"].apply(this, [action, argsArray[0], argsArray[1]]);
 						};
 					};
 				};
@@ -452,12 +448,9 @@ define([
 
 		removePaginate: function(){
 			this._paginate = {
-				currentPage: 0,
-				// which page should pagination start from
-				perPage: 0,
-				// how many items per page should be shown (0 is no limit)
-				maxPages: 0,
-				// max pages (0 is not limit) 
+				currentPage: 0,	// which page should pagination start from
+				perPage: 0, // how many items per page should be shown (0 is no limit)
+				maxPages: 0, // max pages (0 is not limit) 
 				_maxPagesReached: false
 			};
 		},

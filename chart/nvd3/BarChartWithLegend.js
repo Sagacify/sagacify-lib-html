@@ -65,7 +65,7 @@ define([], function(){
 			svg.datum(data).transition().duration(500).call(chart);
 			legendSvg.datum(data[0].values).transition().duration(500).call(legend);
 			chart.update();
-			$('.nvd3 .nv-legend', chart.container).children().attr('transform', 'translate(33, 5)');
+			//$('.nvd3 .nv-legend', chart.container).children().attr('transform', 'translate(33, 5)');
 		}
 
 		
@@ -92,7 +92,7 @@ define([], function(){
 		        } , 
 		        { 
 		          "label" : "D Label" , 
-		          "value" : 196.45946739256,
+		          "value" : 196.45946739256
 		        } , 
 		        { 
 		          "label" : "E Label" ,

@@ -3,7 +3,7 @@ define([
 	'../prototypes/backbone/backbone',
 	'../model/Model/Model',
 	'../model/Collection',
-	'jquery',
+	'jquery'
 ], function (Marionette, backbone, SagaModel, SagaCollection) {
 	
 	return Marionette.Application.extend({

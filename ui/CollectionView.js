@@ -15,7 +15,7 @@ define([
 			if (this.elCssClass) {
 				this.$el.addClass(this.elCssClass);
 			};
-		}, 
+		}
 
 
 	});

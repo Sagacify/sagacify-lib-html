@@ -32,7 +32,7 @@ define([
 				var getAction = function(action){
 					return function(){
 						return function(args, options){
-							return this.do.apply(this, [action, args, options]);
+							return this["do"].apply(this, [action, args, options]);
 						};
 					};
 				};
@@ -70,7 +70,7 @@ define([
 				});
 
 				Object.defineProperties(this, properties);
-			},
+			}
 
 
 		}

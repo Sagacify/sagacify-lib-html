@@ -345,7 +345,7 @@ define([
 
 			},
 
-			do: function(action, args, options){
+			"do": function(action, args, options){
 				var url = this.url instanceof Function?this.url(options):this.url;
 				if(args instanceof Array) {
 					argsObj = {};
@@ -404,7 +404,7 @@ define([
 				var getAction = function(action){
 					return function(){
 						return function(args, options){
-							return this.do.apply(this, [action, args, options]);
+							return this["do"].apply(this, [action, args, options]);
 						};
 					};
 				};
@@ -590,7 +590,7 @@ define([
 
 			validForSave : function(){
 				return null;
-			},
+			}
 
 		}		
 	}

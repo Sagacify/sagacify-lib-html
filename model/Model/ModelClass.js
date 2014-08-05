@@ -1,5 +1,5 @@
 define([
-	'../../types/validateType',
+	'../../types/validateType'
 	], function(is){
 	
 	var Klass = {};

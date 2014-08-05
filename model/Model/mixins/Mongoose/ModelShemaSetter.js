@@ -348,7 +348,7 @@ define([
 			},
 
 
-			do: function(action, args, options){
+			"do": function(action, args, options){
 				var url = this.url instanceof Function?this.url(options):this.url;
 				if(args instanceof Array) {
 					argsObj = {};
