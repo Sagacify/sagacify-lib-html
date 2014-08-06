@@ -159,11 +159,58 @@ define([
 				return this;
 			},
 
+			getSGSort: function(){
+				if (!this._sort) {
+					this._sort = {};
+				};
+				return this._sort;
+			},
+
+			addSGSort: function(name, asc, options){
+				options = _.defaults(options||{}, {
+					silent:false
+				})				
+				this.getSGSort()[name] = asc;
+				(!options.silent) && this.trigger('change');
+			},
+
+			removeSGSort: function(name, options){
+				options = _.defaults(options||{}, {
+					silent:false
+				})				
+				delete (this.getSGSort())[name];
+				(!options.silent) && this.trigger('change');
+			},
+
+
 			sgFilter: function (filters) {
 				this._filters = filters;
 				return this;
 			},
 
+
+			getSGFilter: function(){
+				if (!this._filters) {
+					this._filters = {};
+				};
+				return this._filters;
+			},
+
+			addSGFilter: function(filterName, value, options){
+				options = _.defaults(options||{}, {
+					silent:false
+				})								
+				this.getSGFilter()[filterName] = value;
+				(!options.silent) && this.trigger('change');
+			},
+
+			removeSGFilter: function(filterName, options){
+				options = _.defaults(options||{}, {
+					silent:false
+				})								
+				delete this.getSGFilter()[filterName];
+				(!options.silent) && this.trigger('change');
+			},
 
 			isLoading: function () {
 				return this._isLoading;

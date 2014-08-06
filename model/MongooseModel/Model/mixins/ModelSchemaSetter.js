@@ -123,7 +123,7 @@ define([
 					if (attribute in this.mongooseSchema) {
 						return this.setMSchemaAttribute(attribute, raw, options);
 					} else {
-						if(is.Object(raw)){
+						if(is.Object(raw) && !raw instanceof Backbone.Model){
 							//Check mpath attributes
 							for(var key in raw){
 								this.set(attribute+"."+key, raw[key]);

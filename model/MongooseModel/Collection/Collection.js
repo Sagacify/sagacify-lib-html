@@ -87,38 +87,6 @@ define([
 				return this.getVirtualAttribute(id, options);
 			};
 
-			// if (this.schema && this.schema.virtuals[id]) {
-			// 	if (!this._virtuals[id]) {
-			// 		if (this.schema.virtuals[id] instanceof Array) {
-			// 			var model = null;
-			// 			if (app.customRef[this.schema.virtuals[id][0].ref]) {
-			// 				debugger
-			// 				model = app.customRef[this.schema.virtuals[id][0].ref]
-			// 			} else {
-			// 				model = App.models[this.schema.virtuals[id][0].ref + "Model"].extend({
-			// 					urlRoot: url + '/' + id
-			// 				});
-			// 			}
-			// 			this._virtuals[id] = new App.collections[this.schema.virtuals[id][0].ref + "Collection"]([], {
-			// 				url: url + '/' + id,
-			// 				model: model,
-							// parent: {
-							// 	instance: this,
-							// 	path: ""
-							// }
-			// 			});
-			// 		} else {
-			// 			this._virtuals[id] = new App.models[this.schema.virtuals[id].ref + "Model"]({}, {
-			// 				url: url + '/' + id,
-			// 				parent: {
-			// 					instance: this,
-			// 					path: ""
-			// 				}
-			// 			});
-			// 		}
-			// 	}
-			// 	return this._virtuals[id];
-			// } else 
 			if (id == "new") {
 				var doc = new this.model({}, {
 					urlRoot: url,

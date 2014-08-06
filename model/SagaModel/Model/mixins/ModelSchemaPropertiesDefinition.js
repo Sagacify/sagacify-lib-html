@@ -17,7 +17,12 @@ define([
 				if (setter) {
 					descriptor.set = setter;	
 				};
-				Object.defineProperty(this, attribute, descriptor);
+				try {
+					Object.defineProperty(this, attribute, descriptor);	
+				} catch(e){
+					debugger
+					throw 'error with property '+attribute;
+				}
 			},
 
 			_defineGetter : function(attribute){

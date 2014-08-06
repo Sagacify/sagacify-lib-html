@@ -17,7 +17,6 @@ define([
 			this._parent = options.parent;
 			this._subPath = options.subPath;
 
-			// this._override = options.override;
 			this.generateCompliantOverride(options.override)
 
 			Backbone.Model.prototype.initialize.apply(this, arguments);
@@ -39,6 +38,7 @@ define([
 			override.collection = override.collection||{};
 			override.collection.instance = override.collection.instance||emptyFunction;
 			override.collection.clazz = override.collection.clazz||emptyFunction;
+			override.collection.attrs = override.collection.attrs||{};
 
 			this._override = override;
 		},
@@ -48,6 +48,10 @@ define([
 				return this.getModelName();
 			};
 			return this._parent.getExtendsPath()+"."+this._subPath;
+		},
+
+		showPath: function(){
+			console.log("---->"+this.getExtendsPath());
 		},
 
 		setSuperSchema: function(superSchema){
