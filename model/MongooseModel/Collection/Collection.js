@@ -101,23 +101,26 @@ define([
 				}
 
 				return doc;
-			} else {
-				// ??
-				var doc = Collection.prototype.get.apply(this, arguments);
-				if (!doc && arguments.callee.caller != Collection.prototype.set) {
-					this.add(new this.model({
-						_id: id
-					}, {
-						urlRoot: url,
-						parent: {
-							instance: this,
-							path: ""
-						}
-					}));
-					doc = this.last();
-				}
-				return doc;
 			}
+
+			return Collection.prototype.get.apply(this, arguments);
+			//  else {
+			// 	// ??
+			// 	var doc = Collection.prototype.get.apply(this, arguments);
+			// 	if (!doc && arguments.callee.caller != Collection.prototype.set) {
+			// 		this.add(new this.model({
+			// 			_id: id
+			// 		}, {
+			// 			urlRoot: url,
+			// 			parent: {
+			// 				instance: this,
+			// 				path: ""
+			// 			}
+			// 		}));
+			// 		doc = this.last();
+			// 	}
+			// 	return doc;
+			// }
 		},
 
 		getBySlug: function (slug) {
