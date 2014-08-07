@@ -35,6 +35,9 @@ define([
 
 		constructor: function(attrs, options){
 			this.removePaginate();
+			this.resetSGSort();
+			this.resetSGFilter();
+
 
 			if (options) {
 				if (options.url) {

@@ -154,6 +154,11 @@ define([
 				});
 			},
 
+
+			resetSGSort: function(){
+				this.sgSort({});
+			},
+
 			sgSort: function (sort) {
 				this._sort = sort;
 				return this;
@@ -183,11 +188,14 @@ define([
 			},
 
 
+			resetSGFilter: function(){
+				this.sgFilter({});
+			},
+
 			sgFilter: function (filters) {
 				this._filters = filters;
 				return this;
 			},
-
 
 			getSGFilter: function(){
 				if (!this._filters) {

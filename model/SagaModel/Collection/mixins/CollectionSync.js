@@ -27,7 +27,7 @@ define([
 
 			fetch: function (options) {
 				options = _.defaults(options||{}, {
-					paginate:false
+					paginate:false,
 				})
 
 				if (options.paginate) {
@@ -55,9 +55,7 @@ define([
 					me._isLoading = false;
 					me.trigger('loading-stop');
 				}
-
 				return  Backbone.Collection.prototype.fetch.apply(this, [options]);
-
 			},
 
 		}

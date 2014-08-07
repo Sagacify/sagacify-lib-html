@@ -10,7 +10,19 @@ define([
 				};
 			},
 
+			_generatedGetterAndSetter: function(){
+				if (!this.__generatedGetterAndSetter) {
+					this.__generatedGetterAndSetter = {};
+				};
+				return this.__generatedGetterAndSetter;
+			},	
+
 			_generateGetSetForAttribute: function(attribute){
+
+				if (this._generatedGetterAndSetter()[attribute]) {
+					return;
+				};
+
 				var descriptor = {};
 				descriptor.get = this._defineGetter(attribute);
 				var setter = this._defineSetter(attribute) 
@@ -18,7 +30,9 @@ define([
 					descriptor.set = setter;	
 				};
 				try {
-					Object.defineProperty(this, attribute, descriptor);	
+					Object.defineProperty(this, attribute, descriptor);
+					this._generatedGetterAndSetter()[attribute] = true;
+
 				} catch(e){
 					debugger
 					throw 'error with property '+attribute;
