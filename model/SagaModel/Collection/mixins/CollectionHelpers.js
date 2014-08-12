@@ -57,11 +57,11 @@ define([
 			},
 
 			clear: function ()  {
-				var len = this.models.length;
-				while (len--) {
-					this.models[len].clear();
-					this.remove(this.models[len]);
-				}
+				// var len = this.models.length;
+				// while (len--) {
+				// 	this.models[len].clear();
+				// 	this.remove(this.models[len]);
+				// }
 			},		
 
 
