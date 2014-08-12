@@ -24,9 +24,16 @@ define([
 			},			
 
 			validate: function(attrs, options){
-				
+				options = _.defaults(options||{}, {
+					attrsToValidate :null,
+				})
+
 				var attrs = attrs||this.mongooseSchema.getAttributes();
 				
+				if (options.attrsToValidate) {
+					attrs = options.attrsToValidate;
+				};
+
 				var attributes = _.keys(attrs);
 				for (var i = 0; i < attributes.length; i++) {
 					

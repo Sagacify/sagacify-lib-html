@@ -146,7 +146,6 @@ define([
 
 
 			batchSet: function(dict, options){
-
 				if(dict instanceof SagaModel){
 					return Backbone.Model.prototype.set.apply(this, [dict.toJSON(), options]);
 				}
