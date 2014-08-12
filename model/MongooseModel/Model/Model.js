@@ -33,6 +33,8 @@ define([
 
 		constructor: function(attributes, options){
 			if(options){
+				if("custom_url" in options)
+					this.custom_url = options.custom_url;
 				if("url" in options)
 					this.urlRoot = options.url;
 				if("urlRoot" in options)

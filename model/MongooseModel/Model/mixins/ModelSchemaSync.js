@@ -36,6 +36,8 @@ define([
 					recordedChanges:false,					
 				});
 
+				options.attrsToValidate = attributesToInclude;
+
 				options.recordedChanges && this.stopRecordingChange();
 
 				if (options.recordedChanges) {
