@@ -49,8 +49,12 @@ define([
 					me._isLoading = false;
 					me.trigger('loading-stop');
 				}
+
 				options.error = function(error){
-					error && error.apply(this, arguments);
+					if (error && error.apply) {
+						error.apply(this, arguments);
+					};
+					
 					me.trigger("Fetch:error", error);
 					me._isLoading = false;
 					me.trigger('loading-stop');

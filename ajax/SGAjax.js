@@ -71,6 +71,12 @@ define([
 			};
 
 			promise.fail(function(err){
+
+				//Reject from client
+				if (err.state() == "rejected") {
+					return;
+				};
+
 				if (!err.status) {
 					app.nc.trigger('socket:no_response');
 				};

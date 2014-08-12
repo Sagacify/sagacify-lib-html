@@ -209,6 +209,7 @@ define([
 					silent:false
 				})								
 				this.getSGFilter()[filterName] = value;
+				
 				(!options.silent) && this.trigger('change');
 			},
 
