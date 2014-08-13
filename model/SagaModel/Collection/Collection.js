@@ -49,9 +49,10 @@ define([
 				}
 			}
 
-			return Backbone.Collection.prototype.constructor.apply(this, arguments);
+			var res = Backbone.Collection.prototype.constructor.apply(this, arguments);
 			this.updateUrl()
 			this._handleCustomEvents();
+			return res;
 		},
 
 
@@ -70,12 +71,18 @@ define([
 				if (!this.parent.instance.id) {
 					var me = this;
 					this.listenTo(this.parent.instance, 'change:'+this.parent.instance.idAttribute, function(parentModel, parentIdentifier){
-						var regeneratedUrl = parentModel.getUrlFor(me);
-						me.url = regeneratedUrl||me.url;
-						me.stopListening(this.parent.instance, 'change:'+this.parent.instance.idAttribute);
+						me.url = parentModel.url()+'/'+me.parent.path;
+
+						// var regeneratedUrl = me.parent.instance.getUrlFor(me);
+						// me.url = regeneratedUrl||me.url;
+						// me.stopListening(this.parent.instance, 'change:'+this.parent.instance.idAttribute);
 					})
-				};
-			};
+				}
+				//  else {
+				//  	debugger
+				// 	me.url = this.parent.instance.getUrlFor(me)||me.url;
+				// }
+			}
 		},
 
 

@@ -150,13 +150,18 @@ define([
 					return Backbone.Model.prototype.set.apply(this, [dict.toJSON(), options]);
 				}
 
+				// if (this.idAttribute in dict) {
+				// 	this[this.idAttribute] = dict[this.idAttribute];
+				// 	delete dict[this.idAttribute];
+				// };
+
 				var specialKeys = [];
 
 				_.each(dict, function(value, attribute){
 					if (value != undefined) {
-						var currentVal = this.get(attribute);
+						// var currentVal = this.get(attribute);
 						if (this._isARelationship(attribute)) {
-							specialKeys.push(attribute);	
+							specialKeys.push(attribute);
 						};
 					};
 				}, this);
@@ -179,15 +184,17 @@ define([
 				return this;
 			},	
 
-			getUrlFor: function(subModel){
-				var cols = this.getAllCollections();
-				for(var attribute in cols){
-					if (cols[attribute] == subModel) {
-						return this.url()+"/"+attribute;
-					};
-				}	
-				return null;
-			}
+			// getUrlFor: function(subModel){
+				
+				
+			// 	// var cols = this.getAllCollections();
+			// 	// for(var attribute in cols){
+			// 	// 	if (cols[attribute] == subModel) {
+			// 	// 		return this.url()+"/"+attribute;
+			// 	// 	};
+			// 	// }	
+			// 	return null;
+			// }
 
 		}
 	}

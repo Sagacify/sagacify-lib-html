@@ -149,6 +149,7 @@ define([
 			},
 
 			set: function (models, options) {
+
 				//ids array
 				if (is.Array(models) && models.length && !is.Object(models[0])) {
 					wrappedModels = [];
@@ -161,7 +162,8 @@ define([
 					return this.set(models, options);
 				}
 
-				return Backbone.Collection.prototype.set.apply(this, arguments);
+				var res = Backbone.Collection.prototype.set.apply(this, arguments);
+
 			},
 
 

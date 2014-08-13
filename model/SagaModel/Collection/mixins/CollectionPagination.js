@@ -62,9 +62,14 @@ define([
 				var success = options.success;
 				var me = this;
 				options.success = function(data, resp){
+
+					if (options.parse) resp = me.parse(resp, options);
+
 					me._paginate.currentPage++;
-					debugger
-					me._paginate._maxPagesReached = me._paginate.currentPage == me._paginate.maxPages || resp.length < me._paginate.perPage;
+					me._paginate._maxPagesReached = 
+						(me._paginate.currentPage == me._paginate.maxPages) || 
+						(resp < me._paginate.perPage);
+
 					return success && success.apply(this, arguments);
 				}
 				return options;
