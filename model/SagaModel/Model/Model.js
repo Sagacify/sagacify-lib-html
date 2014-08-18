@@ -1,9 +1,13 @@
 define([
 	'backbone',
-	'./mixins/ModelSchemaPropertiesDefinition'
+	'./mixins/ModelSchemaPropertiesDefinition',
+	'./mixins/ModelGetter',
+	'./mixins/ModelSetter',
 ], function (
 	Backbone,
-	ModelSchemaPropertiesDefinition
+	ModelSchemaPropertiesDefinition,
+	ModelGetter,
+	ModelSetter
 	) {
 
 	var SagaModel = Backbone.Model.extend({
@@ -24,6 +28,11 @@ define([
 	});
 
 	_.extend(SagaModel.prototype, ModelSchemaPropertiesDefinition(SagaModel));
+	_.extend(SagaModel.prototype, ModelGetter(SagaModel));
+	_.extend(SagaModel.prototype, ModelSetter(SagaModel));
+
+	
+
 
 	return SagaModel;
 });

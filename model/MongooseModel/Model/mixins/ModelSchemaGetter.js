@@ -32,9 +32,6 @@ define([
 					//Primitive array?
 					return [];
 				};
-				if (attribute == "comments") {
-					debugger
-				};
 				var collectionUrl = this._generateUrl()+'/'+attribute;
 				var collection = new Collection([], {
 						parent:{
@@ -95,13 +92,13 @@ define([
 				return this.mongooseSchema[attribute] instanceof app.MongoosePrimitiveSchema;	
 			},
 
-			__existGetterForAttribute: function(attribute){
-				if (!_.isString(attribute)) {
-					return false
-				};
-				var getter = attribute.asGetter();
-				return (getter in this) && (_.isFunction(this[getter]));
-			},
+			// __existGetterForAttribute: function(attribute){
+			// 	if (!_.isString(attribute)) {
+			// 		return false
+			// 	};
+			// 	var getter = attribute.asGetter();
+			// 	return (getter in this) && (_.isFunction(this[getter]));
+			// },
 
 			
 			//@pre attribute in this.mongooseSchema
@@ -133,12 +130,12 @@ define([
 			get: function(attribute, options){
 				options = _.defaults(options||{}, {
 					lazyCreation:true, 
-					getterForce:false
+					// getterForce:false
 				});
 
-				if (!options.getterForce &&  this.__existGetterForAttribute(attribute)) {
-					return this[attribute.asGetter()](attribute, options);
-				};
+				// if (!options.getterForce &&  this.__existGetterForAttribute(attribute)) {
+				// 	return this[attribute.asGetter()](attribute, options);
+				// };
 
 				//mPath management
 				if (attribute.contains('.')) {
@@ -151,7 +148,6 @@ define([
 						return subModel.get(subAttri, {lazyCreation:options.lazyCreation});
 					}					
 				};
-
 
 				var value = Backbone.Model.prototype.get.apply(this, arguments);
 
