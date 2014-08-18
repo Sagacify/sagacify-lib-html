@@ -33,11 +33,6 @@ define([
 
 		getCollectionClass: function(){
 
-			// if (this.getExtendsPath() == "Resource.relatedResources") {
-			// 	debugger
-			// };
-			// this.showPath();
-
 			if (this.cannotGenerateCollection()) {
 				return null;
 			};
@@ -61,9 +56,12 @@ define([
 
 		defaultCollectionClass: function(){
 
+			if (this._superSchema) {
+				return this._superSchema.getCollectionClass();
+			};
+
 			if (this.getContent().ref) {
 				//console.log("default class for:"+this.getContent().ref)
-
 				if (!app.MongooseSchemas[this.getContent().ref]) {
 					return app.customCollectionRef[this.ref]|| MongooseElement.prototype.defaultCollectionClass.apply(this, arguments);
 				};				
