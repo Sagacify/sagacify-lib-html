@@ -20,17 +20,19 @@ define([
 					this.listenTo(collection, 'add', function(addedModel){
 						me.recordChange(attribute, {add:addedModel});
 					});
+
 					this.listenTo(collection, 'remove', function(deletedModel){
 						me.recordChange(attribute, {remove:deletedModel});
 					});
+					
 				} else {
-					this.stopListening(collection);	
+					this.stopListening(collection, 'add');
+					this.stopListening(collection, 'remove');
 				}
 			},
 
 			startRecordingChange: function(){
 				this.set('record-change', false);
-
 				this.recordCollectionsChanges(true);
 				this._isRecordingChanges = true;
 			},
@@ -40,7 +42,7 @@ define([
 				this.set('record-change', false);
 
 				this.recordCollectionsChanges(false);
-				this._isRecordingChanges = true;
+				this._isRecordingChanges = false;
 			},
 
 			resetRecord: function(){
@@ -59,13 +61,17 @@ define([
 			},
 
 			recordChange: function(attribute, raw){
+				var currentValue = this.get(attribute, {lazyCreation:false});
+				if (raw == currentValue){
+					return;
+				}
+
 				this.set('record-change', true, {record:false});
 				if (!(attribute in this._recorded)) {
 					this._recorded[attribute] = [];
 				};
 				this._recorded[attribute].push(raw);
 			},
-
 
 
 			// @pre attribute in this.mongooseSchema
@@ -97,23 +103,23 @@ define([
 			},
 
 
-			__existSetterForAttribute: function(attribute){
-				if (!_.isString(attribute)) {
-					return false
-				};
-				var setter = attribute.asSetter();
-				return (setter in this) && (_.isFunction(this[setter]));
-			},
+			// __existSetterForAttribute: function(attribute){
+			// 	if (!_.isString(attribute)) {
+			// 		return false
+			// 	};
+			// 	var setter = attribute.asSetter();
+			// 	return (setter in this) && (_.isFunction(this[setter]));
+			// },
 
 			set: function SGSetter(attribute, raw, options){
 				options = _.defaults(options||{}, {
 					record:true,
-					setterForce:false
+					// setterForce:false
 				});
 
-				if (!options.setterForce &&  this.__existSetterForAttribute(attribute)) {
-					return this[attribute.asSetter()](raw, options);
-				};
+				// if (!options.setterForce &&  this.__existSetterForAttribute(attribute)) {
+				// 	return this[attribute.asSetter()](raw, options);
+				// };
 
 				if (this.isRecordingChanges() && options.record) {
 					this.recordChange(attribute, raw);
@@ -149,11 +155,6 @@ define([
 				if(dict instanceof SagaModel){
 					return Backbone.Model.prototype.set.apply(this, [dict.toJSON(), options]);
 				}
-
-				// if (this.idAttribute in dict) {
-				// 	this[this.idAttribute] = dict[this.idAttribute];
-				// 	delete dict[this.idAttribute];
-				// };
 
 				var specialKeys = [];
 

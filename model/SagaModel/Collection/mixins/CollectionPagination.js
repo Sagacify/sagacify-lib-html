@@ -63,12 +63,16 @@ define([
 				var me = this;
 				options.success = function(data, resp){
 
-					if (options.parse) resp = me.parse(resp, options);
+					if (options.parse) {
+						objects = me.parse(resp, options)
+					} else {
+						objects.resp;
+					}
 
 					me._paginate.currentPage++;
 					me._paginate._maxPagesReached = 
 						(me._paginate.currentPage == me._paginate.maxPages) || 
-						(resp < me._paginate.perPage);
+						(objects < me._paginate.perPage);
 
 					return success && success.apply(this, arguments);
 				}
@@ -183,6 +187,7 @@ define([
 				})				
 				this.getSGSort()[name] = asc;
 				(!options.silent) && this.trigger('change');
+				(!options.silent) && this.trigger('add:sort',name, asc);
 			},
 
 			removeSGSort: function(name, options){
@@ -191,8 +196,8 @@ define([
 				})				
 				delete (this.getSGSort())[name];
 				(!options.silent) && this.trigger('change');
+				(!options.silent) && this.trigger('add:sort', name);
 			},
-
 
 			resetSGFilter: function(){
 				this.sgFilter({});
@@ -217,6 +222,7 @@ define([
 				this.getSGFilter()[filterName] = value;
 				
 				(!options.silent) && this.trigger('change');
+				(!options.silent) && this.trigger('add:filter',filterName, value);
 			},
 
 			removeSGFilter: function(filterName, options){
@@ -225,6 +231,7 @@ define([
 				})								
 				delete this.getSGFilter()[filterName];
 				(!options.silent) && this.trigger('change');
+				(!options.silent) && this.trigger('remove:filter',filterName);
 			},
 
 			isLoading: function () {
