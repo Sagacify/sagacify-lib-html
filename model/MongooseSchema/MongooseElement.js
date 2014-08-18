@@ -66,15 +66,15 @@ define([
 			if (this._superSchema) {
 				return this._superSchema.getModelClass();
 			};
-
-			return  DefaultModel
+			return (app.defaultMongooseModel && app.defaultMongooseModel()) || DefaultModel
 		},
 
 		defaultCollectionClass: function(){
 			if (this._superSchema) {
 				return this._superSchema.getCollectionClass();
 			};
-			return  DefaultCollection
+			return (app.defaultMongooseCollection && app.defaultMongooseCollection()) || DefaultCollection
+			
 		},
 
 		generateSubSchema: function(){

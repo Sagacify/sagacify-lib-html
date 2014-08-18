@@ -138,9 +138,9 @@ define([
 				if(('token' in results) && ('user' in results)) {
 					App.store.set('token', results.token);
 					App.store.set('id', results.user.username);
-					// App.user = new App.models.UserModel(results.user, {
-					// 	custom_url:'/api/user'
-					// });
+					App.user = new App.models.UserModel(results.user, {
+						custom_url:'/api/user'
+					});
 					App.layout.isLoggedIn(); // not sure it should be called ?!
 				}
 			});

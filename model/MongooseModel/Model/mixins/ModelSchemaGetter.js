@@ -32,9 +32,6 @@ define([
 					//Primitive array?
 					return [];
 				};
-				if (attribute == "comments") {
-					debugger
-				};
 				var collectionUrl = this._generateUrl()+'/'+attribute;
 				var collection = new Collection([], {
 						parent:{
