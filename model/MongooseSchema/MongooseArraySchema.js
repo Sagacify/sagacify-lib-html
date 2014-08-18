@@ -62,6 +62,7 @@ define([
 		defaultCollectionClass: function(){
 
 			if (this.getContent().ref) {
+				//console.log("default class for:"+this.getContent().ref)
 
 				if (!app.MongooseSchemas[this.getContent().ref]) {
 					return app.customCollectionRef[this.ref]|| MongooseElement.prototype.defaultCollectionClass.apply(this, arguments);
