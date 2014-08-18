@@ -91,15 +91,6 @@ define([
 			_isAPrimitive: function(attribute){
 				return this.mongooseSchema[attribute] instanceof app.MongoosePrimitiveSchema;	
 			},
-
-			// __existGetterForAttribute: function(attribute){
-			// 	if (!_.isString(attribute)) {
-			// 		return false
-			// 	};
-			// 	var getter = attribute.asGetter();
-			// 	return (getter in this) && (_.isFunction(this[getter]));
-			// },
-
 			
 			//@pre attribute in this.mongooseSchema
 			getMSchemaAttribute: function(attribute, options){

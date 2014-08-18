@@ -17,7 +17,7 @@ define([
 				});
 
 				if (!options.getterForce &&  this.__existGetterForAttribute(attribute)) {
-					return this[attribute.asGetter()](attribute, options);
+					return this[attribute.asGetter()](attribute, _.clone(options||{}));
 				};
 
 				return  Backbone.Model.prototype.get.apply(this, arguments);

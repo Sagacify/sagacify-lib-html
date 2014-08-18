@@ -103,23 +103,11 @@ define([
 			},
 
 
-			// __existSetterForAttribute: function(attribute){
-			// 	if (!_.isString(attribute)) {
-			// 		return false
-			// 	};
-			// 	var setter = attribute.asSetter();
-			// 	return (setter in this) && (_.isFunction(this[setter]));
-			// },
-
 			set: function SGSetter(attribute, raw, options){
 				options = _.defaults(options||{}, {
 					record:true,
 					// setterForce:false
 				});
-
-				// if (!options.setterForce &&  this.__existSetterForAttribute(attribute)) {
-				// 	return this[attribute.asSetter()](raw, options);
-				// };
 
 				if (this.isRecordingChanges() && options.record) {
 					this.recordChange(attribute, raw);
@@ -172,7 +160,7 @@ define([
 					this.set(specialKeys[i], dict[specialKeys[i]])
 
 					//Remove from primitive dict
-					delete dict[specialKeys[i]]
+					// delete dict[specialKeys[i]]
 				};
 
 				//Process simple attributes

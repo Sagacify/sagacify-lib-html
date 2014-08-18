@@ -32,6 +32,12 @@ define([
 		},
 
 		getCollectionClass: function(){
+
+			// if (this.getExtendsPath() == "Resource.relatedResources") {
+			// 	debugger
+			// };
+			// this.showPath();
+
 			if (this.cannotGenerateCollection()) {
 				return null;
 			};

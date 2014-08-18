@@ -102,6 +102,7 @@ define([], function () {
 
 						this.controller[this.viewAction](e, this.node, this);
 					} else {
+						debugger
 						throw "Unknow thing to do with event " + this.getIdentifier() + " - " + this.node;
 					}
 				}

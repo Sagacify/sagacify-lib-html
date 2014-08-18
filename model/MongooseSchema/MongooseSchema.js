@@ -127,16 +127,6 @@ define([
 		},
 
 		generateSubSchemaForAttribute: function(attribute, jsonSchema){
-		
-
-			// if (attribute == "stream") {
-			// 	if (this.getExtendsPath()== 'Resource') {
-			// 		debugger
-			// 	};
-
-			// 	this.showPath();
-
-			// };
 
 			var subSchema = app.SchemaFactory(jsonSchema, this, attribute, this._override.model.attrs[attribute]||this._override.collection.attrs[attribute]);
 
