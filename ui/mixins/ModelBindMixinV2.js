@@ -9,10 +9,9 @@ define([], function () {
 		this.configureBindFunction();
 
 		this.bind();
-		
-		this.tryTriggerFirstValue();
-	}
 
+		this.tryTriggerFirstValue();
+	};
 
 	_.extend(Binder.prototype, {
 
@@ -20,19 +19,19 @@ define([], function () {
 		// Attribute info: ":name->.html(value)" <=> change:name->.html(value)
 		// Attribute info: ":name" <=> change:name->.html(value)
 		// Attribute info: "change:name" <=> change:name->.html(value)
+		// 
 		// Call nameToEl if present in controller
-		retrieveNodeData: function(){
-			return $(this.node).attr('data-sgbind-'+this.controller.uid);
+		retrieveNodeData: function () {
+			return $(this.node).attr('data-sgbind-' + this.controller.uid);
 		},
-		setNodeData: function(data){
-			$(this.node).attr('data-sgbind-'+this.controller.uid, data);
+		setNodeData: function (data) {
+			$(this.node).attr('data-sgbind-' + this.controller.uid, data);
 		},
 
 		//Prepare the binder
-		parseNodeAttribute: function(){
-
+		parseNodeAttribute: function () {
 			var attributeInfo = this.retrieveNodeData();
-			var splittedAttribute = attributeInfo.split("->")			
+			var splittedAttribute = attributeInfo.split("->");
 
 			this.trigger = null;
 			this.viewAction = null;
@@ -41,14 +40,14 @@ define([], function () {
 			this.trigger = splittedAttribute[0];
 
 			if (!this.trigger) {
-				throw "Error with node "+ this.node;
-			};
+				throw "Error with node " + this.node;
+			}
 
 			//Syntaxic sugar :name  <=> change:name
 			if (this.trigger.startsWith(':')) {
-				this.attribute = this.trigger.replace(':','');
-				this.trigger = 'change'+this.trigger;
-			};
+				this.attribute = this.trigger.replace(':', '');
+				this.trigger = 'change' + this.trigger;
+			}
 
 			if (splittedAttribute.length >= 2) {
 				//Action is define 
@@ -64,15 +63,17 @@ define([], function () {
 					//Simple jquery html function
 					this.viewAction = '$.html(value)';
 				}
-			};
+			}
+
+			$(this.node).removeAttr('data-sgbind-' + this.controller.uid);
 		},
 
 		isJqueryEvalAction: function () {
 			return this.viewAction.startsWith('$');
 		},
 
-		configureBindFunction: function(){
-			this._bindFunction = function(model, value, options){
+		configureBindFunction: function () {
+			this._bindFunction = function (model, value, options) {
 
 				if (this.isJqueryEvalAction()) {
 					//Jquery eval function
@@ -110,9 +111,9 @@ define([], function () {
 		},
 
 		unBind: function () {
-			if (this.trigger =='change:record-change') {
+			if (this.trigger == 'change:record-change') {
 				debugger
-			};
+			}
 
 			this.model.off(this.trigger, this._bindFunction, this);
 			this.controller = null;
@@ -142,7 +143,6 @@ define([], function () {
 				//unknow how to retrieve value.
 			}
 		},
-
 	});
 
 	return {
@@ -150,7 +150,6 @@ define([], function () {
 		modelBindv2: false,
 
 		__createAllBinders: function () {
-
 			if (!this.modelBindv2) {
 				return;
 			}
@@ -166,7 +165,24 @@ define([], function () {
 
 			var me = this;
 			$('[data-sgbind-' + this.uid + ']', this.el).each(function (index) {
-				me.__addBind(new Binder(me.model, $(this), me));
+				// without [] -> single bind
+				// with only one [] -> single bind
+				// with multiple [] -> multiple binds
+				var value = $(this).attr('data-sgbind-' + me.uid);
+
+				if (value.startsWith('[')) {
+					var values = value.match(/\[[^\]]+\]/g);
+					var binds = values.map(function (el) {
+						return el.slice(1, -1);
+					});
+					var self = this;
+					binds.forEach(function (bind) {
+						var el = $(self).attr('data-sgbind-' + me.uid, bind);
+						me.__addBind(new Binder(me.model, el, me));
+					});
+				} else {
+					me.__addBind(new Binder(me.model, $(this), me));
+				}
 			});
 		},
 
@@ -200,13 +216,14 @@ define([], function () {
 		},
 
 		__getModelBind: function (id) {
-			this.__getModelBinds()[id];
+			return this.__getModelBinds()[id];
 		},
 
 		__getModelBinds: function () {
 			if (!this.__binds) {
 				this.__binds = {};
 			}
+
 			return this.__binds;
 		}
 	};

@@ -10,14 +10,15 @@ define([
 			previousModel: function(model){
 				if (!model) {
 					return;
-				};
-				var index = this.indexOf(model)
-				if (index == undefined) {
-					return;
-				};
-				return this.at(index-1);
-			}, 
+				}
 
+				var index = this.indexOf(model);
+				if (index === undefined) {
+					return;
+				}
+
+				return this.at(index - 1);
+			},
 
 			remove: function(predicate){
 				if (predicate && _.isFunction(predicate)) {
@@ -25,11 +26,11 @@ define([
 					this.each(function(model){
 						if (predicate(model)) {
 							toRemove.push(model);
-						};
+						}
 					});
 					this.remove(toRemove);
 					return;
-				};
+				}
 
 				return Backbone.Collection.prototype.remove.apply(this, arguments);
 			},
@@ -37,12 +38,14 @@ define([
 			nextModel: function(model){
 				if (!model) {
 					return;
-				};
-				var index = this.indexOf(model)
-				if (index == undefined) {
+				}
+
+				var index = this.indexOf(model);
+				if (index === undefined) {
 					return;
-				};
-				return this.at(index+1);
+				}
+
+				return this.at(index + 1);
 			},
 
 			removeAll: function () {
@@ -51,7 +54,7 @@ define([
 					removed.push(this.models[i]);
 				}
 				this.remove(removed);
-				this.resetPaginate()
+				this.resetPaginate();
 				this.trigger('remove:all');
 				return removed;
 			},
@@ -62,8 +65,7 @@ define([
 				// 	this.models[len].clear();
 				// 	this.remove(this.models[len]);
 				// }
-			},		
-
+			},
 
 			where: function (attrs, first) {
 				var fun_attrs = {};
@@ -90,7 +92,6 @@ define([
 					return true;
 				});
 			},
-
 
 			root: function () {
 				var instance = this;
@@ -126,8 +127,8 @@ define([
 
 			mergeWithCollection: function(anotherCollection){
 				for (var i = 0; i < anotherCollection.models.length; i++) {
-					this.add(anotherCollection.models[i])
-				};
+					this.add(anotherCollection.models[i]);
+				}
 			},
 
 			saveAndMergeByPosition: function () {
@@ -175,15 +176,6 @@ define([
 				}
 				return  Backbone.Collection.prototype.add.apply(this, [model, options]);
 			},
-
-		}
-
-
-	}
-
-
+		};
+	};
 });
-
-
-
-
