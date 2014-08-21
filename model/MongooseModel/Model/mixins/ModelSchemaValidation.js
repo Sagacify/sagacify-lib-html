@@ -4,64 +4,65 @@ define([
 	'saga/types/validateType',
 	'saga/ajax/SGAjax',
 	'saga/model/ModelError',
-
 ], function (
-	ValidateFormat, 
-	SagaCollection, 
-	is, 
+	ValidateFormat,
+	SagaCollection,
+	is,
 	SGAjax,
 	ModelError
-	) {
-	return function(SagaModel){
+) {
+	return function (SagaModel) {
+
 		return {
 
-			generateError: function(verbose, id){
+			generateError: function (verbose, id) {
 				return new ModelError({
-					verbose:verbose, 
-					identifier:id, 
-					model:this
+					verbose: verbose,
+					identifier: id,
+					model: this
 				});
-			},			
+			},
 
-			validate: function(attrs, options){
-				options = _.defaults(options||{}, {
-					attrsToValidate :null,
-				})
+			validate: function (attrs, options) {
+				options = _.defaults(options || {}, {
+					attrsToValidate: null,
+				});
 
-				var attrs = attrs||this.mongooseSchema.getAttributes();
-				
+				attrs = attrs || this.mongooseSchema.getAttributes();
+
 				if (options.attrsToValidate) {
 					attrs = options.attrsToValidate;
-				};
+				}
 
 				var attributes = _.keys(attrs);
 				for (var i = 0; i < attributes.length; i++) {
-					
-					error = this.checkAttrIsValid(attributes[i])
+
+					error = this.checkAttrIsValid(attributes[i]);
 					if (error) {
-						if (error) {
-							error.model.trigger('invalid', error.model, error);
-						};
+						error.model.trigger('invalid', error.model, error);
+
 						return error;
-					};
-				};
+					}
+				}
 			},
 
-			checkAttrIsValid: function(attribute){
+			checkAttrIsValid: function (attribute) {
 				// if never setted ok
-				var val = this.get(attribute, {lazyCreation:false});
+				var val = this.get(attribute, {
+					lazyCreation: false
+				});
 
-				if (val != undefined) {
+				if (val !== undefined) {
 					//Collection or model
 					if (val.validate) {
 						return val.validate();
-					};
-				};
+					}
+				}
 			},
 
 			isValidationRef: false,
 
-			validationRef: function(){
+			validationRef: function () {
 				// var instance = this;
 				// var path = "";
 				// while(instance){
@@ -82,7 +83,7 @@ define([
 				// return {instance:instance, path:path};
 			},
 
-			sgValidate: function(attr) {
+			sgValidate: function (attr) {
 				// if(is.Array(attr)) {
 				// 	var me = this;
 				// 	var success = true;
@@ -129,10 +130,7 @@ define([
 				// 		true
 				// 	};
 				// }
-			},			
-			
+			}
 		}
 	}
-
-
 });
