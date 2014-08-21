@@ -176,6 +176,10 @@ define([
 
 			if (!this._modelClass) {
 
+				// if (this.getExtendsPath() == 'User') {
+				// 	debugger
+				// };
+
 				var defaultClass = this.defaultModelClass();
 				var instanceOverride = this._override.model.instance(defaultClass);
 				var clazzOverride = this._override.model.clazz(defaultClass);
