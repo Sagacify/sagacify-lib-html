@@ -1,21 +1,17 @@
 define([
 	'backbone',
-	
+
 	'./mixins/CollectionHelpers',
 	'./mixins/CollectionPagination',
 	'./mixins/CollectionSync',
-	
-
 ], function (
-	Backbone, 
+	Backbone,
 
 	CollectionHelpers,
 	CollectionPagination,
 	CollectionSync
-
 ) {
 	var SagaCollection = Backbone.Collection.extend({
-
 
 		_isLoading: false,
 
@@ -32,17 +28,15 @@ define([
 			path: null
 		},
 
-
-		constructor: function(attrs, options){
+		constructor: function (attrs, options) {
 			this.removePaginate();
 			this.resetSGSort();
 			this.resetSGFilter();
 
-
 			if (options) {
 				if (options.url) {
 					this.url = options.url;
-					
+
 				}
 				if (options.parent) {
 					this.parent = options.parent;
@@ -50,11 +44,10 @@ define([
 			}
 
 			var res = Backbone.Collection.prototype.constructor.apply(this, arguments);
-			this.updateUrl()
+			this.updateUrl();
 			this._handleCustomEvents();
 			return res;
 		},
-
 
 		_handleCustomEvents: function () {
 			this.on('add', function () {
@@ -64,13 +57,9 @@ define([
 					me.trigger('sync:remove');
 				});
 			});
-		},		
+		},
 
 		updateUrl: function(){
-
-			// if (this.parent.path == "followers") {
-			// 	debugger
-			// };
 
 			if (this.parent.instance) {
 				if (!this.parent.instance.id) {
@@ -84,11 +73,8 @@ define([
 			}
 		},
 
-
-
-
 	});
-	
+
 	_.extend(SagaCollection.prototype, CollectionHelpers(SagaCollection));
 	_.extend(SagaCollection.prototype, CollectionPagination(SagaCollection));
 	_.extend(SagaCollection.prototype, CollectionSync(SagaCollection));
