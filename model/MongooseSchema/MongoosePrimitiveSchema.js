@@ -17,6 +17,10 @@ define([
 			return !this.isModelReference() && !this.type;
 		},
 
+		isPrimitiveValue: function(){
+			return this.type && !this.isModelReference() && !this.freeType()
+		},
+
 		getModelClass: function(){		
 
 			if (!this._modelClass) {

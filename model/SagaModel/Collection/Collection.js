@@ -67,21 +67,20 @@ define([
 		},		
 
 		updateUrl: function(){
+
+			// if (this.parent.path == "followers") {
+			// 	debugger
+			// };
+
 			if (this.parent.instance) {
 				if (!this.parent.instance.id) {
 					var me = this;
-					this.listenTo(this.parent.instance, 'change:'+this.parent.instance.idAttribute, function(parentModel, parentIdentifier){
-						me.url = parentModel.url()+'/'+me.parent.path;
 
-						// var regeneratedUrl = me.parent.instance.getUrlFor(me);
-						// me.url = regeneratedUrl||me.url;
-						// me.stopListening(this.parent.instance, 'change:'+this.parent.instance.idAttribute);
+
+					this.listenTo(this.parent.instance, 'change:'+this.parent.instance.idAttribute, function(parentModel, parentIdentifier){
+						me.url = _.result(parentModel, 'url')+'/'+me.parent.path;
 					})
 				}
-				//  else {
-				//  	debugger
-				// 	me.url = this.parent.instance.getUrlFor(me)||me.url;
-				// }
 			}
 		},
 

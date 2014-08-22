@@ -111,6 +111,10 @@ define([
 					defaultVal = {};
 				};
 
+				// if ((mSchema instanceof app.MongoosePrimitiveSchema) && mSchema.isPrimitiveValue()) {
+				// 	debugger
+				// };
+
 				if (defaultVal) {
 					Backbone.Model.prototype.set.apply(this, [attribute, defaultVal]);	
 				};

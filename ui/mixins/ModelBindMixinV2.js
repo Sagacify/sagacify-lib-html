@@ -19,8 +19,8 @@ define([], function () {
 		// Attribute info: ":name->.html(value)" <=> change:name->.html(value)
 		// Attribute info: ":name" <=> change:name->.html(value)
 		// Attribute info: "change:name" <=> change:name->.html(value)
-		// 
 		// Call nameToEl if present in controller
+		
 		retrieveNodeData: function () {
 			return $(this.node).attr('data-sgbind-' + this.controller.uid);
 		},
@@ -126,6 +126,9 @@ define([], function () {
 		},
 
 		mergeWith: function (anotherBind) {
+			if (!this.node) {
+				debugger
+			};
 			this.node = $(this.node.get().concat(anotherBind.node.get()));
 		},
 
@@ -194,7 +197,7 @@ define([], function () {
 			_.each(this.__getModelBinds(), function (bind, identifier) {
 				bind.unBind();
 			}, this);
-			this.__getModelBinds();
+			this.__binds = {};
 		},
 
 		__addBind: function (bindObj) {
