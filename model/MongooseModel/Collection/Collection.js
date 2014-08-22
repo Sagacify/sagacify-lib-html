@@ -41,6 +41,9 @@ define([
 		},
 
 		mongooseSchemaForVirtual: function(attribute){
+			if (!this.mongooseSchema || !this.mongooseSchema.collection || !this.mongooseSchema.collection[attribute]) {
+				return false
+			};
 			return this.mongooseSchema.collection && this.mongooseSchema.collection[attribute];	
 		},
 
