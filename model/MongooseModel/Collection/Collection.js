@@ -30,7 +30,7 @@ define([
 				options = models;
 			}
 
-
+			console.log("XX");
 			this._virtuals = {};
 			this.defineSchemaProperties();
 			Collection.prototype.constructor.apply(this, arguments);
