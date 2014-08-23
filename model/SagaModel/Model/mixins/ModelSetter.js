@@ -24,7 +24,7 @@ define([
 				});
 
 				if (!options.setterForce &&  this.__existSetterForAttribute(attribute)) {
-					return this[attribute.asSetter()](raw, options);
+					return this[attribute.asSetter()](raw, _.clone(options||{}));
 				};
 
 				if (options.setEach && _.isObject(attribute)) {

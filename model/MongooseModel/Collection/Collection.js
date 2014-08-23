@@ -30,7 +30,7 @@ define([
 				options = models;
 			}
 
-
+			console.log("XX");
 			this._virtuals = {};
 			this.defineSchemaProperties();
 			Collection.prototype.constructor.apply(this, arguments);
@@ -41,6 +41,9 @@ define([
 		},
 
 		mongooseSchemaForVirtual: function(attribute){
+			if (!this.mongooseSchema || !this.mongooseSchema.collection || !this.mongooseSchema.collection[attribute]) {
+				return false
+			};
 			return this.mongooseSchema.collection && this.mongooseSchema.collection[attribute];	
 		},
 

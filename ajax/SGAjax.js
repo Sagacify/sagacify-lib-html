@@ -70,18 +70,20 @@ define([
 				return this;
 			};
 
-			promise.fail(function(err){
+			promise.fail(function(def, error){
 
-				//Reject from client
-				if (err.state() == "rejected") {
+				//Client stop request
+				if (error && error.code && error.code == 100) {
+					app.nc.trigger('Ajax-error', {def:def, error:error});
 					return;
 				};
 
-				if (!err.status) {
+				if (!def.status) {
 					app.nc.trigger('socket:no_response');
 				};
+				
 				if(!promise._preventDefaultError && typeof App.onError == "function"){
-					App.onError(err);
+					App.onError(def);
 				}
 			});
 

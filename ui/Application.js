@@ -39,8 +39,8 @@ define([
 			$.get('/api/app_models', function (structure){
 				App.server_routes = structure.routes;
 
-				// console.log('Models structure : ');
-				// console.log(structure);
+				console.log('Models structure : ');
+				console.log(structure);
 
 				App.models = {};
 				App.collections = {};

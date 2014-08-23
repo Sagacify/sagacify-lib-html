@@ -1,21 +1,17 @@
 define([
 	'backbone',
-	
+
 	'./mixins/CollectionHelpers',
 	'./mixins/CollectionPagination',
 	'./mixins/CollectionSync',
-	
-
 ], function (
-	Backbone, 
+	Backbone,
 
 	CollectionHelpers,
 	CollectionPagination,
 	CollectionSync
-
 ) {
 	var SagaCollection = Backbone.Collection.extend({
-
 
 		_isLoading: false,
 
@@ -32,17 +28,15 @@ define([
 			path: null
 		},
 
-
-		constructor: function(attrs, options){
+		constructor: function (attrs, options) {
 			this.removePaginate();
 			this.resetSGSort();
 			this.resetSGFilter();
 
-
 			if (options) {
 				if (options.url) {
 					this.url = options.url;
-					
+
 				}
 				if (options.parent) {
 					this.parent = options.parent;
@@ -50,11 +44,10 @@ define([
 			}
 
 			var res = Backbone.Collection.prototype.constructor.apply(this, arguments);
-			this.updateUrl()
+			this.updateUrl();
 			this._handleCustomEvents();
 			return res;
 		},
-
 
 		_handleCustomEvents: function () {
 			this.on('add', function () {
@@ -64,33 +57,23 @@ define([
 					me.trigger('sync:remove');
 				});
 			});
-		},		
+		},
 
 		updateUrl: function(){
+
 			if (this.parent.instance) {
 				if (!this.parent.instance.id) {
 					var me = this;
 					this.listenTo(this.parent.instance, 'change:'+this.parent.instance.idAttribute, function(parentModel, parentIdentifier){
 						var parentUrl = typeof parentModel.url == 'string' ? parentModel.url : parentModel.url();
 						me.url = parentUrl+'/'+me.parent.path;
-
-						// var regeneratedUrl = me.parent.instance.getUrlFor(me);
-						// me.url = regeneratedUrl||me.url;
-						// me.stopListening(this.parent.instance, 'change:'+this.parent.instance.idAttribute);
 					})
 				}
-				//  else {
-				//  	debugger
-				// 	me.url = this.parent.instance.getUrlFor(me)||me.url;
-				// }
 			}
 		},
 
-
-
-
 	});
-	
+
 	_.extend(SagaCollection.prototype, CollectionHelpers(SagaCollection));
 	_.extend(SagaCollection.prototype, CollectionPagination(SagaCollection));
 	_.extend(SagaCollection.prototype, CollectionSync(SagaCollection));
