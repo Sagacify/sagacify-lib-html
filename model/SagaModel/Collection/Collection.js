@@ -71,7 +71,8 @@ define([
 				if (!this.parent.instance.id) {
 					var me = this;
 					this.listenTo(this.parent.instance, 'change:'+this.parent.instance.idAttribute, function(parentModel, parentIdentifier){
-						me.url = parentModel.url()+'/'+me.parent.path;
+						var parentUrl = typeof parentModel.url == 'string' ? parentModel.url : parentModel.url();
+						me.url = parentUrl+'/'+me.parent.path;
 
 						// var regeneratedUrl = me.parent.instance.getUrlFor(me);
 						// me.url = regeneratedUrl||me.url;
