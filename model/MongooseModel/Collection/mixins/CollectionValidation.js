@@ -8,7 +8,7 @@ define([
 			validate: function(){
 				var error = undefined;
 				for (var i = 0; i < this.models.length; i++) {
-					error = this.models[i].validate();
+					error = this.models[i].validate && this.models[i].validate();
 					if(error) {
 						return error;
 					}
