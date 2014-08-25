@@ -26,16 +26,15 @@ define([
 
 				var descriptor = {};
 				descriptor.get = this._defineGetter(attribute);
-				var setter = this._defineSetter(attribute)
+				var setter = this._defineSetter(attribute);
 				if (setter) {
 					descriptor.set = setter;
 				}
-				
+
 				try {
 					Object.defineProperty(this, attribute, descriptor);
 					this._generatedGetterAndSetter()[attribute] = true;
 				} catch (e) {
-					debugger
 					throw 'error with property ' + attribute;
 				}
 			},
@@ -52,7 +51,6 @@ define([
 			},
 
 			_defineSetter: function (attribute) {
-
 				var setterName = "set" + attribute.capitalize();
 				if (is.Function(this[setterName]) && this[setterName]) {
 					return this[setterName];
@@ -62,6 +60,6 @@ define([
 					return this.set(attribute, value);
 				};
 			},
-		}
+		};
 	};
 });
