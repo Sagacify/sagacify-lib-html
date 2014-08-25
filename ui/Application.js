@@ -68,7 +68,6 @@ define([
 			for(var ModelName in schemas){
 				app.MongooseSchemas[ModelName] = new MongooseSchema({schema:schemas[ModelName], parent:null, override:this.getModelOverrides()[ModelName]});
 			}
-			delete app['rawSchemas'];
 		},
 
 		loadSchemaClasses: function(){

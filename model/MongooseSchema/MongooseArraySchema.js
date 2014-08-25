@@ -38,7 +38,7 @@ define([
 			};
 
 				if (this.getExtendsPath() == "Space.stream") {
-					debugger
+					// debugger
 				};
 
 			if (!this._generatedDefaultCollection) {
