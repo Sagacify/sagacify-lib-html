@@ -37,7 +37,12 @@ define([
 				return null;
 			};
 
+				if (this.getExtendsPath() == "Space.stream") {
+					debugger
+				};
+
 			if (!this._generatedDefaultCollection) {
+
 
 				var defaultClass = this.defaultCollectionClass();
 				var classOverride = this._override.collection.clazz(defaultClass);
