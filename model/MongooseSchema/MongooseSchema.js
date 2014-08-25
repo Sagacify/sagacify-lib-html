@@ -42,15 +42,20 @@ define([
 				subAttribute = subAttribute.replace(attribute+".", "");
 				tree[subAttribute] = treeSchema;
 			}, this);
-			
-			this.getDocument().tree[attribute] = {
-				collection:{action:{}, name:app.rawSchemas[tree._id.ref].collection.name, virtuals:{}},
-				doc:{
-					tree:tree,
-					modelName:tree._id.ref, 
-					virtuals:{},
-					actions:{}
-				}
+
+
+			try {
+				this.getDocument().tree[attribute] = {
+					collection:{action:{}, name:app.rawSchemas[tree._id.ref].collection.name, virtuals:{}},
+					doc:{
+						tree:tree,
+						modelName:tree._id.ref, 
+						virtuals:{},
+						actions:{}
+					}
+				}				
+			} catch(e){
+				debugger
 			}
 
 			return res;
