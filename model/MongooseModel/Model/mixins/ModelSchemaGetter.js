@@ -8,7 +8,9 @@ define([
 		return {
 
 			__generateModelFor: function(attribute, options){
-
+				if (!this.mongooseSchema) {
+					debugger
+				};
 				var mSchema = this.mongooseSchema[attribute];
 				var Model = mSchema.getModelClass();
 				return new Model(
@@ -30,7 +32,7 @@ define([
 				var Collection = mSchema.getCollectionClass()
 				if (!Collection) {
 					//Primitive array?
-					return [];
+					return [];xy
 				};
 				var collectionUrl = this._generateUrl()+'/'+attribute;
 				var collection = new Collection([], {
@@ -99,11 +101,11 @@ define([
 				var defaultVal = null;
 
 				if (this._isACollectionAttribute(attribute)) {
-					defaultVal = this.__generateCollectionFor(attribute);
+					defaultVal = this.__generateCollectionFor(attribute, options);
 				};
 
 				if (this._isAModelAttribute(attribute)) {
-					defaultVal = this.__generateModelFor(attribute);
+					defaultVal = this.__generateModelFor(attribute, options);
 				};
 
 				//Free type

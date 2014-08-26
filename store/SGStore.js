@@ -36,7 +36,7 @@ define([], function () {
 
 		logout: function () {
 			var rememberMe = App.store.get('rememberMe');
-			if(!((rememberMe === 'true') || (rememberMe === true))) {
+			if(rememberMe !== 'true' && rememberMe !== true) {
 				App.layout.logout();
 			}
 		},

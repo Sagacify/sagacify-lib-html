@@ -84,7 +84,10 @@ define([
 
 			// @pre attribute in this.mongooseSchema
 			setMSchemaAttribute: function (attribute, raw, options) {
-				var currentValue = this.get(attribute);
+				var currentValue = this.get(attribute, {
+					rawData:raw
+				});
+				
 				if (currentValue !== undefined) {
 					if (this._isACollectionAttribute(attribute)) {
 						currentValue.set(raw);

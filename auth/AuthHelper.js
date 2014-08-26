@@ -112,12 +112,14 @@ define([
 				type: 'POST',
 				data: {},
 				auth: true
-			})
-			.always(function (results) {
-				App.memory && App.memory.free();
-				App.layout.isLoggedOut();
-				App.store.clear();
 			});
+			// .always(function (results) {
+			// 	App.memory && App.memory.free();
+			// 	App.layout.isLoggedOut();
+			// });
+
+			App.store.clear();
+			App.layout.isLoggedOut();
 
 			return deferred;
 		},
