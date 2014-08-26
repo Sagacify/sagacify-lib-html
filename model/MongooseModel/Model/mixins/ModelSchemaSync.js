@@ -122,6 +122,10 @@ define([
 					json = _.pick(json, options.attributeToKeep)
 				};
 
+				if ('record-change' in json) {
+					delete json['record-change'];
+				};
+
 				return json;
 			},
 
