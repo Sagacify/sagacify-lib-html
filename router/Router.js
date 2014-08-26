@@ -70,29 +70,28 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 			};
 		},
 
-		navigate: function(){
-			var args = Array.apply(null, arguments);
-			//args[0] = App.uris[args[0]]||args[0];
-			args[0] = this.aliases[args[0]]!=null?this.aliases[args[0]]:args[0];
-			if(!args[1]) {
-				args[1] = {};
-			}
+		navigate: function(route, options){
+			options = _.defaults(options||{}, {
+				silent: false
+			});
+
+			route = this.aliases[route]!=null?this.aliases[route]:route;
 
 			//check if args for route (:var)
-			for(key in args[1]){
-				if(args[0].contains(':'+key)){
-					args[0] = args[0].replace(':'+key, args[1][key]);
+			for(key in options){
+				if(route.contains(':'+key)){
+					route = route.replace(':'+key, options[key]);
 				}
 			}
-			if(!('trigger' in args[1])) {
-				args[1].trigger = true;
+			if(!('trigger' in options)) {
+				options.trigger = true;
 			}
 
-			if(args[1].forceReload && args[0] == Backbone.history.fragment){
+			if(options.forceReload && route == Backbone.history.fragment){
 				this.forceReload();
 			}
 			else{
-				Marionette.AppRouter.prototype.navigate.apply(this, args);
+				Marionette.AppRouter.prototype.navigate.apply(this, [route, options]);
 			}
 		},
 
