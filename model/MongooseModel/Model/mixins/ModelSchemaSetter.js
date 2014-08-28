@@ -139,6 +139,7 @@ define([
 				}
 
 				if (attribute && attribute.isObject()) {
+					options = raw;
 					return this.batchSet(attribute, options);
 				}
 

@@ -134,6 +134,10 @@ define([
 				// 	return this[attribute.asGetter()](attribute, options);
 				// };
 
+				if (!attribute.contains) {
+					debugger
+				};
+
 				//mPath management
 				if (attribute.contains('.')) {
 					
