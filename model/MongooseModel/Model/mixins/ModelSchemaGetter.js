@@ -8,17 +8,14 @@ define([
 		return {
 
 			__generateModelFor: function(attribute, options){
-				if (!this.mongooseSchema) {
-					debugger
-				};
 				var mSchema = this.mongooseSchema[attribute];
 				var Model = mSchema.getModelClass();
 				return new Model(
-					{}, 
+					{},
 					{
-						url: this._generateUrl()+'/'+attribute, 
+						url: this._generateUrl()+'/'+attribute,
 						parent:{
-							instance:this, 
+							instance:this,
 							path:attribute
 						},
 						mongooseSchema: this,
@@ -29,38 +26,41 @@ define([
 
 				var mSchema = this.mongooseSchema[attribute];
 
-				var Collection = mSchema.getCollectionClass()
+				var Collection = mSchema.getCollectionClass();
 				if (!Collection) {
 					//Primitive array?
-					return [];xy
-				};
+					return [];
+				}
+
 				var collectionUrl = this._generateUrl()+'/'+attribute;
 				var collection = new Collection([], {
-						parent:{
-							instance:this, 
-							path:attribute
-						},
-						url: collectionUrl
-					});
+					parent:{
+						instance:this,
+						path:attribute
+					},
+					url: collectionUrl
+				});
+
 				return collection;
 			},
 
 			_isARelationship: function(attribute){
-				if (attribute == "_id") {
+				if(attribute === "_id") {
 					return false;
-				};
+				}
+
 				var mSchema = this.mongooseSchema[attribute];
-				if (!mSchema) {
+				if(!mSchema) {
 					return false;
-				};
+				}
 
-				if (this._isACollectionAttribute(attribute)) {
+				if(this._isACollectionAttribute(attribute)) {
 					return true;
-				};
+				}
 
-				if (this._isAModelAttribute(attribute)) {
+				if(this._isAModelAttribute(attribute)) {
 					return true;
-				};
+				}
 
 				return false;
 			},
