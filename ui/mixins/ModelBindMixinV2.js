@@ -168,6 +168,7 @@ define([], function () {
 
 			var me = this;
 			$('[data-sgbind-' + this.uid + ']', this.el).each(function (index) {
+				debugger
 				// without [] -> single bind
 				// with only one [] -> single bind
 				// with multiple [] -> multiple binds
