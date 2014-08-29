@@ -31,6 +31,10 @@ array_proto.pushFirst = function (item) {
 	return this.splice(0, 0, item);
 };
 
+array_proto.first = function () {
+	return this[0];
+};
+
 array_proto.last = function () {
 	return this[this.length - 1];
 };

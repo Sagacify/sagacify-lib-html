@@ -20,7 +20,7 @@ define([], function () {
 		// Attribute info: ":name" <=> change:name->.html(value)
 		// Attribute info: "change:name" <=> change:name->.html(value)
 		// Call nameToEl if present in controller
-		
+
 		retrieveNodeData: function () {
 			return $(this.node).attr('data-sgbind-' + this.controller.uid);
 		},
@@ -174,12 +174,11 @@ define([], function () {
 				var value = $(this).attr('data-sgbind-' + me.uid);
 
 				if (value.startsWith('[')) {
-					var values = value.match(/\[[^\]]+\]/g);
-					var binds = values.map(function (el) {
-						return el.slice(1, -1);
-					});
+					var values = value.split('],[');
+					values[0] = values.first().slice(1);
+					values[values.length - 1] = values.last().slice(0, -1);
 					var self = this;
-					binds.forEach(function (bind) {
+					values.forEach(function (bind) {
 						var el = $(self).attr('data-sgbind-' + me.uid, bind);
 						me.__addBind(new Binder(me.model, el, me));
 					});
