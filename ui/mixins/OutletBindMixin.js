@@ -15,6 +15,7 @@ define([], function(){
 		outletsBind: false,
 
 		bindOutlets: function(){
+
 			if (!this.outletsBind) {
 				return;
 			};
@@ -34,6 +35,8 @@ define([], function(){
 
 		bindOutlet: function(node, outletName){
 			if (this.getOutlets()[outletName]) {
+				//merge outlet binder
+				this.getOutlets()[outletName] = $(this.getOutlets()[outletName].get().concat([node]));
 				return;
 			};
 
