@@ -54,7 +54,7 @@ define([
 
 				if (val !== undefined) {
 					//Collection or model
-					if (val.validate) {
+					if (val && val.validate) {
 						return val.validate();
 					}
 				}

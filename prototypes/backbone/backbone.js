@@ -1,6 +1,7 @@
 define([
 	'./View',
 	'./Extend',
-	'./Sync'
+	'./Sync',
+	'./History'
 ], function (){
 });

@@ -159,6 +159,7 @@ define([], function () {
 			this._putUids('sgbind');
 
 			if (!this.model) {
+				debugger
 				throw new Error('unknow model');
 			}
 

@@ -61,18 +61,15 @@ define([
 
 				var success = options.success;
 				var me = this;
-				options.success = function(data, resp){
-
+				options.success = function(collection, data){
 					if (options.parse) {
-						objects = me.parse(resp, options)
-					} else {
-						objects.resp;
+						data = me.parse(data, options)
 					}
 
 					me._paginate.currentPage++;
 					me._paginate._maxPagesReached = 
 						(me._paginate.currentPage == me._paginate.maxPages) || 
-						(objects < me._paginate.perPage);
+						(data.length < me._paginate.perPage);
 
 					return success && success.apply(this, arguments);
 				}

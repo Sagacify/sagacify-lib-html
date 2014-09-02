@@ -72,7 +72,7 @@ define(['backbone', 'backbone.marionette'], function(Backbone, Marionette){
 
 		navigate: function(route, options){
 			options = _.defaults(options||{}, {
-				silent: false
+
 			});
 
 			route = this.aliases[route]!=null?this.aliases[route]:route;
