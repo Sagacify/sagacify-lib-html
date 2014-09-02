@@ -24,6 +24,10 @@ define([
 
 			__generateCollectionFor: function(attribute, options){
 
+				// if (attribute == "comments") {
+				// 	debugger
+				// };
+
 				var mSchema = this.mongooseSchema[attribute];
 
 				var Collection = mSchema.getCollectionClass();
