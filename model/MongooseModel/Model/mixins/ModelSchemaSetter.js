@@ -92,6 +92,10 @@ define([
 					if (this._isACollectionAttribute(attribute)) {
 						currentValue.set(raw);
 						this.trigger('change:' + attribute, this, raw);
+						// TODO stopListening
+						this.listenTo(currentValue, 'add remove', function (model, collection, options) {
+							this.trigger('change:' + attribute, model, collection, options);
+						}, this);
 						return;
 					}
 					if (this._isAModelAttribute(attribute)) {
