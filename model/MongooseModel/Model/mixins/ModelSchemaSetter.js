@@ -118,11 +118,11 @@ define([
 					// setterForce:false
 				});
 
-				if (this.isRecordingChanges() && options.record) {
+				if (this.isRecordingChanges() && options.record && _.isString(attribute)) {
 					this.recordChange(attribute, raw);
 				}
 
-				if (attribute && attribute.isString()) {
+				if (attribute && _.isString(attribute)) {
 					if (attribute in this.mongooseSchema) {
 						return this.setMSchemaAttribute(attribute, raw, options);
 					} else {
