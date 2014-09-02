@@ -27,6 +27,7 @@ define([
 			var me = this;
 			$(window).scroll(function (evt){
 				if(me.isBottomReached()) {
+					console.log('bottomReached')
 					me.trigger("bottomReached");
 				}
 			});
