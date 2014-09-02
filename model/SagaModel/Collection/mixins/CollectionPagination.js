@@ -63,13 +63,13 @@ define([
 				var me = this;
 				options.success = function(collection, data){
 					if (options.parse) {
-						data = me.parse(data, options)
+						var items = me.parse(data, options)
 					}
 
 					me._paginate.currentPage++;
 					me._paginate._maxPagesReached = 
 						(me._paginate.currentPage == me._paginate.maxPages) || 
-						(data.length < me._paginate.perPage);
+						(items.length < me._paginate.perPage);
 
 					return success && success.apply(this, arguments);
 				}
