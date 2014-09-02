@@ -80,7 +80,6 @@ define([], function () {
 					var stringToApply = 'this.node' + this.viewAction.substring(1);
 					// console.log("--->"+stringToApply);
 					try {
-
 						eval(stringToApply);
 					} catch (err) {
 						console.log(err);
