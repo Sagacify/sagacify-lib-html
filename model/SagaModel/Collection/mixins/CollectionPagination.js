@@ -65,6 +65,9 @@ define([
 					if (options.parse) {
 						var items = me.parse(data, options)
 					}
+					else{
+						var 	items = data;
+					}
 
 					me._paginate.currentPage++;
 					me._paginate._maxPagesReached = 
