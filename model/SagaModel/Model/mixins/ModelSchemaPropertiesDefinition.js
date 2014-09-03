@@ -41,6 +41,7 @@ define([
 
 			_defineGetter: function (attribute) {
 				var getterName = "get" + attribute.capitalize();
+
 				if (is.Function(this[getterName]) && this[getterName]) {
 					return this[getterName];
 				}

@@ -118,12 +118,9 @@ define([
 					defaultVal = {};
 				}
 
-				// if ((mSchema instanceof app.MongoosePrimitiveSchema) && mSchema.isPrimitiveValue()) {
-				// 	debugger
-				// };
-
 				if (defaultVal) {
-					Backbone.Model.prototype.set.apply(this, [attribute, defaultVal]);
+					SagaModel.__super__.set.apply(this, [attribute, defaultVal]);
+					// Backbone.Model.prototype.set.apply(this, [attribute, defaultVal]);
 				}
 
 				return defaultVal;
@@ -132,12 +129,7 @@ define([
 			get: function (attribute, options) {
 				options = _.defaults(options || {}, {
 					lazyCreation: true,
-					// getterForce:false
 				});
-
-				// if (!options.getterForce &&  this.__existGetterForAttribute(attribute)) {
-				// 	return this[attribute.asGetter()](attribute, options);
-				// };
 
 				//mPath management
 				if (attribute.contains('.')) {
@@ -154,8 +146,8 @@ define([
 						});
 					}
 				}
-
-				var value = Backbone.Model.prototype.get.apply(this, arguments);
+				
+				var value = SagaModel.__super__.get.apply(this, arguments);
 
 				if (!options.lazyCreation) {
 					return value;
