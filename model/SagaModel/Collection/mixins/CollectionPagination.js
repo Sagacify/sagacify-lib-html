@@ -62,13 +62,11 @@ define([
 				var success = options.success;
 				var me = this;
 				options.success = function(collection, data){
+					var items = data;
 					if (options.parse) {
-						var items = me.parse(data, options)
+						items = me.parse(data, options)
 					}
-					else{
-						var 	items = data;
-					}
-
+					
 					me._paginate.currentPage++;
 					me._paginate._maxPagesReached = 
 						(me._paginate.currentPage == me._paginate.maxPages) || 
