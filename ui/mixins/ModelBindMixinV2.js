@@ -52,7 +52,7 @@ define([], function () {
 			if (splittedAttribute.length >= 2) {
 				//Action is define 
 				//if start with $ -> jquery eval function 
-				//Else call delegate 
+				//Else call delegate
 				this.viewAction = splittedAttribute[1];
 			} else {
 				//Default action
