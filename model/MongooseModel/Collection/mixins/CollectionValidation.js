@@ -7,16 +7,16 @@ define([
 
 		return {
 			
-			validate: function () {
+			validate: function (attrs, options) {
 				var error;
 				for (var i = 0; i < this.models.length; i++) {
-					error = this.models[i].validate && this.models[i].validate();
+					error = this.models[i].validate && this.models[i].validate(attrs, options);
 					if (error) {
 						return error;
 					}
 				}
 
-				return undefined;
+				return;
 			},
 
 			generateError: function (verbose, id) {
@@ -25,15 +25,6 @@ define([
 					identifier: id,
 					model: this
 				});
-			},
-
-			isValid: function () {
-				var error = this.validate();
-				if (error) {
-					return false;
-				} else {
-					return true;
-				}
 			}
 		};
 	};

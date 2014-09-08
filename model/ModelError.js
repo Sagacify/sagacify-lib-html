@@ -1,10 +1,8 @@
-define([
-], function () {
-
-	var ModelError = function(options){
-		options = _.defaults(options||{}, {
+define([], function () {
+	var ModelError = function (options) {
+		options = _.defaults(options || {}, {
 			verbose: "Unknow",
-			identifier:0,
+			identifier: 0,
 			model: null
 		});
 
@@ -14,5 +12,4 @@ define([
 	};
 
 	return ModelError;
-
 });
