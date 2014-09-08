@@ -54,6 +54,8 @@ define([
 			this._recorded = {};
 			this.set('record-change', false);
 
+			// window.instances[this.cid] = this;
+
 			return ret;
 		}, 
 
@@ -97,25 +99,28 @@ define([
 		},
 
 		//TODO: improve function to avoid remove embedded models and collections, and clear them
-		clear: function(){
+		clear: function(options){
+			options = _.defaults(options||{}, {
+				recursive:true
+			})
 
-			var attributes = this.mongooseSchema.getAttributes();
-			for(var attribute in attributes){
-				var subSchema = attributes[attribute];
-				var currentValue = this.get(attribute, {lazyCreation:false});
+			//Clear collections
+			var cols = this.getAllCollections({lazyCreation:false});
+			for(var attr in cols){
+				cols[attr].clear(options);
+			}
 
-				if (currentValue) {
-					if (is.Object(currentValue) && 'clear' in currentValue) {
-						currentValue.clear();
-						continue;
-					};
-				};
-			};
+			//Clear embedded models
+			var models = this.getAllModels({lazyCreation:false});
+			for(var attr in models){
+				models[attr].clear(options);	
+			}
 
-			this.attributes = {};
-			// this._mattributes = {};
-			this.changed = {};
-			this.src = null;
+			// this.mongooseSchema = null;
+			this.parent = null;
+
+			window.instances[this.cid] = 'cleared';
+
 			return Model.prototype.clear.apply(this, arguments);
 		},
 

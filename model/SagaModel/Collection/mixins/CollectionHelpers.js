@@ -59,7 +59,13 @@ define([
 				return removed;
 			},
 
-			clear: function ()  {
+			clear: function (options)  {
+				var models = this.models;
+				this.reset([]);
+				for (var i = models.length - 1; i >= 0; i--) {
+					models[i].clear(options);
+				};
+
 				// var len = this.models.length;
 				// while (len--) {
 				// 	this.models[len].clear();
