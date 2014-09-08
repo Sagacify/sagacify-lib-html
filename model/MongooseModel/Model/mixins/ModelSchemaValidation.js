@@ -35,29 +35,26 @@ define([
 				}
 
 				var attributes = _.keys(attrs);
+				var error;
 				for (var i = 0; i < attributes.length; i++) {
-
-					error = this.checkAttrIsValid(attributes[i]);
+					error = this.checkAttrIsValid(attributes[i], attrs, options);
 					if (error) {
-						error.model.trigger('invalid', error.model, error);
-
 						return error;
 					}
 				}
+
+				return;
 			},
 
-			checkAttrIsValid: function (attribute) {
-				// if never setted ok
-				var val = this.get(attribute, {
+			checkAttrIsValid: function (val, attrs, options) {
+				val = this.get(val, {
 					lazyCreation: false
 				});
-
-				if (val !== undefined) {
-					//Collection or model
-					if (val && val.validate) {
-						return val.validate();
-					}
+				if (val && val.validate) {
+					return val.validate(attrs, options);
 				}
+
+				return;
 			},
 
 			isValidationRef: false,
