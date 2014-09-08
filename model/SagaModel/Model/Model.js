@@ -17,7 +17,8 @@ define([
 				automaticGetterAndSetter:false,
 			});
 
-			this.__constructorOptions = options;
+			//Memory management
+			// this.__constructorOptions = options;
 			
 			Backbone.Model.prototype.constructor.apply(this, arguments);
 
@@ -28,12 +29,11 @@ define([
 			}
 		},
 
-		// clone: function(options) {
-		// 	var options = _.clone(_.extend(this.__constructorOptions, options));
-		// 	return new this.constructor(this.attributes, options);
-		// },
-
-
+		clear: function(){
+			this.stopListening();
+			this.collection && (this.collection = null);
+			return Backbone.Model.prototype.clear.apply(this, arguments);
+		},
 	});
 
 	_.extend(SagaModel.prototype, ModelSchemaPropertiesDefinition(SagaModel));

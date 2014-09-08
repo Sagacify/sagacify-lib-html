@@ -168,19 +168,35 @@ define([
 			},
 
 			//Sub set of objects containing only collection
-			getAllCollections: function () {
+			getAllCollections: function (options) {
 				var attrs = this.mongooseSchema.getAttributes();
 				var res = {};
 				for (attribute in attrs) {
-					if (attrs[attribute] instanceof app.MongooseArraySchema && !attrs[attribute].contentIsPrimitiveArray()) {
-						res[attribute] = this[attribute];
+					// if (attrs[attribute] instanceof app.MongooseArraySchema && !attrs[attribute].contentIsPrimitiveArray()) {
+					if (this._isACollectionAttribute(attribute)) {
+						var value = this.get(attribute, options);
+						if (value != undefined) {
+							res[attribute] = value;	
+						};						
 					}
 				}
 				return res;
 			},
 
-			//Sub set of objects containing only collection
-			getAllModel: function (subCollection) {}
+			//Sub set of emebeded model objects
+			getAllModels: function (options) {
+				var res = {}
+				var attributes = this.mongooseSchema.getAttributes();
+				for(var attr in attributes){
+					if (this._isAModelAttribute(attr)) {
+						var value = this.get(attr, options);
+						if (value != undefined && value instanceof Backbone.Model) {
+							res[attr] = value;
+						};
+					};
+				}
+				return res;
+			}
 		};
 	}
 });
