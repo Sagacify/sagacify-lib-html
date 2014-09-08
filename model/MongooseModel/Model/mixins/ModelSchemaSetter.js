@@ -88,7 +88,7 @@ define([
 					rawData:raw
 				});
 				
-				if (currentValue !== undefined) {
+				if (currentValue != undefined) {
 					if (this._isACollectionAttribute(attribute)) {
 						currentValue.set(raw);
 						this.trigger('change:' + attribute, this, raw);
@@ -100,6 +100,7 @@ define([
 					}
 					if (this._isAModelAttribute(attribute)) {
 						if (_.isString(raw)) {
+
 							currentValue.set('_id', raw);
 						} else {
 							currentValue.set(raw);
