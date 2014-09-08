@@ -107,7 +107,7 @@ define([
 			//Clear collections
 			var cols = this.getAllCollections({lazyCreation:false});
 			for(var attr in cols){
-				cols[attr].reset({clear:true});
+				cols[attr].reset([], {clear:true});
 			}
 
 			//Clear embedded models
