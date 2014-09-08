@@ -44,10 +44,10 @@ define([
 
 				var me = this;
 				options.success = function(){
-					success && success.apply(this, arguments);
-					me.trigger("Fetch:success");
 					me._isLoading = false;
+					me.trigger("Fetch:success");
 					me.trigger('loading-stop');
+					success && success.apply(this, arguments);
 				}
 
 				options.error = function(error){
