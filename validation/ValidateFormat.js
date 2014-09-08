@@ -11,7 +11,8 @@ define([
 			}
 			if (isOptional && (ele == null)) {
 				return true;
-			} else if (ele_config.length &&   (ele != null)) {
+			}
+			else if (ele_config.length &&   (ele != null)) {
 				var expected_methods = ele_config;
 				var expected_Type;
 				var has_ValidType = true;
@@ -178,6 +179,14 @@ define([
 
 		isGoogleMapAddress: function (str) {
 			return is.String(str) && !!str.match(/^([^,]+(,\s))?[^,]+(,\s)[^,]+$/g);
+		},
+
+		hasAlpha: function (str) {
+			return !!str.match(/[a-zA-Z]/);
+		},
+
+		hasNumeric: function (str) {
+			return !!str.match(/[0-9]/);
 		}
 
 	};
