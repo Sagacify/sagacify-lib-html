@@ -65,12 +65,8 @@ define([
 				for (var i = models.length - 1; i >= 0; i--) {
 					models[i].clear(options);
 				};
-
-				// var len = this.models.length;
-				// while (len--) {
-				// 	this.models[len].clear();
-				// 	this.remove(this.models[len]);
-				// }
+				this.stopListening();
+				this.parent && (this.parent = null);
 			},
 
 			where: function (attrs, first) {

@@ -45,19 +45,19 @@ define([
 
 			var res = Backbone.Collection.prototype.constructor.apply(this, arguments);
 			this.updateUrl();
-			this._handleCustomEvents();
+			// this._handleCustomEvents();
 			return res;
 		},
 
-		_handleCustomEvents: function () {
-			this.on('add', function () {
-				var added = arguments[0];
-				var me = this;
-				this.listenTo(added, 'sync:destroy', function (res) {
-					me.trigger('sync:remove');
-				});
-			});
-		},
+		// _handleCustomEvents: function () {
+		// 	this.on('add', function () {
+		// 		var added = arguments[0];
+		// 		var me = this;
+		// 		this.listenTo(added, 'sync:destroy', function (res) {
+		// 			me.trigger('sync:remove');
+		// 		});
+		// 	});
+		// },
 
 		updateUrl: function(){
 
