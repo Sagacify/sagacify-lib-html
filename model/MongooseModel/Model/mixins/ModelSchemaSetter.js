@@ -65,6 +65,14 @@ define([
 				return !!this._isRecordingChanges;
 			},
 
+			markAsChanged: function(attribute){
+				this.recordChange(attribute, "fake");
+				// if (!this._recorded[attribute]) {
+				// 	this._recorded[attribute] = [];
+				// };	
+				// this._recorded[attribute].push("fake");
+			},
+
 			recordChange: function (attribute, raw) {
 				var currentValue = this.get(attribute, {
 					lazyCreation: false
