@@ -111,5 +111,5 @@ $.fn.createNameAvatar = function (name, size) {
 	context.fillText(initials, x, y);
 
 	ele.attr('src', canvas.toDataURL());
-	//ele.css('background', colorMod[moduloResult]);
+
 };
