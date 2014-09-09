@@ -101,7 +101,9 @@ define([
 					this.navigationBar.setTitle(this.frontViewController().title);
 				var me = this;
 				on(this.navigationBar.backButton, selectEvent, function(){
-	        		me.popViewController();
+					if(!me.navigationBar.backButton.preventBack){
+	        			me.popViewController();	
+	        		}
 	        	});
 				if(this._viewControllers.length >= 2)
 					this.navigationBar.backButton.style.display = "";
@@ -134,6 +136,10 @@ define([
 		
 		pushViewController: function(viewController, noAnimation) {
 			viewController.placeAt(this.domNode);
+
+			if(uiDegradation){
+				noAnimation = true;
+			}
 			
 			if(typeof viewController.startup == "function")
 				viewController.startup();
@@ -155,8 +161,12 @@ define([
 				});
 			}
 			else{
+				if(typeof viewController.viewDidAppear == "function")
+					viewController.viewDidAppear();
 				this._viewControllers[0].domNode.style.display = "none";
 				viewController.domNode.style.display = "";
+				//$('.cellBase.selected', this._viewControllers[0].domNode).removeClass('selected');
+				this._viewControllers[0].onAfterTransitionOut.apply(this._viewControllers[0].onAfterTransitionOut);
 			}
 
 			viewController.navigationController = this;
@@ -169,30 +179,45 @@ define([
 
 		},
 		
-		popViewController: function(callback) {
+		popViewController: function(callback, noAnimation) {
+			if(window.uiDegradation){
+				noAnimation = true;
+			}
+
 			if(this._viewControllers.length >= 2) {
 				var viewControllerToPop = this._viewControllers.splice(0, 1)[0];
-				this._viewControllers[0].domNode.style.height = (this._viewControllers[0].frame.height+44)+"px";
-				var fakediv = domConstruct.create("div", {style:"width:"+this._viewControllers[0].frame.width+"px;height:44px"}, this._viewControllers[0].domNode, "first");
-				viewControllerToPop.performTransition(this._viewControllers[0].id, -1, "slide", null);
-				var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
 				var viewControllerToAppear = this._viewControllers[0];
-
 				if(typeof viewControllerToPop.viewWillDisappear == "function"){
 					viewControllerToPop.viewWillDisappear();
 				}
 
-				viewControllerToPop.on("afterTransitionOut", function(){
-					if(viewControllerToAppear.domNode){
-						domConstruct.destroy(fakediv);
-						domConstruct.destroy(eventsBlocker);
-						viewControllerToAppear.domNode.style.height = viewControllerToAppear.frame.height+"px"; 
-						viewControllerToPop.destroyRecursive();	
-						if (callback) {
-							callback();
-						};
-					}
-				});
+				if(noAnimation){
+					viewControllerToPop.destroyRecursive();	
+					viewControllerToAppear.domNode.style.display = "";
+					if (callback) {
+						callback();
+					};
+				}
+				else{
+					this._viewControllers[0].domNode.style.height = (this._viewControllers[0].frame.height+44)+"px";
+					var fakediv = domConstruct.create("div", {style:"width:"+this._viewControllers[0].frame.width+"px;height:44px"}, this._viewControllers[0].domNode, "first");
+					viewControllerToPop.performTransition(this._viewControllers[0].id, -1, "slide", null);
+					var eventsBlocker = domConstruct.create("div", {style:"z-index:2;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, this.domNode);
+					
+
+					viewControllerToPop.on("afterTransitionOut", function(){
+						if(viewControllerToAppear.domNode){
+							domConstruct.destroy(fakediv);
+							domConstruct.destroy(eventsBlocker);
+							viewControllerToAppear.domNode.style.height = viewControllerToAppear.frame.height+"px"; 
+							viewControllerToPop.destroyRecursive();	
+							if (callback) {
+								callback();
+							};
+						}
+					});
+				}
+
 				this._updateNavigationBar();
 
 				if(viewControllerToAppear.title)

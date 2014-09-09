@@ -104,7 +104,7 @@ define([
 		},
 		
 		dismissActionSheet: function() {
-			if(has('android')){
+			if(has('android') || window.uiDegradation){
 				this.destroy();
 			}
 			else{

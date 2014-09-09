@@ -58,6 +58,11 @@ define([
 					}
 				});
       		}
+
+      		// if(window.uiDegradation){
+      		// 	this.domNode.style.overflow = 'scroll';
+      		// 	this.domNode.style['-webkit-overflow-scrolling'] = 'touch';
+      		// }
 		},
 		
 		scrollTo: function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node) {
@@ -159,6 +164,12 @@ define([
 					this._nextSlideDest.y = 0;
 				else
 					this.slideTo({y:0}, 0.3, "ease-out");
+			}
+		},
+
+		startup: function(){
+			if(!window.uiDegradation){
+				this.inherited(arguments);
 			}
 		},
 		

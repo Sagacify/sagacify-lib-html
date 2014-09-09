@@ -77,7 +77,9 @@ define([
 			}
 			if(frame.height) {
 				this.frame.height = frame.height;
-				this.domNode.style.height = frame.height + "px";
+				//if(!window.uiDegradation){
+					this.domNode.style.height = frame.height + "px";
+				//}
 			}
 		},
 		
@@ -88,8 +90,12 @@ define([
 			viewController.domNode.style.height = Window.domNode.clientHeight+"px";
 			viewController.domNode.style.zIndex = "2";
 			viewController.domNode.style.position = "absolute";
-			viewController.placeAt(Window.domNode);
-			viewController.performTransition(null, 1, transition||"revealv", null);
+
+			// var presentedViewControllersContainer = $('#presentedViewControllers');
+			// if(!presentedViewControllersContainer.size()){
+			// 	$('body').append('<div id=presentedViewControllers>');
+			// 	presentedViewControllersContainer = $('#presentedViewControllers');
+			// }
 			
 			var eventsBlocker = domConstruct.create("div", {style:"z-index:1000;position:absolute;top:0px;left:0px;width:"+Window.frame.width+"px;height:"+Window.frame.height+"px"}, Window.domNode);
 
@@ -102,29 +108,56 @@ define([
 				domConstruct.destroy(eventsBlocker);
 			}
 
-			if(transition == "none"){
-				onAfterTransitionOut();
+			if(uiDegradation){
+				transition = "none";
+				// if(!presentedViewControllersContainer.children().size()){
+				// 	Window.domNode.style.display = "none";
+				// }
+				// else{
+				// 	this.domNode.style.display = "none";
+				// }
+				//viewController.domNode.style.height = "";
 			}
-			else{
+
+			//viewController.placeAt(presentedViewControllersContainer[0]);
+			viewController.placeAt(Window.domNode);
+
+			// if(transition == "none"){
+			// 	onAfterTransitionOut();
+			// 	viewController.invokeCallback();
+			// }
+			// else{
 				viewController.on("afterTransitionOut", onAfterTransitionOut);
-			}
+				viewController.performTransition(null, 1, transition||"revealv", null);
+			//}
 		},
 		
-		dismissViewController: function(transition) {
-			this.performTransition(null, -1, transition||"revealv", null);
-			
+		dismissViewController: function(transition) {			
 			var me = this;
 
 			var onAfterTransitionOut = function(){
 				me.destroy();
 			}
 
-			if(transition == "none"){
-				onAfterTransitionOut();
+			//var presentedViewControllersContainer = $('#presentedViewControllers');
+
+			if(uiDegradation){
+				transition = "none";
+				// if(presentedViewControllersContainer.children().size() <= 1){
+				// 	Window.domNode.style.display = "";
+				// }
+				// else{
+				// 	presentedViewControllersContainer.children().last().show();
+				// }
 			}
-			else{
+
+			// if(transition == "none"){
+			// 	onAfterTransitionOut();
+			// }
+			// else{
 				this.on("afterTransitionOut", onAfterTransitionOut);
-			}
+				this.performTransition(null, -1, transition||"revealv", null);
+			//}
 		},
 		
 		presentActionSheet: function(actionSheetOptions) {
@@ -149,7 +182,7 @@ define([
 				actionSheet.domNode.style.left = "0px";
 			}
 			
-			if(has('android')){
+			if(has('android') || window.uiDegradation){
 				afterTransitionOut();
 			}
 			else{

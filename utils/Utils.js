@@ -19,7 +19,7 @@ define([
 		};
 		
 		saga.Utils.svgSupport = function(){
-			var support = has("android")?has("android")>=3:true;
+			var support = has("android")?false:!window.uiDegradation;
 			return support;
 		};
 		
@@ -55,6 +55,17 @@ define([
 		
 		saga.Utils.simulateClick = function(node){
 			saga.Utils.simulateEvent(node, "click");	
+		};
+
+		saga.Utils.loadCss = function(path, id) {
+			var e = document.createElement("link");
+			e.href = path;
+			e.type = "text/css";
+			e.rel = "stylesheet";
+			e.media = "screen";
+			if(id)
+				e.id = id;
+			document.getElementsByTagName("head")[0].appendChild(e);
 		};
 
 		

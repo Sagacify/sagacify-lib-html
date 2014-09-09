@@ -68,6 +68,10 @@ define([
 		
 		postCreate: function() {
 			this.inherited(arguments);
+
+			if(window.uiDegradation){
+				this.pullToRefresh = false;
+			}
 			
 			var scrollableView = new ScrollableView({pullToRefresh:this.pullToRefresh, tableViewController:this, frame:this.getFrame()});
 			scrollableView.domNode.style.left = this.frame.x+"px";
@@ -75,7 +79,9 @@ define([
 			scrollableView.domNode.style.width = this.frame.width+"px";
 			scrollableView.domNode.style.height = this.frame.height+"px";
 			scrollableView.placeAt(this.domNode);
-			scrollableView.startup();
+			if(!window.uiDegradation){
+				scrollableView.startup();
+			}
 			this.scrollableView = scrollableView;
 			
 			if(this.stickedHeaders)
@@ -280,6 +286,19 @@ define([
 			if(!this._cellsBySection[indexPath.section])
 				return null;
 			return this._cellsBySection[indexPath.section][indexPath.row];
+		},
+
+		fitToContainerSize: function(){
+			//this.scrollableView.domNode.style.overflow = 'scroll';
+			return
+			this.scrollableView.containerNode.style.position = 'relative';
+			this.scrollableView.domNode.style.height = '';
+			return
+			this.frame.height = this.scrollableView.containerNode.clientHeight;
+			this.scrollableView.domNode.style.height = this.frame.height + 'px';
+			this.setFrame(this.frame);
+			this.containerNode.style.height = this.frame.height + 'px';
+			this.domNode.style.height = this.frame.height + 'px';
 		},
 		
 		scrollToSection: function(section) {

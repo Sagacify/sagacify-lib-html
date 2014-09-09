@@ -26,7 +26,7 @@ define([
 			if(this.searchBar)
 				this.searchBar.searchFieldNode.style.width = (this.frame.width-50)+"px";
 
-			if(this.directoryBar){
+			if(this.directoryBar && !window.uiDegradation){
 				var directoryBar = new DirectoryBar({height:this.frame.height-20, searchItem:!this.searchBarFixed, star:this.staredItems()!=undefined});
 				directoryBar.placeAt(this.domNode);
 				var me = this;

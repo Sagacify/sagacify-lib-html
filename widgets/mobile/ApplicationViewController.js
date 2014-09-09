@@ -120,7 +120,7 @@ define([
 			this.loadingBar.domNode.style.top = "-50px";
 			this.currentPresentLoadingBarAnimation = fx.animateProperty({
 				node:me.loadingBar.domNode,
-				duration:200,
+				duration:window.uiDegradation?20:200,
 				properties:{
 					top:0
 				},
