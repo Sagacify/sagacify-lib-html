@@ -1,12 +1,12 @@
-define([
-], function (
-	) {
-	return function(SagaCollection){
+define([], function () {
+
+	return function () {
+
 		return {
-		
+
 			_prepareFetchOptions: function (options) {
-				options = _.defaults(options||{}, {
-					data : {}
+				options = _.defaults(options || {}, {
+					data: {}
 				});
 
 				if (this._sort) {
@@ -26,16 +26,16 @@ define([
 			},
 
 			fetch: function (options) {
-				options = _.defaults(options||{}, {
-					paginate:false,
-				})
-
+				options = _.defaults(options || {}, {
+					paginate: false
+				});
+				console.log("options 1", options);
 				if (options.paginate) {
 					options = this._preparePaginateFetchOptions(options);
-				};
-
+				}
+				console.log("options 2", options);
 				options = this._prepareFetchOptions(options);
-
+				console.log("options 3", options);
 				this._isLoading = true;
 				this.trigger('loading-start');
 
@@ -43,26 +43,25 @@ define([
 				var error = options.error;
 
 				var me = this;
-				options.success = function(){
+				options.success = function () {
 					me._isLoading = false;
 					me.trigger("Fetch:success");
 					me.trigger('loading-stop');
 					success && success.apply(this, arguments);
-				}
+				}.bind(this);
 
-				options.error = function(error){
+				options.error = function (error) {
 					if (error && error.apply) {
 						error.apply(this, arguments);
-					};
-					
+					}
+
 					me.trigger("Fetch:error", error);
 					me._isLoading = false;
 					me.trigger('loading-stop');
-				}
-				return  Backbone.Collection.prototype.fetch.apply(this, [options]);
+				}.bind(this);
+
+				return Backbone.Collection.prototype.fetch.apply(this, [options]);
 			},
-
-		}
-
-	}
+		};
+	};
 });
