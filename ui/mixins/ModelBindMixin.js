@@ -2,7 +2,7 @@ define(["saga/model/MongooseModel/Model/Model"], function(Model){
 	
 	return {
 
-	/*	modelBind: false,
+		modelBind: false,
 
 		bindToModel: function(){
 			if(this.modelBind && this.model){
@@ -287,7 +287,7 @@ define(["saga/model/MongooseModel/Model/Model"], function(Model){
 		
 			var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
 		}
-		*/
+		
 	}
 
 });
