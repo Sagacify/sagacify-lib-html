@@ -1,6 +1,5 @@
 define([
-	'saga/types/validateType',
-], function (is) {
+], function () {
 
 	return function (SagaModel) {
 
@@ -42,7 +41,7 @@ define([
 			_defineGetter: function (attribute) {
 				var getterName = "get" + attribute.capitalize();
 
-				if (is.Function(this[getterName]) && this[getterName]) {
+				if (_.isFunction(this[getterName]) && this[getterName]) {
 					return this[getterName];
 				}
 
@@ -53,7 +52,7 @@ define([
 
 			_defineSetter: function (attribute) {
 				var setterName = "set" + attribute.capitalize();
-				if (is.Function(this[setterName]) && this[setterName]) {
+				if (_.isFunction(this[setterName]) && this[setterName]) {
 					return this[setterName];
 				}
 
