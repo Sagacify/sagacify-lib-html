@@ -2,7 +2,7 @@ define([], function () {
 
 	return {
 
-	/*		outletsBind: false,
+			outletsBind: false,
 
 		_putUids: function (dataType) {
 			var me = this;
@@ -46,6 +46,6 @@ define([], function () {
 
 			return this.outlets;
 		}
-		*/
+		
 	};
 });
