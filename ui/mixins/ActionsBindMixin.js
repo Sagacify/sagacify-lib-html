@@ -2,7 +2,7 @@ define([], function(){
 	
 	return {
 
-		actionsBind: false,
+	/*	actionsBind: false,
 
 
 		__defaultSGAction : 'click',
@@ -75,5 +75,6 @@ define([], function(){
 			};
 			return this.__actionNodes;
 		},	
+		*/
 	}
 });
