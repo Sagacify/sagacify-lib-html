@@ -31,7 +31,7 @@ define([
 			this.reinjectFirstElement();
 			
 		},
-/*
+
 		bindUIElements: function(){
 
 			this.bindToModel();
@@ -46,7 +46,7 @@ define([
 			this.__destroyAllBinder();
 			return Marionette.Layout.prototype.unbindUIElements.apply(this, arguments);
 		},		
-*/
+
 		showChildOnRender: function(region, childClass, childArgs, childName, keepOnRegionClose){
 
 			childName = (childName === true) ? 'childView' : childName;
