@@ -6,24 +6,28 @@ define([
 		progressNode: null,
 		requestsNode: null,
 		currentRequestsCount: 0,
+		
 		showRequestsProgress: function (node) {
 			node.append('<div>Remaining requests ' + this.currentRequestsCount + '</div>');
 		},
+
 		showUploadProgress: function (node, update) {
 			var done = update.value;
 			var max = update.max;
 			node.append('<div>Upload progress ' + (done / (max / 100)) + '% !</div>');
 		},
+
 		completionHandler: function (xhr, textStatus) {
 			this.currentRequestsCount -= 1;
 			if(this.requestsNode) {
 				this.showRequestsProgress(this.requestsNode);
 			}
-
 		},
+
 		beforeSendHandler: function (xhr, settings) {
 			this.currentRequestsCount += 1;
 		},
+
 		uploadProgressHandler: function (event) {
 			if(event.lengthComputable && this.progressNode) {
 				this.showUploadProgress(this.progressNode, {
@@ -32,9 +36,7 @@ define([
 				});
 			}
 		},
-		// downloadProgressHandler: function () {
-		// 	debugger;
-		// },
+
 		methodWrapper: function (type, url, headers, contentType, data, cbError, cbSuccess) {
 			var me = this;
 			var promise = $.ajax({
@@ -122,18 +124,6 @@ define([
 				xhr: function () {
 					var req = originalXhr();
 					var me = this;
-					// if(req) {
-					// 	if(req.addEventListener.isFunction() && (me.progress !== undefined)) {
-					// 		req.addEventListener('progress', function (evt) {
-					// 			me.progress(evt);
-					// 		}, false);
-					// 	}
-					// 	if(req.upload && req.upload.isObject() && (me.progressUpload !== undefined)) {
-					// 		req.upload.addEventListener('progress', function (evt) {
-					// 			me.progressUpload(evt);
-					// 		}, false);
-					// 	}
-					// }
 					return req;
 				}
 			});

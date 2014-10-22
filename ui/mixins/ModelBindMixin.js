@@ -284,8 +284,10 @@ define(["saga/model/MongooseModel/Model/Model"], function(Model){
 		bindValidation: function(els, model, attr){
 			var me = this;
 			var validClass = typeof me.validClass === 'function' ? me.validClass(attr) : me.validClass;
+		
 			var errorClass = typeof me.errorClass === 'function' ? me.errorClass(attr) : me.errorClass;
 		}
+		
 	}
 
 });

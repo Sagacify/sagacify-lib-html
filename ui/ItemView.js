@@ -37,7 +37,7 @@ define([
 			this.__unbindActions();
 			return Marionette.ItemView.prototype.unbindUIElements.apply(this, arguments);
 		}
-
+		
 	});
 
 	_.extend(ItemView.prototype, Mixin, ModelBindMixin, ActionsBindMixin, OutletBindMixin, ModelBindMixinV2);
