@@ -61,6 +61,11 @@ array_proto.diff = function (a) {
 	});
 };
 
+array_proto.isEmpty = function () {
+	return this.length === 0;
+};
+
+
 array_proto.populateDevelop = function (callback) {
 	if (this.length == 0 || !(this[0] instanceof mongoose.Document)) {
 		callback(null, this);
