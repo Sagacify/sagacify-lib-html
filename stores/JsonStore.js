@@ -98,6 +98,61 @@ define([
 				}
 		},
 
+		/*configureJqueryRequest: function(request) {
+			var jQueryRequest = {
+				type 	: request.method, 
+				url 	: request.url,
+				dataType: request.handleAs,
+				cache 	: request.preventCache,
+				headers : request.headers
+			};
+			if(request.postData) {
+				jQueryRequest.data = request.postData;
+			}
+			return jQueryRequest;
+		},
+
+		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
+			var me = this;
+			var deferred = new Deferred();
+
+			var query = this.configureUrlWithDict(target, queryDict);
+			if (DebugMode) {
+				// console.log(httpMethod + " - " + target);
+				// console.log(queryDict);
+				// console.log(data);
+			};
+
+
+			var headers = this.configureHeader(headersOptions, removeAuth);
+			var request = this.configureRequestContent(query, headers, deferred, data);
+
+			var jQueryRequest = this.configureJqueryRequest(request);
+
+			$.ajax(jQueryRequest).done(function(data) {
+				me.onLoadFunction(deferred)(data);
+			}).fail(function(jqXHR, error) {
+				if(disableRelog) {
+					me.onError(deferred)(error);
+				}
+				else {
+					this.handlingRelog(deferred, function() {
+						var headers = me.configureHeader(headersOptions, removeAuth);
+						var request = me.configureRequestContent(query, headers, deferred);
+
+						var jQueryRequest = this.configureJqueryRequest(request);
+						$.ajax(jQueryRequest).done(function(data) {
+							me.onLoadFunction(deferred)(data);
+						}).fail(function(jqXHR, error) {
+							me.onError(deferred)(error);
+						});
+					});
+				}
+			});
+
+			return deferred;
+		},*/
+
 		executeRequest: function(httpMethod, target, headersOptions, queryDict, data, removeAuth, disableRelog){
 
 			if (httpMethod == "POST") {
