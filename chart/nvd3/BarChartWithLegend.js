@@ -60,14 +60,37 @@ define([], function(){
 		nv.utils.windowResize(legend);
 
 		chart.loadData = function(newData){
-			data = newData;
+			// if(!newData[0].values.length && !data[0].values.length) {
+			// 	return;	
+			// }
+			console.log('loadData')
+
+			data[0].values.splice(newData[0].values.length, data[0].values.length);
+			newData[0].values.forEach(function(value, i) {
+				if(data[0].values[i]) {
+					data[0].values[i].color = value.color;
+					data[0].values[i].label = value.label;
+					data[0].values[i].value = value.value;
+					data[0].values[i].series = value.series;
+				}
+				else {
+					data[0].values.push(value);
+				}
+			});
 			loadDataColors();
 			svg.datum(data).transition().duration(500).call(chart);
-			legendSvg.datum(data[0].values).transition().duration(500).call(legend);
+			console.log(data)
+			legendSvg.datum(data[0].values)
+						.transition()
+						.duration(500)
+						.call(legend);
 			chart.update();
 			//$('.nvd3 .nv-legend', chart.container).children().attr('transform', 'translate(33, 5)');
 		}
 
+		chart.emptyChart = function () {
+			$(svg).empty();
+		}
 		
 
 		return chart;	
